@@ -76,13 +76,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2_image-2.6.3\include;C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2-2.26.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\SDL2-2.26.5\include;$(SolutionDir)vendor\SDL2_image-2.6.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2_image-2.6.3\lib\x86;C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2-2.26.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.dll;SDL2_image.dll;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\SDL2_image-2.6.3\lib\x86;$(SolutionDir)vendor\SDL2-2.26.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -93,15 +93,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2_image-2.6.3\include;C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2-2.26.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\SDL2-2.26.5\include;$(SolutionDir)vendor\SDL2_image-2.6.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2_image-2.6.3\lib\x86;C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2-2.26.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.dll;SDL2_image.dll;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\SDL2_image-2.6.3\lib\x86;$(SolutionDir)vendor\SDL2-2.26.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -110,13 +110,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2_image-2.6.3\include;C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2-2.26.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\SDL2-2.26.5\include;$(SolutionDir)vendor\SDL2_image-2.6.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2_image-2.6.3\lib\x86;C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2-2.26.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.dll;SDL2_image.dll;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\SDL2_image-2.6.3\lib\x86;$(SolutionDir)vendor\SDL2-2.26.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,23 +127,27 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2_image-2.6.3\include;C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2-2.26.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)vendor\SDL2-2.26.5\include;$(SolutionDir)vendor\SDL2_image-2.6.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2_image-2.6.3\lib\x86;C:\Users\Ian Sushruth Tauro\Desktop\Platformer Engine\PlatformerGame\vendor\SDL2-2.26.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.dll;SDL2_image.dll;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)vendor\SDL2_image-2.6.3\lib\x86;$(SolutionDir)vendor\SDL2-2.26.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Game.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2.dll" />
     <None Include="SDL2_image.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Game.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
