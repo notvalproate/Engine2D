@@ -1,7 +1,7 @@
 #include "Game.hpp"
 #include "SDL_image.h"
 #include <iostream>
- 
+
 Game::Game() : IsRunning(false), FrameDelta(16), Window(nullptr), Renderer(nullptr) { }
 
 Game::~Game() { }

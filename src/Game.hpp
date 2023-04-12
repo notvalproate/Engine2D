@@ -3,8 +3,12 @@
 
 class Game {
 public:
-	Game();
-	~Game();
+	Game(const Game&) = delete;
+
+	static Game& Get() {
+		static Game Instance;
+		return Instance;
+	}
 
 	void Init(const char* title, const char* iconpath, const int& x, const int& y, int width, int height);
 	void HandleEvents();
@@ -14,6 +18,9 @@ public:
 	inline bool Exit() { return IsRunning; }
 
 private:
+	Game();
+	~Game();
+
 	bool IsRunning;
 	float FrameDelta;
 	int w, h;

@@ -2,8 +2,8 @@
 
 int main(int argc, char *argv[]) {
 
-	//Initialize Game Object
-	Game game;
+	//Get the static game object
+	Game& game = Game::Get();
 	game.Init("Platformer Game", "assets/textures/icon.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
 
 	while (game.Exit()) {
