@@ -1,12 +1,13 @@
 #include "Game.hpp"
 #include "SDL_image.h"
 #include <iostream>
+#include <vector>;
 
-Game::Game() : IsRunning(false), FrameDelta(16), Window(nullptr), Renderer(nullptr) { }
+Game::Game() : m_IsRunning(false), m_FrameDelta(16), m_Window(nullptr), m_Renderer(nullptr) { }
 
 Game::~Game() { }
 
-void Game::Init(const char* title, const char* iconpath, const int& x, const int& y, int width, int height) {
+void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, const int& p_y, int p_Width, int p_Height) {
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING)) {
 		std::cout << "Error: Couldn't Initialize Subsystems..." << std::endl;
@@ -15,71 +16,111 @@ void Game::Init(const char* title, const char* iconpath, const int& x, const int
 	std::cout << "Stage: Initialized Subsystems..." << std::endl;
 
 	//Get the user's display mode
-	if (SDL_GetDisplayMode(0, 0, &Mode)) {
+	if (SDL_GetDisplayMode(0, 0, &m_Mode)) {
 		std::cout << "Error: Couldn't Get Display Mode...Framerate set to 60" << std::endl;
 	}
 	else {
 		std::cout << "Stage: Display Mode Initialized..." << std::endl;
-		FrameDelta = (float)1000 / (float)Mode.refresh_rate;
+		m_FrameDelta = (float)1000 / (float)m_Mode.refresh_rate;
 		//Set minimum frame-time to 1000 / refresh rate of the user's monitor.
 	}
 
 	//Width and Height of the screen
-	w = width;
-	h = height;
+	m_w = p_Width;
+	m_h = p_Height;
 
 	//Create an SDL Window
-	if (!(Window = SDL_CreateWindow(title, x, y, width, height, 0))) {
+	if (!(m_Window = SDL_CreateWindow(p_Title, p_x, p_y, p_Width, p_Height, 0))) {
 		std::cout << "Error: Couldn't Initialize Window..." << std::endl;
 		return;
 	}
 
-	SDL_Surface* TempSurface = IMG_Load(iconpath);
-	SDL_SetWindowIcon(Window, TempSurface); //Setting window icon
+	//Setting Hints
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
+
+	SDL_Surface* TempSurface = IMG_Load(p_Iconpath);
+	SDL_SetWindowIcon(m_Window, TempSurface); //Setting window icon
 	SDL_FreeSurface(TempSurface);
 	std::cout << "Stage: Initialized Window..." << std::endl;
 
 	//Create an SDL Renderer
-	if (!(Renderer = SDL_CreateRenderer(Window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED))) {
+	if (!(m_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE))) {
 		std::cout << "Error: Couldn't Initialize Renderer..." << std::endl;
 		return;
 	}
-	SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
 	std::cout << "Stage: Initialized Renderer..." << std::endl;
 
-	IsRunning = true; //Boolean to check if window close
+	m_IsRunning = true; //Boolean to check if window close
+
+	//Tilemap
+	unsigned short* L_1 = new unsigned short[40 * 23] {
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+		2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+		2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+	};
+
+	std::vector<SDL_Rect> TileRects;
+	SDL_Rect Temp = { 0, 0, 8, 8 };
+	TileRects.push_back(Temp);
+	Temp.x += 8;
+	TileRects.push_back(Temp);
+
+	Level_1 = new Tilemap(L_1, "assets/tilemaps/Grass.png", TileRects, m_Renderer);
 }
 
 void Game::HandleEvents() {
-	SDL_PollEvent(&Event);
-	if (Event.type == SDL_QUIT) {
-		IsRunning = false;
+	SDL_PollEvent(&m_Event);
+	if (m_Event.type == SDL_QUIT) {
+		m_IsRunning = false;
 		return;
 	}
-	if (Event.type == SDL_KEYDOWN) {
-		switch (Event.key.keysym.sym) { //Check for which key, pause if esc, toggle fullscreen if f11
+	if (m_Event.type == SDL_KEYDOWN) {
+		switch (m_Event.key.keysym.sym) { //Check for which key, pause if esc, toggle fullscreen if f11
 		case SDLK_F11:
 			//If the window doesnt have fullscreen flag, set the window to fullscreen
-			std::cout << SDL_GetWindowGrab(Window) << std::endl;
-			if (!(SDL_GetWindowFlags(Window) & SDL_WINDOW_FULLSCREEN)) {
-				SDL_SetWindowFullscreen(Window, SDL_WINDOW_FULLSCREEN);
-				SDL_SetWindowSize(Window, Mode.w, Mode.h);
+			std::cout << SDL_GetWindowGrab(m_Window) << std::endl;
+			if (!(SDL_GetWindowFlags(m_Window) & SDL_WINDOW_FULLSCREEN)) {
+				SDL_SetWindowFullscreen(m_Window, SDL_WINDOW_FULLSCREEN);
+				SDL_SetWindowSize(m_Window, m_Mode.w, m_Mode.h);
 				break;
 			}
 			//Else remove window fullscreen flag and set resolution
-			SDL_SetWindowFullscreen(Window, 0);
-			SDL_SetWindowSize(Window, 1280, 720);
+			SDL_SetWindowFullscreen(m_Window, 0);
+			SDL_SetWindowSize(m_Window, 1280, 720);
 			break;
 		}
 	}
 }
 
 void Game::Update() {
-	SDL_RenderClear(Renderer); 
+	SDL_RenderClear(m_Renderer); 
 }
  
 void Game::Render() {
-	SDL_RenderPresent(Renderer); 
+	Level_1->Render();
+
+	SDL_RenderPresent(m_Renderer); 
 
 	if (!InFocus()) {
 		SDL_WaitEvent(NULL); //If Window not in focus, do not render and wait for window to come in focus.
@@ -87,13 +128,13 @@ void Game::Render() {
 }
 
 void Game::Clean() {
-	SDL_DestroyWindow(Window); 
-	SDL_DestroyRenderer(Renderer); 
+	SDL_DestroyWindow(m_Window); 
+	SDL_DestroyRenderer(m_Renderer); 
 	SDL_Quit(); 
 	std::cout << "Game Cleaned" << std::endl;
 } 
 
 bool Game::InFocus() {
 	//Get the window's flags and check if it is In Focus.
-	return (SDL_GetWindowFlags(Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS));
+	return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS));
 }
