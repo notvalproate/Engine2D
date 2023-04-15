@@ -19,7 +19,7 @@ Tilemap::~Tilemap() {
 void Tilemap::AddLayer(const std::string& p_TileMapType, unsigned short* p_TileMap) {
 	m_TileLayers.push_back(p_TileMap);
 
-	if (p_TileMapType == "Foreground") {
+	if (p_TileMapType == "Collider") {
 		m_Collider = p_TileMap;
 	}
 }

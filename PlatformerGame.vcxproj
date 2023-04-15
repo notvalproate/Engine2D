@@ -142,6 +142,7 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\math\Rectangle.cpp" />
+    <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Tilemap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="src\Game.hpp" />
     <ClInclude Include="src\math\Rectangle.hpp" />
+    <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\TextureLoader.hpp" />
     <ClInclude Include="src\Tilemap.hpp" />
   </ItemGroup>
