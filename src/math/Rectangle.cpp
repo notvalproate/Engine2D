@@ -1,9 +1,9 @@
 #include "Rectangle.hpp"
 #include <cmath>
 
-void RectUtil::Translate(SDL_Rect& Rectangle, const int& t_x, const int& t_y) {
-	Rectangle.x += t_x;
-	Rectangle.y += t_y;
+void RectUtil::Translate(SDL_Rect& Rectangle, const float& t_x, const float& t_y) {
+	Rectangle.x += std::round(t_x);
+	Rectangle.y += std::round(t_y);
 }
 
 void RectUtil::Scale(SDL_Rect& Rectangle, const float& s_x, const float& s_y) {

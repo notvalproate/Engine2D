@@ -1,23 +1,25 @@
 #pragma once
 #include "SDL.h"
+#include "math/Vector2d.h"
+#include <vector>
 
 class Player {
 public:
-	Player(const Player&) = delete;
-
-	static Player& Get() {
-		static Player Instance;
-		return Instance;
-	}
-
-	void Init(const char* m_TexPath, const SDL_Rect& p_SrcRect, const SDL_Rect& p_DestRect);
+	Player(const char* p_TexPath, const SDL_Rect& p_SrcRect, const SDL_Rect& p_DestRect, SDL_Renderer* p_Renderer);
+	~Player();
+	
 	void Render();
-	void Update();
-	void HandleEvents();
+	void Update(const float& p_DeltaTime);
+	void HandleEvents(const SDL_Event& p_Event);
 
 private:
-	Player();
-	~Player();
+	double m_x, m_y;
+	const int m_StrafeVelocity;
+
+	Vector2d m_CurrVelocity;
+	std::vector<unsigned int> m_InputStack;
 
 	SDL_Rect m_SrcRect, m_DestRect;
+	SDL_Texture *m_Sprite, *m_Buffer;
+	SDL_Renderer* m_Renderer;
 };

@@ -48,10 +48,15 @@ void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, con
 		std::cout << "Error: Couldn't Initialize Renderer..." << std::endl;
 		return;
 	}
-	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 	std::cout << "Stage: Initialized Renderer..." << std::endl;
 
 	m_IsRunning = true; //Boolean to check if window close
+
+	//Player
+
+	SDL_Rect SrcRect = { 0, 0, 15, 12 };
+	m_Player = new Player("assets/character sprites/idle/cat.png", SrcRect, SrcRect, m_Renderer);
 
 	//Tilemaps
 
@@ -147,14 +152,17 @@ void Game::HandleEvents() {
 			break;
 		}
 	}
+	m_Player->HandleEvents(m_Event);
 }
 
 void Game::Update() {
+	m_Player->Update(m_FrameDelta);
 	SDL_RenderClear(m_Renderer); 
 }
  
 void Game::Render() {
 	Level_1->Render();
+	m_Player->Render();
 
 	SDL_RenderPresent(m_Renderer); 
 

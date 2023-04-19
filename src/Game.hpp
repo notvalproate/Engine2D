@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL.h"
 #include "Tilemap.hpp"
+#include "Player.hpp"
 
 class Game {
 public:
@@ -31,6 +32,7 @@ private:
 	SDL_Event m_Event;
 
 	Tilemap* Level_1;
+	Player* m_Player;
 
 	bool InFocus();
 };
