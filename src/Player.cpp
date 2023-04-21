@@ -43,31 +43,23 @@ void Player::Update(unsigned short* p_Collider, const float& p_DeltaTime) {
 }
 
 void Player::HandleEvents(const SDL_Event& p_Event) {
-	if (p_Event.type == SDL_KEYDOWN) {
-		const Uint8 *Keys = SDL_GetKeyboardState(NULL);
-		auto Key = p_Event.key.keysym.sym;
+	const Uint8* Keys = SDL_GetKeyboardState(NULL);
 
-		switch (Key) {
-		case SDLK_w:
-			m_CurrVelocity.y = -m_StrafeVelocity;
-			break;
-		case SDLK_s:
-			m_CurrVelocity.y = m_StrafeVelocity;
-			break;
-		case SDLK_d:
-			m_CurrVelocity.x = m_StrafeVelocity;
-			break;
-		case SDLK_a:
-			m_CurrVelocity.x = -m_StrafeVelocity;
-			break;
-		default:
-			break;
-		}
+	if (Keys[SDL_SCANCODE_W]) {
+		m_CurrVelocity.y = -m_StrafeVelocity;
+	}
+	if (Keys[SDL_SCANCODE_S]) {
+		m_CurrVelocity.y = m_StrafeVelocity;
+	}
+	if (Keys[SDL_SCANCODE_A]) {
+		m_CurrVelocity.x = -m_StrafeVelocity;
+	}
+	if (Keys[SDL_SCANCODE_D]) {
+		m_CurrVelocity.x = m_StrafeVelocity;
 	}
 
 	if (p_Event.type == SDL_KEYUP) {
 		auto Key = p_Event.key.keysym.sym;
-		const Uint8* Keys = SDL_GetKeyboardState(NULL);
 
 		switch (Key) {
 		case SDLK_w:
@@ -97,19 +89,5 @@ void Player::HandleEvents(const SDL_Event& p_Event) {
 }
 
 void Player::CheckCollisions(unsigned short* p_Collider) {
-	for (int i = 0; i <= m_DestRect.w - 1; i += m_DestRect.w - 1) {
-		if (p_Collider[((int)((m_x + i) / 8) + (40 * (int)((m_y + m_DestRect.h) / 8)))] == 1) {
-			m_y = std::round(m_y);
-			m_CurrVelocity.y = 0;
-			return;
-		}
-	}
-
-	for (int i = 0; i <= m_DestRect.w - 1; i += m_DestRect.w - 1) {
-		if (p_Collider[((int)((m_x + i) / 8) + (40 * (int)((m_y) / 8)))] == 1) {
-			m_y = std::round(m_y);
-			m_CurrVelocity.y = 0;
-			return;
-		}
-	}
+	
 }
