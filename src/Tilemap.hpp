@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include <vector>
 #include <string>
+#include "Player.hpp"
 
 class Tilemap {
 public:
@@ -11,11 +12,14 @@ public:
 	void AddLayer(const std::string& p_TileMapType, unsigned short* p_TileMap);
 	void SetBackground(const std::string& p_TexPath);
 	void AddProps(const std::string& p_TexPath);
+	void SetCollider(unsigned short* p_Collider);
 
 	void SaveTilemap(const char* file_name);
 
 	void RenderToBuffer();
 	void Render();
+
+	unsigned short* GetCollider() { return m_Collider; }
 private:
 	std::vector<unsigned short*> m_TileLayers;
 	std::vector<SDL_Rect> m_Tiles;

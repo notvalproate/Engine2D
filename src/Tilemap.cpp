@@ -14,6 +14,7 @@ Tilemap::Tilemap(const char* p_TilesPath, const std::vector<SDL_Rect>& p_Tiles, 
 
 Tilemap::~Tilemap() { 
 	SDL_DestroyTexture(m_Buffer);
+	delete[] m_Collider;
 }
 
 void Tilemap::AddLayer(const std::string& p_TileMapType, unsigned short* p_TileMap) {
@@ -30,6 +31,10 @@ void Tilemap::SetBackground(const std::string& p_TexPath) {
 
 void Tilemap::AddProps(const std::string& p_TexPath) {
 	m_Props = p_TexPath;
+}
+
+void Tilemap::SetCollider(unsigned short* p_Collider) {
+	m_Collider = p_Collider;
 }
 
 void Tilemap::RenderToBuffer() {
