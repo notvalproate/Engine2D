@@ -16,7 +16,7 @@ private:
 	double m_x, m_y;
 	const int m_StrafeVelocity;
 	const int m_Gravity;
-	int ip;
+	bool m_AllowDown, m_AllowUp, m_AllowRight, m_AllowLeft;
 
 	Vector2d m_CurrVelocity;
 	std::vector<unsigned int> m_InputStack;
@@ -24,6 +24,7 @@ private:
 	SDL_Rect m_SrcRect, m_DestRect;
 	SDL_Texture *m_Sprite, *m_Buffer;
 	SDL_Renderer* m_Renderer;
+	int ip;
 
 	void CheckCollisions(unsigned short* p_Collider);
 };
