@@ -55,8 +55,8 @@ void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, con
 
 	//Player
 
-	SDL_Rect SrcRect = { 0, 0, 15, 12 };
-	m_Player = new Player("assets/character sprites/idle/cat.png", SrcRect, SrcRect, m_Renderer);
+	SDL_Rect SrcRect = { 0, 0, 13, 17 };
+	m_Player = new Player("assets/character sprites/idle/madeline.png", SrcRect, SrcRect, m_Renderer);
 
 	//Tilemaps
 
@@ -183,7 +183,7 @@ void Game::HandleEvents() {
 }
 
 void Game::Update() {
-	m_Player->Update(Level_1->GetCollider(), m_FrameDelta);
+	m_Player->Update(Level_1->GetCollider(), Level_1->GetWidth(), m_FrameDelta);
 	SDL_RenderClear(m_Renderer); 
 }
  

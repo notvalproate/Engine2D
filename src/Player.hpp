@@ -9,7 +9,7 @@ public:
 	~Player();
 	
 	void Render();
-	void Update(unsigned short* p_Collider, const float& p_DeltaTime);
+	void Update(unsigned short* p_Collider, const int& p_ColliderWidth, const float& p_DeltaTime);
 	void HandleEvents(const SDL_Event& p_Event);
 	
 private:
@@ -26,5 +26,5 @@ private:
 	SDL_Renderer* m_Renderer;
 	int ip;
 
-	void CheckCollisions(unsigned short* p_Collider);
+	void CheckCollisions(unsigned short* p_Collider, const int& p_ColliderWidth);
 };

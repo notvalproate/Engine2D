@@ -29,15 +29,18 @@ void Player::Render() {
 	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, NULL);
 }
 
-void Player::Update(unsigned short* p_Collider, const float& p_DeltaTime) {
+void Player::Update(unsigned short* p_Collider, const int& p_ColliderWidth, const float& p_DeltaTime) {
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 	SDL_RenderClear(m_Renderer);
 
 	//m_CurrVelocity.y += m_Gravity * (p_DeltaTime / (float)1000);
+	m_CurrVelocity.Normalize();
+	m_CurrVelocity.Scale(m_StrafeVelocity);
+
 	m_y += m_CurrVelocity.y * (p_DeltaTime / (float)1000);
 	m_x += m_CurrVelocity.x * (p_DeltaTime / (float)1000);
 
-	CheckCollisions(p_Collider);
+	CheckCollisions(p_Collider, p_ColliderWidth);
 	
 	m_DestRect.x = m_x;
 	m_DestRect.y = m_y;
@@ -113,23 +116,26 @@ void Player::HandleEvents(const SDL_Event& p_Event) {
 	}
 }
 
-void Player::CheckCollisions(unsigned short* p_Collider) {
+void Player::CheckCollisions(unsigned short* p_Collider, const int& p_ColliderWidth) {
 	SDL_Rect TempRect;
 	m_AllowDown = true;
 	m_AllowUp = true;
 	m_AllowLeft = true;
 	m_AllowRight = true;
 
+	int t_Top = 8 * (int)(m_y / 8);
+	int t_Bottom = 8 * (int)((m_y + m_DestRect.h - 1) / 8);
+	int t_Left = 8 * (int)(m_x / 8);
+	int t_Right = 8 * (int)((m_x + m_DestRect.w - 1) / 8);
+
 	//left
 	int i = 0;
-	while ((8 * (int)(m_y / 8) + i) <= m_y + m_DestRect.h - 1) {
-		TempRect = { 8 * (int)(m_x / 8) - 8, 8 * (int)(m_y / 8) + i, 8, 8 };
-		if (p_Collider[(TempRect.x / 8) + (TempRect.y * 5)] == 1) {
-			if (m_x <= TempRect.x + 9) {
-				m_AllowLeft = false;
-				SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
-				SDL_RenderFillRect(m_Renderer, &TempRect);
-			}
+	while ((t_Top + i) <= m_y + m_DestRect.h - 1) {
+		TempRect = { t_Left - 8, t_Top + i, 8, 8 };
+		if (p_Collider[(TempRect.x / 8) + (TempRect.y * p_ColliderWidth / 8)] == 1 && m_x <= TempRect.x + 9) {
+			m_AllowLeft = false;
+			SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
+			SDL_RenderFillRect(m_Renderer, &TempRect);
 		}
 		else {
 			SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 100); 
@@ -139,14 +145,12 @@ void Player::CheckCollisions(unsigned short* p_Collider) {
 	}
 	//right
 	i = 0;
-	while ((8 * (int)(m_y / 8) + i) <= m_y + m_DestRect.h - 1) {
-		TempRect = { 8 * (int)((m_x + m_DestRect.w - 1) / 8) + 8, 8 * (int)(m_y / 8) + i, 8, 8 };
-		if (p_Collider[(TempRect.x / 8) + (TempRect.y * 5)] == 1) {
-			if (m_x + m_DestRect.w >= TempRect.x) {
-				m_AllowRight = false;
-				SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
-				SDL_RenderFillRect(m_Renderer, &TempRect);
-			}
+	while ((t_Top + i) <= m_y + m_DestRect.h - 1) {
+		TempRect = { t_Right + 8, t_Top + i, 8, 8 }; 
+		if (p_Collider[(TempRect.x / 8) + (TempRect.y * p_ColliderWidth / 8)] == 1 && m_x + m_DestRect.w >= TempRect.x) {
+			m_AllowRight = false;
+			SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
+			SDL_RenderFillRect(m_Renderer, &TempRect);
 		}
 		else {
 			SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 100);
@@ -156,14 +160,12 @@ void Player::CheckCollisions(unsigned short* p_Collider) {
 	}
 	//top
 	i = 0;
-	while ((8 * (int)(m_x / 8) + i) <= m_x + m_DestRect.w - 1) {
-		TempRect = { 8 * (int)(m_x / 8) + i, 8 * (int)(m_y / 8) - 8, 8, 8 };
-		if (p_Collider[(TempRect.x / 8) + (TempRect.y * 5)] == 1) {
-			if ((int)m_y == TempRect.y + 8) {
-				m_AllowUp = false;
-				SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
-				SDL_RenderFillRect(m_Renderer, &TempRect);
-			}
+	while ((t_Left + i) <= m_x + m_DestRect.w - 1) {
+		TempRect = { t_Left + i, t_Top - 8, 8, 8 };
+		if (p_Collider[(TempRect.x / 8) + (TempRect.y * p_ColliderWidth / 8)] == 1 && m_y <= TempRect.y + 9) {
+			m_AllowUp = false;
+			SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
+			SDL_RenderFillRect(m_Renderer, &TempRect);
 		}
 		else {
 			SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 100);
@@ -173,20 +175,67 @@ void Player::CheckCollisions(unsigned short* p_Collider) {
 	}
 	//bottom
 	i = 0;
-	while ((8 * (int)(m_x / 8) + i) <= m_x + m_DestRect.w - 1) {
-		TempRect = { 8 * (int)(m_x / 8) + i, 8 * (int)((m_y + m_DestRect.h - 1) / 8) + 8, 8, 8 };
-		if (p_Collider[(TempRect.x / 8) + (TempRect.y * 5)] == 1) {
-			if (m_y + m_DestRect.h >= TempRect.y) {
-				m_AllowDown = false;
-				SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
-				SDL_RenderFillRect(m_Renderer, &TempRect);
-			} 
+	while ((t_Left + i) <= m_x + m_DestRect.w - 1) { 
+		TempRect = { t_Left + i, t_Bottom + 8, 8, 8 };
+		if (p_Collider[(TempRect.x / 8) + (TempRect.y * p_ColliderWidth / 8)] == 1 && m_y + m_DestRect.h >= TempRect.y) {
+			m_AllowDown = false;
+			SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
+			SDL_RenderFillRect(m_Renderer, &TempRect);
 		}
 		else {
 			SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 100);
 			SDL_RenderFillRect(m_Renderer, &TempRect);
 		}
 		i += 8;
+	}
+
+	if (!(m_AllowDown && m_AllowUp && m_AllowLeft && m_AllowRight)) {
+		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+		return;
+	}
+	//Diagonal Bottom Left
+	TempRect = { 8 * (int)(m_x / 8) - 8, 8 * (int)((m_y + m_DestRect.h - 1) / 8) + 8, 8, 8 };
+	if (p_Collider[(TempRect.x / 8) + (TempRect.y * p_ColliderWidth / 8)] == 1 && (m_y + m_DestRect.h >= TempRect.y) && (m_x <= TempRect.x + 9)) {
+		m_AllowDown = false;
+		SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
+		SDL_RenderFillRect(m_Renderer, &TempRect);
+	}
+	else {
+		SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 100); 
+		SDL_RenderFillRect(m_Renderer, &TempRect); 
+	}
+	//Diagonal Bottom Right
+	TempRect = { 8 * (int)((m_x + m_DestRect.w - 1) / 8) + 8, 8 * (int)((m_y + m_DestRect.h - 1) / 8) + 8, 8, 8 };
+	if (p_Collider[(TempRect.x / 8) + (TempRect.y * p_ColliderWidth / 8)] == 1 && (m_y + m_DestRect.h >= TempRect.y) && (m_x + m_DestRect.w >= TempRect.x)) {
+		m_AllowDown = false;
+		SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100); 
+		SDL_RenderFillRect(m_Renderer, &TempRect); 
+	}
+	else {
+		SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 100); 
+		SDL_RenderFillRect(m_Renderer, &TempRect); 
+	}
+	//Diagonal Top Left
+	TempRect = { 8 * (int)(m_x / 8) - 8, 8 * (int)(m_y / 8) - 8, 8, 8 };
+	if (p_Collider[(TempRect.x / 8) + (TempRect.y * p_ColliderWidth / 8)] == 1 && (m_x <= TempRect.x + 9) && (m_y <= TempRect.y + 9)) {
+		m_AllowLeft = false;
+		SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
+		SDL_RenderFillRect(m_Renderer, &TempRect);
+	}
+	else {
+		SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 100);
+		SDL_RenderFillRect(m_Renderer, &TempRect);
+	}
+	//Diagonal Top Right
+	TempRect = { 8 * (int)((m_x + m_DestRect.w - 1) / 8) + 8, 8 * (int)(m_y / 8) - 8, 8, 8 };
+	if (p_Collider[(TempRect.x / 8) + (TempRect.y * p_ColliderWidth / 8)] == 1 && (m_x + m_DestRect.w >= TempRect.x) && (m_y <= TempRect.y + 9)) {
+		m_AllowRight = false;
+		SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 100);
+		SDL_RenderFillRect(m_Renderer, &TempRect);
+	}
+	else {
+		SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 100); 
+		SDL_RenderFillRect(m_Renderer, &TempRect); 
 	}
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }

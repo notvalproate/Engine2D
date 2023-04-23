@@ -7,4 +7,7 @@ public:
 	~Vector2d();
 
 	double x, y;
+
+	void Normalize();
+	void Scale(const int& p_Factor);
 };
