@@ -21,6 +21,8 @@ public:
 
 	unsigned short* GetCollider() { return m_Collider; }
 	int GetWidth() { return m_Width; }
+	int GetHeight() { return m_Height; }
+
 private:
 	std::vector<unsigned short*> m_TileLayers;
 	std::vector<SDL_Rect> m_Tiles;

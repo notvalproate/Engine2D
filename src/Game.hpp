@@ -33,6 +33,7 @@ private:
 
 	Tilemap* Level_1;
 	Player* m_Player;
+	Collider* m_PlayerCollider;
 
 	bool InFocus();
 };

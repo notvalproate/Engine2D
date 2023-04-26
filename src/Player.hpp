@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include "math/Vector2d.h"
 #include <vector>
+#include "physics/Collider.hpp"
 
 class Player {
 public:
@@ -9,22 +10,18 @@ public:
 	~Player();
 	
 	void Render();
-	void Update(unsigned short* p_Collider, const int& p_ColliderWidth, const float& p_DeltaTime);
+	void LinkCollider(Collider* p_Collider);
+	void Update(const float& p_DeltaTime);
 	void HandleEvents(const SDL_Event& p_Event);
-	
+	SDL_Texture* GetBuffer() { return m_Buffer; }
 private:
-	double m_x, m_y;
 	const int m_StrafeVelocity;
 	const int m_Gravity;
-	bool m_AllowDown, m_AllowUp, m_AllowRight, m_AllowLeft;
 
+	Vector2d m_CurrPosition, m_LastPosition;
 	Vector2d m_CurrVelocity;
-	std::vector<unsigned int> m_InputStack;
 
 	SDL_Rect m_SrcRect, m_DestRect;
 	SDL_Texture *m_Sprite, *m_Buffer;
 	SDL_Renderer* m_Renderer;
-	int ip;
-
-	void CheckCollisions(unsigned short* p_Collider, const int& p_ColliderWidth);
 };

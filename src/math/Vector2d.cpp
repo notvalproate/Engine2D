@@ -24,3 +24,7 @@ void Vector2d::Scale(const int& p_Factor) {
 	x *= p_Factor;
 	y *= p_Factor;
 }
+
+double Vector2d::GetMagnitude() {
+	return std::sqrt(x * x + y * y);
+}

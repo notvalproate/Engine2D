@@ -10,4 +10,15 @@ public:
 
 	void Normalize();
 	void Scale(const int& p_Factor);
+	double GetMagnitude();
+
+	Vector2d operator+(const Vector2d& o_V) {
+		return Vector2d(x + o_V.x, y + o_V.y);
+	}
+	Vector2d operator-(const Vector2d& o_V) {
+		return Vector2d(x - o_V.x, y - o_V.y);
+	}
+	Vector2d operator/(const int& k) {
+		return Vector2d(x / k, y / k);
+	}
 };
