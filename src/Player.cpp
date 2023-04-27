@@ -3,8 +3,8 @@
 #include "TextureLoader.hpp"
 #include <iostream>
 
-Player::Player(const char* p_TexPath, const SDL_Rect& p_SrcRect, const SDL_Rect& p_DestRect, SDL_Renderer* p_Renderer) 
-	: m_StrafeVelocity(160), m_Gravity(140) {
+Player::Player(const char* p_TexPath, const SDL_Rect& p_SrcRect, const SDL_Rect& p_DestRect, SDL_Renderer* p_Renderer, const int& p_MovementSpeed) 
+	: m_StrafeVelocity(p_MovementSpeed), m_Gravity(140) {
 	m_Sprite = TextureUtil::LoadTexture(p_TexPath, p_Renderer);
 	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 320, 180);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
@@ -53,6 +53,12 @@ void Player::Update(const float& p_DeltaTime) {
 	//Set New positions by applying velocity
 	m_CurrPosition.y += m_CurrVelocity.y * (p_DeltaTime / (float)1000);
 	m_CurrPosition.x += m_CurrVelocity.x * (p_DeltaTime / (float)1000);
+}
+
+void Player::UpdateAfterCollision(const float& p_DeltaTime) {
+	//Set New positions by applying velocity
+	m_CurrPosition.y = m_LastPosition.y + m_CurrVelocity.y * (p_DeltaTime / (float)1000);
+	m_CurrPosition.x = m_LastPosition.x + m_CurrVelocity.x * (p_DeltaTime / (float)1000);
 }
 
 void Player::HandleEvents(const SDL_Event& p_Event) {

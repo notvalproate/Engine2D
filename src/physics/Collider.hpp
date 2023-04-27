@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL.h"
 #include "../math/Vector2d.h"
+#include <vector>
 
 class Collider {
 public:
@@ -13,23 +14,31 @@ public:
 	void Update(const float& p_DeltaTime);
 	void DebugRender(const float& p_DeltaTime);
 
-	void CollisionWith(const Collider& p_OtherCollider);
+	struct CollidedTile {
+		SDL_Rect m_Tile; 
+		double m_TimeHitNear; 
+		Vector2d m_ContactNormal; 
+	};
+
 private:
+
 	Vector2d *m_CurrPosition, *m_LastPosition, *m_CurrVelocity;
-	Vector2d m_Offset;
+	Vector2d m_Offset, m_ColliderLastPos;
 
 	SDL_Rect m_ColliderRect;
 
 	SDL_Renderer* m_Renderer;
 	SDL_Texture* m_Buffer;
 
+	std::vector<SDL_Rect> m_TilesToCollide;
+	std::vector<CollidedTile> m_TilesCollided;
+
 	bool m_CollidesWithMap;
 	unsigned short* m_ColliderMap;
 	int m_MapWidth, m_MapHeight;
-	int r, g, b;
 
-	void ResolveCollision(const Collider& p_OtherCollider);
 	void ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Rect& p_Tile);
-
 	void CollisionWithMap(const float& p_DeltaTime);
+
+	int ClosestMultipleDown(const float& p_X, const int& p_N);
 };

@@ -6,12 +6,13 @@
 
 class Player {
 public:
-	Player(const char* p_TexPath, const SDL_Rect& p_SrcRect, const SDL_Rect& p_DestRect, SDL_Renderer* p_Renderer);
+	Player(const char* p_TexPath, const SDL_Rect& p_SrcRect, const SDL_Rect& p_DestRect, SDL_Renderer* p_Renderer, const int& p_MovementSpeed);
 	~Player();
 	
 	void Render();
 	void LinkCollider(Collider* p_Collider);
 	void Update(const float& p_DeltaTime);
+	void UpdateAfterCollision(const float& p_DeltaTime);
 	void HandleEvents(const SDL_Event& p_Event);
 	SDL_Texture* GetBuffer() { return m_Buffer; }
 private:

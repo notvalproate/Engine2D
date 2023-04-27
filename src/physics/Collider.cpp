@@ -1,6 +1,7 @@
 #include "Collider.hpp"
 #include "../math/Rectangle.hpp"
 #include <iostream>
+#include <algorithm>
 
 Collider::Collider(const SDL_Rect& p_ColliderRect, const int& p_OffsetX, const int& p_OffsetY, SDL_Renderer* p_Renderer) {
 	m_ColliderRect = p_ColliderRect;
@@ -14,10 +15,6 @@ Collider::Collider(const SDL_Rect& p_ColliderRect, const int& p_OffsetX, const i
 	m_Renderer = p_Renderer;
 	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 320, 180);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
-
-	r = 255;
-	g = 165;
-	b = 0;
 }
 
 Collider::~Collider() { }
@@ -37,12 +34,14 @@ void Collider::SetColliderMap(unsigned short* p_ColliderMap, const int& p_MapWid
 }
 
 void Collider::LinkObject(Vector2d* p_CurrVelocity, Vector2d* p_CurrPosition, Vector2d* p_LastPosition) {
-	m_CurrPosition = p_CurrPosition; 
+	m_CurrPosition = p_CurrPosition;
 	m_LastPosition = p_LastPosition;
 	m_CurrVelocity = p_CurrVelocity;
 }
 
 void Collider::Update(const float& p_DeltaTime) {
+	m_ColliderLastPos.x = m_LastPosition->x + m_Offset.x;
+	m_ColliderLastPos.y = m_LastPosition->y + m_Offset.y;
 	m_ColliderRect.x = m_CurrPosition->x + m_Offset.x;
 	m_ColliderRect.y = m_CurrPosition->y + m_Offset.y; 
 
@@ -52,28 +51,9 @@ void Collider::Update(const float& p_DeltaTime) {
 }
 
 void Collider::DebugRender(const float& p_DeltaTime) {
-	//Debug to render hitbox
+	//Set target to render debug onto buffer
 	SDL_SetRenderTarget(m_Renderer, m_Buffer); 
 	SDL_RenderClear(m_Renderer);
-
-	//Checking working 
-	Vector2d t_ContactPoint, t_ContactNormal;
-	double t_TimeHitNear;
-	SDL_Rect TestRect = {70, 70, 8, 8}; 
-	SDL_Rect Contact; 
-	SDL_FRect TempRect = { m_ColliderRect.x, m_ColliderRect.y, m_ColliderRect.w, m_ColliderRect.h };
-
-	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 255, 255);
-	if (RectUtil::DynamicRectIntersectRect(TempRect, TestRect, *m_CurrVelocity, t_ContactPoint, t_ContactNormal, t_TimeHitNear, p_DeltaTime)) {
-		SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 255); 
-		SDL_RenderFillRect(m_Renderer, &TestRect); 
-		SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 255);
-		Contact = { (int)t_ContactPoint.x, (int)t_ContactPoint.y, 3, 3 }; 
-		SDL_RenderFillRect(m_Renderer, &Contact);;
-	}
-	else {
-		SDL_RenderFillRect(m_Renderer, &TestRect);
-	}
 
 	//Debug to render all the map colliders
 	bool t_HighlightColliders = true;
@@ -89,6 +69,7 @@ void Collider::DebugRender(const float& p_DeltaTime) {
 		}
 	}
 
+	//Debug to render hitbox
 	SDL_SetRenderDrawColor(m_Renderer, r, g, b, 100);
 	SDL_RenderFillRect(m_Renderer, &m_ColliderRect);
 
@@ -104,59 +85,91 @@ void Collider::DebugRender(const float& p_DeltaTime) {
 	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, NULL);
 }
 
-void Collider::CollisionWithMap(const float& p_DeltaTime) {
-	SDL_Rect t_Tile;
-	Vector2d t_ContactPoint, t_ContactNormal;
+bool CompareCollidedTiles(const Collider::CollidedTile& p_A, const Collider::CollidedTile& p_B) {
+	return p_A.m_TimeHitNear < p_B.m_TimeHitNear;
+}
 
+void Collider::CollisionWithMap(const float& p_DeltaTime) {
+	SDL_Rect t_TileToCheck; 
+	Vector2d t_TopLeft, t_BottomRight; 
+	t_TopLeft.x = ClosestMultipleDown(m_ColliderLastPos.x, 8);
+	t_BottomRight.x = ClosestMultipleDown(m_ColliderRect.x + m_ColliderRect.w, 8);
+	t_TopLeft.y = ClosestMultipleDown(m_ColliderLastPos.y, 8); 
+	t_BottomRight.y = ClosestMultipleDown(m_ColliderRect.y + m_ColliderRect.h, 8); 
+
+	if (m_LastPosition->x > m_CurrPosition->x) { 
+		t_TopLeft.x = ClosestMultipleDown(m_ColliderRect.x, 8); 
+		t_BottomRight.x = ClosestMultipleDown(m_ColliderLastPos.x + m_ColliderRect.w, 8); 
+	}
+	if (m_LastPosition->y > m_CurrPosition->y) {
+		t_TopLeft.y = ClosestMultipleDown(m_ColliderRect.y, 8); 
+		t_BottomRight.y = ClosestMultipleDown(m_ColliderLastPos.y + m_ColliderRect.h, 8); 
+	}
+
+	m_TilesToCollide.clear();
+	for (int i = t_TopLeft.x; i <= t_BottomRight.x; i = i + 8) { 
+		for (int j = t_TopLeft.y; j <= t_BottomRight.y; j = j + 8) { 
+			t_TileToCheck = { i, j, 8, 8 }; 
+			m_TilesToCollide.push_back(t_TileToCheck); 
+		}
+	}
+
+	CollidedTile t_Tile;
+	Vector2d t_ContactPoint, t_ContactNormal;
 	double t_TimeHitNear;
 
-	for (int i = 0; i <= m_MapHeight; i++) {
-		for (int j = 0; j <= m_MapWidth; j++) {
-			if (m_ColliderMap[m_MapWidth * i + j] == 1) {
-				t_Tile = { j * 8, i * 8, 8, 8 };
-				SDL_FRect t_ColliderFRect = { m_ColliderRect.x, m_ColliderRect.y, m_ColliderRect.w, m_ColliderRect.h }; 
+	m_TilesCollided.clear();
+	for (int i = 0; i < m_TilesToCollide.size(); i++) {
+		if (m_ColliderMap[m_TilesToCollide[i].x / 8 + (40 * m_TilesToCollide[i].y / 8)] == 1) {
+			SDL_FRect t_ColliderFRect = { m_ColliderRect.x, m_ColliderRect.y, m_ColliderRect.w, m_ColliderRect.h }; 
 
-				if (RectUtil::DynamicRectIntersectRect(t_ColliderFRect, t_Tile, *m_CurrVelocity, t_ContactPoint, t_ContactNormal, t_TimeHitNear, p_DeltaTime)) {
-					ResolveMapCollision(t_ContactNormal, t_Tile); 
-				}
+			if (RectUtil::DynamicRectIntersectRect(t_ColliderFRect, m_TilesToCollide[i], *m_CurrVelocity, t_ContactPoint, t_ContactNormal, t_TimeHitNear, p_DeltaTime)) {
+				t_Tile = { m_TilesToCollide[i], t_TimeHitNear, t_ContactNormal };
+				m_TilesCollided.push_back(t_Tile);
 			}
+		}
+	}
+	
+	if (m_TilesCollided.empty()) {
+		return;
+	}
+
+	std::sort(m_TilesCollided.begin(), m_TilesCollided.end(), CompareCollidedTiles);
+
+	for (int i = 0; i < m_TilesCollided.size(); i++) {
+		SDL_FRect t_ColliderFRect = { m_ColliderRect.x, m_ColliderRect.y, m_ColliderRect.w, m_ColliderRect.h };
+
+		if (RectUtil::DynamicRectIntersectRect(t_ColliderFRect, m_TilesCollided[i].m_Tile, *m_CurrVelocity, t_ContactPoint, t_ContactNormal, t_TimeHitNear, p_DeltaTime)) {
+			ResolveMapCollision(t_ContactNormal, m_TilesCollided[i].m_Tile);
 		}
 	}
 }
 
-void Collider::ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Rect& p_Tile) {
+int Collider::ClosestMultipleDown(const float& p_X, const int& p_N) {
+	return (int)p_X - ((int)p_X % p_N);	
+}
 
-	std::cout << p_Tile.x << " " << p_Tile.y << std::endl;
+void Collider::ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Rect& p_Tile) {
 	if (p_ContactNormal.x) {
 		//Left
 		if (p_ContactNormal.x > 0) {
 			m_CurrPosition->x = p_Tile.x + 8 - m_Offset.x;
-			m_ColliderRect.x = m_CurrPosition->x + m_Offset.x;
 		}
 		//Right
 		else {
 			m_CurrPosition->x = p_Tile.x - m_ColliderRect.w - m_Offset.x;
-			m_ColliderRect.x = m_CurrPosition->x + m_Offset.x;
 		}
+		m_ColliderRect.x = m_CurrPosition->x + m_Offset.x;
 	}
 	if (p_ContactNormal.y) {
 		//Top
 		if (p_ContactNormal.y > 0) {
 			m_CurrPosition->y = p_Tile.y + 8 - m_Offset.y;
-			m_ColliderRect.y = m_CurrPosition->y + m_Offset.y;
 		}
 		//Bottom
 		else {
 			m_CurrPosition->y = p_Tile.y - m_ColliderRect.h - m_Offset.y;
-			m_ColliderRect.y = m_CurrPosition->y + m_Offset.y;
 		}
+		m_ColliderRect.y = m_CurrPosition->y + m_Offset.y;
 	}
-}
-
-void Collider::CollisionWith(const Collider& p_OtherCollider) {
-
-}
-
-void Collider::ResolveCollision(const Collider& p_OtherCollider) {
-
 }

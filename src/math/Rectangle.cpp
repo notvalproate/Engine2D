@@ -37,6 +37,9 @@ bool RectUtil::RayIntersectRect(const Vector2d& p_RayOrigin, const Vector2d& p_R
 		(Rectangle.y + Rectangle.h - p_RayOrigin.y) / p_RayDir.y
 	);
 
+	if (std::isnan(t_Far.y) || std::isnan(t_Far.x)) return false;
+	if (std::isnan(t_Near.y) || std::isnan(t_Near.x)) return false;
+
 	if (t_Near.x > t_Far.x) {
 		t_Temp = t_Near.x;
 		t_Near.x = t_Far.x;
@@ -87,10 +90,10 @@ bool RectUtil::DynamicRectIntersectRect(const SDL_FRect& p_DynamicRect, const SD
 	}
 
 	SDL_FRect t_ExpandedRect = { 
-		(float)p_StaticRect.x - (p_DynamicRect.w / (float)2.0) + 0.005,
-		(float)p_StaticRect.y - (p_DynamicRect.h / (float)2.0) + 0.005,
-		(float)p_StaticRect.w + p_DynamicRect.w - 0.01,
-		(float)p_StaticRect.h + p_DynamicRect.h - 0.01
+		(float)p_StaticRect.x - (p_DynamicRect.w / (float)2.0),
+		(float)p_StaticRect.y - (p_DynamicRect.h / (float)2.0),
+		(float)p_StaticRect.w + p_DynamicRect.w,
+		(float)p_StaticRect.h + p_DynamicRect.h
 	};
 
 	Vector2d t_RayOrigin(p_DynamicRect.x + (p_DynamicRect.w / (float)2.0), p_DynamicRect.y + (p_DynamicRect.h / (float)2.0));
