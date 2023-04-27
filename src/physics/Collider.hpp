@@ -9,7 +9,7 @@ public:
 	~Collider();
 
 	void SetColliderMap(unsigned short* p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight);
-	void LinkObject(Vector2d* p_CurrVelocity, Vector2d* p_CurrPosition, Vector2d* p_LastPosition);
+	void LinkObject(Vector2d* p_CurrVelocity, Vector2d* p_CurrPosition, Vector2d* p_LastPosition, bool *p_Jumping);
 
 	void Update(const float& p_DeltaTime);
 	void DebugRender(const float& p_DeltaTime);
@@ -21,10 +21,10 @@ public:
 	};
 
 private:
-
 	Vector2d *m_CurrPosition, *m_LastPosition, *m_CurrVelocity;
 	Vector2d m_Offset, m_ColliderLastPos;
-
+	bool* m_Jumping;
+	 
 	SDL_Rect m_ColliderRect;
 
 	SDL_Renderer* m_Renderer;
@@ -37,7 +37,7 @@ private:
 	unsigned short* m_ColliderMap;
 	int m_MapWidth, m_MapHeight;
 
-	void ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Rect& p_Tile);
+	void ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Rect& p_Tile, const float& p_TimeHitNear);
 	void CollisionWithMap(const float& p_DeltaTime);
 
 	int ClosestMultipleDown(const float& p_X, const int& p_N);

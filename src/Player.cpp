@@ -4,7 +4,7 @@
 #include <iostream>
 
 Player::Player(const char* p_TexPath, const SDL_Rect& p_SrcRect, const SDL_Rect& p_DestRect, SDL_Renderer* p_Renderer, const int& p_MovementSpeed) 
-	: m_StrafeVelocity(p_MovementSpeed), m_Gravity(140) {
+	: m_StrafeVelocity(p_MovementSpeed), m_Gravity(360) {
 	m_Sprite = TextureUtil::LoadTexture(p_TexPath, p_Renderer);
 	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 320, 180);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
@@ -17,6 +17,8 @@ Player::Player(const char* p_TexPath, const SDL_Rect& p_SrcRect, const SDL_Rect&
 	m_CurrPosition.y = m_DestRect.y;
 	m_CurrVelocity.x = 0;
 	m_CurrVelocity.y = 0;
+
+	m_Jumping = true;
 }
 
 void Player::Render() {
@@ -38,13 +40,14 @@ void Player::Render() {
 }
 
 void Player::LinkCollider(Collider* p_Collider) {
-	p_Collider->LinkObject(&m_CurrVelocity, &m_CurrPosition, &m_LastPosition);
+	p_Collider->LinkObject(&m_CurrVelocity, &m_CurrPosition, &m_LastPosition, &m_Jumping);
 }
 
 void Player::Update(const float& p_DeltaTime) {
-	//m_CurrVelocity.y += m_Gravity * (p_DeltaTime / (float)1000);
-	m_CurrVelocity.Normalize();
-	m_CurrVelocity.Scale(m_StrafeVelocity);
+	//m_CurrVelocity.Normalize();
+	//m_CurrVelocity.Scale(m_StrafeVelocity);
+	if(m_Jumping) m_CurrVelocity.y += m_Gravity * (p_DeltaTime / (float)1000);
+	std::cout << m_CurrVelocity.y << std::endl;
 
 	//Save Position into last position before updating
 	m_LastPosition.x = m_CurrPosition.x;
@@ -55,17 +58,12 @@ void Player::Update(const float& p_DeltaTime) {
 	m_CurrPosition.x += m_CurrVelocity.x * (p_DeltaTime / (float)1000);
 }
 
-void Player::UpdateAfterCollision(const float& p_DeltaTime) {
-	//Set New positions by applying velocity
-	m_CurrPosition.y = m_LastPosition.y + m_CurrVelocity.y * (p_DeltaTime / (float)1000);
-	m_CurrPosition.x = m_LastPosition.x + m_CurrVelocity.x * (p_DeltaTime / (float)1000);
-}
-
 void Player::HandleEvents(const SDL_Event& p_Event) {
 	const Uint8* Keys = SDL_GetKeyboardState(NULL);
 
-	if (Keys[SDL_SCANCODE_W]) {
-		m_CurrVelocity.y = -m_StrafeVelocity;
+	if (Keys[SDL_SCANCODE_W] && !m_Jumping) {
+		m_CurrVelocity.y = -140;
+		m_Jumping = true;
 	}
 	if (Keys[SDL_SCANCODE_S]) {
 		m_CurrVelocity.y = m_StrafeVelocity;
@@ -81,9 +79,6 @@ void Player::HandleEvents(const SDL_Event& p_Event) {
 		auto Key = p_Event.key.keysym.sym;
 
 		switch (Key) {
-		case SDLK_w:
-			m_CurrVelocity.y = 0;
-			break;
 		case SDLK_s:
 			m_CurrVelocity.y = 0;
 			break;

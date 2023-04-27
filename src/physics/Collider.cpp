@@ -17,7 +17,9 @@ Collider::Collider(const SDL_Rect& p_ColliderRect, const int& p_OffsetX, const i
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
 }
 
-Collider::~Collider() { }
+Collider::~Collider() {
+	delete m_Buffer;
+}
 
 void Collider::SetColliderMap(unsigned short* p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight) {
 	m_ColliderMap = p_ColliderMap;
@@ -33,10 +35,11 @@ void Collider::SetColliderMap(unsigned short* p_ColliderMap, const int& p_MapWid
 	}
 }
 
-void Collider::LinkObject(Vector2d* p_CurrVelocity, Vector2d* p_CurrPosition, Vector2d* p_LastPosition) {
+void Collider::LinkObject(Vector2d* p_CurrVelocity, Vector2d* p_CurrPosition, Vector2d* p_LastPosition, bool* p_Jumping) {
 	m_CurrPosition = p_CurrPosition;
 	m_LastPosition = p_LastPosition;
 	m_CurrVelocity = p_CurrVelocity;
+	m_Jumping = p_Jumping;
 }
 
 void Collider::Update(const float& p_DeltaTime) {
@@ -70,7 +73,7 @@ void Collider::DebugRender(const float& p_DeltaTime) {
 	}
 
 	//Debug to render hitbox
-	SDL_SetRenderDrawColor(m_Renderer, r, g, b, 100);
+	SDL_SetRenderDrawColor(m_Renderer, 255, 165, 0, 100);
 	SDL_RenderFillRect(m_Renderer, &m_ColliderRect);
 
 	//Debug to render velocity direction 
@@ -90,6 +93,7 @@ bool CompareCollidedTiles(const Collider::CollidedTile& p_A, const Collider::Col
 }
 
 void Collider::CollisionWithMap(const float& p_DeltaTime) {
+	*m_Jumping = true;
 	SDL_Rect t_TileToCheck; 
 	Vector2d t_TopLeft, t_BottomRight; 
 	t_TopLeft.x = ClosestMultipleDown(m_ColliderLastPos.x, 8);
@@ -125,7 +129,7 @@ void Collider::CollisionWithMap(const float& p_DeltaTime) {
 
 			if (RectUtil::DynamicRectIntersectRect(t_ColliderFRect, m_TilesToCollide[i], *m_CurrVelocity, t_ContactPoint, t_ContactNormal, t_TimeHitNear, p_DeltaTime)) {
 				t_Tile = { m_TilesToCollide[i], t_TimeHitNear, t_ContactNormal };
-				m_TilesCollided.push_back(t_Tile);
+				m_TilesCollided.push_back(t_Tile); 
 			}
 		}
 	}
@@ -140,7 +144,10 @@ void Collider::CollisionWithMap(const float& p_DeltaTime) {
 		SDL_FRect t_ColliderFRect = { m_ColliderRect.x, m_ColliderRect.y, m_ColliderRect.w, m_ColliderRect.h };
 
 		if (RectUtil::DynamicRectIntersectRect(t_ColliderFRect, m_TilesCollided[i].m_Tile, *m_CurrVelocity, t_ContactPoint, t_ContactNormal, t_TimeHitNear, p_DeltaTime)) {
-			ResolveMapCollision(t_ContactNormal, m_TilesCollided[i].m_Tile);
+			ResolveMapCollision(t_ContactNormal, m_TilesCollided[i].m_Tile, t_TimeHitNear);
+			if (t_ContactNormal.y == -1) {
+				*m_Jumping = false;
+			}
 		}
 	}
 }
@@ -149,7 +156,7 @@ int Collider::ClosestMultipleDown(const float& p_X, const int& p_N) {
 	return (int)p_X - ((int)p_X % p_N);	
 }
 
-void Collider::ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Rect& p_Tile) {
+void Collider::ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Rect& p_Tile, const float& p_TimeHitNear) {
 	if (p_ContactNormal.x) {
 		//Left
 		if (p_ContactNormal.x > 0) {
@@ -159,6 +166,7 @@ void Collider::ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Re
 		else {
 			m_CurrPosition->x = p_Tile.x - m_ColliderRect.w - m_Offset.x;
 		}
+		m_CurrVelocity->x = 0;
 		m_ColliderRect.x = m_CurrPosition->x + m_Offset.x;
 	}
 	if (p_ContactNormal.y) {
@@ -170,6 +178,7 @@ void Collider::ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Re
 		else {
 			m_CurrPosition->y = p_Tile.y - m_ColliderRect.h - m_Offset.y;
 		}
+		m_CurrVelocity->y = 0;
 		m_ColliderRect.y = m_CurrPosition->y + m_Offset.y;
 	}
 }

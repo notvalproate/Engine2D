@@ -95,14 +95,13 @@ void Game::Update() {
 
 	m_Player->Update(m_FrameDelta);
 	m_PlayerCollider->Update(m_FrameDelta);
-	//m_Player->UpdateAfterCollision(m_FrameDelta);
 	SDL_RenderClear(m_Renderer); 
 }
  
 void Game::Render() {
 	Level_1->Render();
 	m_Player->Render();
-	m_PlayerCollider->DebugRender(m_FrameDelta);
+	//m_PlayerCollider->DebugRender(m_FrameDelta);
 
 	SDL_RenderPresent(m_Renderer); 
 

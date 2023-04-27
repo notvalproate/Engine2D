@@ -42,7 +42,7 @@ void Tilemap::RenderToBuffer() {
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 
 	SDL_RenderCopy(m_Renderer, TextureUtil::LoadTexture(m_Background.c_str(), m_Renderer), NULL, NULL);
-
+	
 	for (int n = 0; n < m_TileLayers.size(); n++) {
 		RenderTiles(n);
 	}

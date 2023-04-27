@@ -9,11 +9,13 @@ public:
 	Player(const char* p_TexPath, const SDL_Rect& p_SrcRect, const SDL_Rect& p_DestRect, SDL_Renderer* p_Renderer, const int& p_MovementSpeed);
 	~Player();
 	
-	void Render();
+	
 	void LinkCollider(Collider* p_Collider);
-	void Update(const float& p_DeltaTime);
-	void UpdateAfterCollision(const float& p_DeltaTime);
+
 	void HandleEvents(const SDL_Event& p_Event);
+	void Update(const float& p_DeltaTime);
+	void Render();
+
 	SDL_Texture* GetBuffer() { return m_Buffer; }
 private:
 	const int m_StrafeVelocity;
@@ -25,4 +27,6 @@ private:
 	SDL_Rect m_SrcRect, m_DestRect;
 	SDL_Texture *m_Sprite, *m_Buffer;
 	SDL_Renderer* m_Renderer;
+
+	bool m_Jumping;
 };
