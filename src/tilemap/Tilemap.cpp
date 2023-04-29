@@ -1,5 +1,5 @@
 #include "Tilemap.hpp"
-#include "TextureLoader.hpp"
+#include "../TextureLoader.hpp"
 
 Tilemap::Tilemap(const char* p_TilesPath, const std::vector<SDL_Rect>& p_Tiles, SDL_Renderer* p_Renderer, const int& p_Width, const int& p_Height) {
 	m_TilemapTex = TextureUtil::LoadTexture(p_TilesPath, p_Renderer);
@@ -17,20 +17,20 @@ Tilemap::~Tilemap() {
 	delete[] m_Collider;
 }
 
-void Tilemap::AddLayer(const std::string& p_TileMapType, unsigned short* p_TileMap) {
+void Tilemap::AddLayer(unsigned short* p_TileMap) {
 	m_TileLayers.push_back(p_TileMap);
-
-	if (p_TileMapType == "Collider") {
-		m_Collider = p_TileMap;
-	}
 }
 
 void Tilemap::SetBackground(const std::string& p_TexPath) {
 	m_Background = p_TexPath;
 }
 
-void Tilemap::AddProps(const std::string& p_TexPath) {
-	m_Props = p_TexPath;
+void Tilemap::AddBackgroundProps(const std::string& p_TexPath) {
+	m_BackgroundProps = p_TexPath;
+}
+
+void Tilemap::AddForegroundProps(const std::string& p_TexPath) {
+	m_ForegroundProps = p_TexPath;
 }
 
 void Tilemap::SetCollider(unsigned short* p_Collider) {
@@ -42,12 +42,14 @@ void Tilemap::RenderToBuffer() {
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 
 	SDL_RenderCopy(m_Renderer, TextureUtil::LoadTexture(m_Background.c_str(), m_Renderer), NULL, NULL);
-	
+
+	SDL_RenderCopy(m_Renderer, TextureUtil::LoadTexture(m_BackgroundProps.c_str(), m_Renderer), NULL, NULL);
+
 	for (int n = 0; n < m_TileLayers.size(); n++) {
 		RenderTiles(n);
 	}
 
-	SDL_RenderCopy(m_Renderer, TextureUtil::LoadTexture(m_Props.c_str(), m_Renderer), NULL, NULL);
+	SDL_RenderCopy(m_Renderer, TextureUtil::LoadTexture(m_ForegroundProps.c_str(), m_Renderer), NULL, NULL);
 
 	SDL_SetRenderTarget(m_Renderer, NULL);
 }
@@ -69,11 +71,11 @@ void Tilemap::RenderTiles(const int& p_n) {
 	}
 }
 
-void Tilemap::Render(){
+void Tilemap::Render() const {
 	SDL_RenderCopy(m_Renderer, m_Buffer, &m_Camera, NULL);
 }
 
-void Tilemap::SaveTilemap(const char* file_name) {
+void Tilemap::SaveTilemapAsPng(const char* file_name) const {
 	SDL_Texture* target = SDL_GetRenderTarget(m_Renderer);
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 	int width, height;

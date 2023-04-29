@@ -24,7 +24,7 @@
     <ClCompile Include="src\math\Rectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Tilemap.cpp">
+    <ClCompile Include="src\tilemap\Tilemap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Player.cpp">
@@ -54,7 +54,7 @@
     <ClInclude Include="src\math\Rectangle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Tilemap.hpp">
+    <ClInclude Include="src\tilemap\Tilemap.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Player.hpp">

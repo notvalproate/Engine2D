@@ -105,8 +105,8 @@ bool RectUtil::DynamicRectIntersectRect(const SDL_FRect& p_DynamicRect, const SD
 		p_DynamicRect.y + (p_DynamicRect.h / (float)2.0)
 	);
 	Vector2d t_RayDirection(
-		p_CurrVelocity.x * (p_DeltaTime / (float)1000.0),
-		p_CurrVelocity.y * (p_DeltaTime / (float)1000.0)
+		p_CurrVelocity.x * p_DeltaTime,
+		p_CurrVelocity.y * p_DeltaTime
 	);
 
 	//Check if the ray intersects with the expanded rectangle

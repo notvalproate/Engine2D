@@ -4,17 +4,9 @@
 #include <iostream>
 #include <vector>;
 
-Game::Game() : m_IsRunning(false), m_FrameDelta(16), m_Window(nullptr), m_Renderer(nullptr) { }
+Game::Game() : m_IsRunning(false), m_DeltaTime(16), m_Window(nullptr), m_Renderer(nullptr) { }
 
 Game::~Game() { }
-
-void Game::OnUserCreate() {
-	return;
-}
-
-void Game::OnUserUpdate() {
-	return;
-}
 
 void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, const int& p_y, int p_Width, int p_Height) {
 	//Initialize SDL
@@ -30,11 +22,9 @@ void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, con
 	}
 	else {
 		std::cout << "Stage: Display Mode Initialized..." << std::endl;
-		m_FrameDelta = (float)1000 / (float)m_Mode.refresh_rate;
-		//Set minimum frame-time to 1000 / refresh rate of the user's monitor.
+		m_DeltaTime = 1.0 / (float)m_Mode.refresh_rate;
 	}
 
-	//Width and Height of the screen
 	m_w = p_Width;
 	m_h = p_Height;
 
@@ -92,9 +82,8 @@ void Game::HandleEvents() {
 
 void Game::Update() {
 	OnUserUpdate();
-
-	m_Player->Update(m_FrameDelta);
-	m_PlayerCollider->Update(m_FrameDelta);
+	m_Player->Update(m_DeltaTime);
+	m_PlayerCollider->Update(m_DeltaTime);
 	SDL_RenderClear(m_Renderer); 
 }
  

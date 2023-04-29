@@ -5,7 +5,7 @@
 
 class Collider {
 public:
-	Collider(const SDL_Rect& p_ColliderRect, const int& p_OffsetX, const int& p_OffsetY, SDL_Renderer* p_Renderer);
+	Collider(SDL_Renderer* p_Renderer, const int& p_Width, const int& p_Height, const int& p_OffsetX, const int& p_OffsetY);
 	~Collider();
 
 	void SetColliderMap(unsigned short* p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight);
@@ -19,10 +19,9 @@ public:
 		double m_TimeHitNear; 
 		Vector2d m_ContactNormal; 
 	};
-
 private:
 	Vector2d *m_CurrPosition, *m_LastPosition, *m_CurrVelocity;
-	Vector2d m_Offset, m_ColliderLastPos;
+	Vector2d m_ColliderOffset, m_ColliderLastPos;
 	bool* m_Jumping;
 	 
 	SDL_Rect m_ColliderRect;
@@ -30,8 +29,7 @@ private:
 	SDL_Renderer* m_Renderer;
 	SDL_Texture* m_Buffer;
 
-	std::vector<SDL_Rect> m_TilesToCollide;
-	std::vector<CollidedTile> m_TilesCollided;
+	std::vector<CollidedTile> m_CollidedTiles;
 
 	bool m_CollidesWithMap;
 	unsigned short* m_ColliderMap;
@@ -39,6 +37,4 @@ private:
 
 	void ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Rect& p_Tile, const float& p_TimeHitNear);
 	void CollisionWithMap(const float& p_DeltaTime);
-
-	int ClosestMultipleDown(const float& p_X, const int& p_N);
 };
