@@ -1,9 +1,9 @@
 #include "Game.hpp"
-
+#include <iostream>
 class PlatformerGame : public Game {
 public:
 	void OnUserCreate() override {
-		unsigned short* t_ForegroundTileMap = new unsigned short[40 * 23] {
+		unsigned short t_ForegroundTileMap[40 * 23] = {
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -70,8 +70,6 @@ public:
 		Level_1->SetCollider(t_ColliderTileMap);
 		Level_1->RenderToBuffer();
 		Level_1->SaveTilemapAsPng("assets/levels/Level_1.png");
-
-		delete[] t_ForegroundTileMap;
 
 		//Collider
 

@@ -41,17 +41,12 @@ bool RectUtil::RayIntersectRect(const Vector2d& p_RayOrigin, const Vector2d& p_R
 	if (std::isnan(t_Far.y) || std::isnan(t_Far.x)) return false;
 	if (std::isnan(t_Near.y) || std::isnan(t_Near.x)) return false;
 
-	double t_Temp;
 	//If near and far are in wrong direction, swap them
 	if (t_Near.x > t_Far.x) {
-		t_Temp = t_Near.x;
-		t_Near.x = t_Far.x;
-		t_Far.x = t_Temp;
+		std::swap(t_Near.x, t_Far.x);
 	}
 	if (t_Near.y > t_Far.y) {
-		t_Temp = t_Near.y;
-		t_Near.y = t_Far.y;
-		t_Far.y = t_Temp;
+		std::swap(t_Near.y, t_Far.y);
 	}
 
 	//Condition for intersection not met
@@ -67,8 +62,7 @@ bool RectUtil::RayIntersectRect(const Vector2d& p_RayOrigin, const Vector2d& p_R
 	if (p_TimeHitNear > 1) return false;
 
 	//Get contact point from original equation
-	p_ContactPoint.x = p_RayOrigin.x + (p_RayDir.x * p_TimeHitNear);
-	p_ContactPoint.y = p_RayOrigin.y + (p_RayDir.y * p_TimeHitNear);
+	p_ContactPoint = Vector2d(p_RayOrigin + (p_RayDir * p_TimeHitNear));
 
 	//Get the normal
 	//If nearx is greater, it intersects in x direction, otherwise y
@@ -84,6 +78,7 @@ bool RectUtil::RayIntersectRect(const Vector2d& p_RayOrigin, const Vector2d& p_R
 
 	return true;
 }
+
 
 
 bool RectUtil::DynamicRectIntersectRect(const SDL_FRect& p_DynamicRect, const SDL_Rect& p_StaticRect, const Vector2d& p_CurrVelocity, Vector2d& p_ContactPoint, Vector2d& p_ContactNormal, double& p_TimeHitNear, const float& p_DeltaTime) {

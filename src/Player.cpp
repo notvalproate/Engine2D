@@ -72,7 +72,7 @@ void Player::Update(const float& p_DeltaTime) {
 	if(m_Jumping) m_CurrVelocity.y += m_Gravity * p_DeltaTime;
 
 	m_LastPosition = m_CurrPosition;
-	m_CurrPosition = m_CurrPosition + m_CurrVelocity * p_DeltaTime;
+	m_CurrPosition = m_CurrPosition + m_CurrVelocity * p_DeltaTime; 
 
 	m_Jumping = true;
 }
