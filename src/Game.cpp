@@ -90,7 +90,7 @@ void Game::Update() {
 void Game::Render() {
 	Level_1->Render();
 	m_Player->Render();
-	//m_PlayerCollider->DebugRender(m_FrameDelta);
+	m_PlayerCollider->DebugRender(m_DeltaTime);
 
 	SDL_RenderPresent(m_Renderer); 
 
