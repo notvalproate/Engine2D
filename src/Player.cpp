@@ -22,7 +22,7 @@ Player::~Player() {
 	delete m_Sprite;
 }
 
-void Player::LinkCollider(Collider* p_Collider) {
+void Player::LinkCollider(DynamicCollider2D* p_Collider) {
 	//Send pointers to collider
 	p_Collider->LinkObject(&m_CurrVelocity, &m_CurrPosition, &m_LastPosition, &m_Jumping);
 }
@@ -82,8 +82,8 @@ void Player::Render() {
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 	SDL_RenderClear(m_Renderer);
 
-	m_DestRect.x = m_CurrPosition.x;
-	m_DestRect.y = m_CurrPosition.y;
+	m_DestRect.x = (int)m_CurrPosition.x;
+	m_DestRect.y = (int)m_CurrPosition.y;
 
 	SDL_RenderCopy(m_Renderer, m_Sprite, &m_SrcRect, &m_DestRect);
 	SDL_SetRenderTarget(m_Renderer, NULL);

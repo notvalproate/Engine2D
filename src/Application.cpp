@@ -73,7 +73,7 @@ public:
 
 		//Collider
 
-		m_PlayerCollider = new Collider(m_Renderer, 13, 18, 0, 0);
+		m_PlayerCollider = new DynamicCollider2D(13, 18, 0, 0);
 		m_PlayerCollider->SetColliderMap(t_ColliderTileMap, 40, 23);
 
 		//Player

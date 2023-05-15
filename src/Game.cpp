@@ -6,8 +6,6 @@
 
 Game::Game() : m_IsRunning(false), m_DeltaTime(16), m_Window(nullptr), m_Renderer(nullptr) { }
 
-Game::~Game() { }
-
 void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, const int& p_y, int p_Width, int p_Height) {
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING)) {
@@ -22,7 +20,7 @@ void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, con
 	}
 	else {
 		std::cout << "Stage: Display Mode Initialized..." << std::endl;
-		m_DeltaTime = 1.0 / (float)m_Mode.refresh_rate;
+		m_DeltaTime = (float)1.0 / (float)m_Mode.refresh_rate;
 	}
 
 	m_w = p_Width;
@@ -84,13 +82,11 @@ void Game::Update() {
 	OnUserUpdate();
 	m_Player->Update(m_DeltaTime);
 	m_PlayerCollider->Update(m_DeltaTime);
-	SDL_RenderClear(m_Renderer); 
 }
  
 void Game::Render() {
 	Level_1->Render();
 	m_Player->Render();
-	m_PlayerCollider->DebugRender(m_DeltaTime);
 
 	SDL_RenderPresent(m_Renderer); 
 

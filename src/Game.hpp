@@ -6,7 +6,7 @@
 class Game {
 public:
 	Game(); 
-	~Game();
+	virtual ~Game() = default;
 
 	virtual void OnUserCreate() = 0;
 	virtual void OnUserUpdate() = 0; 
@@ -20,8 +20,7 @@ public:
 
 	Tilemap* Level_1;
 	Player* m_Player;
-	Collider* m_PlayerCollider;
-	Collider* m_PlayerCollider2;
+	DynamicCollider2D* m_PlayerCollider;
 	SDL_Renderer* m_Renderer;
 
 	float m_DeltaTime;

@@ -36,7 +36,10 @@
     <ClCompile Include="src\math\Vector2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\physics\Collider.cpp">
+    <ClCompile Include="src\physics\StaticCollider2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\DynamicCollider2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

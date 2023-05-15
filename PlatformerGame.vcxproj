@@ -147,7 +147,8 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\math\Rectangle.cpp" />
     <ClCompile Include="src\math\Vector2d.cpp" />
-    <ClCompile Include="src\physics\Collider.cpp" />
+    <ClCompile Include="src\physics\DynamicCollider2D.cpp" />
+    <ClCompile Include="src\physics\StaticCollider2D.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\TextureLoader.cpp" />
     <ClCompile Include="src\tilemap\Tilemap.cpp" />
