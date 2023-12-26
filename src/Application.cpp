@@ -1,5 +1,8 @@
 #include "Game.hpp"
 #include <iostream>
+#include <algorithm>
+#include <numeric>
+
 class PlatformerGame : public Game {
 public:
 	void OnUserCreate() override {
@@ -90,7 +93,6 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-
 	PlatformerGame game;
 	game.Init("Platformer Game", "assets/textures/icon.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
 

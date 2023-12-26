@@ -32,7 +32,7 @@ void Player::HandleEvents(const SDL_Event& p_Event) {
 	const Uint8* Keys = SDL_GetKeyboardState(NULL);
 
 	//Checking for whether keys are held down or not
-	if (Keys[SDL_SCANCODE_W] && !m_Jumping) {
+	if ((Keys[SDL_SCANCODE_W] || Keys[SDL_SCANCODE_SPACE]) && !m_Jumping) {
 		m_CurrVelocity.y = -140;
 		m_Jumping = true;
 	}

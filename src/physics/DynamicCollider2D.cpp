@@ -63,7 +63,8 @@ std::tuple<Vector2d, Vector2d> DynamicCollider2D::GetRangeOfTiles() {
 
 	//Get the closest multiple of N to X such that the multiple is < X, eg. N = 4; X = 26.4; return 24;
 	auto ClosestMultipleDown = [](const double& p_X, const int& p_N) {
-		return (int)p_X - ((int)p_X % p_N);
+		//alternatively: return (int)p_X - ((int)p_X % p_N);
+		return ((int)p_X / p_N) * p_N;
 	};
 
 	t_TopLeftTile.x = ClosestMultipleDown(m_ColliderLastPos.x, 8);
