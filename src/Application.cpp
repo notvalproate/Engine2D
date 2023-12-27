@@ -91,6 +91,10 @@ public:
 	}
 
 	void OnUserUpdate() override {
+		
+	}
+
+	void OnUserRender() override {
 		m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime);
 	}
 };

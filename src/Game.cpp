@@ -91,6 +91,7 @@ void Game::Update() {
 void Game::Render() {
 	Level_1->Render();
 	m_Player->Render();
+	OnUserRender();
 
 	SDL_RenderPresent(m_Renderer); 
 

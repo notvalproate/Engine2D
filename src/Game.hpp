@@ -10,6 +10,7 @@ public:
 
 	virtual void OnUserCreate() = 0;
 	virtual void OnUserUpdate() = 0; 
+	virtual void OnUserRender() = 0; 
 
 	void Init(const char* p_Title, const char* p_Iconpath, const int& p_x, const int& p_y, int p_Width, int p_Height); 
 	void HandleEvents();
