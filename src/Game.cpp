@@ -50,6 +50,10 @@ void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, con
 
 	m_IsRunning = true; //Boolean to check if window close
 
+	// Collider Debugger
+
+	m_ColliderDebugger = new ColliderDebugRenderer(m_Renderer);
+
 	OnUserCreate();
 }
 
@@ -79,9 +83,9 @@ void Game::HandleEvents() {
 }
 
 void Game::Update() {
-	OnUserUpdate();
 	m_Player->Update(m_DeltaTime);
 	m_PlayerCollider->Update(m_DeltaTime);
+	OnUserUpdate();
 }
  
 void Game::Render() {

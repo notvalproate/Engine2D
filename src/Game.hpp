@@ -22,6 +22,7 @@ public:
 	Player* m_Player;
 	DynamicCollider2D* m_PlayerCollider;
 	SDL_Renderer* m_Renderer;
+	ColliderDebugRenderer* m_ColliderDebugger;
 
 	float m_DeltaTime;
 private:

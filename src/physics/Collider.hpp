@@ -53,7 +53,7 @@ private:
 
 class ColliderDebugRenderer {
 public:
-	ColliderDebugRenderer(SDL_Renderer* p_Renderer, SDL_Texture* p_Buffer);
+	ColliderDebugRenderer(SDL_Renderer* p_Renderer);
 
 	void DebugRender(const DynamicCollider2D& p_Collider, const float& p_DeltaTime);
 private:

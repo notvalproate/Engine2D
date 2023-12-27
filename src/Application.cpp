@@ -60,13 +60,13 @@ public:
 
 		//Setting up Tile's in the tilemap
 
-		static constexpr unsigned short TILE_SIZE = 4;
+		static constexpr unsigned short TILE_SIZE = 8;
 
 		std::vector<SDL_Rect> TileRects;
 		SDL_Rect Temp = { 0, 0, TILE_SIZE, TILE_SIZE};
 
 		TileRects.push_back(Temp);
-		Temp.x += 8;
+		Temp.x += TILE_SIZE;
 		TileRects.push_back(Temp);
 
 		Level_1 = new Tilemap(TILE_SIZE, "assets/tilemaps/Grass.png", TileRects, m_Renderer, 40, 23);
@@ -91,7 +91,7 @@ public:
 	}
 
 	void OnUserUpdate() override {
-
+		m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime);
 	}
 };
 

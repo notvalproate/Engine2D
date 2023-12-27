@@ -174,7 +174,12 @@ void DynamicCollider2D::ResolveMapCollision(const Vector2d& p_ContactNormal, con
 
 // COLLIDER DEBUG
 
-ColliderDebugRenderer::ColliderDebugRenderer(SDL_Renderer* p_Renderer, SDL_Texture* p_Buffer) : m_Renderer(p_Renderer), m_Buffer(p_Buffer) { }
+ColliderDebugRenderer::ColliderDebugRenderer(SDL_Renderer* p_Renderer) : m_Renderer(p_Renderer) { 
+	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 320, 180);
+	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
+}
+
+#include <iostream>
 
 void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& p_Collider, const float& p_DeltaTime) {
 	//Debug to render hitbox
@@ -217,10 +222,10 @@ void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& p_Collider, con
 	SDL_SetRenderDrawColor(m_Renderer, 255, 165, 0, 100);
 	SDL_RenderFillRect(m_Renderer, &p_Collider.m_ColliderRect);
 
-	//Debug to render velocity direction 
+	//Debug to render velocity direction
 	int centerx = p_Collider.m_ColliderRect.x + p_Collider.m_ColliderRect.w / 2;
 	int centery = p_Collider.m_ColliderRect.y + p_Collider.m_ColliderRect.h / 2;
-	SDL_SetRenderDrawColor(m_Renderer, 00, 255, 0, 255);
+	SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 255);
 	SDL_RenderDrawLine(m_Renderer, centerx, centery, centerx + 15 * (p_Collider.m_CurrVelocity->x / p_Collider.m_CurrVelocity->GetMagnitude()), centery + 15 * (p_Collider.m_CurrVelocity->y / p_Collider.m_CurrVelocity->GetMagnitude()));
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 
