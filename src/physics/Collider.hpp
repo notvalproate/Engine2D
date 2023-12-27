@@ -52,7 +52,10 @@ private:
 };
 
 class ColliderDebugRenderer {
-	void DebugRender(const float& p_DeltaTime);
+public:
+	ColliderDebugRenderer(SDL_Renderer* p_Renderer, SDL_Texture* p_Buffer);
+
+	void DebugRender(const DynamicCollider2D& p_Collider, const float& p_DeltaTime);
 private:
 	SDL_Renderer* m_Renderer;
 	SDL_Texture* m_Buffer;

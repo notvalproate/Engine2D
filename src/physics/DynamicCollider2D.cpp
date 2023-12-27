@@ -171,3 +171,60 @@ void DynamicCollider2D::ResolveMapCollision(const Vector2d& p_ContactNormal, con
 		m_ColliderRect.y = (int)(m_CurrPosition->y + m_ColliderOffset.y);
 	}
 }
+
+// COLLIDER DEBUG
+
+ColliderDebugRenderer::ColliderDebugRenderer(SDL_Renderer* p_Renderer, SDL_Texture* p_Buffer) : m_Renderer(p_Renderer), m_Buffer(p_Buffer) { }
+
+void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& p_Collider, const float& p_DeltaTime) {
+	//Debug to render hitbox
+	SDL_SetRenderTarget(m_Renderer, m_Buffer);
+	SDL_RenderClear(m_Renderer);
+
+	//Checking working 
+	Vector2d t_ContactPoint, t_ContactNormal;
+	double t_TimeHitNear;
+	SDL_Rect TestRect = { 70, 70, p_Collider.m_TileSize, p_Collider.m_TileSize };
+	SDL_Rect Contact;
+	SDL_FRect TempRect = { p_Collider.m_ColliderRect.x, p_Collider.m_ColliderRect.y, p_Collider.m_ColliderRect.w, p_Collider.m_ColliderRect.h };
+
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 255, 255);
+	if (RectUtil::DynamicRectIntersectRect(TempRect, TestRect, *p_Collider.m_CurrVelocity, t_ContactPoint, t_ContactNormal, t_TimeHitNear, p_DeltaTime)) {
+		SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 255);
+		SDL_RenderFillRect(m_Renderer, &TestRect);
+		SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 255);
+		Contact = { (int)t_ContactPoint.x, (int)t_ContactPoint.y, 3, 3 };
+		SDL_RenderFillRect(m_Renderer, &Contact);;
+	}
+	else {
+		SDL_RenderFillRect(m_Renderer, &TestRect);
+	}
+
+	//Debug to render all the map colliders
+	bool t_HighlightColliders = true;
+	SDL_Rect t_Tile;
+	if (t_HighlightColliders && p_Collider.m_CollidesWithMap) {
+		int t_Size = p_Collider.m_MapHeight * p_Collider.m_MapWidth;
+		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 255, 100);
+		for (int i = 0; i < t_Size; i++) {
+			if (p_Collider.m_ColliderMap[i] == 1) {
+				t_Tile = { p_Collider.m_TileSize * (i % p_Collider.m_MapWidth), p_Collider.m_TileSize * (i / p_Collider.m_MapWidth), p_Collider.m_TileSize, p_Collider.m_TileSize };
+				SDL_RenderFillRect(m_Renderer, &t_Tile);
+			}
+		}
+	}
+
+	SDL_SetRenderDrawColor(m_Renderer, 255, 165, 0, 100);
+	SDL_RenderFillRect(m_Renderer, &p_Collider.m_ColliderRect);
+
+	//Debug to render velocity direction 
+	int centerx = p_Collider.m_ColliderRect.x + p_Collider.m_ColliderRect.w / 2;
+	int centery = p_Collider.m_ColliderRect.y + p_Collider.m_ColliderRect.h / 2;
+	SDL_SetRenderDrawColor(m_Renderer, 00, 255, 0, 255);
+	SDL_RenderDrawLine(m_Renderer, centerx, centery, centerx + 15 * (p_Collider.m_CurrVelocity->x / p_Collider.m_CurrVelocity->GetMagnitude()), centery + 15 * (p_Collider.m_CurrVelocity->y / p_Collider.m_CurrVelocity->GetMagnitude()));
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+	SDL_SetRenderTarget(m_Renderer, NULL);
+	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, NULL);
+}
