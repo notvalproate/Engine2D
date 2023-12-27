@@ -2,9 +2,10 @@
 #include <algorithm>
 #include "../math/Rectangle.hpp"
 
-DynamicCollider2D::DynamicCollider2D(const int& p_Width, const int& p_Height, const int& p_OffsetX, const int& p_OffsetY) : StaticCollider2D(p_Width, p_Height, 0, 0) {
+DynamicCollider2D::DynamicCollider2D(const unsigned short p_TileSize, const int& p_Width, const int& p_Height, const int& p_OffsetX, const int& p_OffsetY) : StaticCollider2D(p_Width, p_Height, 0, 0) {
 	m_ColliderOffset.x = p_OffsetX;
 	m_ColliderOffset.y = p_OffsetY;
+	m_TileSize = p_TileSize;
 
 	m_CurrPosition = m_CurrVelocity = m_LastPosition = nullptr;
 	m_Jumping = nullptr;
@@ -67,25 +68,25 @@ std::tuple<Vector2d, Vector2d> DynamicCollider2D::GetRangeOfTiles() {
 		return ((int)p_X / p_N) * p_N;
 	};
 
-	t_TopLeftTile.x = ClosestMultipleDown(m_ColliderLastPos.x, 8);
-	t_TopLeftTile.y = ClosestMultipleDown(m_ColliderLastPos.y, 8);
+	t_TopLeftTile.x = ClosestMultipleDown(m_ColliderLastPos.x, m_TileSize);
+	t_TopLeftTile.y = ClosestMultipleDown(m_ColliderLastPos.y, m_TileSize);
 
-	t_BottomRightTile.x = ClosestMultipleDown(m_ColliderRect.x + m_ColliderRect.w, 8);
-	t_BottomRightTile.y = ClosestMultipleDown(m_ColliderRect.y + m_ColliderRect.h, 8);
+	t_BottomRightTile.x = ClosestMultipleDown(m_ColliderRect.x + m_ColliderRect.w, m_TileSize);
+	t_BottomRightTile.y = ClosestMultipleDown(m_ColliderRect.y + m_ColliderRect.h, m_TileSize);
 
 	if (m_LastPosition->x > m_CurrPosition->x) {
-		t_TopLeftTile.x = ClosestMultipleDown(m_ColliderRect.x, 8);
-		t_BottomRightTile.x = ClosestMultipleDown(m_ColliderLastPos.x + m_ColliderRect.w, 8);
+		t_TopLeftTile.x = ClosestMultipleDown(m_ColliderRect.x, m_TileSize);
+		t_BottomRightTile.x = ClosestMultipleDown(m_ColliderLastPos.x + m_ColliderRect.w, m_TileSize);
 	}
 	if (m_LastPosition->y > m_CurrPosition->y) {
-		t_TopLeftTile.y = ClosestMultipleDown(m_ColliderRect.y, 8);
-		t_BottomRightTile.y = ClosestMultipleDown(m_ColliderLastPos.y + m_ColliderRect.h, 8);
+		t_TopLeftTile.y = ClosestMultipleDown(m_ColliderRect.y, m_TileSize);
+		t_BottomRightTile.y = ClosestMultipleDown(m_ColliderLastPos.y + m_ColliderRect.h, m_TileSize);
 	}
 
-	t_TopLeftTile.x = std::clamp((int)t_TopLeftTile.x, 0, (m_MapWidth - 1) * 8);
-	t_TopLeftTile.y = std::clamp((int)t_TopLeftTile.y, 0, (m_MapHeight - 1) * 8);
-	t_BottomRightTile.x = std::clamp((int)t_BottomRightTile.x, 0, (m_MapWidth - 1) * 8);
-	t_BottomRightTile.y = std::clamp((int)t_BottomRightTile.y, 0, (m_MapHeight - 1) * 8);
+	t_TopLeftTile.x = std::clamp((int)t_TopLeftTile.x, 0, (m_MapWidth - 1) * m_TileSize);
+	t_TopLeftTile.y = std::clamp((int)t_TopLeftTile.y, 0, (m_MapHeight - 1) * m_TileSize);
+	t_BottomRightTile.x = std::clamp((int)t_BottomRightTile.x, 0, (m_MapWidth - 1) * m_TileSize);
+	t_BottomRightTile.y = std::clamp((int)t_BottomRightTile.y, 0, (m_MapHeight - 1) * m_TileSize);
 
 	return std::make_tuple(t_TopLeftTile, t_BottomRightTile);
 }
@@ -95,9 +96,9 @@ void DynamicCollider2D::GetCollidedTiles(const std::tuple<Vector2d, Vector2d>& p
 	const Vector2d& t_BottomRight = std::get<1>(p_RangeOfCollidableTiles);
 
 	m_CollidedTiles.clear();
-	for (int i = (int)t_TopLeft.x; i <= t_BottomRight.x; i += 8) {
-		for (int j = (int)t_TopLeft.y; j <= t_BottomRight.y; j += 8) {
-			CheckCollisionWithTile(SDL_Rect{ i, j, 8, 8 }, p_DeltaTime);
+	for (int i = (int)t_TopLeft.x; i <= t_BottomRight.x; i += m_TileSize) {
+		for (int j = (int)t_TopLeft.y; j <= t_BottomRight.y; j += m_TileSize) {
+			CheckCollisionWithTile(SDL_Rect{ i, j, m_TileSize, m_TileSize }, p_DeltaTime);
 		}
 	}
 }
@@ -106,7 +107,7 @@ void DynamicCollider2D::CheckCollisionWithTile(const SDL_Rect& p_TileToCheck, co
 	Vector2d t_ContactPoint, t_ContactNormal;
 	double t_TimeHitNear;
 
-	if (m_ColliderMap[(p_TileToCheck.x / 8) + (m_MapWidth * p_TileToCheck.y / 8)] != 0) {
+	if (m_ColliderMap[(p_TileToCheck.x / m_TileSize) + (m_MapWidth * p_TileToCheck.y / m_TileSize)] != 0) {
 		SDL_FRect t_ColliderFRect = { (float)m_ColliderRect.x, (float)m_ColliderRect.y, (float)m_ColliderRect.w, (float)m_ColliderRect.h };
 
 		if (RectUtil::DynamicRectIntersectRect(t_ColliderFRect, p_TileToCheck, *m_CurrVelocity, t_ContactPoint, t_ContactNormal, t_TimeHitNear, p_DeltaTime)) {
@@ -148,7 +149,7 @@ void DynamicCollider2D::ResolveMapCollision(const Vector2d& p_ContactNormal, con
 	if (p_ContactNormal.x) {
 		//Left
 		if (p_ContactNormal.x > 0) {
-			m_CurrPosition->x = p_Tile.x + 8 - m_ColliderOffset.x;
+			m_CurrPosition->x = p_Tile.x + m_TileSize - m_ColliderOffset.x;
 		}
 		//Right
 		else {
@@ -160,7 +161,7 @@ void DynamicCollider2D::ResolveMapCollision(const Vector2d& p_ContactNormal, con
 	if (p_ContactNormal.y) {
 		//Top
 		if (p_ContactNormal.y > 0) {
-			m_CurrPosition->y = p_Tile.y + 8 - m_ColliderOffset.y;
+			m_CurrPosition->y = p_Tile.y + m_TileSize - m_ColliderOffset.y;
 		}
 		//Bottom
 		else {

@@ -59,14 +59,17 @@ public:
 		};
 
 		//Setting up Tile's in the tilemap
+
+		static constexpr unsigned short TILE_SIZE = 8;
+
 		std::vector<SDL_Rect> TileRects;
-		SDL_Rect Temp = { 0, 0, 8, 8 };
+		SDL_Rect Temp = { 0, 0, TILE_SIZE, TILE_SIZE};
 
 		TileRects.push_back(Temp);
-		Temp.x += 8;
+		Temp.x += TILE_SIZE;
 		TileRects.push_back(Temp);
 
-		Level_1 = new Tilemap("assets/tilemaps/Grass.png", TileRects, m_Renderer, 40, 23);
+		Level_1 = new Tilemap(TILE_SIZE, "assets/tilemaps/Grass.png", TileRects, m_Renderer, 40, 23);
 		Level_1->SetBackground("assets/backgrounds/BG.png");
 		Level_1->AddBackgroundProps("assets/props/Level_1.png");
 		Level_1->AddLayer(t_ForegroundTileMap);
@@ -76,7 +79,7 @@ public:
 
 		//Collider
 
-		m_PlayerCollider = new DynamicCollider2D(13, 18, 0, 0);
+		m_PlayerCollider = new DynamicCollider2D(TILE_SIZE, 13, 18, 0, 0);
 		m_PlayerCollider->SetColliderMap(t_ColliderTileMap, 40, 23);
 
 		//Player

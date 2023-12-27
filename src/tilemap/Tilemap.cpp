@@ -1,11 +1,12 @@
 #include "Tilemap.hpp"
 #include "../TextureLoader.hpp"
 
-Tilemap::Tilemap(const char* p_TilesPath, const std::vector<SDL_Rect>& p_Tiles, SDL_Renderer* p_Renderer, const int& p_Width, const int& p_Height) {
+Tilemap::Tilemap(const unsigned short p_TileSize, const char* p_TilesPath, const std::vector<SDL_Rect>& p_Tiles, SDL_Renderer* p_Renderer, const int& p_Width, const int& p_Height) {
 	m_TilemapTex = TextureUtil::LoadTexture(p_TilesPath, p_Renderer);
+	m_TileSize = p_TileSize;
 	m_Tiles = p_Tiles;
 	m_Renderer = p_Renderer;
-	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 8 * p_Width, 8 * p_Height);
+	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, p_TileSize * p_Width, p_TileSize * p_Height);
 	m_Collider = nullptr;
 	m_Width = p_Width;
 	m_Height = p_Height;
@@ -56,12 +57,12 @@ void Tilemap::RenderToBuffer() {
 
 void Tilemap::RenderTiles(const int& p_n) {
 	int k;
-	SDL_Rect Temp = { 0, 0, 8, 8 };
+	SDL_Rect Temp = { 0, 0, m_TileSize, m_TileSize };
 
 	for (int i = 0; i < m_Height; i++) {
-		Temp.y = i * 8;
+		Temp.y = i * m_TileSize;
 		for (int j = 0; j < m_Width; j++) {
-			Temp.x = j * 8;
+			Temp.x = j * m_TileSize;
 			k = (i * m_Width) + j;
 
 			if (m_TileLayers[p_n][k] != 0) {

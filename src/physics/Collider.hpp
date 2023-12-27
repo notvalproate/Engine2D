@@ -17,7 +17,7 @@ protected:
 
 class DynamicCollider2D : private StaticCollider2D {
 public:
-	DynamicCollider2D(const int& p_Width, const int& p_Height, const int& p_OffsetX, const int& p_OffsetY);
+	DynamicCollider2D(const unsigned short p_TileSize, const int& p_Width, const int& p_Height, const int& p_OffsetX, const int& p_OffsetY);
 
 	void LinkObject(Vector2d* p_CurrVelocity, Vector2d* p_CurrPosition, Vector2d* p_LastPosition, bool* p_Jumping);
 	void SetColliderMap(unsigned short* p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight);
@@ -31,6 +31,7 @@ private:
 	bool m_CollidesWithMap = false;
 	unsigned short* m_ColliderMap = nullptr;
 	int m_MapWidth = 0, m_MapHeight = 0;
+	unsigned short m_TileSize;
 
 	struct CollidedTile {
 		SDL_Rect m_Tile;

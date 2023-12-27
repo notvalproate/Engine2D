@@ -5,7 +5,7 @@
 
 class Tilemap {
 public:
-	Tilemap(const char* p_TilesPath, const std::vector<SDL_Rect>& p_Tiles, SDL_Renderer* p_Renderer, const int& p_Width, const int& p_Height);
+	Tilemap(const unsigned short p_TileSize, const char* p_TilesPath, const std::vector<SDL_Rect>& p_Tiles, SDL_Renderer* p_Renderer, const int& p_Width, const int& p_Height);
 	~Tilemap();
 
 	void AddLayer(unsigned short* p_TileMap);
@@ -31,6 +31,7 @@ private:
 	std::string m_BackgroundProps, m_ForegroundProps;
 
 	unsigned short* m_Collider;
+	unsigned short m_TileSize;
 	int m_Width, m_Height;
 
 	SDL_Texture *m_Buffer, *m_TilemapTex;
