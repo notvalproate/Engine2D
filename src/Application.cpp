@@ -77,17 +77,17 @@ public:
 		m_Level->RenderToBuffer();
 		m_Level->SaveTilemapAsPng("assets/levels/Level_1.png");
 
-		//Collider
-		 
-		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 13, 18, 0, 0);
-		m_PlayerCollider->SetColliderMap(t_ColliderTileMap, 40, 23);
-
+		
 		//Player
 
-		SDL_Rect DestRect = { 20, 120, 13, 18 };
-		SDL_Rect SrcRect = { 0, 0, 13, 18 };
-		m_Player = std::make_unique<Player>(m_Renderer, "assets/character sprites/idle/madeline.png", SrcRect, 120, 360);
-		m_Player->LinkCollider(m_PlayerCollider.get());
+		SDL_Rect PlayerRect = { 0, 0, 13, 18 };
+		m_Player = std::make_unique<Player>(m_Renderer, "assets/character sprites/idle/madeline.png", PlayerRect, 120, 360);
+
+		//Collider
+
+		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 13, 18, 0, 0);
+		m_PlayerCollider->SetColliderMap(t_ColliderTileMap, 40, 23);
+		m_PlayerCollider->SetPlayer(m_Player);
 	}
 
 	void OnUserUpdate() override {

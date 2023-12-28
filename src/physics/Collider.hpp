@@ -1,7 +1,9 @@
 #pragma once
 #include "SDL.h"
 #include "../math/Vector2d.h"
+#include "../Player.hpp"
 #include <vector>
+#include <memory>
 
 class StaticCollider2D {
 public:
@@ -19,8 +21,8 @@ class DynamicCollider2D : private StaticCollider2D {
 public:
 	DynamicCollider2D(const unsigned short p_TileSize, const int& p_Width, const int& p_Height, const int& p_OffsetX, const int& p_OffsetY);
 
-	void LinkObject(Vector2d* p_CurrVelocity, Vector2d* p_CurrPosition, Vector2d* p_LastPosition, bool* p_Jumping);
 	void SetColliderMap(unsigned short* p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight);
+	void SetPlayer(const std::unique_ptr<Player>& p_Player);
 	void Update(const float& p_DeltaTime);
 
 private:

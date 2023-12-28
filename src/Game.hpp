@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include "tilemap/Tilemap.hpp"
 #include "Player.hpp"
+#include "physics/Collider.hpp"
 #include <memory>
 
 class Game {

@@ -22,11 +22,6 @@ Player::~Player() {
 	SDL_DestroyTexture(m_Sprite);
 }
 
-void Player::LinkCollider(DynamicCollider2D* p_Collider) {
-	//Send pointers to collider
-	p_Collider->LinkObject(&m_CurrVelocity, &m_CurrPosition, &m_LastPosition, &m_Jumping);
-}
-
 void Player::HandleEvents(const SDL_Event& p_Event) {
 	//Primitive Input handler for now since no player controller class yet
 	const Uint8* Keys = SDL_GetKeyboardState(NULL);

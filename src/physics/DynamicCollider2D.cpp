@@ -11,13 +11,6 @@ DynamicCollider2D::DynamicCollider2D(const unsigned short p_TileSize, const int&
 	m_Jumping = nullptr;
 }
 
-void DynamicCollider2D::LinkObject(Vector2d* p_CurrVelocity, Vector2d* p_CurrPosition, Vector2d* p_LastPosition, bool* p_Jumping) {
-	m_CurrPosition = p_CurrPosition;
-	m_LastPosition = p_LastPosition;
-	m_CurrVelocity = p_CurrVelocity;
-	m_Jumping = p_Jumping;
-}
-
 void DynamicCollider2D::SetColliderMap(unsigned short* p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight) {
 	m_ColliderMap = p_ColliderMap;
 
@@ -29,6 +22,13 @@ void DynamicCollider2D::SetColliderMap(unsigned short* p_ColliderMap, const int&
 	m_CollidesWithMap = true;
 	m_MapWidth = p_MapWidth;
 	m_MapHeight = p_MapHeight;
+}
+
+void DynamicCollider2D::SetPlayer(const std::unique_ptr<Player>& p_Player) {
+	m_CurrPosition = &p_Player->m_CurrPosition;
+	m_LastPosition = &p_Player->m_LastPosition;
+	m_CurrVelocity = &p_Player->m_CurrVelocity;
+	m_Jumping = &p_Player->m_Jumping;
 }
 
 void DynamicCollider2D::Update(const float& p_DeltaTime) {
