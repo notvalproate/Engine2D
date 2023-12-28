@@ -33,10 +33,11 @@ private:
 	unsigned short* m_Collider;
 	unsigned short m_TileSize;
 	int m_Width, m_Height;
+	int m_BufferWidth, m_BufferHeight;
 
-	SDL_Texture *m_Buffer, *m_TilemapTex;
+	SDL_Texture *m_Buffer, *m_CameraBuffer, *m_TilemapTex;
 	SDL_Renderer* m_Renderer;
-	SDL_Rect m_Camera;
+	SDL_Rect m_CameraRect, m_BufferRect;
 
 	void RenderTiles(const int& p_n);
 };

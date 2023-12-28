@@ -2,7 +2,7 @@
 #include "SDL_image.h"
 #include "physics/Collider.hpp"
 #include <iostream>
-#include <vector>;
+#include <vector>
 
 Game::Game() : m_IsRunning(false), m_DeltaTime(16), m_Window(nullptr), m_Renderer(nullptr) { }
 

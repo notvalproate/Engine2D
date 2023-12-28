@@ -6,11 +6,15 @@ Tilemap::Tilemap(const unsigned short p_TileSize, const char* p_TilesPath, const
 	m_TileSize = p_TileSize;
 	m_Tiles = p_Tiles;
 	m_Renderer = p_Renderer;
-	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, p_TileSize * p_Width, p_TileSize * p_Height);
+	m_BufferWidth = p_TileSize * p_Width;
+	m_BufferHeight = p_TileSize * p_Height;
+	m_BufferRect = { 0, 0, p_TileSize * p_Width, p_TileSize * p_Height };
+	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferWidth, m_BufferHeight);
 	m_Collider = nullptr;
 	m_Width = p_Width;
 	m_Height = p_Height;
-	m_Camera = { 0, 0, 320, 180 };
+	m_CameraRect = { 0, 0, 320, 180 };
+	m_CameraBuffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 320, 180);
 }
 
 Tilemap::~Tilemap() { 
@@ -39,7 +43,6 @@ void Tilemap::SetCollider(unsigned short* p_Collider) {
 }
 
 void Tilemap::RenderToBuffer() {
-
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 
 	SDL_RenderCopy(m_Renderer, TextureUtil::LoadTexture(m_Background.c_str(), m_Renderer), NULL, NULL);
@@ -73,7 +76,13 @@ void Tilemap::RenderTiles(const int& p_n) {
 }
 
 void Tilemap::Render() const {
-	SDL_RenderCopy(m_Renderer, m_Buffer, &m_Camera, NULL);
+	SDL_SetRenderTarget(m_Renderer, m_CameraBuffer);
+
+	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, &m_BufferRect);
+
+	SDL_SetRenderTarget(m_Renderer, NULL);
+
+	SDL_RenderCopy(m_Renderer, m_CameraBuffer, &m_CameraRect, NULL);
 }
 
 void Tilemap::SaveTilemapAsPng(const char* file_name) const {
