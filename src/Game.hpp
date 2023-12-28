@@ -2,11 +2,18 @@
 #include "SDL.h"
 #include "tilemap/Tilemap.hpp"
 #include "Player.hpp"
+#include <memory>
 
 class Game {
 public:
 	Game(); 
 	virtual ~Game() = default;
+
+	Game(const Game& other) = delete;
+	Game(const Game&& other) = delete;
+
+	Game operator=(const Game& other) = delete;
+	Game operator=(const Game&& other) = delete;
 
 	virtual void OnUserCreate() = 0;
 	virtual void OnUserUpdate() = 0; 
@@ -19,15 +26,17 @@ public:
 	void Clean();
 	inline bool Exit() const { return m_IsRunning; }
 
-	Tilemap* Level_1;
-	Player* m_Player;
-	DynamicCollider2D* m_PlayerCollider;
+protected:
+	std::unique_ptr<Tilemap> m_Level;
+	std::unique_ptr<Player> m_Player;
+	std::unique_ptr<DynamicCollider2D> m_PlayerCollider;
+	std::unique_ptr<ColliderDebugRenderer> m_ColliderDebugger;
+
 	SDL_Renderer* m_Renderer;
-	ColliderDebugRenderer* m_ColliderDebugger;
 
 	float m_DeltaTime;
-private:
 
+private:
 	bool m_IsRunning;
 	int m_w{}, m_h{};
 	SDL_Window* m_Window;

@@ -18,8 +18,8 @@ Player::Player(SDL_Renderer* p_Renderer, const char* p_TexPath, const SDL_Rect& 
 }
 
 Player::~Player() {
-	delete m_Buffer;
-	delete m_Sprite;
+	SDL_DestroyTexture(m_Buffer);
+	SDL_DestroyTexture(m_Sprite);
 }
 
 void Player::LinkCollider(DynamicCollider2D* p_Collider) {

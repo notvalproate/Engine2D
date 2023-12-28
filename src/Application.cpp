@@ -69,25 +69,25 @@ public:
 		Temp.x += TILE_SIZE;
 		TileRects.push_back(Temp);
 
-		Level_1 = new Tilemap(TILE_SIZE, "assets/tilemaps/Grass.png", TileRects, m_Renderer, 40, 23);
-		Level_1->SetBackground("assets/backgrounds/BG.png");
-		Level_1->AddBackgroundProps("assets/props/Level_1.png");
-		Level_1->AddLayer(t_ForegroundTileMap);
-		Level_1->SetCollider(t_ColliderTileMap);
-		Level_1->RenderToBuffer();
-		Level_1->SaveTilemapAsPng("assets/levels/Level_1.png");
+		m_Level = std::make_unique<Tilemap>(TILE_SIZE, "assets/tilemaps/Grass.png", TileRects, m_Renderer, 40, 23);
+		m_Level->SetBackground("assets/backgrounds/BG.png");
+		m_Level->AddBackgroundProps("assets/props/Level_1.png");
+		m_Level->AddLayer(t_ForegroundTileMap);
+		m_Level->SetCollider(t_ColliderTileMap);
+		m_Level->RenderToBuffer();
+		m_Level->SaveTilemapAsPng("assets/levels/Level_1.png");
 
 		//Collider
-
-		m_PlayerCollider = new DynamicCollider2D(TILE_SIZE, 13, 18, 0, 0);
+		 
+		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 13, 18, 0, 0);
 		m_PlayerCollider->SetColliderMap(t_ColliderTileMap, 40, 23);
 
 		//Player
 
 		SDL_Rect DestRect = { 20, 120, 13, 18 };
 		SDL_Rect SrcRect = { 0, 0, 13, 18 };
-		m_Player = new Player(m_Renderer, "assets/character sprites/idle/madeline.png", SrcRect, 120, 360);
-		m_Player->LinkCollider(m_PlayerCollider);
+		m_Player = std::make_unique<Player>(m_Renderer, "assets/character sprites/idle/madeline.png", SrcRect, 120, 360);
+		m_Player->LinkCollider(m_PlayerCollider.get());
 	}
 
 	void OnUserUpdate() override {

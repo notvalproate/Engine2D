@@ -52,7 +52,7 @@ void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, con
 
 	// Collider Debugger
 
-	m_ColliderDebugger = new ColliderDebugRenderer(m_Renderer);
+	m_ColliderDebugger = std::make_unique<ColliderDebugRenderer>(m_Renderer);
 
 	OnUserCreate();
 }
@@ -89,7 +89,7 @@ void Game::Update() {
 }
  
 void Game::Render() {
-	Level_1->Render();
+	m_Level->Render();
 	m_Player->Render();
 	OnUserRender();
 
