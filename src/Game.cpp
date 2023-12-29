@@ -6,6 +6,13 @@
 
 Game::Game() : m_IsRunning(false), m_DeltaTime(16), m_Window(nullptr), m_Renderer(nullptr) { }
 
+Game::~Game() {
+	SDL_DestroyWindow(m_Window);
+	SDL_DestroyRenderer(m_Renderer);
+	SDL_Quit();
+	std::cout << "Game Cleaned" << std::endl;
+}
+
 void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, const int& p_y, int p_Width, int p_Height) {
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING)) {
@@ -99,13 +106,6 @@ void Game::Render() {
 		SDL_WaitEvent(NULL); //If Window not in focus, do not render and wait for window to come in focus.
 	}
 }
-
-void Game::Clean() {
-	SDL_DestroyWindow(m_Window); 
-	SDL_DestroyRenderer(m_Renderer); 
-	SDL_Quit(); 
-	std::cout << "Game Cleaned" << std::endl;
-} 
 
 bool Game::InFocus() {
 	//Get the window's flags and check if it is In Focus.

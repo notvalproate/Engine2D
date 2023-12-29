@@ -8,7 +8,7 @@
 class Game {
 public:
 	Game(); 
-	virtual ~Game() = default;
+	virtual ~Game();
 
 	Game(const Game& other) = delete;
 	Game(const Game&& other) = delete;
@@ -24,7 +24,6 @@ public:
 	void HandleEvents();
 	void Update();
 	void Render();
-	void Clean();
 	inline bool Exit() const { return m_IsRunning; }
 
 protected:

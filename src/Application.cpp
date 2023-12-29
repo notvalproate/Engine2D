@@ -109,6 +109,5 @@ int main(int argc, char *argv[]) {
 		game.Render();
 	}
 
-	game.Clean();
 	return 0;
 }
