@@ -90,10 +90,6 @@ public:
 		m_PlayerCollider->SetPlayer(m_Player);
 	}
 
-	void OnUserUpdate() override {
-		
-	}
-
 	void OnUserRender() override {
 		m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime);
 	}
@@ -103,7 +99,7 @@ int main(int argc, char *argv[]) {
 	PlatformerGame game;
 	game.Init("Platformer Game", "assets/textures/icon.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
 
-	while (game.Exit()) {
+	while (game.isRunning()) {
 		game.HandleEvents();
 		game.Update();
 		game.Render();

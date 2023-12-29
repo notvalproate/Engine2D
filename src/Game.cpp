@@ -30,8 +30,8 @@ void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, con
 		m_DeltaTime = (float)1.0 / (float)m_Mode.refresh_rate;
 	}
 
-	m_w = p_Width;
-	m_h = p_Height;
+	m_Width = p_Width;
+	m_Height = p_Height;
 
 	//Create an SDL Window
 	if (!(m_Window = SDL_CreateWindow(p_Title, p_x, p_y, p_Width, p_Height, 0))) {
@@ -96,8 +96,8 @@ void Game::Update() {
 }
  
 void Game::Render() {
-	m_Level->Render();
 	m_Player->Render();
+	m_Level->Render();
 	OnUserRender();
 
 	SDL_RenderPresent(m_Renderer); 
@@ -105,9 +105,4 @@ void Game::Render() {
 	if (!InFocus()) {
 		SDL_WaitEvent(NULL); //If Window not in focus, do not render and wait for window to come in focus.
 	}
-}
-
-bool Game::InFocus() {
-	//Get the window's flags and check if it is In Focus.
-	return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS));
 }

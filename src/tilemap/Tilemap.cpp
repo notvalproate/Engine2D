@@ -75,6 +75,8 @@ void Tilemap::RenderTiles(const int& p_n) {
 	}
 }
 
+#include <iostream>
+
 void Tilemap::Render() const {
 	SDL_SetRenderTarget(m_Renderer, m_CameraBuffer);
 

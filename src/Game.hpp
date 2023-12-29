@@ -16,15 +16,17 @@ public:
 	Game operator=(const Game& other) = delete;
 	Game operator=(const Game&& other) = delete;
 
-	virtual void OnUserCreate() = 0;
-	virtual void OnUserUpdate() = 0; 
-	virtual void OnUserRender() = 0; 
+	virtual void OnUserCreate() {};
+	virtual void OnUserEvents() {};
+	virtual void OnUserUpdate() {};
+	virtual void OnUserRender() {};
 
 	void Init(const char* p_Title, const char* p_Iconpath, const int& p_x, const int& p_y, int p_Width, int p_Height); 
 	void HandleEvents();
 	void Update();
 	void Render();
-	inline bool Exit() const { return m_IsRunning; }
+
+	inline bool isRunning() const { return m_IsRunning; }
 
 protected:
 	std::unique_ptr<Tilemap> m_Level;
@@ -34,14 +36,14 @@ protected:
 
 	SDL_Renderer* m_Renderer;
 
-	float m_DeltaTime;
+	float m_DeltaTime{};
 
 private:
-	bool m_IsRunning;
-	int m_w{}, m_h{};
+	bool m_IsRunning{};
+	int m_Width{}, m_Height{};
 	SDL_Window* m_Window;
 	SDL_DisplayMode m_Mode;
 	SDL_Event m_Event;
 
-	bool InFocus();
+	inline bool InFocus() const { return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS)); };
 };
