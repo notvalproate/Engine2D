@@ -23,7 +23,7 @@ Tilemap::~Tilemap() {
 	SDL_DestroyTexture(m_Buffer);
 }
 
-void Tilemap::AddLayer(std::unique_ptr<unsigned short[]> p_TileMap) {
+void Tilemap::AddLayer(std::vector<unsigned short>&& p_TileMap) {
 	m_TileLayers.push_back(std::move(p_TileMap));
 }
 

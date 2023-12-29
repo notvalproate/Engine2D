@@ -9,7 +9,7 @@ public:
 	Tilemap(const unsigned short p_TileSize, const char* p_TilesPath, const std::vector<SDL_Rect>& p_Tiles, SDL_Renderer* p_Renderer, const int& p_Width, const int& p_Height);
 	~Tilemap();
 
-	void AddLayer(std::unique_ptr<unsigned short[]> p_TileMap);
+	void AddLayer(std::vector<unsigned short>&& p_TileMap);
 	void SetBackground(const std::string& p_TexPath);
 	void AddBackgroundProps(const std::string& p_TexPath);
 	void AddForegroundProps(const std::string& p_TexPath);
@@ -25,7 +25,7 @@ public:
 	int GetWidth() const { return m_Width; }
 	int GetHeight() const { return m_Height; }
 private:
-	std::vector<std::unique_ptr<unsigned short[]>> m_TileLayers;
+	std::vector<std::vector<unsigned short>> m_TileLayers;
 	std::vector<SDL_Rect> m_Tiles;
 
 	std::string m_Background;
