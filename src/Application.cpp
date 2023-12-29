@@ -2,7 +2,6 @@
 #include <iostream>
 #include <algorithm>
 #include <numeric>
-#include <memory>
 
 class PlatformerGame : public Game {
 public:
@@ -64,14 +63,7 @@ public:
 
 		static constexpr unsigned short TILE_SIZE = 8;
 
-		std::vector<SDL_Rect> TileRects;
-		SDL_Rect Temp = { 0, 0, TILE_SIZE, TILE_SIZE};
-
-		TileRects.push_back(Temp);
-		Temp.x += TILE_SIZE;
-		TileRects.push_back(Temp);
-
-		m_Level = std::make_unique<Tilemap>(TILE_SIZE, "assets/tilemaps/Grass.png", TileRects, m_Renderer, 40, 23);
+		m_Level = std::make_unique<Tilemap>(TILE_SIZE, "assets/tilemaps/Grass.png", m_Renderer, 40, 23);
 		m_Level->SetBackground("assets/backgrounds/BG.png");
 		m_Level->AddBackgroundProps("assets/props/Level_1.png");
 		m_Level->AddLayer(std::move(t_ForegroundTileMap));
@@ -88,7 +80,7 @@ public:
 		//Collider
 
 		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 13, 18, 0, 0);
-		m_PlayerCollider->SetColliderMap(t_ColliderTileMap, 40, 23);
+		m_PlayerCollider->SetColliderMap(m_Level->GetCollider(), 40, 23);
 		m_PlayerCollider->SetPlayer(m_Player);
 	}
 

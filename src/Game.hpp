@@ -13,8 +13,8 @@ public:
 	Game(const Game& other) = delete;
 	Game(const Game&& other) = delete;
 
-	Game operator=(const Game& other) = delete;
-	Game operator=(const Game&& other) = delete;
+	Game& operator=(const Game& other) = delete;
+	Game& operator=(const Game&& other) = delete;
 
 	virtual void OnUserCreate() {};
 	virtual void OnUserEvents() {};
