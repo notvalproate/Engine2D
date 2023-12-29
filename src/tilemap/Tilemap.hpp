@@ -40,4 +40,7 @@ private:
 	SDL_Rect m_CameraRect, m_BufferRect;
 
 	void RenderTiles(const int& p_n);
+
+
+	SDL_Texture* m_BufferTest;
 };

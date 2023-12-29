@@ -10,11 +10,14 @@ Tilemap::Tilemap(const unsigned short p_TileSize, const char* p_TilesPath, const
 	m_BufferHeight = p_TileSize * p_Height;
 	m_BufferRect = { 0, 0, p_TileSize * p_Width, p_TileSize * p_Height };
 	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferWidth, m_BufferHeight);
+	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
 	m_Collider = nullptr;
 	m_Width = p_Width;
 	m_Height = p_Height;
 	m_CameraRect = { 0, 0, 320, 180 };
 	m_CameraBuffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 320, 180);
+
+	m_BufferTest = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferWidth, m_BufferHeight);
 }
 
 Tilemap::~Tilemap() { 
@@ -75,14 +78,14 @@ void Tilemap::RenderTiles(const int& p_n) {
 	}
 }
 
-#include <iostream>
-
 void Tilemap::Render() const {
 	SDL_SetRenderTarget(m_Renderer, m_CameraBuffer);
 
 	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, &m_BufferRect);
 
 	SDL_SetRenderTarget(m_Renderer, NULL);
+
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 
 	SDL_RenderCopy(m_Renderer, m_CameraBuffer, &m_CameraRect, NULL);
 }

@@ -73,16 +73,19 @@ void Game::HandleEvents() {
 	if (m_Event.type == SDL_KEYDOWN) {
 		switch (m_Event.key.keysym.sym) { //Check for which key, pause if esc, toggle fullscreen if f11
 		case SDLK_F11:
+			int wid, hi;
+			SDL_GetWindowSize(m_Window, &wid, &hi);
 			//If the window doesnt have fullscreen flag, set the window to fullscreen
-			std::cout << SDL_GetWindowGrab(m_Window) << std::endl;
 			if (!(SDL_GetWindowFlags(m_Window) & SDL_WINDOW_FULLSCREEN)) {
-				SDL_SetWindowFullscreen(m_Window, SDL_WINDOW_FULLSCREEN);
 				SDL_SetWindowSize(m_Window, m_Mode.w, m_Mode.h);
+				SDL_SetWindowFullscreen(m_Window, SDL_WINDOW_FULLSCREEN);
+				m_Level->RenderToBuffer();
 				break;
 			}
 			//Else remove window fullscreen flag and set resolution
-			SDL_SetWindowFullscreen(m_Window, 0);
 			SDL_SetWindowSize(m_Window, 1280, 720);
+			SDL_SetWindowFullscreen(m_Window, 0);
+			m_Level->RenderToBuffer();
 			break;
 		}
 	}
@@ -96,8 +99,8 @@ void Game::Update() {
 }
  
 void Game::Render() {
-	m_Player->Render();
 	m_Level->Render();
+	m_Player->Render();
 	OnUserRender();
 
 	SDL_RenderPresent(m_Renderer); 
