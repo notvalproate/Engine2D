@@ -11,7 +11,7 @@ DynamicCollider2D::DynamicCollider2D(const unsigned short p_TileSize, const int&
 	m_Jumping = nullptr;
 }
 
-void DynamicCollider2D::SetColliderMap(unsigned short* p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight) {
+void DynamicCollider2D::SetColliderMap(std::shared_ptr<unsigned short[]> p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight) {
 	m_ColliderMap = p_ColliderMap;
 
 	if (m_ColliderMap == nullptr) {

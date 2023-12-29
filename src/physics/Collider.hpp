@@ -21,7 +21,7 @@ class DynamicCollider2D : private StaticCollider2D {
 public:
 	DynamicCollider2D(const unsigned short p_TileSize, const int& p_Width, const int& p_Height, const int& p_OffsetX, const int& p_OffsetY);
 
-	void SetColliderMap(unsigned short* p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight);
+	void SetColliderMap(std::shared_ptr<unsigned short[]> p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight);
 	void SetPlayer(const std::unique_ptr<Player>& p_Player);
 	void Update(const float& p_DeltaTime);
 
@@ -31,7 +31,7 @@ private:
 	bool* m_Jumping;
 
 	bool m_CollidesWithMap = false;
-	unsigned short* m_ColliderMap = nullptr;
+	std::shared_ptr<unsigned short[]> m_ColliderMap;
 	int m_MapWidth = 0, m_MapHeight = 0;
 	unsigned short m_TileSize;
 

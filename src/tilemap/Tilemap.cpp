@@ -11,7 +11,6 @@ Tilemap::Tilemap(const unsigned short p_TileSize, const char* p_TilesPath, const
 	m_BufferRect = { 0, 0, p_TileSize * p_Width, p_TileSize * p_Height };
 	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferWidth, m_BufferHeight);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
-	m_Collider = nullptr;
 	m_Width = p_Width;
 	m_Height = p_Height;
 	m_CameraRect = { 0, 0, 320, 180 };
@@ -22,11 +21,10 @@ Tilemap::Tilemap(const unsigned short p_TileSize, const char* p_TilesPath, const
 
 Tilemap::~Tilemap() { 
 	SDL_DestroyTexture(m_Buffer);
-	delete[] m_Collider;
 }
 
-void Tilemap::AddLayer(unsigned short* p_TileMap) {
-	m_TileLayers.push_back(p_TileMap);
+void Tilemap::AddLayer(std::unique_ptr<unsigned short[]> p_TileMap) {
+	m_TileLayers.push_back(std::move(p_TileMap));
 }
 
 void Tilemap::SetBackground(const std::string& p_TexPath) {
@@ -41,7 +39,7 @@ void Tilemap::AddForegroundProps(const std::string& p_TexPath) {
 	m_ForegroundProps = p_TexPath;
 }
 
-void Tilemap::SetCollider(unsigned short* p_Collider) {
+void Tilemap::SetCollider(std::shared_ptr<unsigned short[]> p_Collider) {
 	m_Collider = p_Collider;
 }
 

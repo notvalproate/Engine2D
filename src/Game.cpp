@@ -83,7 +83,7 @@ void Game::HandleEvents() {
 				break;
 			}
 			//Else remove window fullscreen flag and set resolution
-			SDL_SetWindowSize(m_Window, 1280, 720);
+			SDL_SetWindowSize(m_Window, m_Width, m_Height);
 			SDL_SetWindowFullscreen(m_Window, 0);
 			m_Level->RenderToBuffer();
 			break;
