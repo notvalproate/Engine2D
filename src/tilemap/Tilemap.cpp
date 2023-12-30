@@ -2,10 +2,9 @@
 #include "../TextureLoader.hpp"
 
 Tilemap::Tilemap(const unsigned short p_TileSize, const char* p_TilesPath, SDL_Renderer* p_Renderer, const int& p_Width, const int& p_Height) 
-	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr)
+	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr), m_TileSize(p_TileSize)
 {
 	m_TilemapTex = TextureUtil::LoadTexture(p_TilesPath, p_Renderer);
-	m_TileSize = p_TileSize;
 
 	m_Renderer = p_Renderer;
 

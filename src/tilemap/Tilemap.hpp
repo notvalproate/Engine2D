@@ -1,7 +1,6 @@
 #pragma once
 #include "SDL.h"
 #include <vector>
-#include <string>
 #include <memory>
 
 class Tilemap {
@@ -36,12 +35,13 @@ private:
 	std::vector<std::vector<unsigned short>> m_Layers;
 	std::shared_ptr<unsigned short[]> m_Collider;
 
-	unsigned short m_TileSize;
+	const unsigned short m_TileSize;
 	int m_Width, m_Height;
 	int m_BufferWidth, m_BufferHeight;
 
 	SDL_Texture *m_Buffer, *m_CameraBuffer, *m_TilemapTex;
 	SDL_Texture *m_Background, *m_BackgroundProps, *m_ForegroundProps;
+
 	SDL_Rect m_CameraRect, m_BufferRect;
 
 	SDL_Renderer *m_Renderer;
