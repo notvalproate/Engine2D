@@ -4,17 +4,12 @@
 #include <iostream>
 
 Player::Player(SDL_Renderer* p_Renderer, const char* p_TexPath, const SDL_Rect& p_SrcRect, const int& p_MovementSpeed, const int& p_Gravity)
-	: m_MovementSpeed(p_MovementSpeed), m_Gravity(p_Gravity) {
+	: m_MovementSpeed(p_MovementSpeed), m_Gravity(p_Gravity), m_Renderer(p_Renderer), m_SrcRect(p_SrcRect), m_DestRect(p_SrcRect), m_Jumping(true) 
+{
 	//Load sprite and create buffer texture to render player to
 	m_Sprite = TextureUtil::LoadTexture(p_TexPath, p_Renderer);
 	m_Buffer = SDL_CreateTexture(p_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 320, 180);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
-
-	m_Renderer = p_Renderer;
-	m_SrcRect = p_SrcRect;
-	m_DestRect = p_SrcRect;
-
-	m_Jumping = true;
 }
 
 Player::~Player() {
@@ -64,12 +59,10 @@ void Player::HandleEvents(const SDL_Event& p_Event) {
 
 void Player::Update(const float& p_DeltaTime) {
 	//Apply gravity only while airborne
-	if(m_Jumping) m_CurrVelocity.y += m_Gravity * p_DeltaTime;
+	m_CurrVelocity.y += m_Gravity * p_DeltaTime;
 
 	m_LastPosition = m_CurrPosition;
-	m_CurrPosition = m_CurrPosition + m_CurrVelocity * p_DeltaTime; 
-
-	m_Jumping = true;
+	m_CurrPosition = m_CurrPosition + m_CurrVelocity * p_DeltaTime;
 }
 
 void Player::Render() {

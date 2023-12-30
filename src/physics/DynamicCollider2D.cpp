@@ -206,9 +206,8 @@ void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& p_Collider, con
 	}
 
 	//Debug to render all the map colliders
-	bool t_HighlightColliders = true;
 	SDL_Rect t_Tile;
-	if (t_HighlightColliders && p_Collider.m_CollidesWithMap) {
+	if (p_Collider.m_CollidesWithMap) {
 		int t_Size = p_Collider.m_MapHeight * p_Collider.m_MapWidth;
 		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 255, 100);
 		for (int i = 0; i < t_Size; i++) {
