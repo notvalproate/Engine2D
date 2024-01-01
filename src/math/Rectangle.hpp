@@ -3,9 +3,9 @@
 #include "Vector2d.h"
 
 namespace RectUtil {
-	void Translate(SDL_Rect& Rectangle, const Vector2d& p_Translation);
-	void Scale(SDL_Rect& Rectangle, const float& s_x, const float& s_y);
+	void Translate(SDL_Rect& rectangle, const Vector2d& translation);
+	void Scale(SDL_Rect& rectangle, const float x, const float y);
 	bool RectOverlapRect(const SDL_Rect& R1, const SDL_Rect& R2);
-	bool RayIntersectRect(const Vector2d& p_RayOrigin, const Vector2d& p_RayDir, const SDL_FRect& Rectangle, Vector2d& p_ContactPoint, Vector2d& p_ContactNormal, double& p_TimeHitNear);
-	bool DynamicRectIntersectRect(const SDL_FRect& p_DynamicRect, const SDL_Rect& p_StaticRect, const Vector2d& p_CurrVelocity, Vector2d& p_ContactPoint, Vector2d& p_ContactNormal, double& p_TimeHitNear, const float& p_DeltaTime);
+	bool RayIntersectRect(const Vector2d& rayOrigin, const Vector2d& rayDir, const SDL_FRect& rectangle, Vector2d& contactPoint, Vector2d& contactNormal, double& timeHitNear);
+	bool DynamicRectIntersectRect(const SDL_FRect& dynamicRect, const SDL_Rect& staticRect, const Vector2d& currVelocity, Vector2d& contactPoint, Vector2d& contactNormal, double& timeHitNear, const float deltaTime);
 }

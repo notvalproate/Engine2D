@@ -3,14 +3,14 @@
 #include <iostream>
 #include <algorithm>
 
-void RectUtil::Translate(SDL_Rect& Rectangle, const Vector2d& p_Translation) {
-	Rectangle.x += std::round(p_Translation.x);
-	Rectangle.y += std::round(p_Translation.y);
+void RectUtil::Translate(SDL_Rect& rectangle, const Vector2d& translation) {
+	rectangle.x += std::round(translation.x);
+	rectangle.y += std::round(translation.y);
 }
 
-void RectUtil::Scale(SDL_Rect& Rectangle, const float& s_x, const float& s_y) {
-	Rectangle.w = std::round(Rectangle.w * s_x);
-	Rectangle.h = std::round(Rectangle.h * s_y);
+void RectUtil::Scale(SDL_Rect& rectangle, const float x, const float y) {
+	rectangle.w = std::round(rectangle.w * x);
+	rectangle.h = std::round(rectangle.h * y);
 }
 
 bool RectUtil::RectOverlapRect(const SDL_Rect& R1, const SDL_Rect& R2) {
@@ -26,16 +26,16 @@ bool RectUtil::RectOverlapRect(const SDL_Rect& R1, const SDL_Rect& R2) {
 	return false;
 }
 
-bool RectUtil::RayIntersectRect(const Vector2d& p_RayOrigin, const Vector2d& p_RayDir, const SDL_FRect& Rectangle, Vector2d& p_ContactPoint, Vector2d& p_ContactNormal, double& p_TimeHitNear) {
+bool RectUtil::RayIntersectRect(const Vector2d& rayOrigin, const Vector2d& rayDir, const SDL_FRect& rectangle, Vector2d& contactPoint, Vector2d& contactNormal, double& timeHitNear) {
 	//Calculate the near and far intersection points as ratio from 0 to 1.
 	Vector2d t_Near(
-		(Rectangle.x - p_RayOrigin.x) / p_RayDir.x, 
-		(Rectangle.y - p_RayOrigin.y) / p_RayDir.y
+		(rectangle.x - rayOrigin.x) / rayDir.x, 
+		(rectangle.y - rayOrigin.y) / rayDir.y
 	);
 	//For far intersection points, added width and height
 	Vector2d t_Far(
-		(Rectangle.x + Rectangle.w - p_RayOrigin.x) / p_RayDir.x,
-		(Rectangle.y + Rectangle.h - p_RayOrigin.y) / p_RayDir.y
+		(rectangle.x + rectangle.w - rayOrigin.x) / rayDir.x,
+		(rectangle.y + rectangle.h - rayOrigin.y) / rayDir.y
 	);
 
 	if (std::isnan(t_Far.y) || std::isnan(t_Far.x)) return false;
@@ -56,24 +56,24 @@ bool RectUtil::RayIntersectRect(const Vector2d& p_RayOrigin, const Vector2d& p_R
 	if (std::min(t_Far.x, t_Far.y) < 0)	return false;
 
 	//Ppoint closer to the tip of the ray is going to hit first, hence max
-	p_TimeHitNear = std::max(t_Near.x, t_Near.y);
+	timeHitNear = std::max(t_Near.x, t_Near.y);
 	
 	//If the time to hit is > 1, the extension of the ray intersects
-	if (p_TimeHitNear > 1) return false;
+	if (timeHitNear > 1) return false;
 
 	//Get contact point from original equation
-	p_ContactPoint = Vector2d(p_RayOrigin + (p_RayDir * p_TimeHitNear));
+	contactPoint = Vector2d(rayOrigin + (rayDir * timeHitNear));
 
 	//Get the normal
 	//If nearx is greater, it intersects in x direction, otherwise y
 	if (t_Near.x > t_Near.y) {
 		//Normal in y direction is 0 and x is in opposite of ray direction
-		p_ContactNormal.y = 0; 
-		p_ContactNormal.x = -1 * p_RayDir.x / std::abs(p_RayDir.x); 
+		contactNormal.y = 0; 
+		contactNormal.x = -1 * rayDir.x / std::abs(rayDir.x); 
 	}
 	else if (t_Near.x < t_Near.y) {
-		p_ContactNormal.x = 0; 
-		p_ContactNormal.y = -1 * p_RayDir.y / std::abs(p_RayDir.y);
+		contactNormal.x = 0; 
+		contactNormal.y = -1 * rayDir.y / std::abs(rayDir.y);
 	}
 
 	return true;
@@ -81,31 +81,31 @@ bool RectUtil::RayIntersectRect(const Vector2d& p_RayOrigin, const Vector2d& p_R
 
 
 
-bool RectUtil::DynamicRectIntersectRect(const SDL_FRect& p_DynamicRect, const SDL_Rect& p_StaticRect, const Vector2d& p_CurrVelocity, Vector2d& p_ContactPoint, Vector2d& p_ContactNormal, double& p_TimeHitNear, const float& p_DeltaTime) {
-	if (p_CurrVelocity.x == 0 && p_CurrVelocity.y == 0) {
+bool RectUtil::DynamicRectIntersectRect(const SDL_FRect& dynamicRect, const SDL_Rect& staticRect, const Vector2d& currVelocity, Vector2d& contactPoint, Vector2d& contactNormal, double& timeHitNear, const float deltaTime) {
+	if (currVelocity.x == 0 && currVelocity.y == 0) {
 		return false;
 	}
 	
 	//Expand the rectangle with width and height of dynamic rect. Keeping centered
 	SDL_FRect t_ExpandedRect = {  
-		(float)p_StaticRect.x - (p_DynamicRect.w / (float)2.0),
-		(float)p_StaticRect.y - (p_DynamicRect.h / (float)2.0),
-		(float)p_StaticRect.w + p_DynamicRect.w,
-		(float)p_StaticRect.h + p_DynamicRect.h
+		(float)staticRect.x - (dynamicRect.w / (float)2.0),
+		(float)staticRect.y - (dynamicRect.h / (float)2.0),
+		(float)staticRect.w + dynamicRect.w,
+		(float)staticRect.h + dynamicRect.h
 	};
 
 	//The ray origin is the center
 	Vector2d t_RayOrigin(
-		p_DynamicRect.x + (p_DynamicRect.w / (float)2.0), 
-		p_DynamicRect.y + (p_DynamicRect.h / (float)2.0)
+		dynamicRect.x + (dynamicRect.w / (float)2.0), 
+		dynamicRect.y + (dynamicRect.h / (float)2.0)
 	);
 	Vector2d t_RayDirection(
-		p_CurrVelocity.x * p_DeltaTime,
-		p_CurrVelocity.y * p_DeltaTime
+		currVelocity.x * deltaTime,
+		currVelocity.y * deltaTime
 	);
 
 	//Check if the ray intersects with the expanded rectangle
-	if (RayIntersectRect(t_RayOrigin, t_RayDirection, t_ExpandedRect, p_ContactPoint, p_ContactNormal, p_TimeHitNear)) {
+	if (RayIntersectRect(t_RayOrigin, t_RayDirection, t_ExpandedRect, contactPoint, contactNormal, timeHitNear)) {
 		return true;
 	}
 
