@@ -13,7 +13,7 @@ Game::~Game() {
 	std::cout << "Game Cleaned" << std::endl;
 }
 
-void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, const int& p_y, int p_Width, int p_Height) {
+void Game::Init(const char* title, const char* iconpath, const int x, const int y, int windowWidth, int windowHeight) {
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING)) {
 		std::cout << "Error: Couldn't Initialize Subsystems..." << std::endl;
@@ -30,11 +30,11 @@ void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, con
 		m_DeltaTime = (float)1.0 / (float)m_Mode.refresh_rate;
 	}
 
-	m_Width = p_Width;
-	m_Height = p_Height;
+	m_Width = windowWidth;
+	m_Height = windowHeight;
 
 	//Create an SDL Window
-	if (!(m_Window = SDL_CreateWindow(p_Title, p_x, p_y, p_Width, p_Height, 0))) {
+	if (!(m_Window = SDL_CreateWindow(title, x, y, windowWidth, windowHeight, 0))) {
 		std::cout << "Error: Couldn't Initialize Window..." << std::endl;
 		return;
 	}
@@ -42,7 +42,7 @@ void Game::Init(const char* p_Title, const char* p_Iconpath, const int& p_x, con
 	//Setting Hints
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
 
-	SDL_Surface* TempSurface = IMG_Load(p_Iconpath);
+	SDL_Surface* TempSurface = IMG_Load(iconpath);
 	SDL_SetWindowIcon(m_Window, TempSurface); //Setting window icon
 	SDL_FreeSurface(TempSurface);
 	std::cout << "Stage: Initialized Window..." << std::endl;

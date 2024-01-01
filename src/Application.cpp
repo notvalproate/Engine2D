@@ -3,11 +3,13 @@
 #include <algorithm>
 #include <numeric>
 
+static constexpr unsigned short TILE_SIZE = 8;
+
 class PlatformerGame : public Game {
 public:
 	void OnUserCreate() override {
 		
-		std::vector<unsigned short> t_ForegroundTileMap {
+		std::vector<unsigned short> foregroundTileMap {
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -33,7 +35,7 @@ public:
 			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
 		};
 
-		std::shared_ptr<unsigned short[]> t_ColliderTileMap(new unsigned short[40 * 23] {
+		std::shared_ptr<unsigned short[]> colliderTileMap(new unsigned short[40 * 23] {
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -61,21 +63,19 @@ public:
 
 		//Setting up Tile's in the tilemap
 
-		static constexpr unsigned short TILE_SIZE = 8;
-
 		m_Level = std::make_unique<Tilemap>(TILE_SIZE, "assets/tilemaps/Grass.png", m_Renderer, 40, 23);
 		m_Level->SetBackground("assets/backgrounds/BG.png");
 		m_Level->AddBackgroundProps("assets/props/Level_1.png");
-		m_Level->AddLayer(std::move(t_ForegroundTileMap));
-		m_Level->SetCollider(t_ColliderTileMap);
+		m_Level->AddLayer(std::move(foregroundTileMap));
+		m_Level->SetCollider(colliderTileMap);
 		m_Level->RenderToBuffer();
 		m_Level->SaveTilemapAsPng("assets/levels/Level_1.png");
 
 		
 		//Player
 
-		SDL_Rect PlayerRect = { 0, 0, 13, 18 };
-		m_Player = std::make_unique<Player>(m_Renderer, "assets/character sprites/idle/madeline.png", PlayerRect, 120, 360);
+		SDL_Rect playerRect = { 0, 0, 13, 18 };
+		m_Player = std::make_unique<Player>(m_Renderer, "assets/character sprites/idle/madeline.png", playerRect, 120, 360);
 
 		//Collider
 
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
 	PlatformerGame game;
 	game.Init("Platformer Game", "assets/textures/icon.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
 
-	while (game.isRunning()) {
+	while (game.IsRunning()) {
 		game.HandleEvents();
 		game.Update();
 		game.Render();

@@ -21,12 +21,12 @@ public:
 	virtual void OnUserUpdate() {};
 	virtual void OnUserRender() {};
 
-	void Init(const char* p_Title, const char* p_Iconpath, const int& p_x, const int& p_y, int p_Width, int p_Height); 
+	void Init(const char* title, const char* iconpath, const int x, const int y, int windowWidth, int windowHeight);
 	void HandleEvents();
 	void Update();
 	void Render();
 
-	inline bool isRunning() const { return m_IsRunning; }
+	inline bool IsRunning() const { return m_IsRunning; }
 
 protected:
 	std::unique_ptr<Tilemap> m_Level;
