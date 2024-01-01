@@ -5,7 +5,7 @@
 
 class Tilemap {
 public:
-	Tilemap(const unsigned short p_TileSize, const char* p_TilesPath, SDL_Renderer* p_Renderer, const int& p_Width, const int& p_Height);
+	Tilemap(const unsigned short tileSize, const char* tilesPath, SDL_Renderer* renderer, const int width, const int height);
 	~Tilemap();
 
 	Tilemap(const Tilemap& other) = delete;
@@ -14,15 +14,15 @@ public:
 	Tilemap& operator=(const Tilemap& other) = delete;
 	Tilemap& operator=(const Tilemap&& other) = delete;
 
-	void AddLayer(std::vector<unsigned short>&& p_TileMap);
+	void AddLayer(std::vector<unsigned short>&& tileMap);
 
-	void SetBackground(const char* p_TexPath);
-	void AddBackgroundProps(const char* p_TexPath);
-	void AddForegroundProps(const char* p_TexPath);
+	void SetBackground(const char* texPath);
+	void AddBackgroundProps(const char* texPath);
+	void AddForegroundProps(const char* texPath);
 
-	void SetCollider(std::shared_ptr<unsigned short[]> p_Collider);
+	void SetCollider(std::shared_ptr<unsigned short[]> collider);
 
-	void SaveTilemapAsPng(const char* file_name) const;
+	void SaveTilemapAsPng(const char* fileName) const;
 
 	void RenderToBuffer() const;
 	void Render() const;
@@ -46,5 +46,5 @@ private:
 
 	SDL_Renderer *m_Renderer;
 
-	void RenderTiles(const int& p_n) const;
+	void RenderTiles(const int n) const;
 };
