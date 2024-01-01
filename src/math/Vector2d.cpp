@@ -1,8 +1,8 @@
 #include "Vector2d.h"
 #include <cmath>
 
-Vector2d::Vector2d(const double& p_x, const double& p_y)
-	: x(p_x), y(p_y) { }
+Vector2d::Vector2d(const double px, const double py)
+	: x(px), y(py) { }
 
 void Vector2d::Normalize() {
 	if (x == 0 && y == 0) {
@@ -14,9 +14,9 @@ void Vector2d::Normalize() {
 	y /= k;
 }
 
-void Vector2d::Scale(const int& p_Factor) {
-	x *= p_Factor;
-	y *= p_Factor;
+void Vector2d::Scale(const int factor) {
+	x *= factor;
+	y *= factor;
 }
 
 double Vector2d::GetMagnitude() const {
