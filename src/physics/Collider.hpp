@@ -7,10 +7,10 @@
 
 class StaticCollider2D {
 public:
-	StaticCollider2D(const int& p_Width, const int& p_Height, const int& p_X, const int& p_Y);
+	StaticCollider2D(const int width, const int height, const int  X, const int Y);
 
-	virtual void LinkObject(const Vector2d& p_Position);
-	virtual void Update(const float& p_DeltaTime);
+	virtual void LinkObject(const Vector2d& position);
+	virtual void Update(const float deltaTime);
 protected:
 	SDL_Rect m_ColliderRect;
 
@@ -19,11 +19,11 @@ protected:
 
 class DynamicCollider2D : private StaticCollider2D {
 public:
-	DynamicCollider2D(const unsigned short p_TileSize, const int& p_Width, const int& p_Height, const int& p_OffsetX, const int& p_OffsetY);
+	DynamicCollider2D(const unsigned short tileSize, const int width, const int height, const int offsetX, const int offsetY);
 
-	void SetColliderMap(std::shared_ptr<unsigned short[]> p_ColliderMap, const int& p_MapWidth, const int& p_MapHeight);
-	void SetPlayer(const std::unique_ptr<Player>& p_Player);
-	void Update(const float& p_DeltaTime);
+	void SetColliderMap(std::shared_ptr<unsigned short[]> colliderMap, const int mapWidth, const int mapHeight);
+	void SetPlayer(const std::unique_ptr<Player>& player);
+	void Update(const float deltaTime);
 
 private:
 	Vector2d* m_CurrPosition, * m_LastPosition, * m_CurrVelocity;
@@ -42,22 +42,22 @@ private:
 	};
 	std::vector<CollidedTile> m_CollidedTiles;
 
-	bool CollisionWithMap(const float& p_DeltaTime);
+	bool CollisionWithMap(const float deltaTime);
 	std::tuple<Vector2d, Vector2d> GetRangeOfTiles();
-	void GetCollidedTiles(const std::tuple<Vector2d, Vector2d>& p_RangeOfCollidableTiles, const float& p_DeltaTime);
-	void CheckCollisionWithTile(const SDL_Rect& p_TileToCheck, const float& p_DeltaTime);
+	void GetCollidedTiles(const std::tuple<Vector2d, Vector2d>& rangeOfCollidableTiles, const float deltaTime);
+	void CheckCollisionWithTile(const SDL_Rect& tileToCheck, const float deltaTime);
 	void SortCollidedTilesByTime();
-	void ResolveCollisionsInOrder(const float& p_DeltaTime);
-	void ResolveMapCollision(const Vector2d& p_ContactNormal, const SDL_Rect& p_Tile, const double& p_TimeHitNear);
+	void ResolveCollisionsInOrder(const float deltaTime);
+	void ResolveMapCollision(const Vector2d& contactNormal, const SDL_Rect& tile, const double timeHitNear);
 
 	friend class ColliderDebugRenderer;
 };
 
 class ColliderDebugRenderer {
 public:
-	ColliderDebugRenderer(SDL_Renderer* p_Renderer);
+	ColliderDebugRenderer(SDL_Renderer* renderer);
 
-	void DebugRender(const DynamicCollider2D& p_Collider, const float& p_DeltaTime);
+	void DebugRender(const DynamicCollider2D& collider, const float deltaTime);
 private:
 	SDL_Renderer* m_Renderer;
 	SDL_Texture* m_Buffer;
