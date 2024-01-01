@@ -3,5 +3,5 @@
 #include "SDL.h"
 
 namespace TextureUtil {
-	SDL_Texture* LoadTexture(const char* p_Texpath, SDL_Renderer* p_Renderer);
+	SDL_Texture* LoadTexture(const char* texpath, SDL_Renderer* renderer);
 }
