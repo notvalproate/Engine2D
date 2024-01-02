@@ -8,7 +8,7 @@ Player::Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcR
 {
 	//Load sprite and create buffer texture to render player to
 	m_Sprite = TextureUtil::LoadTexture(texPath, renderer);
-	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 320, 180);
+	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 640, 360);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
 }
 

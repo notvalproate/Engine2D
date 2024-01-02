@@ -6,6 +6,7 @@
 class Tilemap {
 public:
 	Tilemap(const unsigned short tileSize, const char* tilesPath, SDL_Renderer* renderer, const int width, const int height);
+	Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* renderer);
 	~Tilemap();
 
 	Tilemap(const Tilemap& other) = delete;
@@ -35,7 +36,7 @@ private:
 	std::vector<std::vector<unsigned short>> m_Layers;
 	std::shared_ptr<unsigned short[]> m_Collider;
 
-	const unsigned short m_TileSize;
+	unsigned short m_TileSize;
 	int m_Width, m_Height;
 	int m_BufferWidth, m_BufferHeight;
 

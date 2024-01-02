@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <numeric>
 
-static constexpr unsigned short TILE_SIZE = 8;
+static constexpr unsigned short TILE_SIZE = 32;
 
 class PlatformerGame : public Game {
 public:
@@ -72,6 +72,7 @@ public:
 		m_Level->RenderToBuffer();
 		m_Level->SaveTilemapAsPng("assets/levels/Level_1.png");
 
+		Tilemap testTilemap("assets/tilemaps/tuxemon-town.json", "assets/tilemaps/Grass.png", m_Renderer);
 		
 		//Player
 
@@ -86,7 +87,7 @@ public:
 	}
 
 	void OnUserRender() override {
-		m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime);
+		//m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime);
 	}
 };
 

@@ -1,6 +1,10 @@
 #include "Tilemap.hpp"
 #include "../TextureLoader.hpp"
 
+#include "json.hpp"
+#include <fstream>
+#include <iostream>
+
 Tilemap::Tilemap(const unsigned short tileSize, const char* tilesPath, SDL_Renderer* renderer, const int width, const int height) 
 	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr), m_TileSize(tileSize)
 {
@@ -8,14 +12,38 @@ Tilemap::Tilemap(const unsigned short tileSize, const char* tilesPath, SDL_Rende
 
 	m_Renderer = renderer;
 
+	m_Width = width;
+	m_Height = height;
+
 	m_BufferWidth = tileSize * width;
 	m_BufferHeight = tileSize * height;
-	m_BufferRect = { 0, 0, tileSize * width, tileSize * height };
+	m_BufferRect = { 0, 0, m_BufferWidth, m_BufferHeight };
 	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferWidth, m_BufferHeight);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
 
-	m_Width = width;
-	m_Height = height;
+
+	m_CameraRect = { 0, 0, 640, 360 };
+	m_CameraBuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 640, 360);
+}
+
+Tilemap::Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* renderer)
+	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr)
+{
+	m_TilemapTex = TextureUtil::LoadTexture(tilesPath, renderer);
+	m_Renderer = renderer;
+
+	std::ifstream jsonFileStream(tilemapPath);
+	auto tilemapJson = nlohmann::json::parse(jsonFileStream);
+
+	m_Width = tilemapJson["width"];
+	m_Height = tilemapJson["height"];
+	m_TileSize = tilemapJson["tileheight"];
+
+	m_BufferWidth = m_TileSize * m_Width;
+	m_BufferHeight = m_TileSize * m_Height;
+	m_BufferRect = { 0, 0, m_BufferWidth, m_BufferHeight };
+	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferWidth, m_BufferHeight);
+	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
 
 	m_CameraRect = { 0, 0, 320, 180 };
 	m_CameraBuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 320, 180);
