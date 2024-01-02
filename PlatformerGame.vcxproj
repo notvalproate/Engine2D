@@ -152,6 +152,7 @@
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\TextureLoader.cpp" />
     <ClCompile Include="src\tilemap\Tilemap.cpp" />
+    <ClCompile Include="src\tilemap\Tileset.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2.dll" />
@@ -165,6 +166,7 @@
     <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\TextureLoader.hpp" />
     <ClInclude Include="src\tilemap\Tilemap.hpp" />
+    <ClInclude Include="src\tilemap\Tileset.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
