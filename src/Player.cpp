@@ -3,12 +3,12 @@
 #include "TextureLoader.hpp"
 #include <iostream>
 
-Player::Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int gravity)
-	: m_MovementSpeed(movementSpeed), m_Gravity(gravity), m_Renderer(renderer), m_SrcRect(srcRect), m_DestRect(srcRect), m_Jumping(true) 
+Player::Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int jumpStrength, const int gravity)
+	: m_MovementSpeed(movementSpeed), m_JumpStrength(jumpStrength), m_Gravity(gravity), m_Renderer(renderer), m_SrcRect(srcRect), m_DestRect(srcRect), m_Jumping(true)
 {
 	//Load sprite and create buffer texture to render player to
 	m_Sprite = TextureUtil::LoadTexture(texPath, renderer);
-	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 640, 360);
+	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1280, 720);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
 }
 
@@ -23,7 +23,7 @@ void Player::HandleEvents(const SDL_Event& event) {
 
 	//Checking for whether keys are held down or not
 	if ((Keys[SDL_SCANCODE_W] || Keys[SDL_SCANCODE_SPACE]) && !m_Jumping) {
-		m_CurrVelocity.y = -140;
+		m_CurrVelocity.y = -m_JumpStrength;
 		m_Jumping = true;
 	}
 	if (Keys[SDL_SCANCODE_A]) {

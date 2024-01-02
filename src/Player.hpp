@@ -8,7 +8,7 @@ class DynamicCollider2D;
 
 class Player {
 public:
-	Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int gravity);
+	Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int jumpStrength, const int gravity);
 	~Player();
 
 	Player(const Player& other) = delete;
@@ -21,7 +21,7 @@ public:
 	void Update(const float deltaTime);
 	void Render();
 private:
-	const int m_MovementSpeed, m_Gravity;
+	const int m_MovementSpeed, m_JumpStrength, m_Gravity;
 
 	Vector2d m_CurrVelocity, m_CurrPosition, m_LastPosition;
 
