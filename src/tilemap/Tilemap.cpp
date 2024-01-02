@@ -38,9 +38,21 @@ Tilemap::Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* r
 	m_Width = tilemapJson["width"];
 	m_Height = tilemapJson["height"];
 	m_TileSize = tilemapJson["tileheight"];
-	auto test = tilemapJson["layers"];
 
-	std::cout << test << std::endl;
+	for (const auto& layer : tilemapJson["layers"]) {
+		if (!layer.contains("data")) {
+			continue;
+		}
+
+		m_TestLayers.push_back({ layer["name"], layer["data"], layer["x"], layer["y"], layer["width"], layer["height"] });
+	}
+
+	for (const auto& layer : m_TestLayers) {
+		std::cout << "\n" << layer.m_Name << std::endl;
+		for (auto val : layer.m_Data) {
+			std::cout << val << " ";
+		}
+	}
 
 	m_BufferWidth = m_TileSize * m_Width;
 	m_BufferHeight = m_TileSize * m_Height;

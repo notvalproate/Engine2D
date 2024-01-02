@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include <vector>
 #include <memory>
+#include <string>
 
 class Tilemap {
 public:
@@ -33,6 +34,13 @@ public:
 	std::shared_ptr<unsigned short[]> GetCollider() const { return m_Collider; }
 
 private:
+	struct Layer {
+		std::string m_Name;
+		std::vector<unsigned short> m_Data;
+		int m_X, m_Y, m_Width, m_Height;
+	};
+	std::vector<Layer> m_TestLayers;
+
 	std::vector<std::vector<unsigned short>> m_Layers;
 	std::shared_ptr<unsigned short[]> m_Collider;
 
