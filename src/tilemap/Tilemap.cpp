@@ -128,7 +128,7 @@ void Tilemap::RenderTiles(const int n) const {
 }
 
 void Tilemap::Render(const std::unique_ptr<Camera>& camera) const {
-	camera->RenderToBuffer(m_Buffer, &m_BufferRect);
+	camera->RenderToBuffer(m_Buffer, NULL, &m_BufferRect);
 }
 
 void Tilemap::SaveTilemapAsPng(const char* fileName) const {

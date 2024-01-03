@@ -10,7 +10,7 @@ class DynamicCollider2D;
 
 class Player {
 public:
-	Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int jumpStrength, const int gravity, const std::shared_ptr<Camera> camera);
+	Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int jumpStrength, const int gravity);
 	~Player();
 
 	Player(const Player& other) = delete;
@@ -28,7 +28,7 @@ private:
 	Vector2d m_CurrVelocity, m_CurrPosition, m_LastPosition;
 
 	SDL_Rect m_SrcRect, m_DestRect;
-	SDL_Texture *m_Sprite, *m_Buffer;
+	SDL_Texture *m_Sprite;
 
 	SDL_Renderer *m_Renderer;
 
