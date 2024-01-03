@@ -47,12 +47,11 @@ private:
 
 	unsigned short m_TileSize;
 	int m_Width, m_Height;
-	int m_BufferWidth, m_BufferHeight;
 
-	SDL_Texture *m_Buffer, *m_CameraBuffer, *m_TilemapTex;
+	SDL_Texture *m_Buffer, *m_TilemapTex;
 	SDL_Texture *m_Background, *m_BackgroundProps, *m_ForegroundProps;
 
-	SDL_Rect m_CameraRect, m_BufferRect;
+	SDL_Rect m_BufferRect;
 
 	SDL_Renderer *m_Renderer;
 

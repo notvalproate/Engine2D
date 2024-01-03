@@ -60,6 +60,7 @@ public:
 
 	void DebugRender(const DynamicCollider2D& collider, const float deltaTime, const std::unique_ptr<Camera>& camera);
 private:
+	SDL_Rect m_BufferRect;
 	SDL_Renderer* m_Renderer;
 	SDL_Texture* m_Buffer;
 };

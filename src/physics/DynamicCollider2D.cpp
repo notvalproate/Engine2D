@@ -177,6 +177,7 @@ void DynamicCollider2D::ResolveMapCollision(const Vector2d& contactNormal, const
 
 ColliderDebugRenderer::ColliderDebugRenderer(SDL_Renderer* renderer) : m_Renderer(renderer) { 
 	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1280, 720);
+	m_BufferRect = { 0, 0, 1280, 720 };
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
 }
 
@@ -227,7 +228,5 @@ void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& collider, const
 	SDL_RenderDrawLine(m_Renderer, centerx, centery, centerx + collider.m_TileSize * 2 * (collider.m_CurrVelocity->x / collider.m_CurrVelocity->GetMagnitude()), centery + collider.m_TileSize * 2 * (collider.m_CurrVelocity->y / collider.m_CurrVelocity->GetMagnitude()));
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 
-	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
-	SDL_SetRenderTarget(m_Renderer, NULL);
-	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, NULL);
+	camera->RenderToBuffer(m_Buffer, NULL, &m_BufferRect);
 }

@@ -15,15 +15,9 @@ Tilemap::Tilemap(const unsigned short tileSize, const char* tilesPath, SDL_Rende
 	m_Width = width;
 	m_Height = height;
 
-	m_BufferWidth = tileSize * width;
-	m_BufferHeight = tileSize * height;
-	m_BufferRect = { 0, 0, m_BufferWidth, m_BufferHeight };
-	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferWidth, m_BufferHeight);
+	m_BufferRect = { 0, 0, tileSize * width, tileSize * height };
+	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferRect.w, m_BufferRect.h);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
-
-
-	m_CameraRect = { 0, 0, 1280, 720 };
-	m_CameraBuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1280, 720);
 }
 
 Tilemap::Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* renderer)
@@ -53,20 +47,14 @@ Tilemap::Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* r
 			std::cout << val << " ";
 		}
 	}
-
-	m_BufferWidth = m_TileSize * m_Width;
-	m_BufferHeight = m_TileSize * m_Height;
-	m_BufferRect = { 0, 0, m_BufferWidth, m_BufferHeight };
-	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferWidth, m_BufferHeight);
+	
+	m_BufferRect = { 0, 0, m_TileSize * m_Width, m_TileSize * m_Height };
+	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferRect.w, m_BufferRect.h);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
-
-	m_CameraRect = { 0, 0, 1280, 720 };
-	m_CameraBuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1280, 720);
 }
 
 Tilemap::~Tilemap() { 
 	SDL_DestroyTexture(m_Buffer);
-	SDL_DestroyTexture(m_CameraBuffer);
 	SDL_DestroyTexture(m_TilemapTex);
 	SDL_DestroyTexture(m_Background);
 	SDL_DestroyTexture(m_BackgroundProps);
