@@ -57,6 +57,10 @@ void Game::Init(const char* title, const char* iconpath, const int x, const int 
 
 	m_IsRunning = true; //Boolean to check if window close
 
+	// Camera
+
+	m_Camera = std::make_unique<Camera>(m_Width, m_Height, m_Renderer);
+
 	// Collider Debugger
 
 	m_ColliderDebugger = std::make_unique<ColliderDebugRenderer>(m_Renderer);
@@ -99,9 +103,14 @@ void Game::Update() {
 }
  
 void Game::Render() {
-	m_Level->Render();
-	m_Player->Render();
+	SDL_RenderClear(m_Renderer);
+
+	m_Level->Render(m_Camera);
+	m_Player->Render(m_Camera);
+
 	OnUserRender();
+
+	m_Camera->Render();
 
 	SDL_RenderPresent(m_Renderer); 
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "SDL.h"
+#include "../Camera.hpp"
 #include <vector>
 #include <memory>
 #include <string>
@@ -27,7 +28,7 @@ public:
 	void SaveTilemapAsPng(const char* fileName) const;
 
 	void RenderToBuffer() const;
-	void Render() const;
+	void Render(const std::unique_ptr<Camera>& camera) const;
 
 	int GetWidth() const { return m_Width; }
 	int GetHeight() const { return m_Height; }

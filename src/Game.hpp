@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include "tilemap/Tilemap.hpp"
 #include "Player.hpp"
+#include "Camera.hpp"
 #include "physics/Collider.hpp"
 #include <memory>
 
@@ -29,6 +30,7 @@ public:
 	inline bool IsRunning() const { return m_IsRunning; }
 
 protected:
+	std::unique_ptr<Camera> m_Camera;
 	std::unique_ptr<Tilemap> m_Level;
 	std::unique_ptr<Player> m_Player;
 	std::unique_ptr<DynamicCollider2D> m_PlayerCollider;

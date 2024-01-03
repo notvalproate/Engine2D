@@ -1,14 +1,16 @@
 #pragma once
 #include "SDL.h"
+#include "Camera.hpp"
 #include "math/Vector2d.h"
 #include <vector>
+#include <memory>
 
 // Forward Declaration to be friend
 class DynamicCollider2D;
 
 class Player {
 public:
-	Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int jumpStrength, const int gravity);
+	Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int jumpStrength, const int gravity, const std::shared_ptr<Camera> camera);
 	~Player();
 
 	Player(const Player& other) = delete;
@@ -19,7 +21,7 @@ public:
 
 	void HandleEvents(const SDL_Event& event);
 	void Update(const float deltaTime);
-	void Render();
+	void Render(const std::unique_ptr<Camera>& camera);
 private:
 	const int m_MovementSpeed, m_JumpStrength, m_Gravity;
 

@@ -127,13 +127,8 @@ void Tilemap::RenderTiles(const int n) const {
 	}
 }
 
-void Tilemap::Render() const {
-	SDL_SetRenderTarget(m_Renderer, m_CameraBuffer);
-	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, &m_BufferRect);
-
-	SDL_SetRenderTarget(m_Renderer, NULL);
-	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
-	SDL_RenderCopy(m_Renderer, m_CameraBuffer, &m_CameraRect, NULL);
+void Tilemap::Render(const std::unique_ptr<Camera>& camera) const {
+	camera->RenderToBuffer(m_Buffer, &m_BufferRect);
 }
 
 void Tilemap::SaveTilemapAsPng(const char* fileName) const {

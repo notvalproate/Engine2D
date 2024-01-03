@@ -3,8 +3,8 @@
 #include "TextureLoader.hpp"
 #include <iostream>
 
-Player::Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int jumpStrength, const int gravity)
-	: m_MovementSpeed(movementSpeed), m_JumpStrength(jumpStrength), m_Gravity(gravity), m_Renderer(renderer), m_SrcRect(srcRect), m_DestRect(srcRect), m_Jumping(true)
+Player::Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int jumpStrength, const int gravity, const std::shared_ptr<Camera> camera)
+	: m_MovementSpeed(movementSpeed), m_JumpStrength(jumpStrength), m_Gravity(gravity), m_Renderer(renderer), m_SrcRect(srcRect), m_DestRect(srcRect), m_Jumping(true), m_Camera(camera)
 {
 	//Load sprite and create buffer texture to render player to
 	m_Sprite = TextureUtil::LoadTexture(texPath, renderer);
@@ -65,7 +65,7 @@ void Player::Update(const float deltaTime) {
 	m_CurrPosition = m_CurrPosition + m_CurrVelocity * deltaTime;
 }
 
-void Player::Render() {
+void Player::Render(const std::unique_ptr<Camera>& camera) {
 	//Setting Render Target to the buffer
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 	SDL_RenderClear(m_Renderer);
@@ -76,7 +76,5 @@ void Player::Render() {
 	SDL_RenderCopy(m_Renderer, m_Sprite, &m_SrcRect, &m_DestRect);
 	SDL_SetRenderTarget(m_Renderer, NULL);
 
-	//Render the Buffer
-	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, NULL);
-	SDL_SetRenderTarget(m_Renderer, NULL);
+	camera->RenderToBuffer(m_Buffer, NULL);
 }
