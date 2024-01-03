@@ -40,13 +40,6 @@ Tilemap::Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* r
 
 		m_TestLayers.push_back({ layer["name"], layer["data"], layer["x"], layer["y"], layer["width"], layer["height"] });
 	}
-
-	for (const auto& layer : m_TestLayers) {
-		std::cout << "\n" << layer.m_Name << std::endl;
-		for (auto val : layer.m_Data) {
-			std::cout << val << " ";
-		}
-	}
 	
 	m_BufferRect = { 0, 0, m_TileSize * m_Width, m_TileSize * m_Height };
 	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferRect.w, m_BufferRect.h);

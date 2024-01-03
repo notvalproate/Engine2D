@@ -1,6 +1,7 @@
 #pragma once
 #include "SDL.h"
 #include "../Camera.hpp"
+#include "Tileset.hpp"
 #include <vector>
 #include <memory>
 #include <string>
@@ -40,7 +41,13 @@ private:
 		std::vector<unsigned short> m_Data;
 		int m_X, m_Y, m_Width, m_Height;
 	};
+
 	std::vector<Layer> m_TestLayers;
+	std::unique_ptr<Tileset> m_Tileset;
+
+
+
+
 
 	std::vector<std::vector<unsigned short>> m_Layers;
 	std::shared_ptr<unsigned short[]> m_Collider;
