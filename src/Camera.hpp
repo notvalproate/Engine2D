@@ -14,6 +14,8 @@ public:
 
 	void Render() const;
 	void RenderToBuffer(SDL_Texture* buffer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const;
+
+	void SetDimensions(const int width, const int height);
 private:
 	SDL_Texture* m_Buffer;
 	SDL_Renderer* m_Renderer;

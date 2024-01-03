@@ -2,6 +2,7 @@
 #include "SDL.h"
 #include "../math/Vector2d.h"
 #include "../Player.hpp"
+#include "../Camera.hpp"
 #include <vector>
 #include <memory>
 
@@ -57,7 +58,7 @@ class ColliderDebugRenderer {
 public:
 	ColliderDebugRenderer(SDL_Renderer* renderer);
 
-	void DebugRender(const DynamicCollider2D& collider, const float deltaTime);
+	void DebugRender(const DynamicCollider2D& collider, const float deltaTime, const std::unique_ptr<Camera>& camera);
 private:
 	SDL_Renderer* m_Renderer;
 	SDL_Texture* m_Buffer;

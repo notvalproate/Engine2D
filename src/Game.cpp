@@ -107,10 +107,9 @@ void Game::Render() {
 
 	m_Level->Render(m_Camera);
 	m_Player->Render(m_Camera);
-
-	OnUserRender();
-
 	m_Camera->Render();
+ 	OnUserRender();
+
 
 	SDL_RenderPresent(m_Renderer); 
 

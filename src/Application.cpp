@@ -62,7 +62,6 @@ public:
 		});
 
 		//Setting up Tile's in the tilemap
-		
 
 		m_Level = std::make_unique<Tilemap>(TILE_SIZE, "assets/tilemaps/Grass.png", m_Renderer, 40, 23);
 		m_Level->SetBackground("assets/backgrounds/BG.png");
@@ -84,10 +83,14 @@ public:
 		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 52, 72, 0, 0);
 		m_PlayerCollider->SetColliderMap(m_Level->GetCollider(), 40, 23);
 		m_PlayerCollider->SetPlayer(m_Player);
+
+		//Camera
+
+		//m_Camera->SetDimensions(320, 180);
 	}
 
 	void OnUserRender() override {
-		//m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime);
+		m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime, m_Camera);
 	}
 };
 

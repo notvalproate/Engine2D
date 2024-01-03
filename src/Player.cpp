@@ -60,10 +60,10 @@ void Player::Update(const float deltaTime) {
 	m_LastPosition = m_CurrPosition;
 	m_CurrPosition = m_CurrPosition + m_CurrVelocity * deltaTime;
 	
-	m_DestRect.x = (int)m_CurrPosition.x;
-	m_DestRect.y = (int)m_CurrPosition.y;
 }
 
 void Player::Render(const std::unique_ptr<Camera>& camera) {
+	m_DestRect.x = (int)m_CurrPosition.x;
+	m_DestRect.y = (int)m_CurrPosition.y;
 	camera->RenderToBuffer(m_Sprite, &m_SrcRect, &m_DestRect);
 }
