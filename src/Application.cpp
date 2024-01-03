@@ -87,6 +87,7 @@ public:
 		//Camera
 
 		//m_Camera->SetDimensions(320, 180);
+		m_Camera->SetPosition(100, 0);
 	}
 
 	void OnUserRender() override {
