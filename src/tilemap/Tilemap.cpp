@@ -22,7 +22,12 @@ Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* rendere
 			continue;
 		}
 
-		m_Layers.push_back({ layer["name"], layer["data"], layer["x"], layer["y"], layer["width"], layer["height"] });
+		m_Layers.push_back({ 
+			layer["name"], 
+			layer["data"], 
+			layer["x"], layer["y"], 
+			layer["width"], layer["height"] 
+		});
 	}
 
 	std::string parentDir = tilemapPath.parent_path().string();
@@ -38,8 +43,6 @@ Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* rendere
 		};
 
 		std::string atlasPath = parentDir + '/' + std::string(tileset["image"]);
-
-		std::cout << atlasPath << std::endl;
 
 		m_Tilesets.push_back(std::make_unique<Tileset>(config, atlasPath.c_str(), m_Renderer));
 	}
