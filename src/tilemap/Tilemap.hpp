@@ -41,6 +41,7 @@ private:
 
 	unsigned short m_TileSize;
 	unsigned int m_Width, m_Height;
+	uint8_t m_R{}, m_G{}, m_B{}, m_A{};
 
 	SDL_Texture* m_Buffer;
 	SDL_Rect m_BufferRect;
@@ -50,4 +51,5 @@ private:
 	SDL_Renderer *m_Renderer;
 
 	void RenderLayer(const Layer& layer) const;
+	void GetRGBFromHex(std::string hexString);
 };

@@ -6,6 +6,9 @@
 #include <iostream>
 #include <algorithm>
 
+#include <sstream>
+#include <iomanip>
+
 Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* renderer)
 	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr)
 {
@@ -17,6 +20,10 @@ Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* rendere
 	m_Width = tilemapJson["width"];
 	m_Height = tilemapJson["height"];
 	m_TileSize = tilemapJson["tileheight"];
+
+	if (tilemapJson.contains("backgroundcolor")) {
+		GetRGBFromHex(tilemapJson["backgroundcolor"]);
+	}
 
 	for (const auto& layer : tilemapJson["layers"]) {
 		if (!layer.contains("data")) {
@@ -82,6 +89,8 @@ void Tilemap::AddForegroundProps(const char* texPath) {
 
 void Tilemap::RenderToBuffer() const {
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
+	SDL_SetRenderDrawColor(m_Renderer, m_R, m_G, m_B, m_A);
+	SDL_RenderClear(m_Renderer);
 
 	SDL_RenderCopy(m_Renderer, m_Background, NULL, NULL);
 
@@ -142,4 +151,27 @@ void Tilemap::RenderLayer(const Layer& layer) const {
 
 		SDL_RenderCopy(m_Renderer, m_Tilesets[tilesetIndex]->GetAtlas(), &SrcRect, &DestRect);
 	}
+}
+
+void Tilemap::GetRGBFromHex(std::string hexString) {
+	if (hexString[0] == '#') {
+		hexString.erase(0, 1);
+	}
+
+	unsigned int RGB;
+	unsigned int shift = 0;
+	std::istringstream(hexString) >> std::hex >> RGB;
+
+	if (hexString.size() == 8) {
+		m_A = RGB & 0xFF;
+		shift += 8;
+	}
+	else {
+		m_A = 255;
+	}
+	m_B = (RGB >> shift) & 0xFF;
+	shift += 8;
+	m_G = (RGB >> shift) & 0xFF;
+	shift += 8;
+	m_R = (RGB >> shift) & 0xFF;	
 }
