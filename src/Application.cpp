@@ -49,12 +49,12 @@ public:
 		
 		//Player
 
-		SDL_Rect playerRect = { 0, 0, 52, 72 };
-		m_Player = std::make_unique<Player>(m_Renderer, "assets/character sprites/idle/madeline.png", playerRect, 480, 520, 1280);
+		SDL_Rect playerRect = { 0, 0, 13, 18 };
+		m_Player = std::make_unique<Player>(m_Renderer, "assets/characters/idle/madeline.png", playerRect, 480, 520, 1280);
 
 		//Collider
 
-		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 52, 72, 0, 0);
+		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 13, 18, 0, 0);
 		m_PlayerCollider->SetColliderMap(m_Level->GetCollider(), 40, 23);
 		m_PlayerCollider->SetPlayer(m_Player);
 

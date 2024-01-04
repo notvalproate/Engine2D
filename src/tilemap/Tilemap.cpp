@@ -4,6 +4,7 @@
 #include "json.hpp"
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 
 Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* renderer)
 	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr)
@@ -22,12 +23,20 @@ Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* rendere
 			continue;
 		}
 
+		std::string layerName = layer["name"];
+
 		m_Layers.push_back({ 
-			layer["name"], 
+			layerName,
 			layer["data"], 
 			layer["x"], layer["y"], 
 			layer["width"], layer["height"] 
 		});
+
+		std::transform(layerName.begin(), layerName.end(), layerName.begin(), ::tolower);
+
+		if (layerName == "world") {
+			m_TestCollider = m_Layers.back();
+		}
 	}
 
 	std::string parentDir = tilemapPath.parent_path().string();

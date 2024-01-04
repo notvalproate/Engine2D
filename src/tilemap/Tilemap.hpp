@@ -18,6 +18,12 @@ public:
 	Tilemap& operator=(const Tilemap& other) = delete;
 	Tilemap& operator=(const Tilemap&& other) = delete;
 
+	struct Layer {
+		std::string name;
+		std::vector<unsigned short> data;
+		int x, y, width, height;
+	};
+
 	void SetBackground(const char* texPath);
 	void AddBackgroundProps(const char* texPath);
 	void AddForegroundProps(const char* texPath);
@@ -29,18 +35,15 @@ public:
 	void RenderToBuffer() const;
 	void Render(const std::unique_ptr<Camera>& camera) const;
 
-	int GetWidth() const { return m_Width; }
-	int GetHeight() const { return m_Height; }
 	std::shared_ptr<unsigned short[]> GetCollider() const { return m_Collider; }
-private:
-	struct Layer {
-		std::string name;
-		std::vector<unsigned short> data;
-		int x, y, width, height;
-	};
 
+	const Layer* GetTestCollider() const { return &m_TestCollider; }
+
+private:
 	std::vector<Layer> m_Layers;
 	std::vector<std::unique_ptr<Tileset>> m_Tilesets;
+	Layer m_TestCollider;
+	
 	std::shared_ptr<unsigned short[]> m_Collider;
 
 	unsigned short m_TileSize;
