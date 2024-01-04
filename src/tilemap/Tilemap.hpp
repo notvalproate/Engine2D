@@ -5,11 +5,11 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <filesystem>
 
 class Tilemap {
 public:
-	Tilemap(const unsigned short tileSize, const char* tilesPath, SDL_Renderer* renderer, const int width, const int height);
-	Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* renderer);
+	Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* renderer);
 	~Tilemap();
 
 	Tilemap(const Tilemap& other) = delete;
@@ -17,8 +17,6 @@ public:
 
 	Tilemap& operator=(const Tilemap& other) = delete;
 	Tilemap& operator=(const Tilemap&& other) = delete;
-
-	void AddLayer(std::vector<unsigned short>&& tileMap);
 
 	void SetBackground(const char* texPath);
 	void AddBackgroundProps(const char* texPath);
@@ -34,10 +32,6 @@ public:
 	int GetWidth() const { return m_Width; }
 	int GetHeight() const { return m_Height; }
 	std::shared_ptr<unsigned short[]> GetCollider() const { return m_Collider; }
-
-	// TESTING PURPOSES
-
-	void testRenderToBuffer() const;
 private:
 	struct Layer {
 		std::string name;
@@ -45,29 +39,19 @@ private:
 		int x, y, width, height;
 	};
 
-	std::vector<Layer> m_TestLayers;
+	std::vector<Layer> m_Layers;
 	std::vector<std::unique_ptr<Tileset>> m_Tilesets;
-
-
-
-
-
-	std::vector<std::vector<unsigned short>> m_Layers;
 	std::shared_ptr<unsigned short[]> m_Collider;
 
 	unsigned short m_TileSize;
 	int m_Width, m_Height;
 
-	SDL_Texture *m_Buffer, *m_TilemapTex;
+	SDL_Texture *m_Buffer;
 	SDL_Texture *m_Background, *m_BackgroundProps, *m_ForegroundProps;
 
 	SDL_Rect m_BufferRect;
 
 	SDL_Renderer *m_Renderer;
 
-	void RenderTiles(const int n) const;
-
-	// TESTING PURPOSES
-
-	void testRenderLayer(const Layer& layer) const;
+	void RenderLayer(const Layer& layer) const;
 };

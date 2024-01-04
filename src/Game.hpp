@@ -32,7 +32,6 @@ public:
 protected:
 	std::unique_ptr<Camera> m_Camera;
 	std::unique_ptr<Tilemap> m_Level;
-	std::unique_ptr<Tilemap> m_Level2;
 	std::unique_ptr<Player> m_Player;
 	std::unique_ptr<DynamicCollider2D> m_PlayerCollider;
 	std::unique_ptr<ColliderDebugRenderer> m_ColliderDebugger;

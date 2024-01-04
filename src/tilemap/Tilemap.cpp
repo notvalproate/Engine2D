@@ -5,25 +5,9 @@
 #include <fstream>
 #include <iostream>
 
-Tilemap::Tilemap(const unsigned short tileSize, const char* tilesPath, SDL_Renderer* renderer, const int width, const int height) 
-	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr), m_TileSize(tileSize)
-{
-	m_TilemapTex = TextureUtil::LoadTexture(tilesPath, renderer);
-
-	m_Renderer = renderer;
-
-	m_Width = width;
-	m_Height = height;
-
-	m_BufferRect = { 0, 0, tileSize * width, tileSize * height };
-	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferRect.w, m_BufferRect.h);
-	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
-}
-
-Tilemap::Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* renderer)
+Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* renderer)
 	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr)
 {
-	m_TilemapTex = TextureUtil::LoadTexture(tilesPath, renderer);
 	m_Renderer = renderer;
 
 	std::ifstream jsonFileStream(tilemapPath);
@@ -38,8 +22,10 @@ Tilemap::Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* r
 			continue;
 		}
 
-		m_TestLayers.push_back({ layer["name"], layer["data"], layer["x"], layer["y"], layer["width"], layer["height"] });
+		m_Layers.push_back({ layer["name"], layer["data"], layer["x"], layer["y"], layer["width"], layer["height"] });
 	}
+
+	std::string parentDir = tilemapPath.parent_path().string();
 
 	for (const auto& tileset : tilemapJson["tilesets"]) {
 		TilesetConfig config = {
@@ -51,8 +37,8 @@ Tilemap::Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* r
 			tileset["spacing"]
 		};
 
-		std::string atlasPath = tileset["image"];
-	
+		std::string atlasPath = parentDir + '/' + std::string(tileset["image"]);
+
 		std::cout << atlasPath << std::endl;
 
 		m_Tilesets.push_back(std::make_unique<Tileset>(config, atlasPath.c_str(), m_Renderer));
@@ -65,14 +51,9 @@ Tilemap::Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* r
 
 Tilemap::~Tilemap() { 
 	SDL_DestroyTexture(m_Buffer);
-	SDL_DestroyTexture(m_TilemapTex);
 	SDL_DestroyTexture(m_Background);
 	SDL_DestroyTexture(m_BackgroundProps);
 	SDL_DestroyTexture(m_ForegroundProps);
-}
-
-void Tilemap::AddLayer(std::vector<unsigned short>&& tileMap) {
-	m_Layers.push_back(std::move(tileMap));
 }
 
 void Tilemap::SetBackground(const char* texPath) {
@@ -98,31 +79,13 @@ void Tilemap::RenderToBuffer() const {
 
 	SDL_RenderCopy(m_Renderer, m_BackgroundProps, NULL, NULL);
 
-	for (int n = 0; n < m_Layers.size(); n++) {
-		RenderTiles(n);
+	for (const auto& layer : m_Layers) {
+		RenderLayer(layer);
 	}
 
 	SDL_RenderCopy(m_Renderer, m_ForegroundProps, NULL, NULL);
 
 	SDL_SetRenderTarget(m_Renderer, NULL);
-}
-
-void Tilemap::RenderTiles(const int n) const {
-	int k;
-	SDL_Rect Temp = { 0, 0, m_TileSize, m_TileSize };
-
-	for (int i = 0; i < m_Height; i++) {
-		Temp.y = i * m_TileSize;
-		for (int j = 0; j < m_Width; j++) {
-			Temp.x = j * m_TileSize;
-			k = (i * m_Width) + j;
-
-			if (m_Layers[n][k] != 0) {
-				SDL_Rect testrect = { (m_Layers[n][k] - 1) * m_TileSize, 0, m_TileSize, m_TileSize };
-				SDL_RenderCopy(m_Renderer, m_TilemapTex, &testrect, &Temp);
-			}
-		}
-	}
 }
 
 void Tilemap::Render(const std::unique_ptr<Camera>& camera) const {
@@ -141,17 +104,7 @@ void Tilemap::SaveTilemapAsPng(const char* fileName) const {
 	SDL_SetRenderTarget(m_Renderer, target);
 }
 
-void Tilemap::testRenderToBuffer() const {
-	SDL_SetRenderTarget(m_Renderer, m_Buffer);
-
-	for (const auto& layer : m_TestLayers) {
-		testRenderLayer(layer);
-	}
-
-	SDL_SetRenderTarget(m_Renderer, NULL);
-}
-
-void Tilemap::testRenderLayer(const Layer& layer) const {
+void Tilemap::RenderLayer(const Layer& layer) const {
 	for (unsigned int i = 0; i < layer.data.size(); i++) {
 		unsigned int x = layer.x;
 		unsigned int y = layer.y;
@@ -174,6 +127,6 @@ void Tilemap::testRenderLayer(const Layer& layer) const {
 			continue;
 		}
 
-		SDL_RenderCopy(m_Renderer, m_TilemapTex, &SrcRect, &DestRect);
+		SDL_RenderCopy(m_Renderer, m_Tilesets[j]->GetAtlas(), &SrcRect, &DestRect);
 	}
 }
