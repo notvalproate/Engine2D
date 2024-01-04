@@ -37,7 +37,7 @@ public:
 private:
 	std::vector<Layer> m_Layers;
 	std::vector<std::unique_ptr<Tileset>> m_Tilesets;
-	Layer m_CollisionLayer;
+	Layer m_CollisionLayer{};
 
 	unsigned short m_TileSize;
 	unsigned int m_Width, m_Height;

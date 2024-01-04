@@ -9,13 +9,13 @@ public:
 	void OnUserCreate() override {
 		//Setting up Tile's in the tilemap
 
-		m_Level = std::make_unique<Tilemap>("assets/tilemaps/tuxemon-town.json", m_Renderer);
+		m_Level = std::make_unique<Tilemap>("assets/tilemaps/platformer-simple.json", m_Renderer);
 		m_Level->RenderToBuffer();
 		
 		//Player
 
 		SDL_Rect playerRect = { 0, 0, 26, 36 };
-		m_Player = std::make_unique<Player>(m_Renderer, "assets/characters/idle/madeline.png", playerRect, 480, 520, 1280);
+		m_Player = std::make_unique<Player>(m_Renderer, "assets/characters/idle/madeline.png", playerRect, 400, 500, 1280);
 
 		//Collider
 

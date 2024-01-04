@@ -9,6 +9,16 @@ Camera::~Camera() {
 	SDL_DestroyTexture(m_Buffer);
 }
 
+void Camera::ClearCameraBuffer() const {
+	SDL_Texture* renderTarget = SDL_GetRenderTarget(m_Renderer);
+
+	SDL_SetRenderTarget(m_Renderer, m_Buffer);
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+	SDL_RenderClear(m_Renderer);
+
+	SDL_SetRenderTarget(m_Renderer, renderTarget);
+}
+
 void Camera::RenderToBuffer(SDL_Texture* incomingBuffer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const {
 	SDL_Texture* renderTarget = SDL_GetRenderTarget(m_Renderer);
 
@@ -21,6 +31,7 @@ void Camera::RenderToBuffer(SDL_Texture* incomingBuffer, const SDL_Rect* srcRect
 
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+
 	SDL_RenderCopy(m_Renderer, incomingBuffer, srcRect, &newDest);
 
 	SDL_SetRenderTarget(m_Renderer, renderTarget);
@@ -32,7 +43,7 @@ void Camera::Render() const {
 	SDL_SetRenderTarget(m_Renderer, NULL);
 	SDL_RenderClear(m_Renderer);
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
-	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, NULL); 
+	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, NULL);
 
 	SDL_SetRenderTarget(m_Renderer, renderTarget);
 }
