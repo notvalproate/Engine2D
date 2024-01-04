@@ -41,6 +41,23 @@ Tilemap::Tilemap(const char* tilemapPath, const char* tilesPath, SDL_Renderer* r
 		m_TestLayers.push_back({ layer["name"], layer["data"], layer["x"], layer["y"], layer["width"], layer["height"] });
 	}
 
+	for (const auto& tileset : tilemapJson["tilesets"]) {
+		TilesetConfig config = {
+			tileset["tileheight"],
+			tileset["firstgid"],
+			tileset["imagewidth"],
+			tileset["imageheight"],
+			tileset["margin"],
+			tileset["spacing"]
+		};
+
+		std::string atlasPath = tileset["image"];
+	
+		std::cout << atlasPath << std::endl;
+
+		m_Tilesets.push_back(std::make_unique<Tileset>(config, atlasPath.c_str(), m_Renderer));
+	}
+
 	m_BufferRect = { 0, 0, m_TileSize * m_Width, m_TileSize * m_Height };
 	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferRect.w, m_BufferRect.h);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
