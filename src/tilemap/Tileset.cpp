@@ -12,10 +12,21 @@ Tileset::~Tileset() {
 	SDL_DestroyTexture(m_Atlas);
 }
 
-void Tileset::GetTile(const int tileId, SDL_Rect& rect) {
-	unsigned int column = (tileId - 1) % m_Columns;
-	unsigned int row = (tileId - 1) / m_Columns;
+bool Tileset::GetTile(const int tileId, SDL_Rect& rect) {
+	unsigned int localID = tileId - m_Config.firstGID;
 
-	rect.x = (column * (m_Config.tileSize + m_Config.spacing)) + m_Config.spacing / 2;
-	rect.y = (row * (m_Config.tileSize + m_Config.spacing)) + m_Config.spacing / 2;
+	unsigned int column = localID % m_Columns;
+	unsigned int row = localID / m_Columns;
+
+	unsigned int x = m_Config.margin + ((m_Config.tileSize + m_Config.spacing) * column);
+	unsigned int y = m_Config.margin + ((m_Config.tileSize + m_Config.spacing) * row);
+
+	if (y > m_Config.imageHeight) {
+		return false;
+	}
+
+	rect.x = x;
+	rect.y = y;
+
+	return true;
 }
