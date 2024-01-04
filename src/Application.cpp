@@ -27,7 +27,7 @@ public:
 
 int main(int argc, char *argv[]) {
 	PlatformerGame game;
-	game.Init("Platformer Game", "assets/textures/icon.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
+	game.Init("Platformer Game", "assets/characters/idle/madeline.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
 
 	while (game.IsRunning()) {
 		game.HandleEvents();
