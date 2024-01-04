@@ -7,6 +7,8 @@ Player::Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcR
 	: m_MovementSpeed(movementSpeed), m_JumpStrength(jumpStrength), m_Gravity(gravity), m_Renderer(renderer), m_SrcRect(srcRect), m_DestRect(srcRect), m_Jumping(true)
 {
 	m_Sprite = TextureUtil::LoadTexture(texPath, renderer);
+	m_CurrPosition.x = 230;
+	m_CurrPosition.y = 380;
 }
 
 Player::~Player() {

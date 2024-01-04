@@ -3,6 +3,7 @@
 #include "../math/Vector2d.h"
 #include "../Player.hpp"
 #include "../Camera.hpp"
+#include "../tilemap/Tilemap.hpp"
 #include <vector>
 #include <memory>
 
@@ -26,7 +27,10 @@ public:
 	void SetPlayer(const std::unique_ptr<Player>& player);
 	void Update(const float deltaTime);
 
+	void SetTestColliderLayer(const Tilemap::Layer* collider);
 private:
+	const Tilemap::Layer* m_TestCollider;
+
 	Vector2d* m_CurrPosition, * m_LastPosition, * m_CurrVelocity;
 	Vector2d m_ColliderOffset, m_ColliderLastPos;
 	bool* m_Jumping;

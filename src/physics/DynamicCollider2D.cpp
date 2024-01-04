@@ -25,6 +25,10 @@ void DynamicCollider2D::SetColliderMap(std::shared_ptr<unsigned short[]> collide
 	m_MapHeight = mapHeight;
 }
 
+void DynamicCollider2D::SetTestColliderLayer(const Tilemap::Layer* collider) {
+	m_TestCollider = collider;
+}
+
 void DynamicCollider2D::SetPlayer(const std::unique_ptr<Player>& player) {
 	m_CurrPosition = &player->m_CurrPosition;
 	m_LastPosition = &player->m_LastPosition;
@@ -107,8 +111,8 @@ void DynamicCollider2D::GetCollidedTiles(const std::tuple<Vector2d, Vector2d>& r
 void DynamicCollider2D::CheckCollisionWithTile(const SDL_Rect& tileToCheck, const float deltaTime) {
 	Vector2d contactPoint, contactNormal;
 	double timeHitNear;
-
-	if (m_ColliderMap[(tileToCheck.x / m_TileSize) + (m_MapWidth * tileToCheck.y / m_TileSize)] != 0) {
+	
+	if (m_TestCollider->data[(tileToCheck.x / m_TileSize) + (m_MapWidth * tileToCheck.y / m_TileSize)] != 0) {
 		SDL_FRect colliderFRect = { (float)m_ColliderRect.x, (float)m_ColliderRect.y, (float)m_ColliderRect.w, (float)m_ColliderRect.h };
 
 		if (RectUtil::DynamicRectIntersectRect(colliderFRect, tileToCheck, *m_CurrVelocity, contactPoint, contactNormal, timeHitNear, deltaTime)) {
@@ -211,7 +215,7 @@ void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& collider, const
 		int size = collider.m_MapHeight * collider.m_MapWidth;
 		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 255, 100);
 		for (int i = 0; i < size; i++) {
-			if (collider.m_ColliderMap[i] == 1) {
+			if (collider.m_ColliderMap[i] != 0) {
 				tile = { collider.m_TileSize * (i % collider.m_MapWidth), collider.m_TileSize * (i / collider.m_MapWidth), collider.m_TileSize, collider.m_TileSize };
 				SDL_RenderFillRect(m_Renderer, &tile);
 			}

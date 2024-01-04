@@ -56,6 +56,9 @@ public:
 
 		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 13, 18, 0, 0);
 		m_PlayerCollider->SetColliderMap(m_Level->GetCollider(), 40, 23);
+
+		m_PlayerCollider->SetTestColliderLayer(m_Level->GetTestCollider());
+
 		m_PlayerCollider->SetPlayer(m_Player);
 
 		// Camera
