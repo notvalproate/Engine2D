@@ -105,7 +105,8 @@ void Game::Update() {
 void Game::Render() {
 	SDL_RenderClear(m_Renderer);
 
-	m_Level->Render(m_Camera);
+	m_Level2->Render(m_Camera);
+
 	m_Player->Render(m_Camera);
 
 	OnUserRender();

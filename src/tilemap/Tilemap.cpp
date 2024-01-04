@@ -162,9 +162,9 @@ void Tilemap::testRenderLayer(const Layer& layer) const {
 		x += Col * m_TileSize;
 		y += Row * m_TileSize;
 
-		SDL_Rect DestRect = { x, y, m_TileSize, m_TileSize };
+		SDL_Rect DestRect{ x, y, m_TileSize, m_TileSize };
 
-		SDL_Rect SrcRect{};
+		SDL_Rect SrcRect{0, 0, m_TileSize, m_TileSize};
 
 		unsigned int j = 0;
 		while (j < m_Tilesets.size() && !m_Tilesets[j]->GetTile(layer.data[i], SrcRect)) { j++; }
@@ -174,6 +174,6 @@ void Tilemap::testRenderLayer(const Layer& layer) const {
 			continue;
 		}
 
-		SDL_RenderCopy(m_Renderer, m_Tilesets[j]->GetAtlas(), &SrcRect, &DestRect);
+		SDL_RenderCopy(m_Renderer, m_TilemapTex, &SrcRect, &DestRect);
 	}
 }

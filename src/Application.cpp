@@ -71,7 +71,8 @@ public:
 		m_Level->RenderToBuffer();
 		m_Level->SaveTilemapAsPng("assets/levels/Level_1.png");
 
-		Tilemap testTilemap("assets/tilemaps/tuxemon-town.json", "assets/tilemaps/Grass.png", m_Renderer);
+		m_Level2 = std::make_unique<Tilemap>("assets/tilemaps/tuxemon-town.json", "assets/tilesets/tuxmon-sample-32px-extruded.png", m_Renderer);
+		m_Level2->testRenderToBuffer();
 		
 		//Player
 
@@ -84,14 +85,14 @@ public:
 		m_PlayerCollider->SetColliderMap(m_Level->GetCollider(), 40, 23);
 		m_PlayerCollider->SetPlayer(m_Player);
 
-		//Camera
+		// Camera
 
-		//m_Camera->SetDimensions(320, 180);
-		m_Camera->SetPosition(100, 0);
+		//m_Camera->SetPosition(640, 0);
+		//m_Camera->SetDimensions(640, 360);
 	}
 
 	void OnUserRender() override {
-		m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime, m_Camera);
+		//m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime, m_Camera);
 	}
 };
 
