@@ -40,35 +40,33 @@ public:
 		m_Level = std::make_unique<Tilemap>("assets/tilemaps/tuxemon-town.json", m_Renderer);
 		m_Level->SetBackground("assets/backgrounds/BG.png");
 		m_Level->AddBackgroundProps("assets/props/Level_1.png");
-		m_Level->RenderToBuffer();
+		m_Level->RenderToCamera();
 		m_Level->SaveTilemapAsPng("assets/levels/Level_1.png");
-
-		//Collider just for now
-
-		m_Level->SetCollider(colliderTileMap);
 		
 		//Player
 
-		SDL_Rect playerRect = { 0, 0, 13, 18 };
+		SDL_Rect playerRect = { 0, 0, 26, 36 };
 		m_Player = std::make_unique<Player>(m_Renderer, "assets/characters/idle/madeline.png", playerRect, 480, 520, 1280);
 
 		//Collider
 
-		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 13, 18, 0, 0);
-		m_PlayerCollider->SetColliderMap(m_Level->GetCollider(), 40, 23);
-
-		m_PlayerCollider->SetTestColliderLayer(m_Level->GetTestCollider());
+		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 26, 36, 0, 0);
+		m_PlayerCollider->SetCollisionLayer(m_Level->GetCollisionLayer());
 
 		m_PlayerCollider->SetPlayer(m_Player);
 
 		// Camera
 
-		//m_Camera->SetPosition(640, 0);
-		//m_Camera->SetDimensions(640, 360);
+		m_Camera->SetPosition(0, 300);
+		m_Camera->SetDimensions(640, 360);
+
+		// Collider debug
+
+		m_ColliderDebugger->SetCollisionLayer(m_Level->GetCollisionLayer());
 	}
 
 	void OnUserRender() override {
-		//m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime, m_Camera);
+		m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime, m_Camera);
 	}
 };
 

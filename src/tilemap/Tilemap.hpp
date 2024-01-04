@@ -28,21 +28,16 @@ public:
 	void AddBackgroundProps(const char* texPath);
 	void AddForegroundProps(const char* texPath);
 
-	void SetCollider(std::shared_ptr<unsigned short[]> collider);
-
 	void SaveTilemapAsPng(const char* fileName) const;
 
-	void RenderToBuffer() const;
+	void RenderToCamera() const;
 	void Render(const std::unique_ptr<Camera>& camera) const;
 
-	std::shared_ptr<unsigned short[]> GetCollider() const { return m_Collider; }
-
-	const Layer* GetTestCollider() const { return &m_TestCollider; }
-
+	const Layer* GetCollisionLayer() const { return &m_CollisionLayer; }
 private:
 	std::vector<Layer> m_Layers;
 	std::vector<std::unique_ptr<Tileset>> m_Tilesets;
-	Layer m_TestCollider;
+	Layer m_CollisionLayer;
 	
 	std::shared_ptr<unsigned short[]> m_Collider;
 

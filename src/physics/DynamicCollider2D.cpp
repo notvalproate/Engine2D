@@ -10,23 +10,12 @@ DynamicCollider2D::DynamicCollider2D(const unsigned short tileSize, const int wi
 
 	m_CurrPosition = m_CurrVelocity = m_LastPosition = nullptr;
 	m_Jumping = nullptr;
+	m_CollidesWithMap = false;
 }
 
-void DynamicCollider2D::SetColliderMap(std::shared_ptr<unsigned short[]> colliderMap, const int mapWidth, const int mapHeight) {
-	m_ColliderMap = colliderMap;
-
-	if (m_ColliderMap == nullptr) {
-		m_CollidesWithMap = false;
-		return;
-	}
-
+void DynamicCollider2D::SetCollisionLayer(const Tilemap::Layer* collider) {
+	m_CollisionLayer = collider;
 	m_CollidesWithMap = true;
-	m_MapWidth = mapWidth;
-	m_MapHeight = mapHeight;
-}
-
-void DynamicCollider2D::SetTestColliderLayer(const Tilemap::Layer* collider) {
-	m_TestCollider = collider;
 }
 
 void DynamicCollider2D::SetPlayer(const std::unique_ptr<Player>& player) {
@@ -88,10 +77,10 @@ std::tuple<Vector2d, Vector2d> DynamicCollider2D::GetRangeOfTiles() {
 		bottomRightTile.y = ClosestMultipleDown(m_ColliderLastPos.y + m_ColliderRect.h, m_TileSize);
 	}
 
-	topLeftTile.x = std::clamp((int)topLeftTile.x, 0, (m_MapWidth - 1) * m_TileSize);
-	topLeftTile.y = std::clamp((int)topLeftTile.y, 0, (m_MapHeight - 1) * m_TileSize);
-	bottomRightTile.x = std::clamp((int)bottomRightTile.x, 0, (m_MapWidth - 1) * m_TileSize);
-	bottomRightTile.y = std::clamp((int)bottomRightTile.y, 0, (m_MapHeight - 1) * m_TileSize);
+	topLeftTile.x = std::clamp((int)topLeftTile.x, 0, (m_CollisionLayer->width - 1) * m_TileSize);
+	topLeftTile.y = std::clamp((int)topLeftTile.y, 0, (m_CollisionLayer->height - 1) * m_TileSize);
+	bottomRightTile.x = std::clamp((int)bottomRightTile.x, 0, (m_CollisionLayer->width - 1) * m_TileSize);
+	bottomRightTile.y = std::clamp((int)bottomRightTile.y, 0, (m_CollisionLayer->height - 1) * m_TileSize);
 
 	return std::make_tuple(topLeftTile, bottomRightTile);
 }
@@ -112,7 +101,7 @@ void DynamicCollider2D::CheckCollisionWithTile(const SDL_Rect& tileToCheck, cons
 	Vector2d contactPoint, contactNormal;
 	double timeHitNear;
 	
-	if (m_TestCollider->data[(tileToCheck.x / m_TileSize) + (m_MapWidth * tileToCheck.y / m_TileSize)] != 0) {
+	if (m_CollisionLayer->data[(tileToCheck.x / m_TileSize) + (m_CollisionLayer->width * tileToCheck.y / m_TileSize)] != 0) {
 		SDL_FRect colliderFRect = { (float)m_ColliderRect.x, (float)m_ColliderRect.y, (float)m_ColliderRect.w, (float)m_ColliderRect.h };
 
 		if (RectUtil::DynamicRectIntersectRect(colliderFRect, tileToCheck, *m_CurrVelocity, contactPoint, contactNormal, timeHitNear, deltaTime)) {
@@ -179,9 +168,20 @@ void DynamicCollider2D::ResolveMapCollision(const Vector2d& contactNormal, const
 
 // COLLIDER DEBUG
 
-ColliderDebugRenderer::ColliderDebugRenderer(SDL_Renderer* renderer) : m_Renderer(renderer) { 
-	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1280, 720);
+ColliderDebugRenderer::ColliderDebugRenderer(SDL_Renderer* renderer) : m_Renderer(renderer), m_CollisionLayer(nullptr) { 
+	m_Buffer = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1280, 720);
 	m_BufferRect = { 0, 0, 1280, 720 };
+	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
+}
+
+void ColliderDebugRenderer::SetCollisionLayer(const Tilemap::Layer* collider) {
+	m_CollisionLayer = collider; 
+	
+	int bufferWidth = m_CollisionLayer->width * 32;
+	int bufferHeight = m_CollisionLayer->height * 32;
+
+	m_Buffer = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, bufferWidth, bufferHeight);
+	m_BufferRect = { 0, 0, bufferWidth, bufferHeight };
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
 }
 
@@ -210,13 +210,14 @@ void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& collider, const
 	}
 
 	//Debug to render all the map colliders
+
 	SDL_Rect tile;
-	if (collider.m_CollidesWithMap) {
-		int size = collider.m_MapHeight * collider.m_MapWidth;
+	if (collider.m_CollidesWithMap && m_CollisionLayer != nullptr) {
+		int size = m_CollisionLayer->height * m_CollisionLayer->width;
 		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 255, 100);
 		for (int i = 0; i < size; i++) {
-			if (collider.m_ColliderMap[i] != 0) {
-				tile = { collider.m_TileSize * (i % collider.m_MapWidth), collider.m_TileSize * (i / collider.m_MapWidth), collider.m_TileSize, collider.m_TileSize };
+			if (m_CollisionLayer->data[i] != 0) {
+				tile = { collider.m_TileSize * (i % m_CollisionLayer->width), collider.m_TileSize * (i / m_CollisionLayer->width), collider.m_TileSize, collider.m_TileSize };
 				SDL_RenderFillRect(m_Renderer, &tile);
 			}
 		}
@@ -232,5 +233,5 @@ void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& collider, const
 	SDL_RenderDrawLine(m_Renderer, centerx, centery, centerx + collider.m_TileSize * 2 * (collider.m_CurrVelocity->x / collider.m_CurrVelocity->GetMagnitude()), centery + collider.m_TileSize * 2 * (collider.m_CurrVelocity->y / collider.m_CurrVelocity->GetMagnitude()));
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 
-	camera->RenderToBuffer(m_Buffer, NULL, &m_BufferRect);
+	camera->RenderToCamera(m_Buffer, NULL, &m_BufferRect);
 }

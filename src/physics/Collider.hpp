@@ -23,21 +23,17 @@ class DynamicCollider2D : private StaticCollider2D {
 public:
 	DynamicCollider2D(const unsigned short tileSize, const int width, const int height, const int offsetX, const int offsetY);
 
-	void SetColliderMap(std::shared_ptr<unsigned short[]> colliderMap, const int mapWidth, const int mapHeight);
+	void SetCollisionLayer(const Tilemap::Layer* collider);
 	void SetPlayer(const std::unique_ptr<Player>& player);
 	void Update(const float deltaTime);
-
-	void SetTestColliderLayer(const Tilemap::Layer* collider);
 private:
-	const Tilemap::Layer* m_TestCollider;
+	const Tilemap::Layer* m_CollisionLayer;
 
 	Vector2d* m_CurrPosition, * m_LastPosition, * m_CurrVelocity;
 	Vector2d m_ColliderOffset, m_ColliderLastPos;
 	bool* m_Jumping;
 
 	bool m_CollidesWithMap = false;
-	std::shared_ptr<unsigned short[]> m_ColliderMap;
-	int m_MapWidth = 0, m_MapHeight = 0;
 	unsigned short m_TileSize;
 
 	struct CollidedTile {
@@ -62,8 +58,11 @@ class ColliderDebugRenderer {
 public:
 	ColliderDebugRenderer(SDL_Renderer* renderer);
 
+	void SetCollisionLayer(const Tilemap::Layer* collider);
 	void DebugRender(const DynamicCollider2D& collider, const float deltaTime, const std::unique_ptr<Camera>& camera);
 private:
+	const Tilemap::Layer* m_CollisionLayer;
+
 	SDL_Rect m_BufferRect;
 	SDL_Renderer* m_Renderer;
 	SDL_Texture* m_Buffer;

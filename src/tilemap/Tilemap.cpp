@@ -35,7 +35,7 @@ Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* rendere
 		std::transform(layerName.begin(), layerName.end(), layerName.begin(), ::tolower);
 
 		if (layerName == "world") {
-			m_TestCollider = m_Layers.back();
+			m_CollisionLayer = m_Layers.back();
 		}
 	}
 
@@ -80,11 +80,7 @@ void Tilemap::AddForegroundProps(const char* texPath) {
 	m_ForegroundProps = TextureUtil::LoadTexture(texPath, m_Renderer);
 }
 
-void Tilemap::SetCollider(std::shared_ptr<unsigned short[]> collider) {
-	m_Collider = collider;
-}
-
-void Tilemap::RenderToBuffer() const {
+void Tilemap::RenderToCamera() const {
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 
 	SDL_RenderCopy(m_Renderer, m_Background, NULL, NULL);
@@ -101,7 +97,7 @@ void Tilemap::RenderToBuffer() const {
 }
 
 void Tilemap::Render(const std::unique_ptr<Camera>& camera) const {
-	camera->RenderToBuffer(m_Buffer, NULL, &m_BufferRect);
+	camera->RenderToCamera(m_Buffer, NULL, &m_BufferRect);
 }
 
 void Tilemap::SaveTilemapAsPng(const char* fileName) const {
