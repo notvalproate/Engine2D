@@ -12,7 +12,7 @@ Tileset::~Tileset() {
 	SDL_DestroyTexture(m_Atlas);
 }
 
-bool Tileset::GetTile(const int tileId, SDL_Rect& rect) const {
+bool Tileset::GetTile(const unsigned int tileId, SDL_Rect& rect) const {
 	unsigned int localID = tileId - m_Config.firstGID;
 
 	unsigned int column = localID % m_Columns;

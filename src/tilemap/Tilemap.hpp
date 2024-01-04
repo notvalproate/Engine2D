@@ -38,16 +38,14 @@ private:
 	std::vector<Layer> m_Layers;
 	std::vector<std::unique_ptr<Tileset>> m_Tilesets;
 	Layer m_CollisionLayer;
-	
-	std::shared_ptr<unsigned short[]> m_Collider;
 
 	unsigned short m_TileSize;
-	int m_Width, m_Height;
+	unsigned int m_Width, m_Height;
 
-	SDL_Texture *m_Buffer;
-	SDL_Texture *m_Background, *m_BackgroundProps, *m_ForegroundProps;
-
+	SDL_Texture* m_Buffer;
 	SDL_Rect m_BufferRect;
+
+	SDL_Texture *m_Background, *m_BackgroundProps, *m_ForegroundProps;
 
 	SDL_Renderer *m_Renderer;
 

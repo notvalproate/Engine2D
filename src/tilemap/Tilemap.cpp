@@ -56,7 +56,7 @@ Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* rendere
 		m_Tilesets.push_back(std::make_unique<Tileset>(config, atlasPath.c_str(), m_Renderer));
 	}
 
-	m_BufferRect = { 0, 0, m_TileSize * m_Width, m_TileSize * m_Height };
+	m_BufferRect = { 0, 0, static_cast<int>(m_TileSize * m_Width), static_cast<int>(m_TileSize * m_Height)};
 	m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferRect.w, m_BufferRect.h);
 	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
 }
@@ -114,27 +114,32 @@ void Tilemap::SaveTilemapAsPng(const char* fileName) const {
 
 void Tilemap::RenderLayer(const Layer& layer) const {
 	for (unsigned int i = 0; i < layer.data.size(); i++) {
-		unsigned int x = layer.x;
-		unsigned int y = layer.y;
+		unsigned int tileID = layer.data[i];
+
+		if (tileID == 0) {
+			continue;
+		}
 
 		unsigned int Col = i % layer.width;
 		unsigned int Row = i / layer.width;
 
-		x += Col * m_TileSize;
-		y += Row * m_TileSize;
+		SDL_Rect DestRect{ 
+			layer.x + Col * m_TileSize,
+			layer.y + Row * m_TileSize,
+			m_TileSize,
+			m_TileSize
+		};
 
-		SDL_Rect DestRect{ x, y, m_TileSize, m_TileSize };
+		SDL_Rect SrcRect{ NULL, NULL, m_TileSize, m_TileSize};
 
-		SDL_Rect SrcRect{0, 0, m_TileSize, m_TileSize};
+		unsigned int tilesetIndex = 0; 
+		while (tilesetIndex < m_Tilesets.size() && !m_Tilesets[tilesetIndex]->GetTile(tileID, SrcRect)) { tilesetIndex++; }
 
-		unsigned int j = 0;
-		while (j < m_Tilesets.size() && !m_Tilesets[j]->GetTile(layer.data[i], SrcRect)) { j++; }
-
-		if (j == m_Tilesets.size()) {
+		if (tilesetIndex == m_Tilesets.size()) {
 			std::cout << "Error in rendering tile ID: " << layer.data[i] << std::endl;
 			continue;
 		}
 
-		SDL_RenderCopy(m_Renderer, m_Tilesets[j]->GetAtlas(), &SrcRect, &DestRect);
+		SDL_RenderCopy(m_Renderer, m_Tilesets[tilesetIndex]->GetAtlas(), &SrcRect, &DestRect);
 	}
 }
