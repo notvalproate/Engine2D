@@ -43,7 +43,7 @@ private:
 	};
 
 	std::vector<Layer> m_TestLayers;
-	std::unique_ptr<Tileset> m_Tileset;
+	std::vector<Tileset> m_Tileset;
 
 
 

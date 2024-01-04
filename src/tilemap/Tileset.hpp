@@ -2,9 +2,17 @@
 #include "SDL.h"
 #include "json.hpp"
 
+struct TilesetConfig {
+	unsigned int tileSize;
+	unsigned int firstGID;
+	unsigned int imageWidth, imageHeight;
+	unsigned int margin;
+	unsigned int spacing;
+};
+
 class Tileset {
 public:
-	Tileset(const unsigned int tileSize, const unsigned int firstGid, const unsigned int imgWidth, const unsigned int imgHeight, const unsigned int spacing, const char* atlasPath, SDL_Renderer* renderer);
+	Tileset(TilesetConfig& config, const char* atlasPath, SDL_Renderer* renderer);
 	~Tileset();
 
 	Tileset(const Tileset& other) = delete;
@@ -15,10 +23,7 @@ public:
 
 	void GetTile(const int tileId, SDL_Rect& rect);
 private:
-	const unsigned int m_TileSize;
-	const unsigned int m_FirstGID;
-	const unsigned int m_ImageWidth, m_ImageHeight;
-	const unsigned int m_Spacing;
-	const unsigned int m_Columns, m_Rows;
+	TilesetConfig m_Config;
+	unsigned int m_Columns;
 	SDL_Texture* m_Atlas;
 };
