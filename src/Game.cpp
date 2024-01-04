@@ -83,13 +83,13 @@ void Game::HandleEvents() {
 			if (!(SDL_GetWindowFlags(m_Window) & SDL_WINDOW_FULLSCREEN)) {
 				SDL_SetWindowSize(m_Window, m_Mode.w, m_Mode.h);
 				SDL_SetWindowFullscreen(m_Window, SDL_WINDOW_FULLSCREEN);
-				m_Level->RenderToCamera();
+				m_Level->RenderToBuffer();
 				break;
 			}
 			//Else remove window fullscreen flag and set resolution
 			SDL_SetWindowSize(m_Window, m_Width, m_Height);
 			SDL_SetWindowFullscreen(m_Window, 0);
-			m_Level->RenderToCamera();
+			m_Level->RenderToBuffer();
 			break;
 		}
 	}
@@ -106,7 +106,6 @@ void Game::Render() {
 	SDL_RenderClear(m_Renderer);
 
 	m_Level->Render(m_Camera);
-
 	m_Player->Render(m_Camera);
 
 	OnUserRender();

@@ -30,7 +30,7 @@ public:
 
 	void SaveTilemapAsPng(const char* fileName) const;
 
-	void RenderToCamera() const;
+	void RenderToBuffer() const;
 	void Render(const std::unique_ptr<Camera>& camera) const;
 
 	const Layer* GetCollisionLayer() const { return &m_CollisionLayer; }

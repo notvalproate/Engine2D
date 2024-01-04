@@ -9,7 +9,7 @@ Camera::~Camera() {
 	SDL_DestroyTexture(m_Buffer);
 }
 
-void Camera::RenderToCamera(SDL_Texture* incomingBuffer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const {
+void Camera::RenderToBuffer(SDL_Texture* incomingBuffer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const {
 	SDL_Texture* renderTarget = SDL_GetRenderTarget(m_Renderer);
 
 	SDL_Rect newDest = {

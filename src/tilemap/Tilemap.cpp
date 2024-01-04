@@ -80,7 +80,7 @@ void Tilemap::AddForegroundProps(const char* texPath) {
 	m_ForegroundProps = TextureUtil::LoadTexture(texPath, m_Renderer);
 }
 
-void Tilemap::RenderToCamera() const {
+void Tilemap::RenderToBuffer() const {
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 
 	SDL_RenderCopy(m_Renderer, m_Background, NULL, NULL);
@@ -97,7 +97,7 @@ void Tilemap::RenderToCamera() const {
 }
 
 void Tilemap::Render(const std::unique_ptr<Camera>& camera) const {
-	camera->RenderToCamera(m_Buffer, NULL, &m_BufferRect);
+	camera->RenderToBuffer(m_Buffer, NULL, &m_BufferRect);
 }
 
 void Tilemap::SaveTilemapAsPng(const char* fileName) const {

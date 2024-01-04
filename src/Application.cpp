@@ -40,7 +40,7 @@ public:
 		m_Level = std::make_unique<Tilemap>("assets/tilemaps/tuxemon-town.json", m_Renderer);
 		m_Level->SetBackground("assets/backgrounds/BG.png");
 		m_Level->AddBackgroundProps("assets/props/Level_1.png");
-		m_Level->RenderToCamera();
+		m_Level->RenderToBuffer();
 		m_Level->SaveTilemapAsPng("assets/levels/Level_1.png");
 		
 		//Player

@@ -13,7 +13,7 @@ public:
 	Camera& operator=(const Camera&& other) = delete;
 
 	void Render() const;
-	void RenderToCamera(SDL_Texture* buffer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const;
+	void RenderToBuffer(SDL_Texture* buffer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const;
 
 	void SetDimensions(const int width, const int height);
 	void SetPosition(const int x, const int y);

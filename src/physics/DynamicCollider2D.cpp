@@ -233,5 +233,5 @@ void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& collider, const
 	SDL_RenderDrawLine(m_Renderer, centerx, centery, centerx + collider.m_TileSize * 2 * (collider.m_CurrVelocity->x / collider.m_CurrVelocity->GetMagnitude()), centery + collider.m_TileSize * 2 * (collider.m_CurrVelocity->y / collider.m_CurrVelocity->GetMagnitude()));
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 
-	camera->RenderToCamera(m_Buffer, NULL, &m_BufferRect);
+	camera->RenderToBuffer(m_Buffer, NULL, &m_BufferRect);
 }
