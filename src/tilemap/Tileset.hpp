@@ -21,7 +21,8 @@ public:
 	Tileset& operator=(const Tileset& other) = delete;
 	Tileset& operator=(const Tileset&& other) = delete;
 
-	bool GetTile(const int tileId, SDL_Rect& rect);
+	bool GetTile(const int tileId, SDL_Rect& rect) const;
+	inline SDL_Texture* GetAtlas() const { return m_Atlas; }
 private:
 	TilesetConfig m_Config;
 	unsigned int m_Columns;

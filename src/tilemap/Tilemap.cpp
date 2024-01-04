@@ -140,3 +140,40 @@ void Tilemap::SaveTilemapAsPng(const char* fileName) const {
 	SDL_FreeSurface(surface);
 	SDL_SetRenderTarget(m_Renderer, target);
 }
+
+void Tilemap::testRenderToBuffer() const {
+	SDL_SetRenderTarget(m_Renderer, m_Buffer);
+
+	for (const auto& layer : m_TestLayers) {
+		testRenderLayer(layer);
+	}
+
+	SDL_SetRenderTarget(m_Renderer, NULL);
+}
+
+void Tilemap::testRenderLayer(const Layer& layer) const {
+	for (unsigned int i = 0; i < layer.data.size(); i++) {
+		unsigned int x = layer.x;
+		unsigned int y = layer.y;
+
+		unsigned int Col = i % layer.width;
+		unsigned int Row = i / layer.width;
+
+		x += Col * m_TileSize;
+		y += Row * m_TileSize;
+
+		SDL_Rect DestRect = { x, y, m_TileSize, m_TileSize };
+
+		SDL_Rect SrcRect{};
+
+		unsigned int j = 0;
+		while (j < m_Tilesets.size() && !m_Tilesets[j]->GetTile(layer.data[i], SrcRect)) { j++; }
+
+		if (j == m_Tilesets.size()) {
+			std::cout << "Error in rendering tile ID: " << layer.data[i] << std::endl;
+			continue;
+		}
+
+		SDL_RenderCopy(m_Renderer, m_Tilesets[j]->GetAtlas(), &SrcRect, &DestRect);
+	}
+}

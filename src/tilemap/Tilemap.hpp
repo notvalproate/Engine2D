@@ -35,11 +35,14 @@ public:
 	int GetHeight() const { return m_Height; }
 	std::shared_ptr<unsigned short[]> GetCollider() const { return m_Collider; }
 
+	// TESTING PURPOSES
+
+	void testRenderToBuffer() const;
 private:
 	struct Layer {
-		std::string m_Name;
-		std::vector<unsigned short> m_Data;
-		int m_X, m_Y, m_Width, m_Height;
+		std::string name;
+		std::vector<unsigned short> data;
+		int x, y, width, height;
 	};
 
 	std::vector<Layer> m_TestLayers;
@@ -63,4 +66,8 @@ private:
 	SDL_Renderer *m_Renderer;
 
 	void RenderTiles(const int n) const;
+
+	// TESTING PURPOSES
+
+	void testRenderLayer(const Layer& layer) const;
 };
