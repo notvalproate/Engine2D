@@ -10,7 +10,7 @@
 #include <iomanip>
 
 Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* renderer)
-	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr)
+	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr), m_CollisionLayerNames({"world"})
 {
 	m_Renderer = renderer;
 
@@ -41,7 +41,9 @@ Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* rendere
 
 		std::transform(layerName.begin(), layerName.end(), layerName.begin(), ::tolower);
 
-		if (layerName == "world") {
+		auto it = std::find(std::begin(m_CollisionLayerNames), std::end(m_CollisionLayerNames), layerName);
+
+		if (it != std::end(m_CollisionLayerNames)) {
 			m_CollisionLayer = m_Layers.back();
 		}
 	}
@@ -73,6 +75,14 @@ Tilemap::~Tilemap() {
 	SDL_DestroyTexture(m_Background);
 	SDL_DestroyTexture(m_BackgroundProps);
 	SDL_DestroyTexture(m_ForegroundProps);
+}
+
+void Tilemap::SetCollisionLayerNames(const std::vector<std::string>& layerNames) {
+	m_CollisionLayerNames = layerNames;
+
+	for (auto& name : m_CollisionLayerNames) {
+		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+	}
 }
 
 void Tilemap::SetBackground(const char* texPath) {
