@@ -34,7 +34,7 @@ Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* rendere
 
 		m_Layers.push_back({ 
 			layerName,
-			layer["data"], 
+			layer["data"],
 			layer["x"], layer["y"], 
 			layer["width"], layer["height"] 
 		});
@@ -125,6 +125,7 @@ void Tilemap::RenderLayer(const Layer& layer) const {
 	for (unsigned int i = 0; i < layer.data.size(); i++) {
 		unsigned int tileID = layer.data[i];
 
+
 		if (tileID == 0) {
 			continue;
 		}
@@ -141,15 +142,19 @@ void Tilemap::RenderLayer(const Layer& layer) const {
 
 		SDL_Rect SrcRect{ NULL, NULL, m_TileSize, m_TileSize};
 
+		double angle = 0;
+
+		SDL_RendererFlip flipFlag = SDL_FLIP_NONE;
+
 		unsigned int tilesetIndex = 0; 
-		while (tilesetIndex < m_Tilesets.size() && !m_Tilesets[tilesetIndex]->GetTile(tileID, SrcRect)) { tilesetIndex++; }
+		while (tilesetIndex < m_Tilesets.size() && !m_Tilesets[tilesetIndex]->GetTile(tileID, SrcRect, angle, flipFlag)) { tilesetIndex++; }
 
 		if (tilesetIndex == m_Tilesets.size()) {
 			std::cout << "Error in rendering tile ID: " << layer.data[i] << std::endl;
 			continue;
 		}
 
-		SDL_RenderCopy(m_Renderer, m_Tilesets[tilesetIndex]->GetAtlas(), &SrcRect, &DestRect);
+		SDL_RenderCopyEx(m_Renderer, m_Tilesets[tilesetIndex]->GetAtlas(), &SrcRect, &DestRect, angle, NULL, flipFlag);
 	}
 }
 

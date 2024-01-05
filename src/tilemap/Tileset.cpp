@@ -12,8 +12,12 @@ Tileset::~Tileset() {
 	SDL_DestroyTexture(m_Atlas);
 }
 
-bool Tileset::GetTile(const unsigned int tileId, SDL_Rect& rect) const {
-	unsigned int localID = tileId - m_Config.firstGID;
+#include <iostream>
+
+bool Tileset::GetTile(const unsigned int tileId, SDL_Rect& rect, double& angle, SDL_RendererFlip& flipFlag) const {
+	GetFlags(tileId, angle, flipFlag);
+
+	unsigned int localID = (tileId & 0x0FFFFFFF) - m_Config.firstGID;
 
 	unsigned int column = localID % m_Columns;
 	unsigned int row = localID / m_Columns;
@@ -29,4 +33,36 @@ bool Tileset::GetTile(const unsigned int tileId, SDL_Rect& rect) const {
 	rect.y = y;
 
 	return true;
+}
+
+void Tileset::GetFlags(const unsigned int tileId, double& angle, SDL_RendererFlip& flipFlag) const {
+	// FlippedVerticallyFlag & FlippedHorizontallyFlag & FlippedAntiDiagonallyFlag is same as 0xE0000000
+	unsigned int setFlags = tileId & 0xE0000000;
+
+	switch (setFlags) {
+		case(0x00000000):
+			break;
+		case(FlippedHorizontallyFlag):
+			flipFlag = SDL_FLIP_HORIZONTAL;
+			break;
+		case(FlippedVerticallyFlag):
+			flipFlag = SDL_FLIP_VERTICAL;
+			break;
+		case(FlippedAntiDiagonallyFlag):
+			flipFlag = SDL_FLIP_VERTICAL;
+			angle = 90;
+			break;
+		case(FlippedHorizontallyFlag | FlippedVerticallyFlag):
+			angle = 180;
+			break;
+		case(FlippedHorizontallyFlag | FlippedAntiDiagonallyFlag):
+			break;
+		case(FlippedVerticallyFlag | FlippedAntiDiagonallyFlag):
+
+			break;
+		case(FlippedVerticallyFlag | FlippedHorizontallyFlag | FlippedAntiDiagonallyFlag):
+			break;
+		default:
+			break;
+	}
 }

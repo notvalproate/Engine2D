@@ -20,7 +20,7 @@ public:
 
 	struct Layer {
 		std::string name;
-		std::vector<unsigned short> data;
+		std::vector<unsigned int> data;
 		int x, y, width, height;
 	};
 
