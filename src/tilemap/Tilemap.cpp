@@ -9,8 +9,10 @@
 #include <sstream>
 #include <iomanip>
 
+std::vector<std::string> Tilemap::m_CollisionLayerNames({"world"});
+
 Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* renderer)
-	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr), m_CollisionLayerNames({"world"})
+	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr)
 {
 	m_Renderer = renderer;
 

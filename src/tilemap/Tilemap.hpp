@@ -24,7 +24,7 @@ public:
 		int x, y, width, height;
 	};
 
-	void SetCollisionLayerNames(const std::vector<std::string>& layerNames);
+	static void SetCollisionLayerNames(const std::vector<std::string>& layerNames);
 	void SetBackground(const char* texPath);
 	void AddBackgroundProps(const char* texPath);
 	void AddForegroundProps(const char* texPath);
@@ -39,7 +39,7 @@ private:
 	std::vector<Layer> m_Layers;
 	std::vector<std::unique_ptr<Tileset>> m_Tilesets;
 
-	std::vector<std::string> m_CollisionLayerNames;
+	static std::vector<std::string> m_CollisionLayerNames;
 	Layer m_CollisionLayer;
 
 	unsigned short m_TileSize;

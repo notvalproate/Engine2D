@@ -9,8 +9,9 @@ public:
 	void OnUserCreate() override {
 		//Setting up Tile's in the tilemap
 
+		Tilemap::SetCollisionLayerNames({ "world" });
+
 		m_Level = std::make_unique<Tilemap>("assets/tilemaps/platformer.json", m_Renderer);
-		m_Level->SetCollisionLayerNames({ "WORLD" });
 		m_Level->RenderToBuffer();
 		
 		//Player
