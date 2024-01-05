@@ -2,7 +2,9 @@
 #include <algorithm>
 #include "../math/Rectangle.hpp"
 
-DynamicCollider2D::DynamicCollider2D(const unsigned short tileSize, const int width, const int height, const int offsetX, const int offsetY) : StaticCollider2D(width, height, 0, 0) {
+DynamicCollider2D::DynamicCollider2D(const unsigned short tileSize, const int width, const int height, const int offsetX, const int offsetY) 
+	: StaticCollider2D(width, height, 0, 0), m_CollisionLayer(nullptr)
+{
 	m_ColliderOffset.x = offsetX;
 
 	m_ColliderOffset.y = offsetY;
@@ -14,7 +16,7 @@ DynamicCollider2D::DynamicCollider2D(const unsigned short tileSize, const int wi
 }
 
 void DynamicCollider2D::SetCollisionLayer(const Tilemap::Layer* collider) {
-	if (collider == nullptr) {
+	if (collider->name == "") {
 		return;
 	}
 

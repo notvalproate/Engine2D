@@ -10,7 +10,7 @@
 #include <iomanip>
 
 Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* renderer)
-	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr), m_CollisionLayer(nullptr)
+	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr)
 {
 	m_Renderer = renderer;
 
@@ -42,7 +42,7 @@ Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* rendere
 		std::transform(layerName.begin(), layerName.end(), layerName.begin(), ::tolower);
 
 		if (layerName == "world") {
-			m_CollisionLayer = &m_Layers.back();
+			m_CollisionLayer = m_Layers.back();
 		}
 	}
 
