@@ -34,7 +34,8 @@ public:
 	void RenderToBuffer() const;
 	void Render(const std::unique_ptr<Camera>& camera) const;
 
-	const Layer* GetCollisionLayer() const { return &m_CollisionLayer; }
+	inline const Layer* GetCollisionLayer() const { return &m_CollisionLayer; }
+	inline unsigned int GetTileSize() const { return m_TileSize; }
 private:
 	std::vector<Layer> m_Layers;
 	std::vector<std::unique_ptr<Tileset>> m_Tilesets;

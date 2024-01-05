@@ -2,8 +2,6 @@
 #include <iostream>
 #include <numeric>
 
-static constexpr unsigned short TILE_SIZE = 32;
-
 class PlatformerGame : public Game {
 public:
 	void OnUserCreate() override {
@@ -11,21 +9,28 @@ public:
 
 		Tilemap::SetCollisionLayerNames({ "world" });
 
-		m_Level = std::make_unique<Tilemap>("assets/tilemaps/platformer.json", m_Renderer);
+		m_Level = std::make_unique<Tilemap>("assets/tilemaps/mario.json", m_Renderer);
 		m_Level->RenderToBuffer();
 		
 		//Player
 
 		SDL_Rect playerRect = { 0, 0, 26, 36 };
-		m_Player = std::make_unique<Player>(m_Renderer, "assets/characters/idle/madeline.png", playerRect, 400, 500, 1280);
+		m_Player = std::make_unique<Player>(m_Renderer, "assets/characters/idle/madeline.png", playerRect, 400, 600, 1280);
 
 		//Collider
 
-		m_PlayerCollider = std::make_unique<DynamicCollider2D>(TILE_SIZE, 26, 36, 0, 0);
-		m_PlayerCollider->SetCollisionLayer(m_Level->GetCollisionLayer());
+		m_PlayerCollider = std::make_unique<DynamicCollider2D>(26, 36, 0, 0);
+		m_PlayerCollider->SetCollisionLayer(m_Level);
 		m_PlayerCollider->SetPlayer(m_Player);
 
-		//m_Camera->SetDimensions(320, 180);
+		//m_Camera->SetDimensions(640, 360);
+		//m_Camera->SetPosition(0, 400);
+
+		m_ColliderDebugger->SetCollisionLayer(m_Level->GetCollisionLayer());
+	}
+
+	void OnUserRender() override {
+		m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime, m_Camera);
 	}
 };
 

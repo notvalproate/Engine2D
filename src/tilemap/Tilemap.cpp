@@ -174,7 +174,7 @@ void Tilemap::GetRGBFromHex(std::string hexString) {
 	if (hexString[0] == '#') {
 		hexString.erase(0, 1);
 	}
-
+	
 	unsigned int RGB;
 	unsigned int shift = 0;
 	std::istringstream(hexString) >> std::hex >> RGB;

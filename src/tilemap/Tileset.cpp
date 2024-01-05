@@ -12,8 +12,6 @@ Tileset::~Tileset() {
 	SDL_DestroyTexture(m_Atlas);
 }
 
-#include <iostream>
-
 bool Tileset::GetTile(const unsigned int tileId, SDL_Rect& rect, double& angle, SDL_RendererFlip& flipFlag) const {
 	GetFlags(tileId, angle, flipFlag);
 

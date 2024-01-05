@@ -2,25 +2,27 @@
 #include <algorithm>
 #include "../math/Rectangle.hpp"
 
-DynamicCollider2D::DynamicCollider2D(const unsigned short tileSize, const int width, const int height, const int offsetX, const int offsetY) 
+DynamicCollider2D::DynamicCollider2D(const int width, const int height, const int offsetX, const int offsetY) 
 	: StaticCollider2D(width, height, 0, 0), m_CollisionLayer(nullptr)
 {
 	m_ColliderOffset.x = offsetX;
 
 	m_ColliderOffset.y = offsetY;
-	m_TileSize = tileSize;
 
 	m_CurrPosition = m_CurrVelocity = m_LastPosition = nullptr;
 	m_Jumping = nullptr;
 	m_CollidesWithMap = false;
+	m_TileSize = 0;
 }
 
-void DynamicCollider2D::SetCollisionLayer(const Tilemap::Layer* collider) {
-	if (collider->name == "") {
+void DynamicCollider2D::SetCollisionLayer(const std::unique_ptr<Tilemap>& collider) {
+	m_CollisionLayer = collider->GetCollisionLayer();
+
+	if (m_CollisionLayer->name == "") {
 		return;
 	}
 
-	m_CollisionLayer = collider;
+	m_TileSize = collider->GetTileSize();
 	m_CollidesWithMap = true;
 }
 
@@ -192,31 +194,11 @@ void ColliderDebugRenderer::SetCollisionLayer(const Tilemap::Layer* collider) {
 }
 
 void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& collider, const float deltaTime, const std::unique_ptr<Camera>& camera) {
-	//Debug to render hitbox
+	//Debug to render hitboxes
 	SDL_SetRenderTarget(m_Renderer, m_Buffer);
 	SDL_RenderClear(m_Renderer);
 
-	//Checking working 
-	Vector2d contactPoint, contactNormal;
-	double timeHitNear;
-	SDL_Rect testRect = { 70, 70, collider.m_TileSize, collider.m_TileSize };
-	SDL_Rect contact;
-	SDL_FRect tempRect = { collider.m_ColliderRect.x, collider.m_ColliderRect.y, collider.m_ColliderRect.w, collider.m_ColliderRect.h };
-
-	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 255, 255);
-	if (RectUtil::DynamicRectIntersectRect(tempRect, testRect, *collider.m_CurrVelocity, contactPoint, contactNormal, timeHitNear, deltaTime)) {
-		SDL_SetRenderDrawColor(m_Renderer, 0, 255, 0, 255);
-		SDL_RenderFillRect(m_Renderer, &testRect);
-		SDL_SetRenderDrawColor(m_Renderer, 255, 0, 0, 255);
-		contact = { (int)contactPoint.x, (int)contactPoint.y, 3, 3 };
-		SDL_RenderFillRect(m_Renderer, &contact);;
-	}
-	else {
-		SDL_RenderFillRect(m_Renderer, &testRect);
-	}
-
 	//Debug to render all the map colliders
-
 	SDL_Rect tile;
 	if (collider.m_CollidesWithMap && m_CollisionLayer != nullptr) {
 		int size = m_CollisionLayer->height * m_CollisionLayer->width;

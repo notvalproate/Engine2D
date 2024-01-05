@@ -21,9 +21,9 @@ protected:
 
 class DynamicCollider2D : private StaticCollider2D {
 public:
-	DynamicCollider2D(const unsigned short tileSize, const int width, const int height, const int offsetX, const int offsetY);
+	DynamicCollider2D(const int width, const int height, const int offsetX, const int offsetY);
 
-	void SetCollisionLayer(const Tilemap::Layer* collider);
+	void SetCollisionLayer(const std::unique_ptr<Tilemap>& collider);
 	void SetPlayer(const std::unique_ptr<Player>& player);
 	void Update(const float deltaTime);
 private:

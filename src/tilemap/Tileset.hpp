@@ -2,9 +2,10 @@
 #include "SDL.h"
 #include "json.hpp"
 
-static constexpr int FlippedHorizontallyFlag = 0x80000000;
-static constexpr int FlippedVerticallyFlag = 0x40000000;
-static constexpr int FlippedAntiDiagonallyFlag = 0x20000000;
+static constexpr unsigned int FlippedHorizontallyFlag = 0x80000000;
+static constexpr unsigned int FlippedVerticallyFlag = 0x40000000;
+static constexpr unsigned int FlippedAntiDiagonallyFlag = 0x20000000;
+
 
 struct TilesetConfig {
 	unsigned int tileSize;
