@@ -14,6 +14,10 @@ DynamicCollider2D::DynamicCollider2D(const unsigned short tileSize, const int wi
 }
 
 void DynamicCollider2D::SetCollisionLayer(const Tilemap::Layer* collider) {
+	if (collider == nullptr) {
+		return;
+	}
+
 	m_CollisionLayer = collider;
 	m_CollidesWithMap = true;
 }

@@ -9,7 +9,7 @@ public:
 	void OnUserCreate() override {
 		//Setting up Tile's in the tilemap
 
-		m_Level = std::make_unique<Tilemap>("assets/tilemaps/test.json", m_Renderer);
+		m_Level = std::make_unique<Tilemap>("assets/tilemaps/platformer.json", m_Renderer);
 		m_Level->RenderToBuffer();
 		
 		//Player
@@ -23,7 +23,7 @@ public:
 		m_PlayerCollider->SetCollisionLayer(m_Level->GetCollisionLayer());
 		m_PlayerCollider->SetPlayer(m_Player);
 
-		m_Camera->SetDimensions(320, 180);
+		//m_Camera->SetDimensions(320, 180);
 	}
 };
 
