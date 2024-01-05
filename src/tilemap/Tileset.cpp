@@ -52,15 +52,18 @@ void Tileset::GetFlags(const unsigned int tileId, double& angle, SDL_RendererFli
 			flipFlag = SDL_FLIP_VERTICAL;
 			angle = 90;
 			break;
-		case(FlippedHorizontallyFlag | FlippedVerticallyFlag):
+		case(FlippedHorizontallyFlag | FlippedVerticallyFlag): 
 			angle = 180;
 			break;
 		case(FlippedHorizontallyFlag | FlippedAntiDiagonallyFlag):
+			angle = 90;
 			break;
 		case(FlippedVerticallyFlag | FlippedAntiDiagonallyFlag):
-
+			angle = 270;
 			break;
 		case(FlippedVerticallyFlag | FlippedHorizontallyFlag | FlippedAntiDiagonallyFlag):
+			flipFlag = SDL_FLIP_HORIZONTAL;
+			angle = 90;
 			break;
 		default:
 			break;
