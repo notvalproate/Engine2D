@@ -5,11 +5,12 @@
 class PlatformerGame : public Game {
 public:
 	void OnUserCreate() override {
-		//Setting up Tile's in the tilemap
-
+		//Setting up Tilemap
+		Tilemap::SetBackgroundLayerNames({ "below player" });
 		Tilemap::SetCollisionLayerNames({ "world" });
+		Tilemap::SetForegroundLayerNames({ "above player" });
 
-		m_Level = std::make_unique<Tilemap>("assets/tilemaps/mario.json", m_Renderer);
+		m_Level = std::make_unique<Tilemap>("assets/tilemaps/tuxemon-town.json", m_Renderer);
 		m_Level->RenderToBuffer();
 		
 		//Player

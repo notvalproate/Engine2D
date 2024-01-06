@@ -9,7 +9,9 @@
 #include <sstream>
 #include <iomanip>
 
-std::vector<std::string> Tilemap::m_CollisionLayerNames({"world"});
+std::vector<std::string> Tilemap::m_BackgroundLayerNames({ "background" });
+std::vector<std::string> Tilemap::m_CollisionLayerNames({ "world" });
+std::vector<std::string> Tilemap::m_ForegroundLayerNames({ "foreground" });
 
 Tilemap::Tilemap(const std::filesystem::path& tilemapPath, SDL_Renderer* renderer)
 	: m_Background(nullptr), m_BackgroundProps(nullptr), m_ForegroundProps(nullptr)
@@ -79,10 +81,22 @@ Tilemap::~Tilemap() {
 	SDL_DestroyTexture(m_ForegroundProps);
 }
 
-void Tilemap::SetCollisionLayerNames(const std::vector<std::string>& layerNames) {
-	m_CollisionLayerNames = layerNames;
+void Tilemap::SetBackgroundLayerNames(const std::vector<std::string>& layerNames) {
+	SetLayerNamesFor(m_BackgroundLayerNames, layerNames);
+}
 
-	for (auto& name : m_CollisionLayerNames) {
+void Tilemap::SetCollisionLayerNames(const std::vector<std::string>& layerNames) {
+	SetLayerNamesFor(m_CollisionLayerNames, layerNames);
+}
+
+void Tilemap::SetForegroundLayerNames(const std::vector<std::string>& layerNames) {
+	SetLayerNamesFor(m_ForegroundLayerNames, layerNames);
+}
+
+void Tilemap::SetLayerNamesFor(std::vector<std::string>& layerNamesList, const std::vector<std::string>& layerNames) {
+	layerNamesList = layerNames;
+
+	for (auto& name : layerNamesList) {
 		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 	}
 }
