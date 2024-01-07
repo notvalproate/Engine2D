@@ -1,6 +1,6 @@
 #include "TextureLoader.hpp"
 
-SDL_Texture* TextureUtil::LoadTexture(const char* texpath, SDL_Renderer* renderer) {
+SDL_Texture* notval::TextureUtil::LoadTexture(const char* texpath, SDL_Renderer* renderer) {
 	//Load iamge as surface
 	SDL_Surface* temp = IMG_Load(texpath);
 	//Create texture from the surface

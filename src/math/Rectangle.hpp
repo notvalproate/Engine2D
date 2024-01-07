@@ -2,7 +2,7 @@
 #include "SDL.h"
 #include "Vector2d.h"
 
-namespace RectUtil {
+namespace notval::RectUtil {
 	void Translate(SDL_Rect& rectangle, const Vector2d& translation);
 	void Scale(SDL_Rect& rectangle, const float x, const float y);
 	bool RectOverlapRect(const SDL_Rect& R1, const SDL_Rect& R2);
