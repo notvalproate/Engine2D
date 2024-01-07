@@ -6,33 +6,37 @@
 #include <memory>
 
 // Forward Declaration to be friend
-class DynamicCollider2D;
+namespace notval {
 
-class Player {
-public:
-	Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int jumpStrength, const int gravity);
-	~Player();
+	class DynamicCollider2D;
 
-	Player(const Player& other) = delete;
-	Player(const Player&& other) = delete;
+	class Player {
+	public:
+		Player(SDL_Renderer* renderer, const char* texPath, const SDL_Rect& srcRect, const int movementSpeed, const int jumpStrength, const int gravity);
+		~Player();
 
-	Player& operator=(const Player& other) = delete;
-	Player& operator=(const Player&& other) = delete;
+		Player(const Player& other) = delete;
+		Player(const Player&& other) = delete;
 
-	void HandleEvents(const SDL_Event& event);
-	void Update(const float deltaTime);
-	void Render(const std::unique_ptr<Camera>& camera);
-private:
-	const int m_MovementSpeed, m_JumpStrength, m_Gravity;
+		Player& operator=(const Player& other) = delete;
+		Player& operator=(const Player&& other) = delete;
 
-	Vector2d m_CurrVelocity, m_CurrPosition, m_LastPosition;
+		void HandleEvents(const SDL_Event& event);
+		void Update(const float deltaTime);
+		void Render(const std::unique_ptr<Camera>& camera);
+	private:
+		const int m_MovementSpeed, m_JumpStrength, m_Gravity;
 
-	SDL_Rect m_SrcRect, m_DestRect;
-	SDL_Texture *m_Sprite;
+		Vector2d m_CurrVelocity, m_CurrPosition, m_LastPosition;
 
-	SDL_Renderer *m_Renderer;
+		SDL_Rect m_SrcRect, m_DestRect;
+		SDL_Texture* m_Sprite;
 
-	bool m_Jumping;
+		SDL_Renderer* m_Renderer;
 
-	friend DynamicCollider2D;
-};
+		bool m_Jumping;
+
+		friend DynamicCollider2D;
+	};
+
+}

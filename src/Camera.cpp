@@ -1,63 +1,67 @@
 #include "Camera.hpp"
 
-Camera::Camera(const int width, const int height, SDL_Renderer* renderer) : m_CameraRect({ 0, 0, width, height }), m_Renderer(renderer) {
-	m_Buffer = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, width, height);
-	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
-}
+namespace notval {
 
-Camera::~Camera() {
-	SDL_DestroyTexture(m_Buffer);
-}
+	Camera::Camera(const int width, const int height, SDL_Renderer* renderer) : m_CameraRect({ 0, 0, width, height }), m_Renderer(renderer) {
+		m_Buffer = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, width, height);
+		SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
+	}
 
-void Camera::ClearCameraBuffer() const {
-	SDL_Texture* renderTarget = SDL_GetRenderTarget(m_Renderer);
+	Camera::~Camera() {
+		SDL_DestroyTexture(m_Buffer);
+	}
 
-	SDL_SetRenderTarget(m_Renderer, m_Buffer);
-	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
-	SDL_RenderClear(m_Renderer);
+	void Camera::ClearCameraBuffer() const {
+		SDL_Texture* renderTarget = SDL_GetRenderTarget(m_Renderer);
 
-	SDL_SetRenderTarget(m_Renderer, renderTarget);
-}
+		SDL_SetRenderTarget(m_Renderer, m_Buffer);
+		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+		SDL_RenderClear(m_Renderer);
 
-void Camera::RenderToBuffer(SDL_Texture* incomingBuffer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const {
-	SDL_Texture* renderTarget = SDL_GetRenderTarget(m_Renderer);
+		SDL_SetRenderTarget(m_Renderer, renderTarget);
+	}
 
-	SDL_Rect newDest = {
-		destRect->x - m_CameraRect.x,
-		destRect->y - m_CameraRect.y,
-		destRect->w,
-		destRect->h
-	};
+	void Camera::RenderToBuffer(SDL_Texture* incomingBuffer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const {
+		SDL_Texture* renderTarget = SDL_GetRenderTarget(m_Renderer);
 
-	SDL_SetRenderTarget(m_Renderer, m_Buffer);
-	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+		SDL_Rect newDest = {
+			destRect->x - m_CameraRect.x,
+			destRect->y - m_CameraRect.y,
+			destRect->w,
+			destRect->h
+		};
 
-	SDL_RenderCopy(m_Renderer, incomingBuffer, srcRect, &newDest);
+		SDL_SetRenderTarget(m_Renderer, m_Buffer);
+		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 
-	SDL_SetRenderTarget(m_Renderer, renderTarget);
-}
+		SDL_RenderCopy(m_Renderer, incomingBuffer, srcRect, &newDest);
 
-void Camera::Render() const {
-	SDL_Texture* renderTarget = SDL_GetRenderTarget(m_Renderer);
+		SDL_SetRenderTarget(m_Renderer, renderTarget);
+	}
 
-	SDL_SetRenderTarget(m_Renderer, NULL);
-	SDL_RenderClear(m_Renderer);
-	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
-	SDL_RenderCopy(m_Renderer, m_Buffer, NULL, NULL);
+	void Camera::Render() const {
+		SDL_Texture* renderTarget = SDL_GetRenderTarget(m_Renderer);
 
-	SDL_SetRenderTarget(m_Renderer, renderTarget);
-}
+		SDL_SetRenderTarget(m_Renderer, NULL);
+		SDL_RenderClear(m_Renderer);
+		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+		SDL_RenderCopy(m_Renderer, m_Buffer, NULL, NULL);
 
-void Camera::SetDimensions(const int width, const int height) {
-	m_CameraRect.w = width;
-	m_CameraRect.h = height;
+		SDL_SetRenderTarget(m_Renderer, renderTarget);
+	}
 
-	SDL_DestroyTexture(m_Buffer);
-	m_Buffer = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, width, height);
-	SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
-}
+	void Camera::SetDimensions(const int width, const int height) {
+		m_CameraRect.w = width;
+		m_CameraRect.h = height;
 
-void Camera::SetPosition(const int x, const int y) {
-	m_CameraRect.x = x;
-	m_CameraRect.y = y;
+		SDL_DestroyTexture(m_Buffer);
+		m_Buffer = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, width, height);
+		SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
+	}
+
+	void Camera::SetPosition(const int x, const int y) {
+		m_CameraRect.x = x;
+		m_CameraRect.y = y;
+	}
+
 }

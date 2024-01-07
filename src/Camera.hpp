@@ -1,25 +1,29 @@
 #pragma once
 #include "SDL.h"
 
-class Camera {
-public:
-	Camera(const int width, const int height, SDL_Renderer* renderer);
-	~Camera();
+namespace notval {
 
-	Camera(const Camera& other) = delete;
-	Camera(const Camera&& other) = delete;
+	class Camera {
+	public:
+		Camera(const int width, const int height, SDL_Renderer* renderer);
+		~Camera();
 
-	Camera& operator=(const Camera& other) = delete;
-	Camera& operator=(const Camera&& other) = delete;
+		Camera(const Camera& other) = delete;
+		Camera(const Camera&& other) = delete;
 
-	void Render() const;
-	void RenderToBuffer(SDL_Texture* buffer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const;
-	void ClearCameraBuffer() const;
+		Camera& operator=(const Camera& other) = delete;
+		Camera& operator=(const Camera&& other) = delete;
 
-	void SetDimensions(const int width, const int height);
-	void SetPosition(const int x, const int y);
-private:
-	SDL_Texture* m_Buffer;
-	SDL_Renderer* m_Renderer;
-	SDL_Rect m_CameraRect;
-};
+		void Render() const;
+		void RenderToBuffer(SDL_Texture* buffer, const SDL_Rect* srcRect, const SDL_Rect* destRect) const;
+		void ClearCameraBuffer() const;
+
+		void SetDimensions(const int width, const int height);
+		void SetPosition(const int x, const int y);
+	private:
+		SDL_Texture* m_Buffer;
+		SDL_Renderer* m_Renderer;
+		SDL_Rect m_CameraRect;
+	};
+
+}

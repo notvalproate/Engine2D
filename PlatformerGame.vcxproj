@@ -148,6 +148,7 @@
     <ClCompile Include="src\Engine2D.cpp" />
     <ClCompile Include="src\math\Rectangle.cpp" />
     <ClCompile Include="src\math\Vector2d.cpp" />
+    <ClCompile Include="src\physics\ColliderDebugRenderer.cpp" />
     <ClCompile Include="src\physics\DynamicCollider2D.cpp" />
     <ClCompile Include="src\physics\StaticCollider2D.cpp" />
     <ClCompile Include="src\Player.cpp" />

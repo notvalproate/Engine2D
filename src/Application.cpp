@@ -12,21 +12,21 @@ class PlatformerGame : public notval::Engine2D {
 public:
 	void OnUserCreate() override {
 		//Setting up Tilemap
-		Tilemap::SetBackgroundLayerNames({ "below player" });
-		Tilemap::SetCollisionLayerNames({ "world" });
-		Tilemap::SetForegroundLayerNames({ "above player" });
+		notval::Tilemap::SetBackgroundLayerNames({ "below player" });
+		notval::Tilemap::SetCollisionLayerNames({ "world" });
+		notval::Tilemap::SetForegroundLayerNames({ "above player" });
 
-		m_Level = std::make_unique<Tilemap>("assets/tilemaps/tuxemon-town.json", m_Renderer);
+		m_Level = std::make_unique<notval::Tilemap>("assets/tilemaps/tuxemon-town.json", m_Renderer);
 		m_Level->RenderToBuffer();
 		
 		//Player
 
 		SDL_Rect playerRect = { 0, 0, 26, 36 };
-		m_Player = std::make_unique<Player>(m_Renderer, "assets/characters/idle/madeline.png", playerRect, 400, 600, 1280);
+		m_Player = std::make_unique<notval::Player>(m_Renderer, "assets/characters/idle/madeline.png", playerRect, 400, 600, 1280);
 
 		//Collider
 
-		m_PlayerCollider = std::make_unique<DynamicCollider2D>(26, 36, 0, 0);
+		m_PlayerCollider = std::make_unique<notval::DynamicCollider2D>(26, 36, 0, 0);
 		m_PlayerCollider->SetCollisionLayer(m_Level);
 		m_PlayerCollider->SetPlayer(m_Player);
 
