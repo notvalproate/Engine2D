@@ -21,7 +21,7 @@ namespace notval {
 		void SetDimensions(const int width, const int height);
 		void SetPosition(const int x, const int y);
 	private:
-		SDL_Texture* m_Buffer;
+		SDL_Texture* m_BackgroundBuffer;
 		SDL_Renderer* m_Renderer;
 		SDL_Rect m_CameraRect;
 	};

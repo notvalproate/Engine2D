@@ -67,7 +67,7 @@ namespace notval {
 
 		SDL_Rect m_BufferRect;
 		SDL_Renderer* m_Renderer;
-		SDL_Texture* m_Buffer;
+		SDL_Texture* m_BackgroundBuffer;
 	};
 
 }

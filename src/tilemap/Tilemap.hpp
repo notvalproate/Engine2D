@@ -54,7 +54,7 @@ namespace notval {
 		unsigned int m_Width, m_Height;
 		uint8_t m_R{}, m_G{}, m_B{}, m_A{};
 
-		SDL_Texture* m_Buffer;
+		SDL_Texture *m_BackgroundBuffer, *m_ForegroundBuffer;
 		SDL_Rect m_BufferRect;
 
 		SDL_Texture* m_Background, * m_BackgroundProps, * m_ForegroundProps;

@@ -72,12 +72,12 @@ namespace notval {
 		}
 
 		m_BufferRect = { 0, 0, static_cast<int>(m_TileSize * m_Width), static_cast<int>(m_TileSize * m_Height) };
-		m_Buffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferRect.w, m_BufferRect.h);
-		SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
+		m_BackgroundBuffer = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, m_BufferRect.w, m_BufferRect.h);
+		SDL_SetTextureBlendMode(m_BackgroundBuffer, SDL_BLENDMODE_BLEND);
 	}
 
 	Tilemap::~Tilemap() {
-		SDL_DestroyTexture(m_Buffer);
+		SDL_DestroyTexture(m_BackgroundBuffer);
 		SDL_DestroyTexture(m_Background);
 		SDL_DestroyTexture(m_BackgroundProps);
 		SDL_DestroyTexture(m_ForegroundProps);
@@ -116,7 +116,7 @@ namespace notval {
 	}
 
 	void Tilemap::RenderToBuffer() const {
-		SDL_SetRenderTarget(m_Renderer, m_Buffer);
+		SDL_SetRenderTarget(m_Renderer, m_BackgroundBuffer);
 		SDL_SetRenderDrawColor(m_Renderer, m_R, m_G, m_B, m_A);
 		SDL_RenderClear(m_Renderer);
 
@@ -134,14 +134,14 @@ namespace notval {
 	}
 
 	void Tilemap::Render(const std::unique_ptr<Camera>& camera) const {
-		camera->RenderToBuffer(m_Buffer, NULL, &m_BufferRect);
+		camera->RenderToBuffer(m_BackgroundBuffer, NULL, &m_BufferRect);
 	}
 
 	void Tilemap::SaveTilemapAsPng(const char* fileName) const {
 		SDL_Texture* target = SDL_GetRenderTarget(m_Renderer);
-		SDL_SetRenderTarget(m_Renderer, m_Buffer);
+		SDL_SetRenderTarget(m_Renderer, m_BackgroundBuffer);
 		int width, height;
-		SDL_QueryTexture(m_Buffer, NULL, NULL, &width, &height);
+		SDL_QueryTexture(m_BackgroundBuffer, NULL, NULL, &width, &height);
 		SDL_Surface* surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 		SDL_RenderReadPixels(m_Renderer, NULL, surface->format->format, surface->pixels, surface->pitch);
 		IMG_SavePNG(surface, fileName);

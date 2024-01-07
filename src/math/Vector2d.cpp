@@ -3,6 +3,13 @@
 
 namespace notval {
 
+	const Vector2d Vector2d::forward(1.0, 0.0);
+	const Vector2d Vector2d::back(-1.0, 0.0);
+	const Vector2d Vector2d::up(0.0, -1.0);
+	const Vector2d Vector2d::down(0.0, 1.0);
+	const Vector2d Vector2d::one(1.0, 1.0);
+	const Vector2d Vector2d::zero(0.0, 0.0);
+
 	Vector2d::Vector2d(const double px, const double py)
 		: x(px), y(py) { }
 

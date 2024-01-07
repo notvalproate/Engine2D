@@ -3,9 +3,9 @@
 namespace notval {
 
 	ColliderDebugRenderer::ColliderDebugRenderer(SDL_Renderer* renderer) : m_Renderer(renderer), m_CollisionLayer(nullptr) {
-		m_Buffer = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1280, 720);
+		m_BackgroundBuffer = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, 1280, 720);
 		m_BufferRect = { 0, 0, 1280, 720 };
-		SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureBlendMode(m_BackgroundBuffer, SDL_BLENDMODE_BLEND);
 	}
 
 	void ColliderDebugRenderer::SetCollisionLayer(const Tilemap::Layer* collider) {
@@ -14,14 +14,14 @@ namespace notval {
 		int bufferWidth = m_CollisionLayer->width * 32;
 		int bufferHeight = m_CollisionLayer->height * 32;
 
-		m_Buffer = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, bufferWidth, bufferHeight);
+		m_BackgroundBuffer = SDL_CreateTexture(m_Renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, bufferWidth, bufferHeight);
 		m_BufferRect = { 0, 0, bufferWidth, bufferHeight };
-		SDL_SetTextureBlendMode(m_Buffer, SDL_BLENDMODE_BLEND);
+		SDL_SetTextureBlendMode(m_BackgroundBuffer, SDL_BLENDMODE_BLEND);
 	}
 
 	void ColliderDebugRenderer::DebugRender(const DynamicCollider2D& collider, const float deltaTime, const std::unique_ptr<Camera>& camera) {
 		//Debug to render hitboxes
-		SDL_SetRenderTarget(m_Renderer, m_Buffer);
+		SDL_SetRenderTarget(m_Renderer, m_BackgroundBuffer);
 		SDL_RenderClear(m_Renderer);
 
 		//Debug to render all the map colliders
@@ -47,7 +47,7 @@ namespace notval {
 		SDL_RenderDrawLine(m_Renderer, centerx, centery, centerx + collider.m_TileSize * 2 * (collider.m_CurrVelocity->x / collider.m_CurrVelocity->GetMagnitude()), centery + collider.m_TileSize * 2 * (collider.m_CurrVelocity->y / collider.m_CurrVelocity->GetMagnitude()));
 		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 
-		camera->RenderToBuffer(m_Buffer, NULL, &m_BufferRect);
+		camera->RenderToBuffer(m_BackgroundBuffer, NULL, &m_BufferRect);
 	}
 
 }

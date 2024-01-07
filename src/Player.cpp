@@ -62,8 +62,7 @@ namespace notval {
 		m_CurrVelocity.y += m_Gravity * deltaTime;
 
 		m_LastPosition = m_CurrPosition;
-		m_CurrPosition = m_CurrPosition + m_CurrVelocity * deltaTime;
-
+		m_CurrPosition += m_CurrVelocity * deltaTime;
 	}
 
 	void Player::Render(const std::unique_ptr<Camera>& camera) {
