@@ -18,7 +18,7 @@
     <ClCompile Include="src\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game.cpp">
+    <ClCompile Include="src\Engine2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\math\Rectangle.cpp">
@@ -54,7 +54,7 @@
     <None Include="SDL2_image.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Game.hpp">
+    <ClInclude Include="src\Engine2D.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\TextureLoader.hpp">

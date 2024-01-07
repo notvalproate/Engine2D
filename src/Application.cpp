@@ -1,8 +1,14 @@
-#include "Game.hpp"
+#include "Engine2D.hpp"
 #include <iostream>
 #include <numeric>
 
-class PlatformerGame : public Game {
+// Things I want to implement:
+// Tilemap bg and fg rendering
+// A component system similar to unity's like SpriteRenderer, DynamicCollider, getcomponent<> addcomponent<> and Game Object class.
+// Scene class to hold everything for a specific scene
+// Wrap everything in a namespace
+
+class PlatformerGame : public notval::Engine2D {
 public:
 	void OnUserCreate() override {
 		//Setting up Tilemap
@@ -37,7 +43,7 @@ public:
 
 int main(int argc, char *argv[]) {
 	PlatformerGame game;
-	game.Init("Platformer Game", "assets/characters/idle/madeline.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
+	game.Init("Engine2D", "assets/characters/idle/madeline.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
 
 	while (game.IsRunning()) {
 		game.HandleEvents();
