@@ -8,6 +8,7 @@
 #include <memory>
 #include <algorithm>
 #include <functional>
+#include <type_traits>
 
 class Object;
 class Component;
@@ -107,6 +108,7 @@ private:
     friend class GameObject;
 };
 
+
 class Transform final {
 public:
     Transform(GameObject* gameObject);
@@ -154,6 +156,7 @@ private:
     friend class Object;
 };
 
+
 class GameObject final : public Object {
 public:
     template<typename T>
@@ -168,7 +171,7 @@ public:
 
         m_Components.push_back(std::unique_ptr<T>(new T(this)));
         m_Components.back().get()->Awake();
-        m_Components.back().get();
+        return static_cast<T*>(m_Components.back().get());
     }
 
     template<typename First, typename Second, typename... Args>
@@ -331,12 +334,13 @@ private:
     friend class Scene;
 };
 
+
 class Scene : public Object {
 public:
     Scene();
     Scene(const std::string_view name);
 
-    virtual void SetupScene() = 0;
+    virtual void InitScene() = 0;
 
     void Start();
     void Update();
@@ -357,4 +361,40 @@ private:
     uint32_t LatestSceneInstanceID{};
 
     friend class Object;
+};
+
+
+class Engine2D {
+public:
+    Engine2D();
+
+    virtual void InitGame() = 0;
+    void Run();
+
+    template<typename T>
+    void AddScene() {
+        AssertSceneIsDerived<T>();
+        m_Scenes.push_back(std::unique_ptr<T>(new T()));
+    }
+
+    void LoadScene(std::size_t sceneID) {
+        m_CurrentScene = m_Scenes[sceneID].get();
+        m_CurrentScene->InitScene();
+    }
+
+private:
+    void Update();
+    void Render() const;
+
+    std::vector<std::unique_ptr<Scene>> m_Scenes{};
+    Scene* m_CurrentScene;
+    bool m_IsRunning;
+
+    template<typename T>
+    static void AssertSceneIsDerived() {
+        static_assert(
+            std::is_base_of<Scene, T>::value,
+            "Scene provided not derived from Scene Class"
+        );
+    }
 };

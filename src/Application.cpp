@@ -2,12 +2,7 @@
 #include <iostream>
 #include <numeric>
 
-// Things I want to implement:
-// Tilemap bg and fg rendering
-// A component system similar to unity's like SpriteRenderer, DynamicCollider, getcomponent<> addcomponent<> and Game Object class.
-// Scene class to hold everything for a specific scene
-// Wrap everything in a namespace
-
+/*
 class PlatformerGame : public notval::Engine2D {
 public:
 	void OnUserCreate() override {
@@ -39,17 +34,41 @@ public:
 	void OnUserRender() override {
 		m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime, m_Camera);
 	}
+};*/
+
+#include "core/Core.hpp"
+
+class TestScene : public Scene {
+public:
+	void InitScene() {
+		auto PlayerObject = CreateGameObject("Player");
+		std::cout << "Created Player Object" << std::endl;
+	}
+};
+
+class GameTest : public Engine2D {
+public:
+	void InitGame() override {
+		std::cout << "Hi Game started!" << std::endl;
+		AddScene<TestScene>();
+		LoadScene(0);
+	}
 };
 
 int main(int argc, char *argv[]) {
-	PlatformerGame game;
-	game.Init("Engine2D", "assets/characters/idle/madeline.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
+	//PlatformerGame game;
+	//game.Init("Engine2D", "assets/characters/idle/madeline.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
 
-	while (game.IsRunning()) {
-		game.HandleEvents();
-		game.Update();
-		game.Render();
-	}
+	//while (game.IsRunning()) {
+		//game.HandleEvents();
+		//game.Update();
+		//game.Render();
+	//}
+
+	GameTest myGame;
+
+	myGame.InitGame();
+	myGame.Run();
 
 	return 0;
 }

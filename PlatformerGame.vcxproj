@@ -150,6 +150,7 @@
     <ClCompile Include="src\core\GameObject.cpp" />
     <ClCompile Include="src\core\Object.cpp" />
     <ClCompile Include="src\core\Scene.cpp" />
+    <ClCompile Include="src\core\TestEngine2D.cpp" />
     <ClCompile Include="src\core\Transform.cpp" />
     <ClCompile Include="src\core\TestVector2D.cpp" />
     <ClCompile Include="src\Engine2D.cpp" />
