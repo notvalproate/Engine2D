@@ -48,6 +48,8 @@ public:
 
 class GameTest : public Engine2D {
 public:
+	using Engine2D::Engine2D;
+
 	void InitGame() override {
 		std::cout << "Hi Game started!" << std::endl;
 		AddScene<TestScene>();
@@ -65,7 +67,7 @@ int main(int argc, char *argv[]) {
 		//game.Render();
 	//}
 
-	GameTest myGame;
+	GameTest myGame("Engine2D", "assets/characters/idle/madeline.png", 1280, 720);
 
 	myGame.InitGame();
 	myGame.Run();

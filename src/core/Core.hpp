@@ -363,10 +363,18 @@ private:
     friend class Object;
 };
 
+#include "SDL.h"
 
 class Engine2D {
 public:
-    Engine2D();
+    Engine2D(const char* title, const char* iconpath, int windowWidth, int windowHeight);
+    ~Engine2D();
+
+    Engine2D(const Engine2D& other) = delete;
+    Engine2D(const Engine2D&& other) = delete;
+
+    Engine2D& operator=(const Engine2D& other) = delete;
+    Engine2D& operator=(const Engine2D&& other) = delete;
 
     virtual void InitGame() = 0;
     void Run();
@@ -389,6 +397,17 @@ private:
     std::vector<std::unique_ptr<Scene>> m_Scenes{};
     Scene* m_CurrentScene;
     bool m_IsRunning;
+
+    //SDL STUFF
+
+    SDL_Renderer* m_Renderer;
+    int m_Width{}, m_Height{};
+    float m_DeltaTime{};
+    SDL_Window* m_Window;
+    SDL_DisplayMode m_Mode;
+    SDL_Event m_Event;
+
+    inline bool InFocus() const { return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS)); };
 
     template<typename T>
     static void AssertSceneIsDerived() {
