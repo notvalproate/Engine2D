@@ -51,31 +51,31 @@
     <ClCompile Include="src\physics\ColliderDebugRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Behaviour.cpp">
+    <ClCompile Include="src\Engine2D\Behaviour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Component.cpp">
+    <ClCompile Include="src\Engine2D\Component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\GameObject.cpp">
+    <ClCompile Include="src\Engine2D\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Object.cpp">
+    <ClCompile Include="src\Engine2D\Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Scene.cpp">
+    <ClCompile Include="src\Engine2D\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Transform.cpp">
+    <ClCompile Include="src\Engine2D\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\TestVector2D.cpp">
+    <ClCompile Include="src\Engine2D\TestVector2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\TestEngine2D.cpp">
+    <ClCompile Include="src\Engine2D\TestEngine2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\InputHandler.cpp">
+    <ClCompile Include="src\Engine2D\InputHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -111,7 +111,7 @@
     <ClInclude Include="src\Camera.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Core.hpp">
+    <ClInclude Include="src\Engine2D\Core.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

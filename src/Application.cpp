@@ -36,7 +36,7 @@ public:
 	}
 };*/
 
-#include "core/Core.hpp"
+#include "Engine2D/Core.hpp"
 
 class Player : public Behaviour {
 public:
@@ -59,6 +59,8 @@ public:
 
 class TestScene : public Scene {
 public:
+	using Scene::Scene;
+
 	void SetupScene() {
 		auto PlayerObject = CreateGameObject("Player 1");
 		PlayerObject->AddComponent<Player>();
@@ -75,7 +77,7 @@ public:
 
 	void SetupGame() override {
 		std::cout << "Hi Game started!" << std::endl;
-		AddScene<TestScene>();
+		AddScene<TestScene>("Test Scene");
 		LoadScene(0);
 	}
 };

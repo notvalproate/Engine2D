@@ -1,6 +1,4 @@
 #include "Core.hpp"
-
-#define _USE_MATH_DEFINES
 #include <math.h>
 
 Transform::Transform(GameObject* gameObject) : gameObject(gameObject), parent(nullptr), tag(&gameObject->tag), name(&gameObject->name) { };

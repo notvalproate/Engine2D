@@ -342,15 +342,6 @@ private:
 
 class Scene : public Object {
 public:
-    Scene();
-    Scene(const std::string_view name);
-
-    virtual void SetupScene() = 0;
-
-    void Start();
-    void Update();
-    void Render() const;
-
     GameObject* CreateGameObject();
     GameObject* CreateGameObject(const std::string_view goName);
 
@@ -360,12 +351,21 @@ public:
     std::string name{};
 
 private:
+    Scene(const std::string_view name);
+
+    virtual void SetupScene() = 0;
+
+    void Start();
+    void Update();
+    void Render() const;
+
     std::vector<std::unique_ptr<GameObject>> m_SceneGameObjects{};
     std::vector<GameObject*> m_StagedForDestruction{};
 
     uint32_t LatestSceneInstanceID{};
 
     friend class Object;
+    friend class Engine2D;
 };
 
 #include "SDL.h"
@@ -405,9 +405,9 @@ public:
     void Run();
 
     template<typename T>
-    void AddScene() {
+    void AddScene(const std::string_view sceneName) {
         AssertSceneIsDerived<T>();
-        m_Scenes.push_back(std::unique_ptr<T>(new T()));
+        m_Scenes.push_back(std::unique_ptr<T>(new T(sceneName)));
     }
 
     void LoadScene(std::size_t sceneID) {

@@ -1,7 +1,5 @@
 #include "Core.hpp"
 
-Scene::Scene() { }
-
 Scene::Scene(const std::string_view name) : name(name) { }
 
 void Scene::Start() {
