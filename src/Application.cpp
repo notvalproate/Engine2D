@@ -48,7 +48,11 @@ public:
 
 	void Update() {
 		if (Input.GetKeyDown(SDL_SCANCODE_UP)) {
-			std::cout << "Player moved up" << std::endl;
+			std::cout << gameObject->name << " moved up" << std::endl;
+		}
+
+		if (Input.GetCurrentEvent().key.keysym.sym == SDLK_w) {
+			std::cout << "Getting the event works" << std::endl;
 		}
 	}
 };
@@ -56,10 +60,12 @@ public:
 class TestScene : public Scene {
 public:
 	void SetupScene() {
-		auto PlayerObject = CreateGameObject("Player");
+		auto PlayerObject = CreateGameObject("Player 1");
 		PlayerObject->AddComponent<Player>();
+		
+		Instantiate(PlayerObject);
 
-		std::cout << "Created Player Object" << std::endl;
+		std::cout << "Created Player Objects" << std::endl;
 	}
 };
 
@@ -75,15 +81,6 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-	//PlatformerGame game;
-	//game.Init("Engine2D", "assets/characters/idle/madeline.png", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
-
-	//while (game.IsRunning()) {
-		//game.HandleEvents();
-		//game.Update();
-		//game.Render();
-	//}
-
 	GameTest myGame;
 
 	myGame.InitGame("Engine2D", "assets/characters/idle/madeline.png", 1280, 720);

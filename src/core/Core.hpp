@@ -372,8 +372,10 @@ private:
 
 class InputHandler {
 public:
-    bool GetKeyDown(SDL_Scancode scanCode) const;
-    bool GetKeyUp(SDL_Scancode scanCode) const;
+    bool GetKeyDown(const SDL_Scancode scanCode) const;
+    bool GetKeyUp(const SDL_Scancode scanCode) const;
+
+    inline const SDL_Event& GetCurrentEvent() const { return m_CurrentEvent; }
 
 private:
     InputHandler();

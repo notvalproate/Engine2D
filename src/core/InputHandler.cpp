@@ -2,11 +2,11 @@
 
 InputHandler::InputHandler() : m_KeyboardState(SDL_GetKeyboardState(NULL)) { }
 
-bool InputHandler::GetKeyDown(SDL_Scancode scanCode) const {
+bool InputHandler::GetKeyDown(const SDL_Scancode scanCode) const {
 	return m_KeyboardState[scanCode] == 1;
 }
 
-bool InputHandler::GetKeyUp(SDL_Scancode scanCode) const {
+bool InputHandler::GetKeyUp(const SDL_Scancode scanCode) const {
 	return m_KeyboardState[scanCode] == 0;
 }
 
