@@ -1,5 +1,7 @@
 #include "Core.hpp"
 
+InputHandler Object::Input;
+
 GameObject* Object::Instantiate(GameObject* gameObject) {
     std::string newName = gameObject->name + " #" + std::to_string(gameObject->scene->LatestSceneInstanceID);
     GameObject* newGameObject = gameObject->scene->CreateGameObject(newName);

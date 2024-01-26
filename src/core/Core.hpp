@@ -16,6 +16,9 @@ class Behaviour;
 class GameObject;
 class Scene;
 
+class InputHandler;
+class Engine2D;
+
 class Vector2D;
 class Transform;
 
@@ -38,6 +41,8 @@ public:
     static Component* Instantiate(Component* component, const Vector2D& position, const double rotation);
     static void Destroy(Component* component);
     static void DestroyImmediate(Component* component);
+
+    static InputHandler Input;
 };
 
 
@@ -340,7 +345,7 @@ public:
     Scene();
     Scene(const std::string_view name);
 
-    virtual void InitScene() = 0;
+    virtual void SetupScene() = 0;
 
     void Start();
     void Update();
@@ -365,9 +370,26 @@ private:
 
 #include "SDL.h"
 
-class Engine2D {
+class InputHandler {
 public:
-    Engine2D(const char* title, const char* iconpath, int windowWidth, int windowHeight);
+    bool GetKeyDown(SDL_Scancode scanCode) const;
+    bool GetKeyUp(SDL_Scancode scanCode) const;
+
+private:
+    InputHandler();
+
+    void PollEvents();
+
+    SDL_Event m_CurrentEvent;
+    const uint8_t* m_KeyboardState;
+
+    friend class Object;
+    friend class Engine2D;
+};
+
+class Engine2D : public Object {
+public:
+    Engine2D();
     ~Engine2D();
 
     Engine2D(const Engine2D& other) = delete;
@@ -376,7 +398,8 @@ public:
     Engine2D& operator=(const Engine2D& other) = delete;
     Engine2D& operator=(const Engine2D&& other) = delete;
 
-    virtual void InitGame() = 0;
+    virtual void SetupGame() = 0;
+    void InitGame(const char* title, const char* iconpath, int windowWidth, int windowHeight);
     void Run();
 
     template<typename T>
@@ -387,7 +410,7 @@ public:
 
     void LoadScene(std::size_t sceneID) {
         m_CurrentScene = m_Scenes[sceneID].get();
-        m_CurrentScene->InitScene();
+        m_CurrentScene->SetupScene();
     }
 
 private:
@@ -398,14 +421,11 @@ private:
     Scene* m_CurrentScene;
     bool m_IsRunning;
 
-    //SDL STUFF
-
     SDL_Renderer* m_Renderer;
     int m_Width{}, m_Height{};
     float m_DeltaTime{};
     SDL_Window* m_Window;
     SDL_DisplayMode m_Mode;
-    SDL_Event m_Event;
 
     inline bool InFocus() const { return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS)); };
 

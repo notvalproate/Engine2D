@@ -40,7 +40,7 @@ public:
 
 class TestScene : public Scene {
 public:
-	void InitScene() {
+	void SetupScene() {
 		auto PlayerObject = CreateGameObject("Player");
 		std::cout << "Created Player Object" << std::endl;
 	}
@@ -50,7 +50,7 @@ class GameTest : public Engine2D {
 public:
 	using Engine2D::Engine2D;
 
-	void InitGame() override {
+	void SetupGame() override {
 		std::cout << "Hi Game started!" << std::endl;
 		AddScene<TestScene>();
 		LoadScene(0);
@@ -67,9 +67,9 @@ int main(int argc, char *argv[]) {
 		//game.Render();
 	//}
 
-	GameTest myGame("Engine2D", "assets/characters/idle/madeline.png", 1280, 720);
+	GameTest myGame;
 
-	myGame.InitGame();
+	myGame.InitGame("Engine2D", "assets/characters/idle/madeline.png", 1280, 720);
 	myGame.Run();
 
 	return 0;

@@ -148,6 +148,7 @@
     <ClCompile Include="src\core\Behaviour.cpp" />
     <ClCompile Include="src\core\Component.cpp" />
     <ClCompile Include="src\core\GameObject.cpp" />
+    <ClCompile Include="src\core\InputHandler.cpp" />
     <ClCompile Include="src\core\Object.cpp" />
     <ClCompile Include="src\core\Scene.cpp" />
     <ClCompile Include="src\core\TestEngine2D.cpp" />
