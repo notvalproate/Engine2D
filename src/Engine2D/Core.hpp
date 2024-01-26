@@ -372,8 +372,9 @@ private:
 
 class InputHandler {
 public:
-    bool GetKeyDown(const SDL_Scancode scanCode) const;
+    bool GetKey(const SDL_Scancode scanCode) const;
     bool GetKeyUp(const SDL_Scancode scanCode) const;
+    bool GetKeyDown(const SDL_Scancode scanCode) const;
 
     inline const SDL_Event& GetCurrentEvent() const { return m_CurrentEvent; }
 
@@ -400,9 +401,11 @@ public:
     Engine2D& operator=(const Engine2D& other) = delete;
     Engine2D& operator=(const Engine2D&& other) = delete;
 
-    virtual void SetupGame() = 0;
     void InitGame(const char* title, const char* iconpath, int windowWidth, int windowHeight);
     void Run();
+
+protected:
+    void LoadScene(std::size_t sceneID);
 
     template<typename T>
     void AddScene(const std::string_view sceneName) {
@@ -410,12 +413,9 @@ public:
         m_Scenes.push_back(std::unique_ptr<T>(new T(sceneName)));
     }
 
-    void LoadScene(std::size_t sceneID) {
-        m_CurrentScene = m_Scenes[sceneID].get();
-        m_CurrentScene->SetupScene();
-    }
-
 private:
+    virtual void SetupGame() = 0;
+
     void Update();
     void Render() const;
 

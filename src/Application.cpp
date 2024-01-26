@@ -47,12 +47,17 @@ public:
 	}
 
 	void Update() {
-		if (Input.GetKeyDown(SDL_SCANCODE_UP)) {
+		if (Input.GetKeyDown(SDL_SCANCODE_W)) {
 			std::cout << gameObject->name << " moved up" << std::endl;
 		}
-
-		if (Input.GetCurrentEvent().key.keysym.sym == SDLK_w) {
-			std::cout << "Getting the event works" << std::endl;
+		if (Input.GetKeyDown(SDL_SCANCODE_S)) {
+			std::cout << gameObject->name << " moved down" << std::endl;
+		}
+		if (Input.GetKeyDown(SDL_SCANCODE_A)) {
+			std::cout << gameObject->name << " moved left" << std::endl;
+		}
+		if (Input.GetKeyDown(SDL_SCANCODE_D)) {
+			std::cout << gameObject->name << " moved right" << std::endl;
 		}
 	}
 };
@@ -62,10 +67,8 @@ public:
 	using Scene::Scene;
 
 	void SetupScene() {
-		auto PlayerObject = CreateGameObject("Player 1");
+		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<Player>();
-		
-		Instantiate(PlayerObject);
 
 		std::cout << "Created Player Objects" << std::endl;
 	}

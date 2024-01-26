@@ -72,3 +72,8 @@ void Engine2D::Render() const {
 		SDL_WaitEvent(NULL);
 	}
 }
+
+void Engine2D::LoadScene(std::size_t sceneID) {
+	m_CurrentScene = m_Scenes[sceneID].get();
+	m_CurrentScene->SetupScene();
+}
