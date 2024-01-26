@@ -38,10 +38,27 @@ public:
 
 #include "core/Core.hpp"
 
+class Player : public Behaviour {
+public:
+	using Behaviour::Behaviour;
+
+	std::unique_ptr<Component> Clone() const override {
+		return std::make_unique<Player>(*this);
+	}
+
+	void Update() {
+		if (Input.GetKeyDown(SDL_SCANCODE_UP)) {
+			std::cout << "Player moved up" << std::endl;
+		}
+	}
+};
+
 class TestScene : public Scene {
 public:
 	void SetupScene() {
 		auto PlayerObject = CreateGameObject("Player");
+		PlayerObject->AddComponent<Player>();
+
 		std::cout << "Created Player Object" << std::endl;
 	}
 };
