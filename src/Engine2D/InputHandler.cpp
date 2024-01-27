@@ -23,7 +23,7 @@ bool InputHandler::GetKeyDown(const SDL_Scancode scanCode) const {
 }
 
 bool InputHandler::GetMouseButton(const uint8_t buttonCode) const {
-	return false;
+	return SDL_GetMouseState(NULL, NULL) && SDL_BUTTON(buttonCode);
 }
 
 bool InputHandler::GetMouseButtonUp(const uint8_t buttonCode) const {
