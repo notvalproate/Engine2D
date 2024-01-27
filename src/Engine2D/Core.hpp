@@ -368,6 +368,7 @@ private:
 
     friend class Object;
     friend class Engine2D;
+    friend class SceneHandler;
 };
 
 #include "SDL.h"
@@ -411,14 +412,12 @@ public:
 
     void LoadScene(std::size_t sceneID);
     void LoadScene(const std::string_view sceneName);
+
 private:
-    SceneHandler() = default;
+    SceneHandler();
 
     std::vector<std::unique_ptr<Scene>> m_Scenes{};
     Scene* m_CurrentScene;
-
-    friend class Object;
-    friend class Engine2D;
 
     template<typename T>
     static void AssertSceneIsDerived() {
@@ -427,6 +426,9 @@ private:
             "Scene provided not derived from Scene Class"
             );
     }
+
+    friend class Object;
+    friend class Engine2D;
 };
 
 class Engine2D : public Object {

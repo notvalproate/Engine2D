@@ -64,11 +64,11 @@ void Engine2D::Update() {
 		m_IsRunning = false;
 	}
 
-	m_CurrentScene->Update();
+	SceneManager.m_CurrentScene->Update();
 }
 
 void Engine2D::Render() const {
-	m_CurrentScene->Render();
+	SceneManager.m_CurrentScene->Render();
 
 	SDL_RenderPresent(m_Renderer);
 
