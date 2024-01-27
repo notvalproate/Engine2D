@@ -46,6 +46,10 @@ public:
 		return std::make_unique<Player>(*this);
 	}
 
+	void Start() {
+		myInputString = "";
+	}
+
 	void Update() {
 		if (Input.GetKeyDown(SDL_SCANCODE_W)) {
 			std::cout << gameObject->name << " moved up" << std::endl;
@@ -68,11 +72,16 @@ public:
 		
 		for (const auto& c : Input.inputString) {
 			if (c == '\b') {
-				myInputString.resize(myInputString.length() - 2);
+				myInputString.resize(myInputString.length() - 1);
+			}
+			else if (c == '\r') {
+				myInputString += '\n';
+			}
+			else {
+				myInputString += c;
 			}
 
-			myInputString += c;
-
+			system("cls");
 			std::cout << myInputString << std::endl;
 		}
 

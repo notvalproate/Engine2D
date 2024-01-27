@@ -51,8 +51,20 @@ void InputHandler::SetProperties() {
 	if (m_CurrentEvent.type == SDL_MOUSEMOTION) {
 		SDL_GetMouseState(&mousePositionX, &mousePositionY);
 	}
-	else if (m_CurrentEvent.type == SDL_KEYDOWN) {
-		inputString = m_CurrentEvent.key.keysym.sym; // PRIMITIVE FOR NOW, DOESNT INPUT CAPITAL LETTERS AND COPY PASTE AND OTHER STUFF.
+	else if (
+		m_CurrentEvent.type == SDL_KEYDOWN && 
+		(	
+			m_CurrentEvent.key.keysym.sym == SDLK_BACKSPACE || 
+			m_CurrentEvent.key.keysym.sym == SDLK_RETURN || 
+			m_CurrentEvent.key.keysym.sym == SDLK_TAB || 
+			m_CurrentEvent.key.keysym.sym == SDLK_DELETE
+		)
+	) 
+	{
+		inputString = m_CurrentEvent.key.keysym.sym;
+	}
+	else if (m_CurrentEvent.type == SDL_TEXTINPUT) {
+		inputString = *m_CurrentEvent.text.text;
 	}
 	else if (m_CurrentEvent.type == SDL_MOUSEWHEEL) {
 		mouseScrollDeltaX = m_CurrentEvent.wheel.x;
