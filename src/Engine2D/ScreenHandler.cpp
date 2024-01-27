@@ -13,6 +13,11 @@ void ScreenHandler::ToggleFullscreen() {
 	SDL_SetWindowFullscreen(m_Window, 0);
 }
 
+void ScreenHandler::SetResolution(const int w, const int h) {
+	SDL_SetWindowSize(m_Window, w, h);
+	SDL_SetWindowPosition(m_Window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+}
+
 void ScreenHandler::InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight) {
 	if (SDL_GetDisplayMode(0, 0, &m_Mode)) {
 		std::cout << "Error: Couldn't Get Display Mode...Framerate set to 60" << std::endl;

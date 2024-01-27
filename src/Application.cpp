@@ -71,7 +71,10 @@ public:
 		}
 
 		if (Input.GetKeyDown(SDL_SCANCODE_F11)) {
-			Screen.ToggleFullscreen();
+			Screen.SetResolution(1600, 900);
+		}
+		if (Input.GetKeyDown(SDL_SCANCODE_F10)) {
+			Screen.SetResolution(1280, 720);
 		}
 		
 		for (const auto& c : Input.inputString) {

@@ -436,6 +436,7 @@ private:
 class ScreenHandler {
 public:
     void ToggleFullscreen();
+    void SetResolution(const int w, const int h);
 
 private:
     ScreenHandler();
