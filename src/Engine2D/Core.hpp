@@ -384,7 +384,7 @@ public:
 
     int mousePositionX, mousePositionY;
     double mouseScrollDelta;
-    char inputChar;
+    std::string inputString;
 
 private:
     InputHandler();

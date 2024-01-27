@@ -52,6 +52,9 @@ void InputHandler::SetProperties() {
 		SDL_GetMouseState(&mousePositionX, &mousePositionY);
 	}
 	else if (m_CurrentEvent.type == SDL_KEYDOWN) {
-		inputChar = m_CurrentEvent.key.keysym.sym; // PRIMITIVE FOR NOW, DOESNT INPUT CAPITAL LETTERS AND COPY PASTE AND OTHER STUFF.
+		inputString = m_CurrentEvent.key.keysym.sym; // PRIMITIVE FOR NOW, DOESNT INPUT CAPITAL LETTERS AND COPY PASTE AND OTHER STUFF.
+	}
+	else {
+		inputString.clear();
 	}
 }

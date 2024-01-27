@@ -65,7 +65,19 @@ public:
 		if (Input.GetMouseButtonDown(SDL_BUTTON_LEFT)) {
 			std::cout << gameObject->name << " left clicked!" << std::endl;
 		}
+		
+		for (const auto& c : Input.inputString) {
+			if (c == '\b') {
+				myInputString.resize(myInputString.length() - 2);
+			}
+
+			myInputString += c;
+
+			std::cout << myInputString << std::endl;
+		}
 	}
+
+	std::string myInputString;
 };
 
 class TestScene : public Scene {
