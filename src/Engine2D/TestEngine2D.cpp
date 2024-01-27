@@ -60,6 +60,10 @@ void Engine2D::Run() {
 void Engine2D::Update() {
 	Input.PollEvents();
 
+	if (Input.GetCurrentEvent().type == SDL_QUIT) {
+		m_IsRunning = false;
+	}
+
 	m_CurrentScene->Update();
 }
 

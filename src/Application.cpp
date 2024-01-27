@@ -71,7 +71,7 @@ public:
 		}
 		
 		for (const auto& c : Input.inputString) {
-			if (c == '\b') {
+			if (c == '\b' && myInputString.length()) {
 				myInputString.resize(myInputString.length() - 1);
 			}
 			else if (c == '\r') {
@@ -81,7 +81,6 @@ public:
 				myInputString += c;
 			}
 
-			system("cls");
 			std::cout << myInputString << std::endl;
 		}
 

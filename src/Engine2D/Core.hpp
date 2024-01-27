@@ -17,6 +17,7 @@ class GameObject;
 class Scene;
 
 class InputHandler;
+class SceneHandler;
 class Engine2D;
 
 class Vector2D;
@@ -43,6 +44,7 @@ public:
     static void DestroyImmediate(Component* component);
 
     static InputHandler Input;
+    static SceneHandler SceneManager;
 };
 
 
@@ -397,6 +399,34 @@ private:
 
     friend class Object;
     friend class Engine2D;
+};
+
+class SceneHandler {
+public:
+    template<typename T>
+    void AddScene(const std::string_view sceneName) {
+        AssertSceneIsDerived<T>();
+        m_Scenes.push_back(std::unique_ptr<T>(new T(sceneName)));
+    }
+
+    void LoadScene(std::size_t sceneID);
+    void LoadScene(const std::string_view sceneName);
+private:
+    SceneHandler() = default;
+
+    std::vector<std::unique_ptr<Scene>> m_Scenes{};
+    Scene* m_CurrentScene;
+
+    friend class Object;
+    friend class Engine2D;
+
+    template<typename T>
+    static void AssertSceneIsDerived() {
+        static_assert(
+            std::is_base_of<Scene, T>::value,
+            "Scene provided not derived from Scene Class"
+            );
+    }
 };
 
 class Engine2D : public Object {
