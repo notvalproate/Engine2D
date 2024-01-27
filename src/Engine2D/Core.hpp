@@ -18,6 +18,7 @@ class Scene;
 
 class InputHandler;
 class SceneHandler;
+class ScreenHandler;
 class Engine2D;
 
 class Vector2D;
@@ -45,6 +46,7 @@ public:
 
     static InputHandler Input;
     static SceneHandler SceneManager;
+    static ScreenHandler Screen;
 };
 
 
@@ -424,8 +426,25 @@ private:
         static_assert(
             std::is_base_of<Scene, T>::value,
             "Scene provided not derived from Scene Class"
-            );
+        );
     }
+
+    friend class Object;
+    friend class Engine2D;
+};
+
+class ScreenHandler {
+public:
+    void ToggleFullscreen();
+
+private:
+    ScreenHandler();
+
+    void InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight);
+
+    SDL_Window* m_Window;
+    SDL_DisplayMode m_Mode{};
+    int m_Width{}, m_Height{};
 
     friend class Object;
     friend class Engine2D;
@@ -460,12 +479,4 @@ private:
     SDL_DisplayMode m_Mode;
 
     inline bool InFocus() const { return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS)); };
-
-    template<typename T>
-    static void AssertSceneIsDerived() {
-        static_assert(
-            std::is_base_of<Scene, T>::value,
-            "Scene provided not derived from Scene Class"
-        );
-    }
 };

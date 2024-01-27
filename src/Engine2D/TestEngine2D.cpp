@@ -10,30 +10,18 @@ void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth
 	}
 	std::cout << "Stage: Initialized Subsystems..." << std::endl;
 
-	if (SDL_GetDisplayMode(0, 0, &m_Mode)) {
-		std::cout << "Error: Couldn't Get Display Mode...Framerate set to 60" << std::endl;
-	}
-	else {
-		std::cout << "Stage: Display Mode Initialized..." << std::endl;
-		m_DeltaTime = (float)1.0 / (float)m_Mode.refresh_rate;
-	}
+	Screen.InitScreen(title, iconpath, windowWidth, windowHeight);
 
-	m_Width = windowWidth;
-	m_Height = windowHeight;
-
-	if (!(m_Window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0))) {
-		std::cout << "Error: Couldn't Initialize Window..." << std::endl;
-		return;
-	}
-
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
+	m_DeltaTime = (float)1.0 / (float)Screen.m_Mode.refresh_rate;
 
 	SDL_Surface* TempSurface = IMG_Load(iconpath);
-	SDL_SetWindowIcon(m_Window, TempSurface); //Setting window icon
+	SDL_SetWindowIcon(Screen.m_Window, TempSurface); //Setting window icon
 	SDL_FreeSurface(TempSurface);
 	std::cout << "Stage: Initialized Window..." << std::endl;
 
-	if (!(m_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE))) {
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
+
+	if (!(m_Renderer = SDL_CreateRenderer(Screen.m_Window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE))) {
 		std::cout << "Error: Couldn't Initialize Renderer..." << std::endl;
 		return;
 	}
@@ -45,7 +33,7 @@ void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth
 }
 
 Engine2D::~Engine2D() {
-	SDL_DestroyWindow(m_Window);
+	SDL_DestroyWindow(Screen.m_Window);
 	SDL_DestroyRenderer(m_Renderer);
 	SDL_Quit();
 }

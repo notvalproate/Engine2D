@@ -152,6 +152,7 @@
     <ClCompile Include="src\Engine2D\Object.cpp" />
     <ClCompile Include="src\Engine2D\Scene.cpp" />
     <ClCompile Include="src\Engine2D\SceneHandler.cpp" />
+    <ClCompile Include="src\Engine2D\ScreenHandler.cpp" />
     <ClCompile Include="src\Engine2D\TestEngine2D.cpp" />
     <ClCompile Include="src\Engine2D\Transform.cpp" />
     <ClCompile Include="src\Engine2D\TestVector2D.cpp" />

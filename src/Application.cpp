@@ -69,6 +69,10 @@ public:
 		if (Input.GetMouseButtonDown(SDL_BUTTON_LEFT)) {
 			std::cout << gameObject->name << " left clicked!" << std::endl;
 		}
+
+		if (Input.GetKeyDown(SDL_SCANCODE_F11)) {
+			Screen.ToggleFullscreen();
+		}
 		
 		for (const auto& c : Input.inputString) {
 			if (c == '\b' && myInputString.length()) {
