@@ -19,6 +19,7 @@ class Scene;
 class InputHandler;
 class SceneHandler;
 class ScreenHandler;
+class RenderingHandler;
 class Engine2D;
 
 class Vector2D;
@@ -47,6 +48,7 @@ public:
     static InputHandler Input;
     static SceneHandler SceneManager;
     static ScreenHandler Screen;
+    static RenderingHandler RenderingPipeline;
 };
 
 
@@ -375,6 +377,7 @@ private:
 
 #include "SDL.h"
 
+
 class InputHandler {
 public:
     bool GetKey(const SDL_Scancode scanCode) const;
@@ -403,6 +406,7 @@ private:
     friend class Object;
     friend class Engine2D;
 };
+
 
 class SceneHandler {
 public:
@@ -433,6 +437,7 @@ private:
     friend class Engine2D;
 };
 
+
 class ScreenHandler {
 public:
     void ToggleFullscreen();
@@ -442,6 +447,7 @@ private:
     ScreenHandler();
 
     void InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight);
+    inline bool InFocus() const { return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS)); };
 
     SDL_Window* m_Window;
     SDL_DisplayMode m_Mode{};
@@ -450,6 +456,17 @@ private:
     friend class Object;
     friend class Engine2D;
 };
+
+class RenderingHandler {
+public:
+
+private:
+    RenderingHandler() = default;
+
+    friend class Object;
+    friend class Engine2D;
+};
+
 
 class Engine2D : public Object {
 public:
@@ -474,10 +491,5 @@ private:
     bool m_IsRunning;
 
     SDL_Renderer* m_Renderer;
-    int m_Width{}, m_Height{};
     float m_DeltaTime{};
-    SDL_Window* m_Window;
-    SDL_DisplayMode m_Mode;
-
-    inline bool InFocus() const { return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS)); };
 };

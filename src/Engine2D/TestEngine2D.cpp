@@ -1,7 +1,7 @@
 #include "Core.hpp"
 #include "SDL_image.h"
 
-Engine2D::Engine2D() : m_IsRunning(true), m_Renderer(nullptr), m_DeltaTime(16), m_Window(nullptr) { }
+Engine2D::Engine2D() : m_IsRunning(true), m_Renderer(nullptr), m_DeltaTime(16) { }
 
 void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth, int windowHeight) {
 	if (SDL_Init(SDL_INIT_EVERYTHING)) {
@@ -60,7 +60,7 @@ void Engine2D::Render() const {
 
 	SDL_RenderPresent(m_Renderer);
 
-	if (!InFocus()) {
+	if (!Screen.InFocus()) {
 		SDL_WaitEvent(NULL);
 	}
 }

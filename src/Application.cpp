@@ -46,11 +46,11 @@ public:
 		return std::make_unique<Player>(*this);
 	}
 
-	void Start() {
+	void Start() override {
 		myInputString = "";
 	}
 
-	void Update() {
+	void Update() override {
 		if (Input.GetKeyDown(SDL_SCANCODE_W)) {
 			std::cout << gameObject->name << " moved up" << std::endl;
 		}
@@ -91,11 +91,9 @@ public:
 			std::cout << myInputString << std::endl;
 		}
 
-		if (!Input.mouseScrollDeltaY) {
-			return;
+		if (Input.mouseScrollDeltaY) {
+			std::cout << Input.mouseScrollDeltaY << std::endl;
 		}
-
-		std::cout << Input.mouseScrollDeltaY << std::endl;
 	}
 
 	std::string myInputString;
@@ -105,9 +103,9 @@ class TestScene : public Scene {
 public:
 	using Scene::Scene;
 
-	void SetupScene() {
+	void SetupScene() override {
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->AddComponent<Player>();
+		auto PlayerComponent = PlayerObject->AddComponent<Player>();
 
 		std::cout << "Created Player Objects" << std::endl;
 	}
