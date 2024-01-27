@@ -75,6 +75,12 @@ public:
 
 			std::cout << myInputString << std::endl;
 		}
+
+		if (!Input.mouseScrollDeltaY) {
+			return;
+		}
+
+		std::cout << Input.mouseScrollDeltaY << std::endl;
 	}
 
 	std::string myInputString;

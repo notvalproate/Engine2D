@@ -383,7 +383,7 @@ public:
     inline const SDL_Event& GetCurrentEvent() const { return m_CurrentEvent; }
 
     int mousePositionX, mousePositionY;
-    double mouseScrollDelta;
+    int mouseScrollDeltaX, mouseScrollDeltaY;
     std::string inputString;
 
 private:

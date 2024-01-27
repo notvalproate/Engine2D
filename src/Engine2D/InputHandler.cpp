@@ -54,7 +54,13 @@ void InputHandler::SetProperties() {
 	else if (m_CurrentEvent.type == SDL_KEYDOWN) {
 		inputString = m_CurrentEvent.key.keysym.sym; // PRIMITIVE FOR NOW, DOESNT INPUT CAPITAL LETTERS AND COPY PASTE AND OTHER STUFF.
 	}
+	else if (m_CurrentEvent.type == SDL_MOUSEWHEEL) {
+		mouseScrollDeltaX = m_CurrentEvent.wheel.x;
+		mouseScrollDeltaY = m_CurrentEvent.wheel.y;
+	}
 	else {
 		inputString.clear();
+		mouseScrollDeltaX = 0;
+		mouseScrollDeltaY = 0;
 	}
 }
