@@ -59,6 +59,9 @@ public:
 		if (Input.GetKeyDown(SDL_SCANCODE_D)) {
 			std::cout << gameObject->name << " moved right" << std::endl;
 		}
+		if (Input.GetMouseButtonDown(SDL_BUTTON_LEFT)) {
+			std::cout << gameObject->name << " clicked!" << std::endl;
+		}
 	}
 };
 
