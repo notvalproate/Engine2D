@@ -445,23 +445,12 @@ public:
     void InitGame(const char* title, const char* iconpath, int windowWidth, int windowHeight);
     void Run();
 
-protected:
-    void LoadScene(std::size_t sceneID);
-
-    template<typename T>
-    void AddScene(const std::string_view sceneName) {
-        AssertSceneIsDerived<T>();
-        m_Scenes.push_back(std::unique_ptr<T>(new T(sceneName)));
-    }
-
 private:
     virtual void SetupGame() = 0;
 
     void Update();
     void Render() const;
 
-    std::vector<std::unique_ptr<Scene>> m_Scenes{};
-    Scene* m_CurrentScene;
     bool m_IsRunning;
 
     SDL_Renderer* m_Renderer;

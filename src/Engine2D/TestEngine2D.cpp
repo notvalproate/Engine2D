@@ -1,7 +1,7 @@
 #include "Core.hpp"
 #include "SDL_image.h"
 
-Engine2D::Engine2D() : m_CurrentScene(nullptr), m_IsRunning(true), m_Renderer(nullptr), m_DeltaTime(16), m_Window(nullptr) { }
+Engine2D::Engine2D() : m_IsRunning(true), m_Renderer(nullptr), m_DeltaTime(16), m_Window(nullptr) { }
 
 void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth, int windowHeight) {
 	if (SDL_Init(SDL_INIT_EVERYTHING)) {
@@ -75,9 +75,4 @@ void Engine2D::Render() const {
 	if (!InFocus()) {
 		SDL_WaitEvent(NULL);
 	}
-}
-
-void Engine2D::LoadScene(std::size_t sceneID) {
-	m_CurrentScene = m_Scenes[sceneID].get();
-	m_CurrentScene->SetupScene();
 }

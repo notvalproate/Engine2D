@@ -113,7 +113,7 @@ public:
 	void SetupGame() override {
 		std::cout << "Hi Game started!" << std::endl;
 		SceneManager.AddScene<TestScene>("Test Scene");
-		SceneManager.LoadScene(0);
+		SceneManager.LoadScene("Test Scene");
 	}
 };
 
