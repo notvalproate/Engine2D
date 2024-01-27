@@ -382,10 +382,15 @@ public:
 
     inline const SDL_Event& GetCurrentEvent() const { return m_CurrentEvent; }
 
+    int mousePositionX, mousePositionY;
+    double mouseScrollDelta;
+    char inputChar;
+
 private:
     InputHandler();
 
     void PollEvents();
+    void SetProperties();
 
     SDL_Event m_CurrentEvent;
     const uint8_t* m_KeyboardState;

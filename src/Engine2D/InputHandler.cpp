@@ -23,7 +23,7 @@ bool InputHandler::GetKeyDown(const SDL_Scancode scanCode) const {
 }
 
 bool InputHandler::GetMouseButton(const uint8_t buttonCode) const {
-	return SDL_GetMouseState(NULL, NULL) && SDL_BUTTON(buttonCode);
+	return SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(buttonCode);
 }
 
 bool InputHandler::GetMouseButtonUp(const uint8_t buttonCode) const {
@@ -44,4 +44,14 @@ bool InputHandler::GetMouseButtonDown(const uint8_t buttonCode) const {
 
 void InputHandler::PollEvents() {
 	SDL_PollEvent(&m_CurrentEvent);
+	SetProperties();
+}
+
+void InputHandler::SetProperties() {
+	if (m_CurrentEvent.type == SDL_MOUSEMOTION) {
+		SDL_GetMouseState(&mousePositionX, &mousePositionY);
+	}
+	else if (m_CurrentEvent.type == SDL_KEYDOWN) {
+		inputChar = m_CurrentEvent.key.keysym.sym; // PRIMITIVE FOR NOW, DOESNT INPUT CAPITAL LETTERS AND COPY PASTE AND OTHER STUFF.
+	}
 }
