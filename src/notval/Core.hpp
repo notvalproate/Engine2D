@@ -134,7 +134,7 @@ public:
 
     Vector2D position{};
     double rotation{};
-    Vector2D scale{};
+    Vector2D scale{Vector2D::one};
 
     GameObject* gameObject;
 
@@ -465,6 +465,8 @@ private:
 
 
 class RenderingHandler {
+public:
+    void RenderSprite(SDL_Texture* texture, const SDL_Rect src, const SDL_Rect dest);
 private:
     RenderingHandler();
 

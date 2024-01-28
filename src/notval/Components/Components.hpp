@@ -16,4 +16,6 @@ private:
 
 	SDL_Texture* m_Sprite;
 	SDL_Rect m_SrcRect, m_DestRect;
+
+	friend class GameObject;
 };

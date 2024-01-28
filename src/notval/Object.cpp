@@ -4,6 +4,7 @@ InputHandler Object::Input;
 SceneHandler Object::SceneManager;
 ScreenHandler Object::Screen;
 RenderingHandler Object::RenderingPipeline;
+TextureHandler Object::TextureManager;
 TimeHandler Object::Time;
 
 GameObject* Object::Instantiate(GameObject* gameObject) {

@@ -8,6 +8,7 @@ bool RenderingHandler::InitRenderer() {
 		return false;
 	}
 
+	SDL_SetRenderTarget(m_Renderer, NULL);
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, 0);
@@ -15,6 +16,10 @@ bool RenderingHandler::InitRenderer() {
 	std::cout << "Stage: Initialized Renderer..." << std::endl;
 
 	return true;
+}
+
+void RenderingHandler::RenderSprite(SDL_Texture* texture, const SDL_Rect src, const SDL_Rect dest) {
+	SDL_RenderCopy(m_Renderer, texture, &src, &dest);
 }
 
 void RenderingHandler::PresentRenderer() {

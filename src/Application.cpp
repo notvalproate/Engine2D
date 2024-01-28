@@ -60,8 +60,6 @@ public:
 
 		PlayerObject->AddComponent<Player>();
 		PlayerObject->AddComponent<SpriteRenderer>()->SetSprite("assets/characters/idle/madeline.png");
-
-		std::cout << "Created Player Objects" << std::endl;
 	}
 };
 
@@ -70,7 +68,6 @@ public:
 	using Engine2D::Engine2D;
 
 	void SetupGame() override {
-		std::cout << "Hi Game started!" << std::endl;
 		SceneManager.AddScene<TestScene>("Test Scene");
 		SceneManager.LoadScene("Test Scene");
 	}
