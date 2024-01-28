@@ -481,6 +481,9 @@ class TimeHandler {
 public:
     inline float GetFixedDeltaTime() const { return m_FixedDeltaTime; }
     inline float GetDeltaTime() const { return m_DeltaTime; }
+    inline unsigned int GetFixedFramerate() const { return static_cast<unsigned int>(m_FixedFramerate); }
+    inline unsigned int GetFramerate() const { return static_cast<unsigned int>(1000 / m_DeltaTime); }
+    inline uint32_t GetFrameCount() const { return m_FrameCount; }
 
 private:
     TimeHandler();
@@ -488,10 +491,13 @@ private:
     void InitTime();
     void UpdateDeltaTime();
 
+    unsigned int m_FixedFramerate;
     float m_FixedDeltaTime;
     float m_DeltaTime;
 
     std::chrono::system_clock::time_point m_FrameStart;
+
+    uint32_t m_FrameCount;
 
     friend class Object;
     friend class Engine2D;
