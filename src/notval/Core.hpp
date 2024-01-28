@@ -68,6 +68,34 @@ public:
     void Normalize();
 	void Scale(const int factor);
 
+    Vector2D operator+(const Vector2D& other) const {
+        return Vector2D(x + other.x, y + other.y);
+    }
+    Vector2D& operator+=(const Vector2D& other) {
+        x += other.x;
+        y += other.y;
+
+        return *this;
+    }
+    Vector2D operator-(const Vector2D& other) const {
+        return Vector2D(x - other.x, y - other.y);
+    }
+    Vector2D& operator-=(const Vector2D& other) {
+        x -= other.x;
+        y -= other.y;
+
+        return *this;
+    }
+    double operator*(const Vector2D other) const {
+        return x * other.x + y * other.y;
+    }
+    Vector2D operator*(const float k) const {
+        return Vector2D(x * k, y * k);
+    }
+    Vector2D operator/(const float k) const {
+        return Vector2D(x / k, y / k);
+    }
+
     static const Vector2D up;
     static const Vector2D down;
     static const Vector2D left;

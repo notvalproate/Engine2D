@@ -46,9 +46,26 @@ public:
 		return std::make_unique<Player>(*this);
 	}
 
-	void Update() override {
-		
+	void Awake() override {
+		speed = 360;
 	}
+
+	void Update() override {
+		if (Input.GetKey(SDL_SCANCODE_W)) {
+			transform->position.y -= speed * Time.GetDeltaTime();
+		}
+		if (Input.GetKey(SDL_SCANCODE_S)) {
+			transform->position.y += speed * Time.GetDeltaTime();
+		}
+		if (Input.GetKey(SDL_SCANCODE_A)) {
+			transform->position.x -= speed * Time.GetDeltaTime();
+		}
+		if (Input.GetKey(SDL_SCANCODE_D)) {
+			transform->position.x += speed * Time.GetDeltaTime();
+		}
+	}
+
+	int speed;
 };
 
 class TestScene : public Scene {
@@ -60,6 +77,7 @@ public:
 
 		PlayerObject->AddComponent<Player>();
 		PlayerObject->AddComponent<SpriteRenderer>()->SetSprite("assets/characters/idle/madeline.png");
+		PlayerObject->transform.scale = Vector2D::one * 5;
 	}
 };
 

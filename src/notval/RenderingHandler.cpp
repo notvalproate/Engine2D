@@ -24,6 +24,7 @@ void RenderingHandler::RenderSprite(SDL_Texture* texture, const SDL_Rect src, co
 
 void RenderingHandler::PresentRenderer() {
 	SDL_RenderPresent(m_Renderer);
+	SDL_RenderClear(m_Renderer);
 
 	if (!Object::Screen.InFocus()) {
 		SDL_WaitEvent(NULL);

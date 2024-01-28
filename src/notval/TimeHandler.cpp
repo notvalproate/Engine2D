@@ -11,6 +11,6 @@ void TimeHandler::InitTime() {
 void TimeHandler::UpdateDeltaTime() {
 	m_FrameCount++;
 	auto newTime = std::chrono::system_clock::now();
-	m_DeltaTime = (std::chrono::duration_cast<std::chrono::microseconds>(newTime - m_FrameStart).count() / 1000.0f);
+	m_DeltaTime = (std::chrono::duration_cast<std::chrono::microseconds>(newTime - m_FrameStart).count() / 1000000.0f);
 	m_FrameStart = newTime;
 }
