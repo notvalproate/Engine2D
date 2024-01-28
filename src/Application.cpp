@@ -48,6 +48,7 @@ public:
 
 	void Awake() override {
 		speed = 360;
+		rotationSpeed = 180;
 	}
 
 	void Update() override {
@@ -63,9 +64,19 @@ public:
 		if (Input.GetKey(SDL_SCANCODE_D)) {
 			transform->position.x += speed * Time.GetDeltaTime();
 		}
+		if (Input.GetKey(SDL_SCANCODE_R)) {
+			transform->rotation += rotationSpeed * Time.GetDeltaTime();
+		}
+		if (Input.GetKey(SDL_SCANCODE_G)) {
+			transform->scale = Vector2D::one * -5;
+		}
+		if (Input.GetKey(SDL_SCANCODE_F)) {
+			transform->scale = Vector2D::one * 5;
+		}
 	}
 
 	int speed;
+	int rotationSpeed;
 };
 
 class TestScene : public Scene {

@@ -18,8 +18,8 @@ bool RenderingHandler::InitRenderer() {
 	return true;
 }
 
-void RenderingHandler::RenderSprite(SDL_Texture* texture, const SDL_Rect src, const SDL_Rect dest) {
-	SDL_RenderCopy(m_Renderer, texture, &src, &dest);
+void RenderingHandler::RenderSprite(SDL_Texture* texture, const SDL_Rect src, const SDL_Rect dest, const double angle) {
+	SDL_RenderCopyEx(m_Renderer, texture, &src, &dest, angle, NULL, SDL_FLIP_NONE);
 }
 
 void RenderingHandler::PresentRenderer() {

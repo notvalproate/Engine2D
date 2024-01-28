@@ -494,7 +494,7 @@ private:
 
 class RenderingHandler {
 public:
-    void RenderSprite(SDL_Texture* texture, const SDL_Rect src, const SDL_Rect dest);
+    void RenderSprite(SDL_Texture* texture, const SDL_Rect src, const SDL_Rect dest, const double angle);
 private:
     RenderingHandler();
 
