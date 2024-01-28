@@ -32,6 +32,7 @@ Engine2D::~Engine2D() {
 
 void Engine2D::Run() {
 	while (m_IsRunning) {
+		Time.UpdateDeltaTime();
 		Update();
 		Render();
 	}

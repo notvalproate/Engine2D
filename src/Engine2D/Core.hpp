@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <functional>
 #include <type_traits>
+#include <chrono>
 
 class Object;
 class Component;
@@ -478,14 +479,19 @@ private:
 
 class TimeHandler {
 public:
+    inline float GetFixedDeltaTime() const { return m_FixedDeltaTime; }
     inline float GetDeltaTime() const { return m_DeltaTime; }
 
 private:
     TimeHandler();
 
     void InitTime();
+    void UpdateDeltaTime();
 
+    float m_FixedDeltaTime;
     float m_DeltaTime;
+
+    std::chrono::system_clock::time_point m_FrameStart;
 
     friend class Object;
     friend class Engine2D;
