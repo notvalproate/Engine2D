@@ -1,4 +1,5 @@
 #include "Core.hpp"
+#include "SDL_image.h"
 
 ScreenHandler::ScreenHandler() : m_Window(nullptr) { }
 
@@ -18,7 +19,7 @@ void ScreenHandler::SetResolution(const int w, const int h) {
 	SDL_SetWindowPosition(m_Window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
 
-void ScreenHandler::InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight) {
+bool ScreenHandler::InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight) {
 	if (SDL_GetDisplayMode(0, 0, &m_Mode)) {
 		std::cout << "Error: Couldn't Get Display Mode...Framerate set to 60" << std::endl;
 	}
@@ -31,8 +32,15 @@ void ScreenHandler::InitScreen(const char* title, const char* iconpath, const in
 
 	if (!(m_Window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0))) {
 		std::cout << "Error: Couldn't Initialize Window..." << std::endl;
-		return;
+		return false;
 	}
 
 	std::cout << "Stage: Initialized Window..." << std::endl;
+
+	SDL_Surface* TempSurface = IMG_Load(iconpath);
+	SDL_SetWindowIcon(m_Window, TempSurface);
+	SDL_FreeSurface(TempSurface);
+	std::cout << "Stage: Initialized Window..." << std::endl;
+
+	return true;
 }

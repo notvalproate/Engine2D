@@ -446,7 +446,7 @@ public:
 private:
     ScreenHandler();
 
-    void InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight);
+    bool InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight);
     inline bool InFocus() const { return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS)); };
 
     SDL_Window* m_Window;
@@ -455,13 +455,17 @@ private:
 
     friend class Object;
     friend class Engine2D;
+    friend class RenderingHandler;
 };
 
 class RenderingHandler {
-public:
-
 private:
-    RenderingHandler() = default;
+    RenderingHandler();
+
+    bool InitRenderer();
+    void PresentRenderer();
+
+    SDL_Renderer* m_Renderer;
 
     friend class Object;
     friend class Engine2D;
@@ -489,7 +493,5 @@ private:
     void Render() const;
 
     bool m_IsRunning;
-
-    SDL_Renderer* m_Renderer;
     float m_DeltaTime{};
 };

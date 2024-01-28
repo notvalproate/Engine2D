@@ -3,6 +3,7 @@
 InputHandler Object::Input;
 SceneHandler Object::SceneManager;
 ScreenHandler Object::Screen;
+RenderingHandler Object::RenderingPipeline;
 
 GameObject* Object::Instantiate(GameObject* gameObject) {
     std::string newName = gameObject->name + " #" + std::to_string(gameObject->scene->LatestSceneInstanceID);
