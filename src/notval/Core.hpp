@@ -21,6 +21,7 @@ class InputHandler;
 class SceneHandler;
 class ScreenHandler;
 class RenderingHandler;
+class TextureHandler;
 class TimeHandler;
 class Engine2D;
 
@@ -51,6 +52,7 @@ public:
     static SceneHandler SceneManager;
     static ScreenHandler Screen;
     static RenderingHandler RenderingPipeline;
+    static TextureHandler TextureManager;
     static TimeHandler Time;
 };
 
@@ -87,7 +89,7 @@ public:
     Transform* transform;
     std::string* tag;
 
-private:
+protected:
     Component(GameObject* gameObject);
 
     virtual void Awake() {};
@@ -380,7 +382,6 @@ private:
 
 #include "SDL.h"
 
-
 class InputHandler {
 public:
     bool GetKey(const SDL_Scancode scanCode) const;
@@ -474,8 +475,19 @@ private:
 
     friend class Object;
     friend class Engine2D;
+    friend class TextureHandler;
 };
 
+class TextureHandler : public Object {
+public:
+    SDL_Texture* LoadTexture(const char* texpath) const;
+    SDL_Point GetTextureSize(SDL_Texture* texture) const;
+
+private:
+    TextureHandler() = default;
+
+    friend class Object;
+};
 
 class TimeHandler {
 public:

@@ -36,7 +36,7 @@ public:
 	}
 };*/
 
-#include "Engine2D/Core.hpp"
+#include "notval/Engine2D.hpp"
 
 class Player : public Behaviour {
 public:
@@ -46,57 +46,9 @@ public:
 		return std::make_unique<Player>(*this);
 	}
 
-	void Start() override {
-		myInputString = "";
-	}
-
 	void Update() override {
-		if (Input.GetKeyDown(SDL_SCANCODE_W)) {
-			std::cout << gameObject->name << " moved up" << std::endl;
-		}
-		if (Input.GetKeyDown(SDL_SCANCODE_S)) {
-			std::cout << gameObject->name << " moved down" << std::endl;
-		}
-		if (Input.GetKeyDown(SDL_SCANCODE_A)) {
-			std::cout << gameObject->name << " moved left" << std::endl;
-		}
-		if (Input.GetKeyDown(SDL_SCANCODE_D)) {
-			std::cout << gameObject->name << " moved right" << std::endl;
-		}
-		if (Input.GetMouseButton(SDL_BUTTON_RIGHT)) {
-			std::cout << gameObject->name << " holding right click!" << std::endl;
-		}
-		if (Input.GetMouseButtonDown(SDL_BUTTON_LEFT)) {
-			std::cout << gameObject->name << " left clicked!" << std::endl;
-		}
-
-		if (Input.GetKeyDown(SDL_SCANCODE_F11)) {
-			Screen.SetResolution(1600, 900);
-		}
-		if (Input.GetKeyDown(SDL_SCANCODE_F10)) {
-			Screen.SetResolution(1280, 720);
-		}
 		
-		for (const auto& c : Input.inputString) {
-			if (c == '\b' && myInputString.length()) {
-				myInputString.resize(myInputString.length() - 1);
-			}
-			else if (c == '\r') {
-				myInputString += '\n';
-			}
-			else {
-				myInputString += c;
-			}
-
-			std::cout << myInputString << std::endl;
-		}
-
-		if (Input.mouseScrollDeltaY) {
-			std::cout << Input.mouseScrollDeltaY << std::endl;
-		}
 	}
-
-	std::string myInputString;
 };
 
 class TestScene : public Scene {
@@ -105,7 +57,9 @@ public:
 
 	void SetupScene() override {
 		auto PlayerObject = CreateGameObject("Player");
-		auto PlayerComponent = PlayerObject->AddComponent<Player>();
+
+		PlayerObject->AddComponent<Player>();
+		PlayerObject->AddComponent<SpriteRenderer>()->SetSprite("assets/characters/idle/madeline.png");
 
 		std::cout << "Created Player Objects" << std::endl;
 	}

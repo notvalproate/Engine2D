@@ -145,19 +145,21 @@
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\Engine2D\Behaviour.cpp" />
-    <ClCompile Include="src\Engine2D\Component.cpp" />
-    <ClCompile Include="src\Engine2D\GameObject.cpp" />
-    <ClCompile Include="src\Engine2D\InputHandler.cpp" />
-    <ClCompile Include="src\Engine2D\Object.cpp" />
-    <ClCompile Include="src\Engine2D\RenderingHandler.cpp" />
-    <ClCompile Include="src\Engine2D\Scene.cpp" />
-    <ClCompile Include="src\Engine2D\SceneHandler.cpp" />
-    <ClCompile Include="src\Engine2D\ScreenHandler.cpp" />
-    <ClCompile Include="src\Engine2D\TestEngine2D.cpp" />
-    <ClCompile Include="src\Engine2D\TimeHandler.cpp" />
-    <ClCompile Include="src\Engine2D\Transform.cpp" />
-    <ClCompile Include="src\Engine2D\TestVector2D.cpp" />
+    <ClCompile Include="src\notval\Behaviour.cpp" />
+    <ClCompile Include="src\notval\Component.cpp" />
+    <ClCompile Include="src\notval\Components\SpriteRenderer.cpp" />
+    <ClCompile Include="src\notval\GameObject.cpp" />
+    <ClCompile Include="src\notval\InputHandler.cpp" />
+    <ClCompile Include="src\notval\Object.cpp" />
+    <ClCompile Include="src\notval\RenderingHandler.cpp" />
+    <ClCompile Include="src\notval\Scene.cpp" />
+    <ClCompile Include="src\notval\SceneHandler.cpp" />
+    <ClCompile Include="src\notval\ScreenHandler.cpp" />
+    <ClCompile Include="src\notval\TestEngine2D.cpp" />
+    <ClCompile Include="src\notval\TextureHandler.cpp" />
+    <ClCompile Include="src\notval\TimeHandler.cpp" />
+    <ClCompile Include="src\notval\Transform.cpp" />
+    <ClCompile Include="src\notval\TestVector2D.cpp" />
     <ClCompile Include="src\Engine2D.cpp" />
     <ClCompile Include="src\math\Rectangle.cpp" />
     <ClCompile Include="src\math\Vector2d.cpp" />
@@ -175,8 +177,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.hpp" />
-    <ClInclude Include="src\Engine2D\Core.hpp" />
+    <ClInclude Include="src\notval\Components\Components.hpp" />
+    <ClInclude Include="src\notval\Core.hpp" />
     <ClInclude Include="src\Engine2D.hpp" />
+    <ClInclude Include="src\notval\Engine2D.hpp" />
     <ClInclude Include="src\math\Vector2d.h" />
     <ClInclude Include="src\math\Rectangle.hpp" />
     <ClInclude Include="src\physics\Collider.hpp" />
