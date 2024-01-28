@@ -1,7 +1,7 @@
 #include "Core.hpp"
 #include "SDL_image.h"
 
-Engine2D::Engine2D() : m_IsRunning(true), m_DeltaTime(16) { }
+Engine2D::Engine2D() : m_IsRunning(true) { }
 
 void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth, int windowHeight) {
 	if (SDL_Init(SDL_INIT_EVERYTHING)) {
@@ -15,11 +15,11 @@ void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth
 		m_IsRunning = false;
 	}
 
-	m_DeltaTime = (float)1.0 / (float)Screen.m_Mode.refresh_rate;
-
 	if (!RenderingPipeline.InitRenderer()) {
 		m_IsRunning = false;
 	}
+
+	Time.InitTime();
 
 	SetupGame();
 }
@@ -49,6 +49,5 @@ void Engine2D::Update() {
 
 void Engine2D::Render() const {
 	SceneManager.m_CurrentScene->Render();
-
 	RenderingPipeline.PresentRenderer();
 }

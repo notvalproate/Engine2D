@@ -20,6 +20,7 @@ class InputHandler;
 class SceneHandler;
 class ScreenHandler;
 class RenderingHandler;
+class TimeHandler;
 class Engine2D;
 
 class Vector2D;
@@ -49,6 +50,7 @@ public:
     static SceneHandler SceneManager;
     static ScreenHandler Screen;
     static RenderingHandler RenderingPipeline;
+    static TimeHandler Time;
 };
 
 
@@ -456,7 +458,9 @@ private:
     friend class Object;
     friend class Engine2D;
     friend class RenderingHandler;
+    friend class TimeHandler;
 };
+
 
 class RenderingHandler {
 private:
@@ -466,6 +470,22 @@ private:
     void PresentRenderer();
 
     SDL_Renderer* m_Renderer;
+
+    friend class Object;
+    friend class Engine2D;
+};
+
+
+class TimeHandler {
+public:
+    inline float GetDeltaTime() const { return m_DeltaTime; }
+
+private:
+    TimeHandler();
+
+    void InitTime();
+
+    float m_DeltaTime;
 
     friend class Object;
     friend class Engine2D;
@@ -493,5 +513,4 @@ private:
     void Render() const;
 
     bool m_IsRunning;
-    float m_DeltaTime{};
 };
