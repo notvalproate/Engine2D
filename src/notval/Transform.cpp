@@ -23,7 +23,7 @@ void Transform::Rotate(const double angle) {
 }
 
 void Transform::RotateAround(const Vector2D& point, const double angle) {
-    const double angleRadians = angle * 180 / M_PI;
+    const double angleRadians = angle * M_PI / 180.0;
 
     const double relX = position.x - point.x, relY = position.y - point.y;
     const double radius = std::sqrt(relX * relX + relY * relY);

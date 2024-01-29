@@ -73,7 +73,7 @@ public:
 		transform->Translate(velocity * speed * Time.GetDeltaTime());
 
 		if (Input.GetKey(SDL_SCANCODE_R)) {
-			transform->rotation += rotationSpeed * Time.GetDeltaTime();
+			transform->RotateAround(Vector2D(640, 360), rotationSpeed * Time.GetDeltaTime());
 		}
 
 		if (Input.GetKey(SDL_SCANCODE_G)) {
