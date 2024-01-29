@@ -75,6 +75,9 @@ public:
 		if (Input.GetKey(SDL_SCANCODE_R)) {
 			transform->RotateAround(Vector2D(640, 360), rotationSpeed * Time.GetDeltaTime());
 		}
+		if (Input.GetKey(SDL_SCANCODE_T)) {
+			transform->Rotate(rotationSpeed * Time.GetDeltaTime());
+		}
 
 		if (Input.GetKey(SDL_SCANCODE_G)) {
 			transform->scale = Vector2D::one * -5;
@@ -98,6 +101,13 @@ public:
 		PlayerObject->AddComponent<Player>();
 		PlayerObject->AddComponent<SpriteRenderer>()->SetSprite("assets/characters/idle/madeline.png");
 		PlayerObject->transform.scale = Vector2D::one * 5;
+
+		auto PlayerObject2 = CreateGameObject("Player 2");
+
+		PlayerObject2->AddComponent<SpriteRenderer>()->SetSprite("assets/characters/idle/madeline.png");
+		PlayerObject2->transform.scale = Vector2D::one * 3;
+		PlayerObject2->transform.SetParent(PlayerObject);
+		PlayerObject2->transform.Translate(Vector2D(140, 0));
 	}
 };
 
