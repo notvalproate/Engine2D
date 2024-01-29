@@ -52,21 +52,30 @@ public:
 	}
 
 	void Update() override {
+		float moveX = 0, moveY = 0;
+
 		if (Input.GetKey(SDL_SCANCODE_W)) {
-			transform->position.y -= speed * Time.GetDeltaTime();
+			moveY = -1;
 		}
 		if (Input.GetKey(SDL_SCANCODE_S)) {
-			transform->position.y += speed * Time.GetDeltaTime();
+			moveY = 1;
 		}
 		if (Input.GetKey(SDL_SCANCODE_A)) {
-			transform->position.x -= speed * Time.GetDeltaTime();
+			moveX = -1;
 		}
 		if (Input.GetKey(SDL_SCANCODE_D)) {
-			transform->position.x += speed * Time.GetDeltaTime();
+			moveX = 1;
 		}
+
+		Vector2D velocity(moveX, moveY);
+		velocity.Normalize();
+
+		transform->Translate(velocity * speed * Time.GetDeltaTime());
+
 		if (Input.GetKey(SDL_SCANCODE_R)) {
 			transform->rotation += rotationSpeed * Time.GetDeltaTime();
 		}
+
 		if (Input.GetKey(SDL_SCANCODE_G)) {
 			transform->scale = Vector2D::one * -5;
 		}
