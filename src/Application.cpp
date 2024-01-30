@@ -1,6 +1,4 @@
 #include "Engine2D.hpp"
-#include <iostream>
-#include <numeric>
 
 /*
 class PlatformerGame : public notval::Engine2D {
@@ -32,9 +30,11 @@ public:
 	}
 
 	void OnUserRender() override {
-		m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime, m_Camera);
+		//m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime, m_Camera);
 	}
-};*/
+};
+*/
+
 
 #include "notval/Engine2D.hpp"
 
@@ -84,6 +84,13 @@ public:
 		}
 		if (Input.GetKey(SDL_SCANCODE_F)) {
 			transform->scale = Vector2D::one * 5;
+		}
+
+		if (Input.GetKeyDown(SDL_SCANCODE_K)) {
+			SceneManager.LoadScene("Test Scene 2");
+		}
+		if (Input.GetKeyDown(SDL_SCANCODE_L)) {
+			SceneManager.LoadScene("Test Scene");
 		}
 	}
 
@@ -200,6 +207,8 @@ public:
 
 		auto fpsCounter = CreateGameObject("FPS Counter");
 		fpsCounter->AddComponent<FPSCounter>();
+
+		std::cout << 1e-5 << std::endl;
 	}
 };
 
@@ -209,10 +218,11 @@ public:
 
 	void SetupGame() override {
 		RenderingPipeline.AddSortingLayer("Background");
-		RenderingPipeline.AddSortingLayer("Player Child");
 		RenderingPipeline.AddSortingLayer("Player");
+		RenderingPipeline.AddSortingLayer("Player Child");
 
 		SceneManager.AddScene<TestScene>("Test Scene");
+		SceneManager.AddScene<TestScene>("Test Scene 2");
 		SceneManager.LoadScene("Test Scene");
 	}
 };

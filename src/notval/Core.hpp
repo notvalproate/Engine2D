@@ -12,10 +12,13 @@
 #include <chrono>
 
 class Object;
+class Vector2D;
 class Component;
 class Behaviour;
+class Transform;
 class GameObject;
 class Scene;
+class Engine2D;
 
 class InputHandler;
 class SceneHandler;
@@ -23,12 +26,6 @@ class ScreenHandler;
 class RenderingHandler;
 class TextureHandler;
 class TimeHandler;
-class Engine2D;
-
-class Vector2D;
-class Transform;
-
-class SpriteRenderer;
 
 class Object {
 public:
@@ -96,6 +93,12 @@ public:
     }
     Vector2D operator/(const float k) const {
         return Vector2D(x / k, y / k);
+    }
+    bool operator==(const Vector2D other) const {
+        if ((std::abs(x - other.x) < 1e-5) && (std::abs(y - other.y) < 1e-5)) {
+            return true;
+        }
+        return false;
     }
 
     static const Vector2D up;
