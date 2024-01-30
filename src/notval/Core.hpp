@@ -28,6 +28,8 @@ class Engine2D;
 class Vector2D;
 class Transform;
 
+class SpriteRenderer;
+
 class Object {
 public:
     static GameObject* Instantiate(GameObject* gameObject);
@@ -346,6 +348,7 @@ public:
 
     Scene* scene;
     uint32_t m_SceneInstanceID;
+
 private:
     GameObject(Scene* scene, const uint32_t id);
     GameObject(const std::string_view goName, Scene* scene, const uint32_t id);
@@ -376,6 +379,7 @@ private:
 
     friend class Object;
     friend class Scene;
+    friend class RenderingHandler;
 };
 
 
@@ -474,6 +478,8 @@ class ScreenHandler {
 public:
     void ToggleFullscreen();
     void SetResolution(const int w, const int h);
+    inline unsigned int GetScreenWidth() const { return m_Width; }
+    inline unsigned int GetScreenHeight() const { return m_Height; }
 
 private:
     ScreenHandler();
@@ -495,17 +501,35 @@ private:
 class RenderingHandler {
 public:
     void RenderSprite(SDL_Texture* texture, const SDL_Rect src, const SDL_Rect dest, const double angle);
+    void AddSortingLayer(const std::string_view name);
+
 private:
     RenderingHandler();
 
     bool InitRenderer();
+    void AddGameObjectToRenderer(GameObject* gameObject);
+    bool SetSortingLayer(GameObject* gameObject, const std::string_view layerName, const std::string_view previousLayer);
+    void ClearSortingLayers();
+    void RenderSortingLayers();
     void PresentRenderer();
 
     SDL_Renderer* m_Renderer;
 
+    struct SortingLayer {
+        SortingLayer(const std::string_view layerName) : name(layerName), m_GameObjectsInLayer({}) {}
+
+        std::string name;
+        std::vector<GameObject*> m_GameObjectsInLayer;
+    };
+
+    std::vector<SortingLayer> m_SortingLayers;
+
     friend class Object;
-    friend class Engine2D;
+    friend class GameObject;
+    friend class SpriteRenderer;
+    friend class SceneHandler;
     friend class TextureHandler;
+    friend class Engine2D;
 };
 
 class TextureHandler : public Object {
@@ -524,7 +548,7 @@ public:
     inline float GetFixedDeltaTime() const { return m_FixedDeltaTime; }
     inline float GetDeltaTime() const { return m_DeltaTime; }
     inline unsigned int GetFixedFramerate() const { return static_cast<unsigned int>(m_FixedFramerate); }
-    inline unsigned int GetFramerate() const { return static_cast<unsigned int>(1000 / m_DeltaTime); }
+    inline unsigned int GetFramerate() const { return static_cast<unsigned int>(1 / m_DeltaTime); }
     inline uint32_t GetFrameCount() const { return m_FrameCount; }
 
 private:

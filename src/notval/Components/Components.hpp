@@ -6,6 +6,7 @@ class SpriteRenderer;
 class SpriteRenderer final : public Component {
 public:
 	void SetSprite(const char* spritePath);
+	void SetSortingLayer(const std::string_view layerName);
 
 private:
 	SpriteRenderer(GameObject* gameObject);
@@ -16,6 +17,7 @@ private:
 
 	SDL_Texture* m_Sprite;
 	SDL_Rect m_SrcRect, m_DestRect;
+	std::string m_SortingLayer;
 
 	friend class GameObject;
 };

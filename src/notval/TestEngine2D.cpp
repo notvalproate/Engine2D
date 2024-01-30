@@ -19,6 +19,8 @@ void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth
 		m_IsRunning = false;
 	}
 
+	Time.InitTime();
+
 	SetupGame();
 }
 
@@ -29,8 +31,6 @@ Engine2D::~Engine2D() {
 }
 
 void Engine2D::Run() {
-	Time.InitTime();
-
 	while (m_IsRunning) {
 		Time.UpdateDeltaTime();
 		Update();
@@ -49,6 +49,6 @@ void Engine2D::Update() {
 }
 
 void Engine2D::Render() const {
-	SceneManager.m_CurrentScene->Render();
+	RenderingPipeline.RenderSortingLayers();
 	RenderingPipeline.PresentRenderer();
 }

@@ -1,7 +1,10 @@
 #include "Components.hpp"
 #include "SDL_image.h"
 
-SpriteRenderer::SpriteRenderer(GameObject* gameObject) : Component(gameObject), m_Sprite(nullptr), m_SrcRect({0, 0, 0, 0}), m_DestRect({0, 0, 0, 0}) { }
+SpriteRenderer::SpriteRenderer(GameObject* gameObject) 
+	: Component(gameObject), m_Sprite(nullptr), m_SrcRect({0, 0, 0, 0}), m_DestRect({0, 0, 0, 0}), m_SortingLayer("Default") {
+	RenderingPipeline.AddGameObjectToRenderer(gameObject);
+}
 
 std::unique_ptr<Component> SpriteRenderer::Clone() const {
 	return std::make_unique<SpriteRenderer>(*this);
@@ -18,6 +21,15 @@ void SpriteRenderer::SetSprite(const char* spritePath) {
 	m_DestRect.h = size.y * transform->scale.y;
 	m_DestRect.x -= m_DestRect.w / 2;
 	m_DestRect.y -= m_DestRect.h / 2;
+}
+
+void SpriteRenderer::SetSortingLayer(const std::string_view layerName) {
+	if (RenderingPipeline.SetSortingLayer(gameObject, layerName, m_SortingLayer)) {
+		m_SortingLayer = layerName;
+		return;
+	}
+
+	m_SortingLayer = "Default";
 }
 
 void SpriteRenderer::Update() {
