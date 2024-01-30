@@ -25,5 +25,9 @@ void SceneHandler::LoadScene(const std::string_view sceneName) {
 	}
 
 	m_CurrentScene = (*it).get();
-	m_CurrentScene->SetupScene();
+
+	if (!m_CurrentScene->m_Loaded) {
+		m_CurrentScene->SetupScene();
+		m_CurrentScene->m_Loaded = true;
+	}
 }

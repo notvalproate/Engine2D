@@ -1,5 +1,7 @@
 #include "Engine2D.hpp"
 
+// FIGURE OUT HOW TO RELOAD A SCENE AND CONTINUE WHERE LEFT OFF WITH SORTING LAYERS
+
 /*
 class PlatformerGame : public notval::Engine2D {
 public:
@@ -207,8 +209,6 @@ public:
 
 		auto fpsCounter = CreateGameObject("FPS Counter");
 		fpsCounter->AddComponent<FPSCounter>();
-
-		std::cout << 1e-5 << std::endl;
 	}
 };
 

@@ -1,6 +1,6 @@
 #include "Core.hpp"
 
-Scene::Scene(const std::string_view name) : name(name) { }
+Scene::Scene(const std::string_view name) : name(name), m_Loaded(false) { }
 
 void Scene::Start() {
     for(auto& gameObject : m_SceneGameObjects) {

@@ -409,6 +409,7 @@ private:
     std::vector<GameObject*> m_StagedForDestruction{};
 
     uint32_t LatestSceneInstanceID{};
+    bool m_Loaded;
 
     friend class Object;
     friend class Engine2D;
