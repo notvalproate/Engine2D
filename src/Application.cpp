@@ -177,7 +177,7 @@ public:
 		backgroundRenderer->SetSprite("assets/backgrounds/BG.png");
 		backgroundRenderer->SetSortingLayer("Background");
 		Background->transform.scale = Vector2D::one * 4;
-		Background->transform.Translate(Vector2D(640, 360));
+		Background->transform.Translate(Vector2D(Screen.GetScreenWidth() / 2, Screen.GetScreenHeight() / 2));
 
 
 		auto PlayerObject = CreateGameObject("Player");
