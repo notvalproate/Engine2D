@@ -21,12 +21,6 @@ void Scene::Update() {
     }
 }
 
-void Scene::Render() const {
-    for(auto& gameObject : m_SceneGameObjects) {
-        gameObject->Render();
-    }
-}
-
 GameObject* Scene::CreateGameObject() {
     m_SceneGameObjects.push_back(std::unique_ptr<GameObject>(new GameObject(this, LatestSceneInstanceID++)));
     return m_SceneGameObjects.back().get();

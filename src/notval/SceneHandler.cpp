@@ -29,5 +29,9 @@ void SceneHandler::LoadScene(const std::string_view sceneName) {
 	if (!m_CurrentScene->m_Loaded) {
 		m_CurrentScene->SetupScene();
 		m_CurrentScene->m_Loaded = true;
+		m_CurrentScene->m_SortingLayers = Object::RenderingPipeline.m_SortingLayers;
+	}
+	else {
+		Object::RenderingPipeline.m_SortingLayers = m_CurrentScene->m_SortingLayers;
 	}
 }

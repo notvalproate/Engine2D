@@ -27,6 +27,8 @@ class RenderingHandler;
 class TextureHandler;
 class TimeHandler;
 
+class SpriteRenderer;
+
 class Object {
 public:
     static GameObject* Instantiate(GameObject* gameObject);
@@ -386,6 +388,14 @@ private:
 };
 
 
+struct SortingLayer {
+    SortingLayer(const std::string_view layerName) : name(layerName), m_GameObjectsInLayer({}) {}
+
+    std::string name;
+    std::vector<GameObject*> m_GameObjectsInLayer;
+};
+
+
 class Scene : public Object {
 public:
     GameObject* CreateGameObject();
@@ -403,10 +413,10 @@ private:
 
     void Start();
     void Update();
-    void Render() const;
 
     std::vector<std::unique_ptr<GameObject>> m_SceneGameObjects{};
     std::vector<GameObject*> m_StagedForDestruction{};
+    std::vector<SortingLayer> m_SortingLayers;
 
     uint32_t LatestSceneInstanceID{};
     bool m_Loaded;
@@ -518,13 +528,6 @@ private:
     void PresentRenderer();
 
     SDL_Renderer* m_Renderer;
-
-    struct SortingLayer {
-        SortingLayer(const std::string_view layerName) : name(layerName), m_GameObjectsInLayer({}) {}
-
-        std::string name;
-        std::vector<GameObject*> m_GameObjectsInLayer;
-    };
 
     std::vector<SortingLayer> m_SortingLayers;
 
