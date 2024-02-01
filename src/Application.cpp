@@ -72,7 +72,7 @@ public:
 		Vector2D velocity(moveX, moveY);
 		velocity.Normalize();
 
-		transform->Translate(velocity * speed * Time.GetDeltaTime());
+		transform->Translate(velocity * speed * Time.GetFixedDeltaTime());
 
 		if (Input.GetKey(SDL_SCANCODE_R)) {
 			transform->RotateAround(Vector2D(640, 360), rotationSpeed * Time.GetDeltaTime());
@@ -207,8 +207,8 @@ public:
 		PlayerObject2->transform.Translate(Vector2D(40, 0));
 
 
-		auto fpsCounter = CreateGameObject("FPS Counter");
-		fpsCounter->AddComponent<FPSCounter>();
+		//auto fpsCounter = CreateGameObject("FPS Counter");
+		//fpsCounter->AddComponent<FPSCounter>();
 	}
 };
 

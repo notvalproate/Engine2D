@@ -21,3 +21,7 @@ private:
 
 	friend class GameObject;
 };
+
+class BoxCollider final : public Behaviour {
+	
+};
