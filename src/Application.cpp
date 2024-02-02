@@ -100,82 +100,6 @@ public:
 	int rotationSpeed;
 };
 
-class PlayerChild : public Behaviour {
-public:
-	using Behaviour::Behaviour;
-
-	std::unique_ptr<Component> Clone() const override {
-		return std::make_unique<PlayerChild>(*this);
-	}
-
-	void Awake() override {
-		speed = 360;
-		rotationSpeed = 180;
-	}
-
-	void Update() override {
-		float moveX = 0, moveY = 0;
-
-		if (Input.GetKey(SDL_SCANCODE_UP)) {
-			moveY = -1;
-		}
-		if (Input.GetKey(SDL_SCANCODE_DOWN)) {
-			moveY = 1;
-		}
-		if (Input.GetKey(SDL_SCANCODE_LEFT)) {
-			moveX = -1;
-		}
-		if (Input.GetKey(SDL_SCANCODE_RIGHT)) {
-			moveX = 1;
-		}
-
-		Vector2D velocity(moveX, moveY);
-		velocity.Normalize();
-
-		transform->Translate(velocity * speed * Time.GetDeltaTime());
-
-		if (Input.GetKey(SDL_SCANCODE_Y)) {
-			transform->RotateAround(Vector2D(640, 360), rotationSpeed * Time.GetDeltaTime());
-		}
-		if (Input.GetKey(SDL_SCANCODE_U)) {
-			transform->Rotate(rotationSpeed * Time.GetDeltaTime());
-		}
-	}
-
-	int speed;
-	int rotationSpeed;
-};
-
-class FPSCounter : public Behaviour {
-public:
-	using Behaviour::Behaviour;
-
-	std::unique_ptr<Component> Clone() const override {
-		return std::make_unique<FPSCounter>(*this);
-	}
-
-	void Awake() override {
-		fps = Time.GetFixedFramerate();
-		count = 0;
-		sum = 0;
-	}
-
-	void Update() override {
-		count++;
-		sum += Time.GetFramerate();
-
-		if (count == fps) {
-			std::cout << "FPS: " << sum / count << std::endl;
-			count = 0;
-			sum = 0;
-		}
-	}
-
-	int fps;
-	int count;
-	int sum;
-};
-
 class TestScene : public Scene {
 public:
 	using Scene::Scene;
@@ -190,25 +114,11 @@ public:
 
 
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->AddComponent<Player>();
+		PlayerObject->AddComponent<Player, BoxCollider>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
 		PlayerObject->transform.scale = Vector2D::one * 5;
-
-
-		auto PlayerObject2 = CreateGameObject("Player 2");
-		PlayerObject2->AddComponent<PlayerChild>();
-		auto player2Renderer = PlayerObject2->AddComponent<SpriteRenderer>();
-		player2Renderer->SetSprite("assets/characters/idle/madeline.png");
-		player2Renderer->SetSortingLayer("Player Child");
-		PlayerObject2->transform.scale = Vector2D::one * 2;
-		PlayerObject2->transform.SetParent(PlayerObject);
-		PlayerObject2->transform.Translate(Vector2D(80, 0));
-
-
-		//auto fpsCounter = CreateGameObject("FPS Counter");
-		//fpsCounter->AddComponent<FPSCounter>();
 	}
 };
 
@@ -219,7 +129,6 @@ public:
 	void SetupGame() override {
 		RenderingPipeline.AddSortingLayer("Background");
 		RenderingPipeline.AddSortingLayer("Player");
-		RenderingPipeline.AddSortingLayer("Player Child");
 
 		SceneManager.AddScene<TestScene>("Test Scene");
 		SceneManager.AddScene<TestScene>("Test Scene 2");

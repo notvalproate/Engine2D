@@ -45,6 +45,7 @@ void Engine2D::Update() {
 		m_IsRunning = false;
 	}
 
+	CollisionManager.m_World.get()->Step(Time.GetDeltaTime(), 6, 2);
 	SceneManager.m_CurrentScene->Update();
 }
 

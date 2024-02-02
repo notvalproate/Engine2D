@@ -12,8 +12,8 @@ private:
 	SpriteRenderer(GameObject* gameObject);
 	std::unique_ptr<Component> Clone() const;
 
-	void Update();
-	void Render() const;
+	void Update() override;
+	void Render() const override;
 
 	SDL_Texture* m_Sprite;
 	SDL_Rect m_SrcRect, m_DestRect;
@@ -27,5 +27,10 @@ private:
 	BoxCollider(GameObject* gameObject);
 	std::unique_ptr<Component> Clone() const;
 
-	b2BodyDef m_Body;
+	void Update() override;
+
+	b2Body* m_Body;
+	b2Fixture* m_Fixture;
+
+	friend class GameObject;
 };

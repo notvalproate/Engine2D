@@ -154,9 +154,10 @@ public:
     bool isActiveAndEnabled;
     std::string* name;
 
-private:
+protected:
     Behaviour(GameObject* gameObject);
 
+private:
     void Render() const override final { };
 
     void AttachGameObject(GameObject* newGameObject) override final;
@@ -589,6 +590,10 @@ private:
     CollisionHandler();
 
     std::unique_ptr<b2World> m_World;
+
+    friend class Object;
+    friend class BoxCollider;
+    friend class Engine2D;
 };
 
 
