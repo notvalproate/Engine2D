@@ -99,6 +99,13 @@ public:
 			SceneManager.LoadScene("Test Scene");
 		}
 
+		if (Input.GetKeyDown(SDL_SCANCODE_P)) {
+			gameObject->scene->SwitchToCamera("Cam2");
+		}
+		if (Input.GetKeyDown(SDL_SCANCODE_O)) {
+			gameObject->scene->SwitchToCamera("Main Camera");
+		}
+
 		//Make camera follow player
 
 		mainCamera->transform->position = transform->position;
@@ -107,6 +114,21 @@ public:
 	int speed;
 	int rotationSpeed;
 	Camera* mainCamera;
+};
+
+class FullscreenToggler : public Behaviour {
+public:
+	using Behaviour::Behaviour;
+
+	std::unique_ptr<Component> Clone() const override {
+		return std::make_unique<FullscreenToggler>(*this);
+	}
+
+	void Update() override {
+		if (Input.GetKeyDown(SDL_SCANCODE_F11)) {
+			Screen.ToggleFullscreen();
+		}
+	}
 };
 
 class TestScene : public Scene {
@@ -127,6 +149,11 @@ public:
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
 		PlayerObject->transform.scale = Vector2D::one * 5;
+
+		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
+
+		auto camera2 = CreateCamera("Cam2");
+		camera2->transform->Translate(Vector2D(2.0, 2.0));
 	}
 };
 

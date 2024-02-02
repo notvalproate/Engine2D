@@ -438,9 +438,11 @@ class Scene : public Object {
 public:
     GameObject* CreateGameObject();
     GameObject* CreateGameObject(const std::string_view goName);
+    Camera* CreateCamera(const std::string_view camName);
 
     std::vector<GameObject*> FindObjectsByTag(const std::string_view searchTag) const;
     GameObject* FindObjectByName(const std::string_view searchName) const;
+    void SwitchToCamera(const std::string_view cameraName);
 
     std::string name{};
 

@@ -1,8 +1,7 @@
 #include "Core.hpp"
 
 Scene::Scene(const std::string_view name) : name(name), m_Loaded(false) {
-    m_CurrentCamera = CreateGameObject("Main Camera")->AddComponent<Camera>();
-    m_SceneCameras.push_back(m_CurrentCamera);
+    m_CurrentCamera = CreateCamera("Main Camera");
 }
 
 void Scene::Start() {
@@ -34,6 +33,14 @@ GameObject* Scene::CreateGameObject(const std::string_view goName) {
     return m_SceneGameObjects.back().get();
 }
 
+Camera* Scene::CreateCamera(const std::string_view camName) {
+    auto cameraObj = CreateGameObject(camName);
+    auto cameraComp = cameraObj->AddComponent<Camera>();
+    m_SceneCameras.push_back(cameraComp);
+
+    return cameraComp;
+}
+
 GameObject* Scene::FindObjectByName(const std::string_view searchName) const {
     for(auto& object : m_SceneGameObjects) {
         if(object.get()->name == searchName) {
@@ -54,4 +61,13 @@ std::vector<GameObject*> Scene::FindObjectsByTag(const std::string_view searchTa
     }
 
     return objects;
+}
+
+void Scene::SwitchToCamera(const std::string_view cameraName) {
+    for (const auto& camera : m_SceneCameras) {
+        if (camera->gameObject->name == cameraName) {
+            m_CurrentCamera = camera;
+            return;
+        }
+    }
 }
