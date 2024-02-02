@@ -1,6 +1,9 @@
 #include "Core.hpp"
 
-Scene::Scene(const std::string_view name) : name(name), m_Loaded(false) { }
+Scene::Scene(const std::string_view name) : name(name), m_Loaded(false) {
+    m_CurrentCamera = CreateGameObject("Main Camera")->AddComponent<Camera>();
+    m_SceneCameras.push_back(m_CurrentCamera);
+}
 
 void Scene::Start() {
     for(auto& gameObject : m_SceneGameObjects) {

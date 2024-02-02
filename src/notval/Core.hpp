@@ -30,6 +30,7 @@ class TextureHandler;
 class TimeHandler;
 class CollisionHandler;
 
+class Camera;
 class SpriteRenderer;
 class BoxCollider;
 
@@ -100,8 +101,18 @@ public:
     Vector2D operator*(const float k) const {
         return Vector2D(x * k, y * k);
     }
+    Vector2D& operator*=(const float k) {
+        x *= k;
+        y *= k;
+        return *this;
+    }
     Vector2D operator/(const float k) const {
         return Vector2D(x / k, y / k);
+    }
+    Vector2D& operator/=(const float k) {
+        x /= k;
+        y /= k;
+        return *this;
     }
     bool operator==(const Vector2D other) const {
         if ((std::abs(x - other.x) < 1e-5) && (std::abs(y - other.y) < 1e-5)) {
@@ -167,6 +178,25 @@ private:
     friend class GameObject;
 };
 
+class Camera final : public Component {
+public:
+    Vector2D ScreenToViewportPoint(const Vector2D pos) const { }
+    Vector2D ScreenToWorldPoint(const Vector2D pos) const { }
+
+    Vector2D ViewportToScreenPoint(const Vector2D pos) const { }
+    Vector2D ViewportToWorldPoint(const Vector2D pos) const { }
+
+    Vector2D WorldToScreenPoint(const Vector2D pos) const;
+    Vector2D WorldToViewportPoint(const Vector2D pos) const;
+
+private:
+    Camera(GameObject* gameObject);
+    std::unique_ptr<Component> Clone() const;
+
+    double m_AspectRatio;
+
+    friend class GameObject;
+};
 
 class Transform final {
 public:
@@ -425,6 +455,9 @@ private:
     std::vector<std::unique_ptr<GameObject>> m_SceneGameObjects{};
     std::vector<GameObject*> m_StagedForDestruction{};
     std::vector<SortingLayer> m_SortingLayers;
+
+    Camera* m_CurrentCamera;
+    std::vector<Camera*> m_SceneCameras{};
 
     uint32_t LatestSceneInstanceID{};
     bool m_Loaded;

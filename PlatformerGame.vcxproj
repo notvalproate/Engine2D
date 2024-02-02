@@ -150,6 +150,7 @@
     <ClCompile Include="src\notval\Component.cpp" />
     <ClCompile Include="src\notval\Components\BoxCollider.cpp" />
     <ClCompile Include="src\notval\Components\SpriteRenderer.cpp" />
+    <ClCompile Include="src\notval\Components\TestCamera.cpp" />
     <ClCompile Include="src\notval\GameObject.cpp" />
     <ClCompile Include="src\notval\InputHandler.cpp" />
     <ClCompile Include="src\notval\Object.cpp" />

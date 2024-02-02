@@ -1,8 +1,6 @@
 #pragma once
 #include "../Core.hpp"
 
-class SpriteRenderer;
-
 class SpriteRenderer final : public Component {
 public:
 	void SetSprite(const char* spritePath);

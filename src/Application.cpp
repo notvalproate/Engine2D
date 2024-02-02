@@ -110,11 +110,10 @@ public:
 		backgroundRenderer->SetSprite("assets/backgrounds/BG.png");
 		backgroundRenderer->SetSortingLayer("Background");
 		Background->transform.scale = Vector2D::one * 4;
-		Background->transform.Translate(Vector2D(Screen.GetScreenWidth() / 2, Screen.GetScreenHeight() / 2));
 
 
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->AddComponent<Player, BoxCollider>();
+		PlayerObject->AddComponent<Player>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
