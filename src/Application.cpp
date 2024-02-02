@@ -99,11 +99,11 @@ public:
 			SceneManager.LoadScene("Test Scene");
 		}
 
-		if (Input.GetKeyDown(SDL_SCANCODE_P)) {
-			gameObject->scene->SwitchToCamera("Cam2");
+		if (Input.mouseScrollDeltaY > 0) {
+			mainCamera->transform->scale += Vector2D(0.05, 0.05);
 		}
-		if (Input.GetKeyDown(SDL_SCANCODE_O)) {
-			gameObject->scene->SwitchToCamera("Main Camera");
+		if (Input.mouseScrollDeltaY < 0) {
+			mainCamera->transform->scale -= Vector2D(0.05, 0.05);
 		}
 
 		//Make camera follow player
@@ -151,9 +151,6 @@ public:
 		PlayerObject->transform.scale = Vector2D::one * 5;
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
-
-		auto camera2 = CreateCamera("Cam2");
-		camera2->transform->Translate(Vector2D(2.0, 2.0));
 	}
 };
 
