@@ -53,6 +53,10 @@ public:
 		rotationSpeed = 180;
 	}
 
+	void Start() override {
+		mainCamera = FindObjectByName("Main Camera")->GetComponent<Camera>();
+	}
+
 	void Update() override {
 		float moveX = 0, moveY = 0;
 
@@ -94,10 +98,15 @@ public:
 		if (Input.GetKeyDown(SDL_SCANCODE_L)) {
 			SceneManager.LoadScene("Test Scene");
 		}
+
+		//Make camera follow player
+
+		mainCamera->transform->position = transform->position;
 	}
 
 	int speed;
 	int rotationSpeed;
+	Camera* mainCamera;
 };
 
 class TestScene : public Scene {
