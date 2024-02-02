@@ -23,5 +23,9 @@ private:
 };
 
 class BoxCollider final : public Behaviour {
-	
+private:
+	BoxCollider(GameObject* gameObject);
+	std::unique_ptr<Component> Clone() const;
+
+	b2BodyDef m_Body;
 };

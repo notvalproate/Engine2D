@@ -11,6 +11,8 @@
 #include <type_traits>
 #include <chrono>
 
+#include <box2d.h>
+
 class Object;
 class Vector2D;
 class Component;
@@ -26,8 +28,10 @@ class ScreenHandler;
 class RenderingHandler;
 class TextureHandler;
 class TimeHandler;
+class CollisionHandler;
 
 class SpriteRenderer;
+class BoxCollider;
 
 class Object {
 public:
@@ -55,6 +59,9 @@ public:
     static RenderingHandler RenderingPipeline;
     static TextureHandler TextureManager;
     static TimeHandler Time;
+    static CollisionHandler CollisionManager;
+
+    b2World* box2dWorld = new b2World(b2Vec2(0.0f, -9.81f));
 };
 
 
@@ -574,6 +581,14 @@ private:
 
     friend class Object;
     friend class Engine2D;
+};
+
+
+class CollisionHandler {
+private:
+    CollisionHandler();
+
+    std::unique_ptr<b2World> m_World;
 };
 
 

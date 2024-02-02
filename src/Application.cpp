@@ -204,7 +204,7 @@ public:
 		player2Renderer->SetSortingLayer("Player Child");
 		PlayerObject2->transform.scale = Vector2D::one * 2;
 		PlayerObject2->transform.SetParent(PlayerObject);
-		PlayerObject2->transform.Translate(Vector2D(40, 0));
+		PlayerObject2->transform.Translate(Vector2D(80, 0));
 
 
 		//auto fpsCounter = CreateGameObject("FPS Counter");
