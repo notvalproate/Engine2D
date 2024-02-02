@@ -465,6 +465,7 @@ private:
     friend class Object;
     friend class Engine2D;
     friend class SceneHandler;
+    friend class RenderingHandler;
 };
 
 #include "SDL.h"
@@ -526,6 +527,7 @@ private:
 
     friend class Object;
     friend class Engine2D;
+    friend class RenderingHandler;
 };
 
 
@@ -555,7 +557,7 @@ private:
 
 class RenderingHandler {
 public:
-    void RenderSprite(SDL_Texture* texture, const SDL_Rect src, const SDL_Rect dest, const double angle);
+    void RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const Transform* transform);
     void AddSortingLayer(const std::string_view name);
 
 private:

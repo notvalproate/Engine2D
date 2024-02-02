@@ -10,11 +10,10 @@ private:
 	SpriteRenderer(GameObject* gameObject);
 	std::unique_ptr<Component> Clone() const;
 
-	void Update() override;
 	void Render() const override;
 
 	SDL_Texture* m_Sprite;
-	SDL_Rect m_SrcRect, m_DestRect;
+	Vector2D m_Dimensions;
 	std::string m_SortingLayer;
 
 	friend class GameObject;

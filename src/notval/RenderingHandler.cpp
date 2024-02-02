@@ -18,8 +18,20 @@ bool RenderingHandler::InitRenderer() {
 	return true;
 }
 
-void RenderingHandler::RenderSprite(SDL_Texture* texture, const SDL_Rect src, const SDL_Rect dest, const double angle) {
-	SDL_RenderCopyEx(m_Renderer, texture, &src, &dest, angle, NULL, SDL_FLIP_NONE);
+void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const Transform* transform) {
+	Vector2D screenPosition = Object::SceneManager.m_CurrentScene->m_CurrentCamera->WorldToScreenPoint(transform->position);
+
+	SDL_Rect destRect{};
+
+	Vector2D newDimensions(dimensions.x * transform->scale.x, dimensions.y * transform->scale.y);
+
+	destRect.x = screenPosition.x - newDimensions.x / 2.0;
+	destRect.y = screenPosition.y - newDimensions.y / 2.0;
+	destRect.w = newDimensions.x;
+	destRect.h = newDimensions.y;
+	
+
+	SDL_RenderCopyEx(m_Renderer, texture, NULL, &destRect, transform->rotation, NULL, SDL_FLIP_NONE);
 }
 
 

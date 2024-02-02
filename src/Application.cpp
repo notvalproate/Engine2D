@@ -49,7 +49,7 @@ public:
 	}
 
 	void Awake() override {
-		speed = 360;
+		speed = 5;
 		rotationSpeed = 180;
 	}
 
@@ -57,10 +57,10 @@ public:
 		float moveX = 0, moveY = 0;
 
 		if (Input.GetKey(SDL_SCANCODE_W)) {
-			moveY = -1;
+			moveY = 1;
 		}
 		if (Input.GetKey(SDL_SCANCODE_S)) {
-			moveY = 1;
+			moveY = -1;
 		}
 		if (Input.GetKey(SDL_SCANCODE_A)) {
 			moveX = -1;
