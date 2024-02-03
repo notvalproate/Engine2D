@@ -29,6 +29,33 @@ void Object::CopyComponents(GameObject* newGameObject, GameObject* originalGameO
     }
 }
 
+void Object::DestroyChildren(GameObject* gameObject) {
+    if (gameObject->transform.m_Children.size() == 0) {
+        return;
+    }
+
+    for (auto& childTransform : gameObject->transform.m_Children) {
+        DestroyChildren(childTransform->gameObject);
+    }
+
+    std::vector<std::unique_ptr<GameObject>>& SceneObjects = gameObject->scene->m_SceneGameObjects;
+
+    for (auto& childTransform : gameObject->transform.m_Children) {
+        auto it = std::find_if(
+            SceneObjects.begin(),
+            SceneObjects.end(),
+            [&childTransform](const std::unique_ptr<GameObject>& sceneObj) {
+                return sceneObj.get() == childTransform->gameObject;
+            });
+
+        if (it != SceneObjects.end()) {
+            SceneObjects.erase(it);
+        }
+    }
+
+    gameObject->transform.m_Children.clear();
+}
+
 GameObject* Object::Instantiate(GameObject* gameObject) {
     std::string newName = gameObject->name + " ID#" + std::to_string(gameObject->scene->LatestSceneInstanceID);
     GameObject* newGameObject = gameObject->scene->CreateGameObject(newName);
@@ -63,9 +90,9 @@ void Object::Destroy(GameObject* gameObject) {
 }
 
 void Object::DestroyImmediate(GameObject* gameObject) {
-    for(auto& childTransform : gameObject->transform.m_Children) {
-        DestroyImmediate(childTransform->gameObject);
-    }   
+    gameObject->transform.DetachFromParent();
+
+    DestroyChildren(gameObject);
 
     std::vector<std::unique_ptr<GameObject>>& SceneObjects = gameObject->scene->m_SceneGameObjects;
 

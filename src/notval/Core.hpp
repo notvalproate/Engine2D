@@ -67,7 +67,9 @@ public:
 private:
     static void CopyBehaviours(GameObject* newGameObject, GameObject* originalGameObject);
     static void CopyComponents(GameObject* newGameObject, GameObject* originalGameObject);
+    static void DestroyChildren(GameObject* gameObject);
 };
+
 
 class Vector2D {
 public:
@@ -103,7 +105,6 @@ public:
     static const Vector2D zero;
 };
 
-// CODE ABOVE IS REVIEWED
 
 class Component : public Object {
 public:
@@ -119,14 +120,13 @@ public:
 
 protected:
     Component(GameObject* gameObject);
+    virtual std::unique_ptr<Component> Clone() const;
 
     virtual void Awake() {};
     virtual void Start() {};
     virtual void Update() {};
     virtual void Render() const {};
-
     virtual void AttachGameObject(GameObject* newGameObject);
-    virtual std::unique_ptr<Component> Clone() const;
 
     friend class Object;
     friend class GameObject;
@@ -144,44 +144,20 @@ protected:
     Behaviour(GameObject* gameObject);
 
 private:
-    void Render() const override final { };
-
-    void AttachGameObject(GameObject* newGameObject) override final;
     std::unique_ptr<Component> Clone() const override;
+
+    void Render() const override final { };
+    void AttachGameObject(GameObject* newGameObject) override final;
 
     friend class Object;
     friend class GameObject;
 };
 
-class Camera final : public Component {
-public:
-    Vector2D ScreenToViewportPoint(const Vector2D pos) const;
-    Vector2D ScreenToWorldPoint(const Vector2D pos) const;
-
-    Vector2D ViewportToScreenPoint(const Vector2D pos) const;
-    Vector2D ViewportToWorldPoint(const Vector2D pos) const;
-
-    Vector2D WorldToScreenPoint(const Vector2D pos) const;
-    Vector2D WorldToViewportPoint(const Vector2D pos) const;
-
-private:
-    Camera(GameObject* gameObject);
-    std::unique_ptr<Component> Clone() const;
-
-    static constexpr uint8_t defaultUnitsY = 10;
-    Vector2D GetUnitsOnScreen() const;
-
-    double m_AspectRatio;
-
-    friend class GameObject;
-};
+// CODE ABOVE IS REVIEWED
 
 class Transform final {
 public:
     Transform(GameObject* gameObject);
-
-    //CHECK WHAT THIS SHOULD BE DOING LATER
-    ~Transform();
 
     Vector2D position{};
     double rotation{};
@@ -219,8 +195,8 @@ public:
 private:
     std::vector<Transform*> m_Children{};
 
-    friend class GameObject;
     friend class Object;
+    friend class GameObject;
 };
 
 
@@ -409,6 +385,30 @@ struct SortingLayer {
 
     std::string name;
     std::vector<GameObject*> m_GameObjectsInLayer;
+};
+
+
+class Camera final : public Component {
+public:
+    Vector2D ScreenToViewportPoint(const Vector2D pos) const;
+    Vector2D ScreenToWorldPoint(const Vector2D pos) const;
+
+    Vector2D ViewportToScreenPoint(const Vector2D pos) const;
+    Vector2D ViewportToWorldPoint(const Vector2D pos) const;
+
+    Vector2D WorldToScreenPoint(const Vector2D pos) const;
+    Vector2D WorldToViewportPoint(const Vector2D pos) const;
+
+private:
+    Camera(GameObject* gameObject);
+    std::unique_ptr<Component> Clone() const;
+
+    static constexpr uint8_t defaultUnitsY = 10;
+    Vector2D GetUnitsOnScreen() const;
+
+    double m_AspectRatio;
+
+    friend class GameObject;
 };
 
 

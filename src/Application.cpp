@@ -57,6 +57,8 @@ public:
 		mainCamera = FindObjectByName("Main Camera")->GetComponent<Camera>();
 		cameraTwo = FindObjectByName("Cam2")->GetComponent<Camera>();
 		currentCamera = mainCamera;
+		
+		child = FindObjectByName("go2");
 	}
 
 	void Update() override {
@@ -88,10 +90,10 @@ public:
 		}
 
 		if (Input.GetKey(SDL_SCANCODE_G)) {
-			transform->scale = Vector2D::one * -5;
+			transform->scale = Vector2D::one * -1;
 		}
 		if (Input.GetKey(SDL_SCANCODE_F)) {
-			transform->scale = Vector2D::one * 5;
+			transform->scale = Vector2D::one * 1;
 		}
 
 		if (Input.GetKeyDown(SDL_SCANCODE_K)) {
@@ -117,6 +119,13 @@ public:
 			currentCamera = mainCamera;
 		}
 
+		if (Input.GetKeyDown(SDL_SCANCODE_M)) {
+			if (child != nullptr) {
+				Destroy(child);
+				child = nullptr;
+			}
+		}
+		
 		//Make camera follow player
 		mainCamera->transform->position = transform->position;
 	}
@@ -126,6 +135,7 @@ public:
 	Camera* mainCamera;
 	Camera* cameraTwo;
 	Camera* currentCamera;
+	GameObject* child;
 };
 
 class FullscreenToggler : public Behaviour {
@@ -156,13 +166,26 @@ public:
 		backgroundRenderer->SetSortingLayer("Background");
 		backgroundRenderer->SetPixelsPerUnit(8);
 
-
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<Player>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(8);
+
+		auto go1 = CreateGameObject("go1");
+		auto go1Renderer = go1->AddComponent<SpriteRenderer>();
+		go1Renderer->SetSprite("assets/characters/idle/madeline.png");
+		go1Renderer->SetSortingLayer("Player");
+		go1->transform.SetParent(PlayerObject);
+		go1->transform.Translate(Vector2D(1.0, 0.0));
+
+		auto go2 = CreateGameObject("go2");
+		auto go2Renderer = go2->AddComponent<SpriteRenderer>();
+		go2Renderer->SetSprite("assets/characters/idle/madeline.png");
+		go2Renderer->SetSortingLayer("Player");
+		go2->transform.SetParent(go1);
+		go2->transform.Translate(Vector2D(2.0, 0.0));
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

@@ -3,8 +3,6 @@
 
 Transform::Transform(GameObject* gameObject) : gameObject(gameObject), parent(nullptr), tag(&gameObject->tag), name(&gameObject->name) { };
 
-Transform::~Transform() { }
-
 void Transform::Translate(const Vector2D& translation) {
     position.x += translation.x;
     position.y += translation.y;
