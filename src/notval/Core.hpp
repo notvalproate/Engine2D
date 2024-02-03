@@ -180,11 +180,11 @@ private:
 
 class Camera final : public Component {
 public:
-    Vector2D ScreenToViewportPoint(const Vector2D pos) const { }
-    Vector2D ScreenToWorldPoint(const Vector2D pos) const { }
+    Vector2D ScreenToViewportPoint(const Vector2D pos) const;
+    Vector2D ScreenToWorldPoint(const Vector2D pos) const;
 
     Vector2D ViewportToScreenPoint(const Vector2D pos) const;
-    Vector2D ViewportToWorldPoint(const Vector2D pos) const { }
+    Vector2D ViewportToWorldPoint(const Vector2D pos) const;
 
     Vector2D WorldToScreenPoint(const Vector2D pos) const;
     Vector2D WorldToViewportPoint(const Vector2D pos) const;
@@ -192,6 +192,9 @@ public:
 private:
     Camera(GameObject* gameObject);
     std::unique_ptr<Component> Clone() const;
+
+    static constexpr uint8_t defaultUnitsY = 10;
+    Vector2D GetUnitsOnScreen() const;
 
     double m_AspectRatio;
 

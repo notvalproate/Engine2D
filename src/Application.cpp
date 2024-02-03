@@ -49,7 +49,7 @@ public:
 	}
 
 	void Awake() override {
-		speed = 5;
+		speed = 10;
 		rotationSpeed = 180;
 	}
 
@@ -149,12 +149,12 @@ public:
 
 	void SetupScene() override {
 		auto cam2 = CreateCamera("Cam2");
-		cam2->transform->Translate(Vector2D(2.0, 2.0));
 
 		auto Background = CreateGameObject("BG");
 		auto backgroundRenderer = Background->AddComponent<SpriteRenderer>();
 		backgroundRenderer->SetSprite("assets/backgrounds/BG.png");
 		backgroundRenderer->SetSortingLayer("Background");
+		backgroundRenderer->SetPixelsPerUnit(8);
 
 
 		auto PlayerObject = CreateGameObject("Player");
@@ -162,6 +162,7 @@ public:
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
+		playerRenderer->SetPixelsPerUnit(8);
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}
