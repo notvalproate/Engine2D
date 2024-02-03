@@ -80,49 +80,20 @@ public:
     void Normalize();
 	void Scale(const int factor);
 
-    Vector2D operator+(const Vector2D& other) const {
-        return Vector2D(x + other.x, y + other.y);
-    }
-    Vector2D& operator+=(const Vector2D& other) {
-        x += other.x;
-        y += other.y;
+    Vector2D operator+(const Vector2D& other) const;
+    Vector2D& operator+=(const Vector2D& other);
 
-        return *this;
-    }
-    Vector2D operator-(const Vector2D& other) const {
-        return Vector2D(x - other.x, y - other.y);
-    }
-    Vector2D& operator-=(const Vector2D& other) {
-        x -= other.x;
-        y -= other.y;
+    Vector2D operator-(const Vector2D& other) const;
+    Vector2D& operator-=(const Vector2D& other);
 
-        return *this;
-    }
-    double operator*(const Vector2D other) const {
-        return x * other.x + y * other.y;
-    }
-    Vector2D operator*(const float k) const {
-        return Vector2D(x * k, y * k);
-    }
-    Vector2D& operator*=(const float k) {
-        x *= k;
-        y *= k;
-        return *this;
-    }
-    Vector2D operator/(const float k) const {
-        return Vector2D(x / k, y / k);
-    }
-    Vector2D& operator/=(const float k) {
-        x /= k;
-        y /= k;
-        return *this;
-    }
-    bool operator==(const Vector2D other) const {
-        if ((std::abs(x - other.x) < 1e-5) && (std::abs(y - other.y) < 1e-5)) {
-            return true;
-        }
-        return false;
-    }
+    double operator*(const Vector2D other) const;
+    Vector2D operator*(const float k) const;
+    Vector2D& operator*=(const float k);
+
+    Vector2D operator/(const float k) const;
+    Vector2D& operator/=(const float k);
+
+    bool operator==(const Vector2D other) const;
 
     static const Vector2D up;
     static const Vector2D down;
