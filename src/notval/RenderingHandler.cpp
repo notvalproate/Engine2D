@@ -24,12 +24,21 @@ void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensi
 
 	SDL_Rect destRect{};
 
-	//FIGURE OUT THIS
-	//Vector2D newDimensions = dimensions;
-	//newDimensions /= pixelsPerUnit;
-	Vector2D newDimensions(dimensions.x * transform->scale.x / cameraScale.x, dimensions.y * transform->scale.y / cameraScale.y);
-	//newDimensions /= pixelsPerUnit;
-	//newDimensions = Object::SceneManager.m_CurrentScene->m_CurrentCamera->WorldToScreenPoint(newDimensions);
+	Vector2D newDimensions = dimensions;
+	newDimensions /= pixelsPerUnit;
+
+	Vector2D diff = Object::SceneManager.m_CurrentScene->m_CurrentCamera->WorldToScreenPoint(newDimensions + Vector2D(1.0, 1.0));
+	Vector2D point = Object::SceneManager.m_CurrentScene->m_CurrentCamera->WorldToScreenPoint(newDimensions);
+
+	newDimensions.x *= -(point.x - diff.x);
+	newDimensions.y *= (point.y - diff.y);
+	
+	if (dimensions.x == 13) {
+		std::cout << newDimensions.x << " " << newDimensions.y << std::endl;
+	}
+
+	newDimensions.x = newDimensions.x * transform->scale.x / cameraScale.x;
+	newDimensions.y = newDimensions.y * transform->scale.y / cameraScale.y;
 
 	destRect.x = screenPosition.x - newDimensions.x / 2.0;
 	destRect.y = screenPosition.y - newDimensions.y / 2.0;
