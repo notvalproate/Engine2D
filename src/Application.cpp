@@ -55,6 +55,8 @@ public:
 
 	void Start() override {
 		mainCamera = FindObjectByName("Main Camera")->GetComponent<Camera>();
+		cameraTwo = FindObjectByName("Cam2")->GetComponent<Camera>();
+		currentCamera = mainCamera;
 	}
 
 	void Update() override {
@@ -100,20 +102,30 @@ public:
 		}
 
 		if (Input.mouseScrollDeltaY > 0) {
-			mainCamera->transform->scale -= Vector2D(0.02, 0.02);
+			currentCamera->transform->scale -= Vector2D(0.02, 0.02);
 		}
 		if (Input.mouseScrollDeltaY < 0) {
-			mainCamera->transform->scale += Vector2D(0.02, 0.02);
+			currentCamera->transform->scale += Vector2D(0.02, 0.02);
+		}
+		
+		if (Input.GetKeyDown(SDL_SCANCODE_P)) {
+			gameObject->scene->SwitchToCamera("Cam2");
+			currentCamera = cameraTwo;
+		}
+		if (Input.GetKeyDown(SDL_SCANCODE_O)) {
+			gameObject->scene->SwitchToCamera("Main Camera");
+			currentCamera = mainCamera;
 		}
 
 		//Make camera follow player
-
 		mainCamera->transform->position = transform->position;
 	}
 
 	int speed;
 	int rotationSpeed;
 	Camera* mainCamera;
+	Camera* cameraTwo;
+	Camera* currentCamera;
 };
 
 class FullscreenToggler : public Behaviour {
@@ -136,6 +148,9 @@ public:
 	using Scene::Scene;
 
 	void SetupScene() override {
+		auto cam2 = CreateCamera("Cam2");
+		cam2->transform->Translate(Vector2D(2.0, 2.0));
+
 		auto Background = CreateGameObject("BG");
 		auto backgroundRenderer = Background->AddComponent<SpriteRenderer>();
 		backgroundRenderer->SetSprite("assets/backgrounds/BG.png");

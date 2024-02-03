@@ -28,6 +28,10 @@ void SpriteRenderer::SetSortingLayer(const std::string_view layerName) {
 	m_SortingLayer = "Default";
 }
 
+void SpriteRenderer::SetPixelsPerUnit(const uint16_t pixelsPerUnit) {
+	m_PixelsPerUnit = pixelsPerUnit;
+}
+
 void SpriteRenderer::Render() const {
 	RenderingPipeline.RenderSprite(m_Sprite, m_Dimensions, m_PixelsPerUnit, transform);
 }
