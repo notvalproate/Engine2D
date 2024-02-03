@@ -8,15 +8,8 @@ TextureHandler Object::TextureManager;
 TimeHandler Object::Time;
 CollisionHandler Object::CollisionManager;
 
-GameObject* Object::Instantiate(GameObject* gameObject) {
-    std::string newName = gameObject->name + " #" + std::to_string(gameObject->scene->LatestSceneInstanceID);
-    GameObject* newGameObject = gameObject->scene->CreateGameObject(newName);
-
-    for(auto& childTransform : gameObject->transform.m_Children) {
-        Instantiate(childTransform->gameObject, &newGameObject->transform);
-    }
-
-    for(auto& behaviour : gameObject->m_Behaviours) {
+void Object::CopyBehaviours(GameObject* newGameObject, GameObject* originalGameObject) {
+    for (auto& behaviour : originalGameObject->m_Behaviours) {
         auto componentClone = behaviour.get()->Clone();
         std::unique_ptr<Behaviour> behaviourCasted(static_cast<Behaviour*>(componentClone.release()));
 
@@ -24,14 +17,28 @@ GameObject* Object::Instantiate(GameObject* gameObject) {
 
         newGameObject->m_Behaviours.push_back(std::move(behaviourCasted));
     }
+}
 
-    for(auto& component : gameObject->m_Components) {
+void Object::CopyComponents(GameObject* newGameObject, GameObject* originalGameObject) {
+    for (auto& component : originalGameObject->m_Components) {
         auto componentClone = component.get()->Clone();
 
         componentClone.get()->AttachGameObject(newGameObject);
 
         newGameObject->m_Components.push_back(std::move(componentClone));
     }
+}
+
+GameObject* Object::Instantiate(GameObject* gameObject) {
+    std::string newName = gameObject->name + " ID#" + std::to_string(gameObject->scene->LatestSceneInstanceID);
+    GameObject* newGameObject = gameObject->scene->CreateGameObject(newName);
+
+    for(auto& childTransform : gameObject->transform.m_Children) {
+        Instantiate(childTransform->gameObject, &newGameObject->transform);
+    }
+
+    CopyBehaviours(newGameObject, gameObject);
+    CopyComponents(newGameObject, gameObject);
 
     return newGameObject;
 }

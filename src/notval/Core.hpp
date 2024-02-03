@@ -11,6 +11,7 @@
 #include <type_traits>
 #include <chrono>
 
+#include <SDL.h>
 #include <box2d.h>
 
 class Object;
@@ -33,6 +34,7 @@ class CollisionHandler;
 class Camera;
 class SpriteRenderer;
 class BoxCollider;
+
 
 class Object {
 public:
@@ -62,9 +64,10 @@ public:
     static TimeHandler Time;
     static CollisionHandler CollisionManager;
 
-    b2World* box2dWorld = new b2World(b2Vec2(0.0f, -9.81f));
+private:
+    static void CopyBehaviours(GameObject* newGameObject, GameObject* originalGameObject);
+    static void CopyComponents(GameObject* newGameObject, GameObject* originalGameObject);
 };
-
 
 class Vector2D {
 public:
@@ -129,6 +132,7 @@ public:
     static const Vector2D zero;
 };
 
+// CODE ABOVE IS REVIEWED
 
 class Component : public Object {
 public:
@@ -472,8 +476,6 @@ private:
     friend class SceneHandler;
     friend class RenderingHandler;
 };
-
-#include "SDL.h"
 
 class InputHandler {
 public:
