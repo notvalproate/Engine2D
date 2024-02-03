@@ -14,6 +14,7 @@ private:
 
 	SDL_Texture* m_Sprite;
 	Vector2D m_Dimensions;
+	uint16_t m_PixelsPerUnit;
 	std::string m_SortingLayer;
 
 	friend class GameObject;

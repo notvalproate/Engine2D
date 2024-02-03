@@ -183,7 +183,7 @@ public:
     Vector2D ScreenToViewportPoint(const Vector2D pos) const { }
     Vector2D ScreenToWorldPoint(const Vector2D pos) const { }
 
-    Vector2D ViewportToScreenPoint(const Vector2D pos) const { }
+    Vector2D ViewportToScreenPoint(const Vector2D pos) const;
     Vector2D ViewportToWorldPoint(const Vector2D pos) const { }
 
     Vector2D WorldToScreenPoint(const Vector2D pos) const;
@@ -559,7 +559,7 @@ private:
 
 class RenderingHandler {
 public:
-    void RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const Transform* transform);
+    void RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform);
     void AddSortingLayer(const std::string_view name);
 
 private:

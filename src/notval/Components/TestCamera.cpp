@@ -8,6 +8,15 @@ std::unique_ptr<Component> Camera::Clone() const {
 	return std::make_unique<Camera>(*this);
 }
 
+Vector2D Camera::ViewportToScreenPoint(const Vector2D pos) const {
+	Vector2D screenPosition = pos;
+
+	screenPosition.x *= Screen.GetScreenWidth();
+	screenPosition.y *= Screen.GetScreenHeight();
+
+	return screenPosition;
+}
+
 Vector2D Camera::WorldToViewportPoint(const Vector2D pos) const {
 	Vector2D viewportPosition(pos.x - transform->position.x, pos.y - transform->position.y);
 
@@ -23,10 +32,8 @@ Vector2D Camera::WorldToViewportPoint(const Vector2D pos) const {
 }
 
 Vector2D Camera::WorldToScreenPoint(const Vector2D pos) const {
-	Vector2D screenPosition = WorldToViewportPoint(pos);
-
-	screenPosition.x *= Screen.GetScreenWidth();
-	screenPosition.y *= Screen.GetScreenHeight();
+	Vector2D viewportPosition = WorldToViewportPoint(pos);
+	Vector2D screenPosition = ViewportToScreenPoint(viewportPosition);
 
 	return screenPosition;
 }

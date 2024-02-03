@@ -30,7 +30,7 @@ void Transform::RotateAround(const Vector2D& point, const double angle) {
 
     const double currentAngleFromPoint = atan2(relY, relX);
 
-    const double totalAngle = angleRadians + currentAngleFromPoint;
+    const double totalAngle = currentAngleFromPoint - angleRadians;
 
     position.x = (cos(totalAngle) * radius) + point.x;
     position.y = (sin(totalAngle) * radius) + point.y;

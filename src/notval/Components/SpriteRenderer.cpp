@@ -2,7 +2,7 @@
 #include "SDL_image.h"
 
 SpriteRenderer::SpriteRenderer(GameObject* gameObject) 
-	: Component(gameObject), m_Sprite(nullptr), m_Dimensions({0, 0}), m_SortingLayer("Default") 
+	: Component(gameObject), m_Sprite(nullptr), m_Dimensions({0, 0}), m_PixelsPerUnit(10), m_SortingLayer("Default") 
 {
 	RenderingPipeline.AddGameObjectToRenderer(gameObject);
 }
@@ -29,5 +29,5 @@ void SpriteRenderer::SetSortingLayer(const std::string_view layerName) {
 }
 
 void SpriteRenderer::Render() const {
-	RenderingPipeline.RenderSprite(m_Sprite, m_Dimensions, transform);
+	RenderingPipeline.RenderSprite(m_Sprite, m_Dimensions, m_PixelsPerUnit, transform);
 }

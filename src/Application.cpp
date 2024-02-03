@@ -79,7 +79,7 @@ public:
 		transform->Translate(velocity * speed * Time.GetFixedDeltaTime());
 
 		if (Input.GetKey(SDL_SCANCODE_R)) {
-			transform->RotateAround(Vector2D(640, 360), rotationSpeed * Time.GetDeltaTime());
+			transform->RotateAround(Vector2D(0, 0), rotationSpeed * Time.GetDeltaTime());
 		}
 		if (Input.GetKey(SDL_SCANCODE_T)) {
 			transform->Rotate(rotationSpeed * Time.GetDeltaTime());
@@ -100,10 +100,10 @@ public:
 		}
 
 		if (Input.mouseScrollDeltaY > 0) {
-			mainCamera->transform->scale += Vector2D(0.05, 0.05);
+			mainCamera->transform->scale -= Vector2D(0.02, 0.02);
 		}
 		if (Input.mouseScrollDeltaY < 0) {
-			mainCamera->transform->scale -= Vector2D(0.05, 0.05);
+			mainCamera->transform->scale += Vector2D(0.02, 0.02);
 		}
 
 		//Make camera follow player
@@ -140,7 +140,6 @@ public:
 		auto backgroundRenderer = Background->AddComponent<SpriteRenderer>();
 		backgroundRenderer->SetSprite("assets/backgrounds/BG.png");
 		backgroundRenderer->SetSortingLayer("Background");
-		Background->transform.scale = Vector2D::one * 4;
 
 
 		auto PlayerObject = CreateGameObject("Player");
@@ -148,7 +147,6 @@ public:
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
-		PlayerObject->transform.scale = Vector2D::one * 5;
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

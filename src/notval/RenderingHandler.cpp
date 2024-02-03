@@ -18,13 +18,18 @@ bool RenderingHandler::InitRenderer() {
 	return true;
 }
 
-void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const Transform* transform) {
+void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) {
 	Vector2D screenPosition = Object::SceneManager.m_CurrentScene->m_CurrentCamera->WorldToScreenPoint(transform->position);
 	Vector2D cameraScale = Object::SceneManager.m_CurrentScene->m_CurrentCamera->transform->scale;
 
 	SDL_Rect destRect{};
 
+	//FIGURE OUT THIS
+	//Vector2D newDimensions = dimensions;
+	//newDimensions /= pixelsPerUnit;
 	Vector2D newDimensions(dimensions.x * transform->scale.x / cameraScale.x, dimensions.y * transform->scale.y / cameraScale.y);
+	//newDimensions /= pixelsPerUnit;
+	//newDimensions = Object::SceneManager.m_CurrentScene->m_CurrentCamera->WorldToScreenPoint(newDimensions);
 
 	destRect.x = screenPosition.x - newDimensions.x / 2.0;
 	destRect.y = screenPosition.y - newDimensions.y / 2.0;
