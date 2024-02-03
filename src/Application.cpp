@@ -51,14 +51,13 @@ public:
 	void Awake() override {
 		speed = 10;
 		rotationSpeed = 180;
+		xoffset = 0;
 	}
 
 	void Start() override {
 		mainCamera = FindObjectByName("Main Camera")->GetComponent<Camera>();
 		cameraTwo = FindObjectByName("Cam2")->GetComponent<Camera>();
 		currentCamera = mainCamera;
-		
-		child = FindObjectByName("go2");
 	}
 
 	void Update() override {
@@ -119,11 +118,11 @@ public:
 			currentCamera = mainCamera;
 		}
 
+		// FIX INSTANTIATE LATER
 		if (Input.GetKeyDown(SDL_SCANCODE_M)) {
-			if (child != nullptr) {
-				Destroy(child);
-				child = nullptr;
-			}
+			auto gameObj = Instantiate(gameObject);
+			gameObj->transform.Translate(Vector2D(xoffset, 0));
+			xoffset++;
 		}
 		
 		//Make camera follow player
@@ -135,7 +134,7 @@ public:
 	Camera* mainCamera;
 	Camera* cameraTwo;
 	Camera* currentCamera;
-	GameObject* child;
+	int xoffset;
 };
 
 class FullscreenToggler : public Behaviour {
@@ -173,6 +172,7 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(8);
 
+		/*
 		auto go1 = CreateGameObject("go1");
 		auto go1Renderer = go1->AddComponent<SpriteRenderer>();
 		go1Renderer->SetSprite("assets/characters/idle/madeline.png");
@@ -186,6 +186,7 @@ public:
 		go2Renderer->SetSortingLayer("Player");
 		go2->transform.SetParent(go1);
 		go2->transform.Translate(Vector2D(2.0, 0.0));
+		*/
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

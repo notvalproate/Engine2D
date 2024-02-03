@@ -153,12 +153,8 @@ private:
     friend class GameObject;
 };
 
-// CODE ABOVE IS REVIEWED
-
 class Transform final {
 public:
-    Transform(GameObject* gameObject);
-
     Vector2D position{};
     double rotation{};
     Vector2D scale{Vector2D::one};
@@ -193,12 +189,15 @@ public:
     void SetParent(GameObject* parentGo);
 
 private:
+    Transform(GameObject* gameObject);
+
     std::vector<Transform*> m_Children{};
 
     friend class Object;
     friend class GameObject;
 };
 
+// CODE ABOVE IS REVIEWED
 
 class GameObject final : public Object {
 public:

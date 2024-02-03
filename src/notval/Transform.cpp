@@ -119,11 +119,7 @@ void Transform::SetSiblingIndex(const std::size_t index) const {
 }
 
 bool Transform::IsChildOf(Transform* parentTransform) const {
-    if(parent == parentTransform) {
-        return true;
-    }
-
-    return false;
+    return parent == parentTransform;
 }
 
 bool Transform::IsChildOf(Transform& parentTransform) const {
