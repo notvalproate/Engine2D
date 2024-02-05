@@ -357,10 +357,10 @@ private:
     void RemoveComponent(Component* component);
     void RemoveBehaviour(Behaviour* behaviour);
 
-    template<typename... Args>
+    template<typename T>
     static void AssertComponentIsDerived() {
         static_assert(
-            std::conjunction<std::is_base_of<Component, Args>...>::value,
+            std::is_base_of<Component, T>::value,
             "Custom Component provided not derived from Component Class"
         );
     }
