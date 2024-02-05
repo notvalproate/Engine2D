@@ -10,7 +10,6 @@
 #include <functional>
 #include <type_traits>
 #include <chrono>
-#include <cmath>
 
 #include <SDL.h>
 #include <box2d.h>
@@ -74,8 +73,8 @@ private:
 
 class Vector2D {
 public:
-    Vector2D() = default;
-    Vector2D(double x, double y) : x(x), y(y) {}
+    inline constexpr Vector2D() = default;
+    inline constexpr Vector2D(double x, double y) : x(x), y(y) {}
 
     double x{}, y{};
 
@@ -101,14 +100,14 @@ public:
         y /= k;
     }
     
-    inline Vector2D GetNormalized() {
+    inline Vector2D GetNormalized() const {
         Vector2D vec(*this);
         vec.Normalize();
 
         return vec;
     }
 
-    inline constexpr void Scale(const int factor) {
+    inline void Scale(const int factor) {
         x *= factor;
         y *= factor;
     }
@@ -161,15 +160,19 @@ public:
         return *this;
     }
 
+    static inline constexpr double absoluteOf(const double x) {
+        return x < 0 ? -x : x;
+    }
+
     inline constexpr bool operator==(const Vector2D other) const {
-        return (std::abs(x - other.x) < 1e-5) && (std::abs(y - other.y) < 1e-5);
+        return (absoluteOf(x - other.x) < epsilon) && (absoluteOf(y - other.y) < epsilon);
     }
 
     inline constexpr bool operator!=(const Vector2D other) const {
         return !(*this == other);
     }
 
-    friend inline constexpr std::ostream& operator<<(std::ostream& os, const Vector2D vec) {
+    friend inline std::ostream& operator<<(std::ostream& os, const Vector2D vec) {
         os << vec.ToString();
         return os;
     }
@@ -280,7 +283,7 @@ private:
 class GameObject final : public Object {
 public:
     template<typename T>
-    T* AddComponent() {
+    inline constexpr T* AddComponent() {
         AssertComponentIsDerived<T>();
 
         if constexpr (std::is_base_of<Behaviour, T>::value) {
@@ -295,13 +298,13 @@ public:
     }
 
     template<typename First, typename Second, typename... Args>
-    void AddComponent() {
+    inline constexpr void AddComponent() {
         AddComponent<First>();
         AddComponent<Second, Args...>();
     }
 
     template<typename T>
-    T* GetComponent() {
+    inline constexpr T* GetComponent() const {
         AssertComponentIsDerived<T>();
 
         if constexpr (std::is_base_of<Behaviour, T>::value) {
@@ -327,7 +330,7 @@ public:
     }
 
     template<typename T>
-    T* GetComponentInChildren() {
+    inline constexpr T* GetComponentInChildren() const {
         AssertComponentIsDerived<T>();
 
         T* ptr = GetComponent<T>();
@@ -346,7 +349,7 @@ public:
     }
 
     template<typename T>
-    T* GetComponentInParent() {
+    inline constexpr T* GetComponentInParent() const {
         AssertComponentIsDerived<T>();
 
         T* ptr = GetComponent<T>();
@@ -359,7 +362,7 @@ public:
     }
 
     template<typename T>
-    std::vector<T*> GetComponents() {
+    inline constexpr std::vector<T*> GetComponents() const {
         AssertComponentIsDerived<T>();
 
         std::vector<T*> components{};
@@ -387,7 +390,7 @@ public:
     }
 
     template<typename T>
-    std::vector<T*> GetComponentsInChildren() {
+    inline constexpr std::vector<T*> GetComponentsInChildren() const {
         std::vector<T*> components = GetComponents<T>();
 
         for(auto& childTransform : transform.m_Children) {
@@ -400,7 +403,7 @@ public:
     }
 
     template<typename T>
-    std::vector<T*> GetComponentsInParent() {
+    inline constexpr std::vector<T*> GetComponentsInParent() const {
         std::vector<T*> components = GetComponents<T>();
 
         if(transform.m_Parent) {
@@ -435,7 +438,7 @@ private:
     void RemoveBehaviour(Behaviour* behaviour);
 
     template<typename T>
-    static void AssertComponentIsDerived() {
+    inline static void AssertComponentIsDerived() {
         static_assert(
             std::is_base_of<Component, T>::value,
             "Custom Component provided not derived from Component Class"
@@ -450,15 +453,6 @@ private:
     friend class Object;
     friend class Scene;
     friend class RenderingHandler;
-};
-
-// CODE ABOVE IS REVIEWED
-
-struct SortingLayer {
-    SortingLayer(const std::string_view layerName) : name(layerName), m_GameObjectsInLayer({}) {}
-
-    std::string name;
-    std::vector<GameObject*> m_GameObjectsInLayer;
 };
 
 class Camera final : public Component {
@@ -484,6 +478,14 @@ private:
     friend class GameObject;
 };
 
+// CODE ABOVE IS REVIEWED
+
+struct SortingLayer {
+    SortingLayer(const std::string_view layerName) : name(layerName), m_GameObjectsInLayer({}) {}
+
+    std::string name;
+    std::vector<GameObject*> m_GameObjectsInLayer;
+};
 
 class Scene : public Object {
 public:
