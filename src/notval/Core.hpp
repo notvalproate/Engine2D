@@ -10,6 +10,7 @@
 #include <functional>
 #include <type_traits>
 #include <chrono>
+#include <cmath>
 
 #include <SDL.h>
 #include <box2d.h>
@@ -74,29 +75,104 @@ private:
 class Vector2D {
 public:
     Vector2D() = default;
-    Vector2D(double x, double y);
+    Vector2D(double x, double y) : x(x), y(y) {}
 
     double x{}, y{};
 
-	double GetMagnitude() const;
-    double GetMagnitudeSquared() const;
-    void Normalize();
-	void Scale(const int factor);
+    inline constexpr std::string ToString() const {
+        return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
+    }
 
-    Vector2D operator+(const Vector2D& other) const;
-    Vector2D& operator+=(const Vector2D& other);
+    inline double GetMagnitude() const {
+        return std::sqrt(x * x + y * y);
+    }
 
-    Vector2D operator-(const Vector2D& other) const;
-    Vector2D& operator-=(const Vector2D& other);
+    inline constexpr double GetMagnitudeSquared() const {
+        return x * x + y * y;
+    }
 
-    double operator*(const Vector2D other) const;
-    Vector2D operator*(const float k) const;
-    Vector2D& operator*=(const float k);
+    inline void Normalize() {
+        if (x == 0 && y == 0) {
+            return;
+        }
 
-    Vector2D operator/(const float k) const;
-    Vector2D& operator/=(const float k);
+        double k = std::sqrt(x * x + y * y);
+        x /= k;
+        y /= k;
+    }
+    
+    inline Vector2D GetNormalized() {
+        Vector2D vec(*this);
+        vec.Normalize();
 
-    bool operator==(const Vector2D other) const;
+        return vec;
+    }
+
+    inline constexpr void Scale(const int factor) {
+        x *= factor;
+        y *= factor;
+    }
+
+    static constexpr double epsilon = 1e-5;
+
+    inline constexpr Vector2D operator+(const Vector2D& other) const {
+        return Vector2D(x + other.x, y + other.y);
+    }
+
+    inline constexpr Vector2D& operator+=(const Vector2D& other) {
+        x += other.x;
+        y += other.y;
+
+        return *this;
+    }
+
+    inline constexpr Vector2D operator-(const Vector2D& other) const {
+        return Vector2D(x - other.x, y - other.y);
+    }
+
+    inline constexpr Vector2D& operator-=(const Vector2D& other) {
+        x -= other.x;
+        y -= other.y;
+
+        return *this;
+    }
+
+    inline constexpr double operator*(const Vector2D other) const {
+        return x * other.x + y * other.y;
+    }
+
+    inline constexpr Vector2D operator*(const float k) const {
+        return Vector2D(x * k, y * k);
+    }
+
+    inline constexpr Vector2D& operator*=(const float k) {
+        x *= k;
+        y *= k;
+        return *this;
+    }
+
+    inline constexpr Vector2D operator/(const float k) const {
+        return Vector2D(x / k, y / k);
+    }
+
+    inline constexpr Vector2D& operator/=(const float k) {
+        x /= k;
+        y /= k;
+        return *this;
+    }
+
+    inline constexpr bool operator==(const Vector2D other) const {
+        return (std::abs(x - other.x) < 1e-5) && (std::abs(y - other.y) < 1e-5);
+    }
+
+    inline constexpr bool operator!=(const Vector2D other) const {
+        return !(*this == other);
+    }
+
+    friend inline constexpr std::ostream& operator<<(std::ostream& os, const Vector2D vec) {
+        os << vec.ToString();
+        return os;
+    }
 
     static const Vector2D up;
     static const Vector2D down;
