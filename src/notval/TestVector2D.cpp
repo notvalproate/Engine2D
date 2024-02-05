@@ -15,6 +15,10 @@ double Vector2D::GetMagnitude() const {
     return std::sqrt(x * x + y * y);
 }
 
+double Vector2D::GetMagnitudeSquared() const {
+    return x * x + y * y;
+}
+
 void Vector2D::Normalize() {
     if (x == 0 && y == 0) {
 		return;

@@ -79,6 +79,7 @@ public:
     double x{}, y{};
 
 	double GetMagnitude() const;
+    double GetMagnitudeSquared() const;
     void Normalize();
 	void Scale(const int factor);
 
