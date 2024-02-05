@@ -120,7 +120,7 @@ public:
     std::string* tag;
 
 protected:
-    Component(GameObject* gameObject);
+    explicit Component(GameObject* gameObject);
     virtual std::unique_ptr<Component> Clone() const;
 
     virtual void Awake() {};
@@ -142,7 +142,7 @@ public:
     std::string* name;
 
 protected:
-    Behaviour(GameObject* gameObject);
+    explicit Behaviour(GameObject* gameObject);
 
 private:
     std::unique_ptr<Component> Clone() const override;
@@ -192,7 +192,7 @@ public:
     inline std::vector<Transform*> GetChildren() const { return m_Children; }
 
 private:
-    Transform(GameObject* gameObject);
+    explicit Transform(GameObject* gameObject);
 
     std::vector<Transform*> m_Children{};
     Transform* m_Parent;
@@ -344,8 +344,8 @@ public:
     uint32_t m_SceneInstanceID;
 
 private:
-    GameObject(Scene* scene, const uint32_t id);
-    GameObject(const std::string_view goName, Scene* scene, const uint32_t id);
+    explicit GameObject(Scene* scene, const uint32_t id);
+    explicit GameObject(const std::string_view goName, Scene* scene, const uint32_t id);
 
     void Start();
     void Update();
@@ -397,7 +397,7 @@ public:
     Vector2D WorldToViewportPoint(const Vector2D pos) const;
 
 private:
-    Camera(GameObject* gameObject);
+    explicit Camera(GameObject* gameObject);
     std::unique_ptr<Component> Clone() const;
 
     static constexpr uint8_t defaultUnitsY = 10;
@@ -422,7 +422,7 @@ public:
     std::string name{};
 
 private:
-    Scene(const std::string_view name);
+    explicit Scene(const std::string_view name);
 
     virtual void SetupScene() = 0;
 
