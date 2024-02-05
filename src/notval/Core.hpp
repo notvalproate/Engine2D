@@ -140,25 +140,25 @@ public:
         return x * other.x + y * other.y;
     }
 
-    inline constexpr Vector2D operator*(const float k) const {
+    inline constexpr Vector2D operator*(const double k) const {
         return Vector2D(x * k, y * k);
     }
 
-    friend inline constexpr Vector2D operator*(const float k, const Vector2D vec) {
+    friend inline constexpr Vector2D operator*(const double k, const Vector2D vec) {
         return vec * k;
     }
 
-    inline constexpr Vector2D& operator*=(const float k) {
+    inline constexpr Vector2D& operator*=(const double k) {
         x *= k;
         y *= k;
         return *this;
     }
 
-    inline constexpr Vector2D operator/(const float k) const {
+    inline constexpr Vector2D operator/(const double k) const {
         return Vector2D(x / k, y / k);
     }
 
-    inline constexpr Vector2D& operator/=(const float k) {
+    inline constexpr Vector2D& operator/=(const double k) {
         x /= k;
         y /= k;
         return *this;
