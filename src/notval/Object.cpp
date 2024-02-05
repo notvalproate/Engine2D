@@ -6,7 +6,7 @@ ScreenHandler Object::Screen;
 RenderingHandler Object::RenderingPipeline;
 TextureHandler Object::TextureManager;
 TimeHandler Object::Time;
-CollisionHandler Object::CollisionManager;
+PhysicsHandler Object::Physics;
 
 void Object::CopyBehaviours(GameObject* newGameObject, GameObject* originalGameObject) {
     for (auto& behaviour : originalGameObject->m_Behaviours) {

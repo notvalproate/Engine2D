@@ -29,7 +29,7 @@ class ScreenHandler;
 class RenderingHandler;
 class TextureHandler;
 class TimeHandler;
-class CollisionHandler;
+class PhysicsHandler;
 
 class Camera;
 class SpriteRenderer;
@@ -62,7 +62,7 @@ public:
     static RenderingHandler RenderingPipeline;
     static TextureHandler TextureManager;
     static TimeHandler Time;
-    static CollisionHandler CollisionManager;
+    static PhysicsHandler Physics;
 
 private:
     static void CopyBehaviours(GameObject* newGameObject, GameObject* originalGameObject);
@@ -161,7 +161,6 @@ public:
 
     GameObject* gameObject;
 
-    Transform* parent;
     std::size_t childCount{};
 
     std::string* tag;
@@ -188,22 +187,24 @@ public:
     void SetParent(Transform& parentTransform);
     void SetParent(GameObject* parentGo);
 
+    inline Transform* GetParent() const { return m_Parent; }
+    inline std::vector<Transform*> GetChildren() const { return m_Children; }
+
 private:
     Transform(GameObject* gameObject);
 
     std::vector<Transform*> m_Children{};
+    Transform* m_Parent;
 
     friend class Object;
     friend class GameObject;
 };
 
-// CODE ABOVE IS REVIEWED
-
 class GameObject final : public Object {
 public:
     template<typename T>
     T* AddComponent() {
-        AssertParametersAreDerived<T>();
+        AssertComponentIsDerived<T>();
 
         if constexpr (std::is_base_of<Behaviour, T>::value) {
             m_Behaviours.push_back(std::unique_ptr<T>(new T(this)));
@@ -224,7 +225,7 @@ public:
 
     template<typename T>
     T* GetComponent() {
-        AssertParametersAreDerived<T>();    
+        AssertComponentIsDerived<T>();
 
         if constexpr (std::is_base_of<Behaviour, T>::value) {
             for(auto& behaviour : m_Behaviours) {
@@ -250,7 +251,7 @@ public:
 
     template<typename T>
     T* GetComponentInChildren() {
-        AssertParametersAreDerived<T>();
+        AssertComponentIsDerived<T>();
 
         T* ptr = GetComponent<T>();
 
@@ -269,12 +270,12 @@ public:
 
     template<typename T>
     T* GetComponentInParent() {
-        AssertParametersAreDerived<T>();
+        AssertComponentIsDerived<T>();
 
         T* ptr = GetComponent<T>();
 
-        if(ptr == nullptr && transform.parent) {
-            ptr = transform.parent->gameObject->GetComponentInParent<T>();
+        if(ptr == nullptr && transform.m_Parent) {
+            ptr = transform.m_Parent->gameObject->GetComponentInParent<T>();
         }
 
         return ptr;
@@ -282,7 +283,7 @@ public:
 
     template<typename T>
     std::vector<T*> GetComponents() {
-        AssertParametersAreDerived<T>();
+        AssertComponentIsDerived<T>();
 
         std::vector<T*> components{};
 
@@ -310,8 +311,6 @@ public:
 
     template<typename T>
     std::vector<T*> GetComponentsInChildren() {
-        AssertParametersAreDerived<T>();
-
         std::vector<T*> components = GetComponents<T>();
 
         for(auto& childTransform : transform.m_Children) {
@@ -325,12 +324,10 @@ public:
 
     template<typename T>
     std::vector<T*> GetComponentsInParent() {
-        AssertParametersAreDerived<T>();
-
         std::vector<T*> components = GetComponents<T>();
 
-        if(transform.parent) {
-            auto componentsInParent = transform.parent->gameObject->GetComponentsInParent<T>();
+        if(transform.m_Parent) {
+            auto componentsInParent = transform.m_Parent->gameObject->GetComponentsInParent<T>();
 
             components.insert(std::end(components), std::begin(componentsInParent), std::end(componentsInParent));
         }
@@ -352,7 +349,6 @@ private:
     void Start();
     void Update();
     void Render() const;
-    std::vector<Behaviour*> m_BehavioursStagedForDestruction{};
 
     std::size_t GetComponentIndex(Component* component);
     std::size_t GetBehaviourIndex(Behaviour* behaviour);
@@ -362,9 +358,9 @@ private:
     void RemoveBehaviour(Behaviour* behaviour);
 
     template<typename... Args>
-    static void AssertParametersAreDerived() {
+    static void AssertComponentIsDerived() {
         static_assert(
-            std::conjunction<std::is_base_of<Component, Args>...>::value, 
+            std::conjunction<std::is_base_of<Component, Args>...>::value,
             "Custom Component provided not derived from Component Class"
         );
     }
@@ -372,12 +368,14 @@ private:
     std::vector<std::unique_ptr<Component>> m_Components{};
     std::vector<std::unique_ptr<Behaviour>> m_Behaviours{};
     std::vector<Component*> m_ComponentsStagedForDestruction{};
+    std::vector<Behaviour*> m_BehavioursStagedForDestruction{};
 
     friend class Object;
     friend class Scene;
     friend class RenderingHandler;
 };
 
+// CODE ABOVE IS REVIEWED
 
 struct SortingLayer {
     SortingLayer(const std::string_view layerName) : name(layerName), m_GameObjectsInLayer({}) {}
@@ -385,7 +383,6 @@ struct SortingLayer {
     std::string name;
     std::vector<GameObject*> m_GameObjectsInLayer;
 };
-
 
 class Camera final : public Component {
 public:
@@ -597,9 +594,9 @@ private:
 };
 
 
-class CollisionHandler {
+class PhysicsHandler {
 private:
-    CollisionHandler();
+    PhysicsHandler();
 
     std::unique_ptr<b2World> m_World;
 

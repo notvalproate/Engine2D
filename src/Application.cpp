@@ -51,13 +51,14 @@ public:
 	void Awake() override {
 		speed = 10;
 		rotationSpeed = 180;
-		xoffset = 0;
 	}
 
 	void Start() override {
 		mainCamera = FindObjectByName("Main Camera")->GetComponent<Camera>();
 		cameraTwo = FindObjectByName("Cam2")->GetComponent<Camera>();
 		currentCamera = mainCamera;
+		go1ref = FindObjectByName("go1");
+		renderers = gameObject->GetComponentsInChildren<SpriteRenderer>();
 	}
 
 	void Update() override {
@@ -119,11 +120,9 @@ public:
 		}
 
 		// FIX INSTANTIATE LATER
-		if (Input.GetKeyDown(SDL_SCANCODE_M)) {
-			auto gameObj = Instantiate(gameObject);
-			gameObj->transform.Translate(Vector2D(xoffset, 0));
-			xoffset++;
-		}
+		//if (Input.GetKeyDown(SDL_SCANCODE_M)) {
+			//auto go = Instantiate(go1ref, transform->position, 0);
+		//}
 		
 		//Make camera follow player
 		mainCamera->transform->position = transform->position;
@@ -134,7 +133,8 @@ public:
 	Camera* mainCamera;
 	Camera* cameraTwo;
 	Camera* currentCamera;
-	int xoffset;
+	GameObject* go1ref;
+	std::vector<SpriteRenderer*> renderers;
 };
 
 class FullscreenToggler : public Behaviour {
@@ -172,7 +172,7 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(8);
 
-		/*
+		
 		auto go1 = CreateGameObject("go1");
 		auto go1Renderer = go1->AddComponent<SpriteRenderer>();
 		go1Renderer->SetSprite("assets/characters/idle/madeline.png");
@@ -186,7 +186,7 @@ public:
 		go2Renderer->SetSortingLayer("Player");
 		go2->transform.SetParent(go1);
 		go2->transform.Translate(Vector2D(2.0, 0.0));
-		*/
+		
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

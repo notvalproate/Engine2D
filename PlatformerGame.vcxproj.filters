@@ -96,7 +96,7 @@
     <ClCompile Include="src\notval\TextureHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\notval\CollisionHandler.cpp">
+    <ClCompile Include="src\notval\PhysicsHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\notval\Components\BoxCollider.cpp">
