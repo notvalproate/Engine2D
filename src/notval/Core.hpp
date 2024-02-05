@@ -144,6 +144,10 @@ public:
         return Vector2D(x * k, y * k);
     }
 
+    friend inline constexpr Vector2D operator*(const float k, const Vector2D vec) {
+        return vec * k;
+    }
+
     inline constexpr Vector2D& operator*=(const float k) {
         x *= k;
         y *= k;

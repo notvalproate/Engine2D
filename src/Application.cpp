@@ -178,14 +178,14 @@ public:
 		go1Renderer->SetSprite("assets/characters/idle/madeline.png");
 		go1Renderer->SetSortingLayer("Player");
 		go1->transform.SetParent(PlayerObject);
-		go1->transform.Translate(Vector2D(1.0, 0.0) * 3);
+		go1->transform.Translate(Vector2D(1.0, 0.0));
 
 		auto go2 = CreateGameObject("go2");
 		auto go2Renderer = go2->AddComponent<SpriteRenderer>();
 		go2Renderer->SetSprite("assets/characters/idle/madeline.png");
 		go2Renderer->SetSortingLayer("Player");
 		go2->transform.SetParent(go1);
-		go2->transform.Translate(Vector2D(2.0, 0.0));
+		go2->transform.Translate(2 * Vector2D(1.0, 0.0));
 		
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
