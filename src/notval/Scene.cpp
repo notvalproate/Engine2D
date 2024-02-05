@@ -24,12 +24,12 @@ void Scene::Update() {
 }
 
 GameObject* Scene::CreateGameObject() {
-    m_SceneGameObjects.push_back(std::unique_ptr<GameObject>(new GameObject(this, LatestSceneInstanceID++)));
+    m_SceneGameObjects.push_back(std::unique_ptr<GameObject>(new GameObject(this, m_LatestSceneInstanceID++)));
     return m_SceneGameObjects.back().get();
 }
 
 GameObject* Scene::CreateGameObject(const std::string_view goName) {
-    m_SceneGameObjects.push_back(std::unique_ptr<GameObject>(new GameObject(goName, this, LatestSceneInstanceID++)));
+    m_SceneGameObjects.push_back(std::unique_ptr<GameObject>(new GameObject(goName, this, m_LatestSceneInstanceID++)));
     return m_SceneGameObjects.back().get();
 }
 

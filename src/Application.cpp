@@ -178,7 +178,7 @@ public:
 		go1Renderer->SetSprite("assets/characters/idle/madeline.png");
 		go1Renderer->SetSortingLayer("Player");
 		go1->transform.SetParent(PlayerObject);
-		go1->transform.Translate(Vector2D(1.0, 0.0));
+		go1->transform.Translate(Vector2D(1.0, 0.0) * 3);
 
 		auto go2 = CreateGameObject("go2");
 		auto go2Renderer = go2->AddComponent<SpriteRenderer>();

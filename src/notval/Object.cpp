@@ -57,7 +57,7 @@ void Object::DestroyChildren(GameObject* gameObject) {
 }
 
 GameObject* Object::Instantiate(GameObject* gameObject) {
-    std::string newName = gameObject->name + " ID#" + std::to_string(gameObject->scene->LatestSceneInstanceID);
+    std::string newName = gameObject->name + " ID#" + std::to_string(gameObject->scene->m_LatestSceneInstanceID);
     GameObject* newGameObject = gameObject->scene->CreateGameObject(newName);
 
     for(auto& childTransform : gameObject->transform.m_Children) {

@@ -478,8 +478,6 @@ private:
     friend class GameObject;
 };
 
-// CODE ABOVE IS REVIEWED
-
 struct SortingLayer {
     SortingLayer(const std::string_view layerName) : name(layerName), m_GameObjectsInLayer({}) {}
 
@@ -514,7 +512,7 @@ private:
     Camera* m_CurrentCamera;
     std::vector<Camera*> m_SceneCameras{};
 
-    uint32_t LatestSceneInstanceID{};
+    uint32_t m_LatestSceneInstanceID{};
     bool m_Loaded;
 
     friend class Object;
@@ -522,6 +520,8 @@ private:
     friend class SceneHandler;
     friend class RenderingHandler;
 };
+
+// CODE ABOVE IS REVIEWED
 
 class InputHandler {
 public:
