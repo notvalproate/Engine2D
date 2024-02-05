@@ -237,6 +237,7 @@ private:
     friend class GameObject;
 };
 
+
 class Transform final {
 public:
     Vector2D position{};
@@ -283,6 +284,7 @@ private:
     friend class Object;
     friend class GameObject;
 };
+
 
 class GameObject final : public Object {
 public:
@@ -459,6 +461,7 @@ private:
     friend class RenderingHandler;
 };
 
+
 class Camera final : public Component {
 public:
     Vector2D ScreenToViewportPoint(const Vector2D pos) const;
@@ -474,13 +477,14 @@ private:
     explicit Camera(GameObject* gameObject);
     std::unique_ptr<Component> Clone() const;
 
-    static constexpr uint8_t defaultUnitsY = 10;
     Vector2D GetUnitsOnScreen() const;
 
     double m_AspectRatio;
+    static constexpr uint8_t defaultUnitsY = 10;
 
     friend class GameObject;
 };
+
 
 struct SortingLayer {
     SortingLayer(const std::string_view layerName) : name(layerName), m_GameObjectsInLayer({}) {}
@@ -488,6 +492,7 @@ struct SortingLayer {
     std::string name;
     std::vector<GameObject*> m_GameObjectsInLayer;
 };
+
 
 class Scene : public Object {
 public:
@@ -522,6 +527,37 @@ private:
     friend class Object;
     friend class Engine2D;
     friend class SceneHandler;
+};
+
+class SceneHandler {
+public:
+    template<typename T>
+    void AddScene(const std::string_view sceneName) {
+        AssertSceneIsDerived<T>();
+        m_Scenes.push_back(std::unique_ptr<T>(new T(sceneName)));
+    }
+
+    void LoadScene(std::size_t sceneID);
+    void LoadScene(const std::string_view sceneName);
+
+    inline Scene* GetCurrentScene() const { return m_CurrentScene; }
+    inline Camera* GetCurrentCamera() const { return m_CurrentScene->m_CurrentCamera; }
+private:
+    SceneHandler();
+
+    std::vector<std::unique_ptr<Scene>> m_Scenes{};
+    Scene* m_CurrentScene;
+
+    template<typename T>
+    static void AssertSceneIsDerived() {
+        static_assert(
+            std::is_base_of<Scene, T>::value,
+            "Scene provided not derived from Scene Class"
+        );
+    }
+
+    friend class Object;
+    friend class Engine2D;
     friend class RenderingHandler;
 };
 
@@ -554,37 +590,6 @@ private:
 
     friend class Object;
     friend class Engine2D;
-};
-
-
-class SceneHandler {
-public:
-    template<typename T>
-    void AddScene(const std::string_view sceneName) {
-        AssertSceneIsDerived<T>();
-        m_Scenes.push_back(std::unique_ptr<T>(new T(sceneName)));
-    }
-
-    void LoadScene(std::size_t sceneID);
-    void LoadScene(const std::string_view sceneName);
-
-private:
-    SceneHandler();
-
-    std::vector<std::unique_ptr<Scene>> m_Scenes{};
-    Scene* m_CurrentScene;
-
-    template<typename T>
-    static void AssertSceneIsDerived() {
-        static_assert(
-            std::is_base_of<Scene, T>::value,
-            "Scene provided not derived from Scene Class"
-        );
-    }
-
-    friend class Object;
-    friend class Engine2D;
-    friend class RenderingHandler;
 };
 
 
