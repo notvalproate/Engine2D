@@ -90,10 +90,10 @@ public:
 		}
 
 		if (Input.GetKey(SDL_SCANCODE_G)) {
-			transform->scale = Vector2D::one * -1;
+			transform->scale = Vector2D(1.0, -1.0);
 		}
 		if (Input.GetKey(SDL_SCANCODE_F)) {
-			transform->scale = Vector2D::one * 1;
+			transform->scale = Vector2D::one;
 		}
 
 		if (Input.GetKeyDown(SDL_SCANCODE_K)) {

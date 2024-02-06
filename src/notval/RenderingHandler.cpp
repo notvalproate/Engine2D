@@ -20,8 +20,22 @@ bool RenderingHandler::InitRenderer() {
 
 void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) {
 	SDL_Rect destRect = GetSpriteDestRect(dimensions, pixelsPerUnit, transform);
+
+	double angle = transform->rotation;
+
+	SDL_RendererFlip flipFlag = SDL_FLIP_NONE;
+
+	if (transform->scale.x < 0 && transform->scale.y < 0) {
+		angle += 180.0;
+	}
+	else if (transform->scale.x < 0) {
+		flipFlag = SDL_FLIP_HORIZONTAL;
+	}
+	else if (transform->scale.y < 0) {
+		flipFlag = SDL_FLIP_VERTICAL;
+	}
 	
-	SDL_RenderCopyEx(m_Renderer, texture, NULL, &destRect, transform->rotation, NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(m_Renderer, texture, NULL, &destRect, angle, NULL, flipFlag);
 }
 
 SDL_Rect RenderingHandler::GetSpriteDestRect(const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
@@ -31,8 +45,8 @@ SDL_Rect RenderingHandler::GetSpriteDestRect(const Vector2D dimensions, const ui
 	Vector2D screenPosition = currentCamera->WorldToScreenPoint(transform->position);
 	Vector2D newDimensions = (dimensions * pixelsPerUnitOnScreen) / pixelsPerUnit;
 
-	newDimensions.x = newDimensions.x * transform->scale.x;
-	newDimensions.y = newDimensions.y * transform->scale.y;
+	newDimensions.x = newDimensions.x * std::abs(transform->scale.x);
+	newDimensions.y = newDimensions.y * std::abs(transform->scale.y);
 
 	SDL_Rect destRect{
 		screenPosition.x - newDimensions.x / 2.0,
