@@ -1,6 +1,6 @@
 #include "Core.hpp"
 
-Component::Component(GameObject* gameObject) : gameObject(gameObject), transform(&gameObject->transform), tag(&gameObject->tag) { }
+Component::Component(GameObject* gameObject) : gameObject(gameObject), transform(&gameObject->transform), tag(&gameObject->tag), m_Started(false) { }
 
 Component::~Component() { }
 

@@ -2,7 +2,7 @@
 
 #include <ranges>
 
-GameObject::GameObject(Scene* scene, const uint32_t id) : name({}), tag({}), transform(this), scene(scene), m_SceneInstanceID(id) { }
+GameObject::GameObject(Scene* scene, const uint32_t id) : name({}), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false) { }
 
 GameObject::GameObject(const std::string_view goName, Scene* scene, const uint32_t id) : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id) { }
 
@@ -13,6 +13,7 @@ void GameObject::Start() {
     for(auto& component : m_Components) {
         component->Start();
     }
+    m_Started = true;
 }
 
 void GameObject::Update() {
@@ -37,6 +38,22 @@ void GameObject::Update() {
             RemoveComponent(component);
         }
         m_ComponentsStagedForDestruction.clear();
+    }
+    
+    if (m_BehavioursStagedForAdding.size()) {
+        m_Behaviours.insert(m_Behaviours.end(),
+            std::make_move_iterator(m_BehavioursStagedForAdding.begin()),
+            std::make_move_iterator(m_BehavioursStagedForAdding.end())
+        );
+        m_BehavioursStagedForAdding.clear();
+    }
+    
+    if (m_ComponentsStagedForAdding.size()) {
+        m_Components.insert(m_Components.end(),
+            std::make_move_iterator(m_ComponentsStagedForAdding.begin()),
+            std::make_move_iterator(m_ComponentsStagedForAdding.end())
+        );
+        m_ComponentsStagedForAdding.clear();
     }
 }
 

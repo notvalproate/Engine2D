@@ -212,6 +212,8 @@ protected:
     virtual void Render() const {};
     virtual void AttachGameObject(GameObject* newGameObject);
 
+    bool m_Started;
+
     friend class Object;
     friend class GameObject;
     friend class Behaviour;
@@ -291,6 +293,10 @@ public:
     template<typename T>
     inline constexpr T* AddComponent() {
         AssertComponentIsDerived<T>();
+
+        if (m_Started) {
+            return AddComponentDuringUpdate<T>();
+        }
 
         if constexpr (std::is_base_of<Behaviour, T>::value) {
             m_Behaviours.push_back(std::unique_ptr<T>(new T(this)));
@@ -444,6 +450,23 @@ private:
     void RemoveBehaviour(Behaviour* behaviour);
 
     template<typename T>
+    inline constexpr T* AddComponentDuringUpdate() {
+        if constexpr (std::is_base_of<Behaviour, T>::value) {
+            m_BehavioursStagedForAdding.push_back(std::unique_ptr<T>(new T(this)));
+            m_BehavioursStagedForAdding.back().get()->Awake();
+            m_BehavioursStagedForAdding.back().get()->Start();
+
+            return static_cast<T*>(m_Behaviours.back().get());
+        }
+
+        m_ComponentsStagedForAdding.push_back(std::unique_ptr<T>(new T(this)));
+        m_ComponentsStagedForAdding.back().get()->Awake();
+        m_ComponentsStagedForAdding.back().get()->Start();
+
+        return static_cast<T*>(m_Components.back().get());
+    }
+
+    template<typename T>
     inline static void AssertComponentIsDerived() {
         static_assert(
             std::is_base_of<Component, T>::value,
@@ -451,6 +474,10 @@ private:
         );
     }
 
+    bool m_Started;
+
+    std::vector<std::unique_ptr<Component>> m_ComponentsStagedForAdding{};
+    std::vector<std::unique_ptr<Behaviour>> m_BehavioursStagedForAdding{};
     std::vector<std::unique_ptr<Component>> m_Components{};
     std::vector<std::unique_ptr<Behaviour>> m_Behaviours{};
     std::vector<Component*> m_ComponentsStagedForDestruction{};
