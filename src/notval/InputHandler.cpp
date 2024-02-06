@@ -42,6 +42,10 @@ bool InputHandler::GetMouseButtonDown(const uint8_t buttonCode) const {
 	return m_CurrentEvent.button.button == buttonCode;
 }
 
+void InputHandler::WaitForEvent() const {
+	SDL_WaitEvent(NULL);
+}
+
 void InputHandler::PollEvents() {
 	SDL_PollEvent(&m_CurrentEvent);
 	SetProperties();

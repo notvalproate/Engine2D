@@ -74,8 +74,4 @@ const std::vector<std::string>& RenderingHandler::GetAvailableSortingLayers() co
 void RenderingHandler::PresentRenderer() {
 	SDL_RenderPresent(m_Renderer);
 	SDL_RenderClear(m_Renderer);
-
-	if (!Object::Screen.InFocus()) {
-		SDL_WaitEvent(NULL);
-	}
 }

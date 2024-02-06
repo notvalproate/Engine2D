@@ -634,6 +634,8 @@ public:
     bool GetMouseButtonUp(const uint8_t buttonCode) const;
     bool GetMouseButtonDown(const uint8_t buttonCode) const;
 
+    void WaitForEvent() const;
+
     inline const SDL_Event& GetCurrentEvent() const { return m_CurrentEvent; }
 
     int mousePositionX, mousePositionY;
