@@ -662,13 +662,12 @@ public:
     void SetResolution(const int w, const int h);
     inline unsigned int GetScreenWidth() const { return m_Width; }
     inline unsigned int GetScreenHeight() const { return m_Height; }
-
+    inline bool InFocus() const { return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS)); };
 private:
     ScreenHandler();
 
     bool InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight);
-    inline bool InFocus() const { return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS)); };
-
+    
     SDL_Window* m_Window;
     SDL_DisplayMode m_Mode{};
     int m_Width{}, m_Height{};

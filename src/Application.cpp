@@ -126,6 +126,10 @@ public:
 		
 		//Make camera follow player
 		mainCamera->transform->position = transform->position;
+
+		if (!Screen.InFocus()) {
+			Input.WaitForEvent();
+		}
 	}
 
 	int speed;
