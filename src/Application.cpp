@@ -172,7 +172,7 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(8);
 
-		
+		/*
 		auto go1 = CreateGameObject("go1");
 		auto go1Renderer = go1->AddComponent<SpriteRenderer>();
 		go1Renderer->SetSprite("assets/characters/idle/madeline.png");
@@ -186,7 +186,7 @@ public:
 		go2Renderer->SetSortingLayer("Player");
 		go2->transform.SetParent(go1);
 		go2->transform.Translate(2 * Vector2D(1.0, 0.0));
-		
+		*/
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

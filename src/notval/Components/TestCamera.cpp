@@ -15,6 +15,10 @@ Vector2D Camera::GetUnitsOnScreen() const {
 	);
 }
 
+double Camera::GetPixelsPerUnit() const {
+	return Screen.GetScreenHeight() / (defaultUnitsY * transform->scale.y);
+}
+
 Vector2D Camera::ScreenToViewportPoint(const Vector2D pos) const {
 	return Vector2D(
 		pos.x / Screen.GetScreenWidth(),

@@ -20,27 +20,21 @@ bool RenderingHandler::InitRenderer() {
 
 void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
+	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 
 	Vector2D screenPosition = currentCamera->WorldToScreenPoint(transform->position);
 
-	SDL_Rect destRect{};
-
-	Vector2D newDimensions = dimensions;
-	newDimensions /= pixelsPerUnit;
-
-	Vector2D diff = currentCamera->WorldToScreenPoint(newDimensions + Vector2D(1.0, 1.0));
-	Vector2D point = currentCamera->WorldToScreenPoint(newDimensions);
-
-	newDimensions.x *= -(point.x - diff.x);
-	newDimensions.y *= (point.y - diff.y);
+	Vector2D newDimensions = (dimensions * pixelsPerUnitOnScreen) / pixelsPerUnit;
 
 	newDimensions.x = newDimensions.x * transform->scale.x;
 	newDimensions.y = newDimensions.y * transform->scale.y;
 
-	destRect.x = screenPosition.x - newDimensions.x / 2.0;
-	destRect.y = screenPosition.y - newDimensions.y / 2.0;
-	destRect.w = newDimensions.x;
-	destRect.h = newDimensions.y;
+	SDL_Rect destRect{
+		screenPosition.x - newDimensions.x / 2.0,
+		screenPosition.y - newDimensions.y / 2.0,
+		newDimensions.x,
+		newDimensions.y,
+	};
 	
 	SDL_RenderCopyEx(m_Renderer, texture, NULL, &destRect, transform->rotation, NULL, SDL_FLIP_NONE);
 }

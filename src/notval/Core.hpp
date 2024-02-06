@@ -473,6 +473,7 @@ public:
     Vector2D WorldToScreenPoint(const Vector2D pos) const;
     Vector2D WorldToViewportPoint(const Vector2D pos) const;
 
+    double GetPixelsPerUnit() const;
 private:
     explicit Camera(GameObject* gameObject);
     std::unique_ptr<Component> Clone() const;
