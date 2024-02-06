@@ -21,6 +21,7 @@ void Scene::Update() {
 
     if(m_StagedForDestruction.size()) {
         for(auto& gO : m_StagedForDestruction) {
+
             GameObject::DestroyImmediate(gO);
         }
         m_StagedForDestruction.clear();
@@ -86,6 +87,24 @@ void Scene::SwitchToCamera(const std::string_view cameraName) {
 
 void Scene::AddObjectToSortingLayers(GameObject* gameObject) {
     m_SortingLayers[0].m_GameObjectsInLayer.push_back(gameObject);
+}
+
+void Scene::RemoveObjectFromSortingLayers(GameObject* gameObject, const std::string_view layerName) {
+    auto it = std::find_if(
+        m_SortingLayers.begin(),
+        m_SortingLayers.end(),
+        [&layerName](const SortingLayer& layer) {
+            return layer.name == layerName;
+        });
+
+    auto& gameObjectsInLayer = (*it).m_GameObjectsInLayer;
+
+    for (std::size_t i = 0; i < gameObjectsInLayer.size(); i++) {
+        if (gameObjectsInLayer[i] == gameObject) {
+            gameObjectsInLayer.erase(gameObjectsInLayer.begin() + i);
+            break;
+        }
+    }
 }
 
 bool Scene::SetSortingLayer(GameObject* gameObject, const std::string_view layerName, const std::string_view previousLayer) {

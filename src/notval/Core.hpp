@@ -539,7 +539,6 @@ private:
     const std::vector<std::string>& GetAvailableSortingLayers() const;
 
     SDL_Renderer* m_Renderer;
-
     std::vector<std::string> m_AvailableSortingLayers;
 
     friend class Object;
@@ -572,6 +571,7 @@ private:
     void Render() const;
 
     void AddObjectToSortingLayers(GameObject* gameObject);
+    void RemoveObjectFromSortingLayers(GameObject* gameObject, const std::string_view layerName);
     bool SetSortingLayer(GameObject* gameObject, const std::string_view layerName, const std::string_view previousLayer);
 
     std::vector<std::unique_ptr<GameObject>> m_SceneGameObjects{};
