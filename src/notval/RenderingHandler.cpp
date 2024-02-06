@@ -19,11 +19,16 @@ bool RenderingHandler::InitRenderer() {
 }
 
 void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) {
+	SDL_Rect destRect = GetSpriteDestRect(dimensions, pixelsPerUnit, transform);
+	
+	SDL_RenderCopyEx(m_Renderer, texture, NULL, &destRect, transform->rotation, NULL, SDL_FLIP_NONE);
+}
+
+SDL_Rect RenderingHandler::GetSpriteDestRect(const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 
 	Vector2D screenPosition = currentCamera->WorldToScreenPoint(transform->position);
-
 	Vector2D newDimensions = (dimensions * pixelsPerUnitOnScreen) / pixelsPerUnit;
 
 	newDimensions.x = newDimensions.x * transform->scale.x;
@@ -35,10 +40,9 @@ void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensi
 		newDimensions.x,
 		newDimensions.y,
 	};
-	
-	SDL_RenderCopyEx(m_Renderer, texture, NULL, &destRect, transform->rotation, NULL, SDL_FLIP_NONE);
-}
 
+	return destRect;
+}
 
 void RenderingHandler::AddSortingLayer(const std::string_view name) {
 	m_SortingLayers.push_back(SortingLayer(name));

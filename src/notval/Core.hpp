@@ -474,6 +474,7 @@ public:
     Vector2D WorldToViewportPoint(const Vector2D pos) const;
 
     double GetPixelsPerUnit() const;
+
 private:
     explicit Camera(GameObject* gameObject);
     std::unique_ptr<Component> Clone() const;
@@ -632,6 +633,7 @@ private:
     void ClearSortingLayers();
     void RenderSortingLayers();
     void PresentRenderer();
+    SDL_Rect GetSpriteDestRect(const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
 
     SDL_Renderer* m_Renderer;
 
