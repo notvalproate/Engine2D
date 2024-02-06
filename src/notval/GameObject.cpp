@@ -7,13 +7,13 @@ GameObject::GameObject(Scene* scene, const uint32_t id) : name({}), tag({}), tra
 GameObject::GameObject(const std::string_view goName, Scene* scene, const uint32_t id) : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id) { }
 
 void GameObject::Start() {
+    m_Started = true;
     for (auto& behaviour : m_Behaviours) {
         behaviour->Start();
     }
     for(auto& component : m_Components) {
         component->Start();
     }
-    m_Started = true;
 }
 
 void GameObject::Update() {
