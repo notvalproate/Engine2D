@@ -46,10 +46,11 @@ void Engine2D::Update() {
 	}
 
 	Physics.m_World.get()->Step(Time.GetDeltaTime(), 6, 2);
+
 	SceneManager.m_CurrentScene->Update();
 }
 
 void Engine2D::Render() const {
-	RenderingPipeline.RenderSortingLayers();
+	SceneManager.m_CurrentScene->Render();
 	RenderingPipeline.PresentRenderer();
 }

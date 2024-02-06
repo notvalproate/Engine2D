@@ -4,7 +4,7 @@
 SpriteRenderer::SpriteRenderer(GameObject* gameObject) 
 	: Component(gameObject), m_Sprite(nullptr), m_Dimensions({0, 0}), m_PixelsPerUnit(10), m_SortingLayer("Default") 
 {
-	RenderingPipeline.AddGameObjectToRenderer(gameObject);
+	gameObject->scene->AddObjectToSortingLayers(gameObject);
 }
 
 std::unique_ptr<Component> SpriteRenderer::Clone() const {
@@ -20,7 +20,7 @@ void SpriteRenderer::SetSprite(const char* spritePath) {
 }
 
 void SpriteRenderer::SetSortingLayer(const std::string_view layerName) {
-	if (RenderingPipeline.SetSortingLayer(gameObject, layerName, m_SortingLayer)) {
+	if (gameObject->scene->SetSortingLayer(gameObject, layerName, m_SortingLayer)) {
 		m_SortingLayer = layerName;
 		return;
 	}

@@ -1,7 +1,11 @@
 #include "Core.hpp"
 
-Scene::Scene(const std::string_view name) : name(name), m_Loaded(false) {
+Scene::Scene(const std::string_view name, const std::vector<std::string>& avaiableSortingLayers) : name(name), m_Loaded(false) {
     m_CurrentCamera = CreateCamera("Main Camera");
+    
+    for (const auto& layerName : avaiableSortingLayers) {
+        m_SortingLayers.push_back(SortingLayer(layerName));
+    }
 }
 
 void Scene::Start() {
@@ -20,6 +24,14 @@ void Scene::Update() {
             GameObject::DestroyImmediate(gO);
         }
         m_StagedForDestruction.clear();
+    }
+}
+
+void Scene::Render() const {
+    for (const auto& layer : m_SortingLayers) {
+        for (const auto& gO : layer.m_GameObjectsInLayer) {
+            gO->Render();
+        }
     }
 }
 
@@ -70,4 +82,41 @@ void Scene::SwitchToCamera(const std::string_view cameraName) {
             return;
         }
     }
+}
+
+void Scene::AddObjectToSortingLayers(GameObject* gameObject) {
+    m_SortingLayers[0].m_GameObjectsInLayer.push_back(gameObject);
+}
+
+bool Scene::SetSortingLayer(GameObject* gameObject, const std::string_view layerName, const std::string_view previousLayer) {
+    auto it = std::find_if(
+        m_SortingLayers.begin(),
+        m_SortingLayers.end(),
+        [&previousLayer](const SortingLayer& layer) {
+            return layer.name == previousLayer;
+        });
+
+    auto& prevLayerObjects = (*it).m_GameObjectsInLayer;
+
+    for (std::size_t i = 0; i < prevLayerObjects.size(); i++) {
+        if (prevLayerObjects[i] == gameObject) {
+            prevLayerObjects.erase(prevLayerObjects.begin() + i);
+            break;
+        }
+    }
+
+    auto it2 = std::find_if(
+        m_SortingLayers.begin(),
+        m_SortingLayers.end(),
+        [&layerName](const SortingLayer& layer) {
+            return layer.name == layerName;
+        });
+
+    if (it2 == m_SortingLayers.end()) {
+        m_SortingLayers[0].m_GameObjectsInLayer.push_back(gameObject);
+        return false;
+    }
+
+    (*it2).m_GameObjectsInLayer.push_back(gameObject);
+    return true;
 }

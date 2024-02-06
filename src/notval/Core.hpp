@@ -523,6 +523,33 @@ struct SortingLayer {
 };
 
 
+class RenderingHandler {
+public:
+    void RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform);
+    void AddSortingLayer(const std::string& name);
+
+private:
+    RenderingHandler();
+
+    bool InitRenderer();
+    void PresentRenderer();
+
+    SDL_Rect GetSpriteDestRect(const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
+    void GetFlipAndRotation(const Transform* transform, double& rotation, SDL_RendererFlip& flipFlag) const;
+    const std::vector<std::string>& GetAvailableSortingLayers() const;
+
+    SDL_Renderer* m_Renderer;
+
+    std::vector<std::string> m_AvailableSortingLayers;
+
+    friend class Object;
+    friend class GameObject;
+    friend class SceneHandler;
+    friend class TextureHandler;
+    friend class Engine2D;
+};
+
+
 class Scene : public Object {
 public:
     GameObject* CreateGameObject();
@@ -536,12 +563,16 @@ public:
     std::string name{};
 
 private:
-    explicit Scene(const std::string_view name);
+    explicit Scene(const std::string_view name, const std::vector<std::string>& avaiableSortingLayers);
 
     virtual void SetupScene() = 0;
 
     void Start();
     void Update();
+    void Render() const;
+
+    void AddObjectToSortingLayers(GameObject* gameObject);
+    bool SetSortingLayer(GameObject* gameObject, const std::string_view layerName, const std::string_view previousLayer);
 
     std::vector<std::unique_ptr<GameObject>> m_SceneGameObjects{};
     std::vector<GameObject*> m_StagedForDestruction{};
@@ -556,6 +587,7 @@ private:
     friend class Object;
     friend class Engine2D;
     friend class SceneHandler;
+    friend class SpriteRenderer;
 };
 
 class SceneHandler {
@@ -563,7 +595,7 @@ public:
     template<typename T>
     void AddScene(const std::string_view sceneName) {
         AssertSceneIsDerived<T>();
-        m_Scenes.push_back(std::unique_ptr<T>(new T(sceneName)));
+        m_Scenes.push_back(std::unique_ptr<T>(new T(sceneName, Object::RenderingPipeline.GetAvailableSortingLayers())));
     }
 
     void LoadScene(std::size_t sceneID);
@@ -643,37 +675,6 @@ private:
     friend class Engine2D;
     friend class RenderingHandler;
     friend class TimeHandler;
-};
-
-
-class RenderingHandler {
-public:
-    void RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform);
-    void AddSortingLayer(const std::string_view name);
-
-private:
-    RenderingHandler();
-
-    bool InitRenderer();
-    void AddGameObjectToRenderer(GameObject* gameObject);
-    bool SetSortingLayer(GameObject* gameObject, const std::string_view layerName, const std::string_view previousLayer);
-    void ClearSortingLayers();
-    void RenderSortingLayers();
-    void PresentRenderer();
-
-    SDL_Rect GetSpriteDestRect(const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
-    void GetFlipAndRotation(const Transform* transform, double& rotation, SDL_RendererFlip& flipFlag) const;
-
-    SDL_Renderer* m_Renderer;
-
-    std::vector<SortingLayer> m_SortingLayers;
-
-    friend class Object;
-    friend class GameObject;
-    friend class SpriteRenderer;
-    friend class SceneHandler;
-    friend class TextureHandler;
-    friend class Engine2D;
 };
 
 class TextureHandler : public Object {
