@@ -17,6 +17,7 @@ void ScreenHandler::ToggleFullscreen() {
 void ScreenHandler::SetResolution(const int w, const int h) {
 	m_Width = w;
 	m_Height = h;
+	m_AspectRatio = static_cast<double>(m_Width) / static_cast<double>(m_Height);
 	SDL_SetWindowSize(m_Window, w, h);
 	SDL_SetWindowPosition(m_Window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
