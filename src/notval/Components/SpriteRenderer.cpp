@@ -7,10 +7,6 @@ SpriteRenderer::SpriteRenderer(GameObject* gameObject)
 	gameObject->scene->AddObjectToSortingLayers(gameObject);
 }
 
-SpriteRenderer::~SpriteRenderer() {
-	gameObject->scene->RemoveObjectFromSortingLayers(gameObject, m_SortingLayer);
-}
-
 std::unique_ptr<Component> SpriteRenderer::Clone() const {
 	return std::make_unique<SpriteRenderer>(*this);
 }
