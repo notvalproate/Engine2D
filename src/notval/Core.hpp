@@ -712,16 +712,13 @@ private:
     unsigned int m_FixedFramerate;
     float m_FixedDeltaTime;
     float m_DeltaTime;
+    uint32_t m_FrameCount;
 
     std::chrono::system_clock::time_point m_FrameStart;
-
-    uint32_t m_FrameCount;
 
     friend class Object;
     friend class Engine2D;
 };
-
-// CODE ABOVE IS REVIEWED
 
 class PhysicsHandler {
 private:
@@ -757,3 +754,5 @@ private:
 
     bool m_IsRunning;
 };
+
+// CODE ABOVE IS REVIEWED
