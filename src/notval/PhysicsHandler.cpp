@@ -1,5 +1,7 @@
 #include "Core.hpp"
 
-PhysicsHandler::PhysicsHandler() {
-	m_World = std::make_unique<b2World>(b2Vec2(0.0f, 9.8f));
+PhysicsHandler::PhysicsHandler() { }
+
+void PhysicsHandler::StepCurrentWorld(const float deltaTime) const {
+	GetCurrentWorld()->Step(deltaTime, 6, 2);
 }

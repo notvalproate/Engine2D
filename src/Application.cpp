@@ -55,37 +55,10 @@ public:
 
 	void Start() override {
 		mainCamera = FindObjectByName("Main Camera")->GetComponent<Camera>();
-		cameraTwo = FindObjectByName("Cam2")->GetComponent<Camera>();
-		currentCamera = mainCamera;
-		go1ref = FindObjectByName("go1");
-		renderers = gameObject->GetComponentsInChildren<SpriteRenderer>();
 	}
 
 	void Update() override {
-		float moveX = 0, moveY = 0;
-
-		if (Input.GetKey(SDL_SCANCODE_W)) {
-			moveY = 1;
-		}
-		if (Input.GetKey(SDL_SCANCODE_S)) {
-			moveY = -1;
-		}
-		if (Input.GetKey(SDL_SCANCODE_A)) {
-			moveX = -1;
-		}
-		if (Input.GetKey(SDL_SCANCODE_D)) {
-			moveX = 1;
-		}
-
-		Vector2D velocity(moveX, moveY);
-		velocity.Normalize();
-
-		transform->Translate(velocity * speed * Time.GetDeltaTime());
-
 		if (Input.GetKey(SDL_SCANCODE_R)) {
-			transform->RotateAround(Vector2D(0, 0), rotationSpeed * Time.GetDeltaTime());
-		}
-		if (Input.GetKey(SDL_SCANCODE_T)) {
 			transform->Rotate(rotationSpeed * Time.GetDeltaTime());
 		}
 
@@ -104,38 +77,21 @@ public:
 		}
 
 		if (Input.mouseScrollDeltaY > 0) {
-			currentCamera->transform->scale -= Vector2D(0.02, 0.02);
+			mainCamera->transform->scale -= Vector2D(0.02, 0.02);
 		}
 		if (Input.mouseScrollDeltaY < 0) {
-			currentCamera->transform->scale += Vector2D(0.02, 0.02);
-		}
-		
-		if (Input.GetKeyDown(SDL_SCANCODE_P)) {
-			gameObject->scene->SwitchToCamera("Cam2");
-			currentCamera = cameraTwo;
-		}
-		if (Input.GetKeyDown(SDL_SCANCODE_O)) {
-			gameObject->scene->SwitchToCamera("Main Camera");
-			currentCamera = mainCamera;
+			mainCamera->transform->scale += Vector2D(0.02, 0.02);
 		}
 
 		// FIX INSTANTIATE LATER
 		//if (Input.GetKeyDown(SDL_SCANCODE_M)) {
 			//auto go = Instantiate(go1ref, transform->position, 0);
 		//}
-		
-		mainCamera->transform->position = transform->position;
-
-		if (!Screen.InFocus()) {
-			Input.WaitForEvent();
-		}
 	}
 
 	int speed;
 	int rotationSpeed;
 	Camera* mainCamera;
-	Camera* cameraTwo;
-	Camera* currentCamera;
 	GameObject* go1ref;
 	std::vector<SpriteRenderer*> renderers;
 };
@@ -152,6 +108,10 @@ public:
 		if (Input.GetKeyDown(SDL_SCANCODE_F11)) {
 			Screen.ToggleFullscreen();
 		}
+
+		if (!Screen.InFocus()) {
+			Input.WaitForEvent();
+		}
 	}
 };
 
@@ -160,8 +120,6 @@ public:
 	using Scene::Scene;
 
 	void SetupScene() override {
-		auto cam2 = CreateCamera("Cam2");
-
 		auto Background = CreateGameObject("BG");
 		auto backgroundRenderer = Background->AddComponent<SpriteRenderer>();
 		backgroundRenderer->SetSprite("assets/backgrounds/BG.png");
@@ -169,27 +127,11 @@ public:
 		backgroundRenderer->SetPixelsPerUnit(8);
 
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->AddComponent<Player>();
+		PlayerObject->AddComponent<Player, BoxCollider>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(8);
-
-		/*
-		auto go1 = CreateGameObject("go1");
-		auto go1Renderer = go1->AddComponent<SpriteRenderer>();
-		go1Renderer->SetSprite("assets/characters/idle/madeline.png");
-		go1Renderer->SetSortingLayer("Player");
-		go1->transform.SetParent(PlayerObject);
-		go1->transform.Translate(Vector2D(1.0, 0.0));
-
-		auto go2 = CreateGameObject("go2");
-		auto go2Renderer = go2->AddComponent<SpriteRenderer>();
-		go2Renderer->SetSprite("assets/characters/idle/madeline.png");
-		go2Renderer->SetSortingLayer("Player");
-		go2->transform.SetParent(go1);
-		go2->transform.Translate(2 * Vector2D(1.0, 0.0));
-		*/
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

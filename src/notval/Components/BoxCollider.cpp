@@ -4,10 +4,11 @@ BoxCollider::BoxCollider(GameObject* gameObject) : Behaviour(gameObject), m_Body
 	b2BodyDef boxBody;
 	boxBody.type = b2_dynamicBody;
 	boxBody.position.Set(transform->position.x / 10.0f, transform->position.y / 10.0f);
-	m_Body = Physics.m_World.get()->CreateBody(&boxBody);
+
+	m_Body = Physics.GetCurrentWorld()->CreateBody(&boxBody);
 
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(5.0f, 5.0f);
+	boxShape.SetAsBox(1.0f, 1.0f);
 
 	b2FixtureDef boxFixture;
 	boxFixture.shape = &boxShape;

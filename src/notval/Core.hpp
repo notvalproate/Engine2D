@@ -581,14 +581,18 @@ private:
     Camera* m_CurrentCamera;
     std::vector<Camera*> m_SceneCameras{};
 
+    std::unique_ptr<b2World> m_PhysicsWorld;
+
     uint32_t m_LatestSceneInstanceID{};
     bool m_Loaded;
 
     friend class Object;
     friend class Engine2D;
     friend class SceneHandler;
+    friend class PhysicsHandler;
     friend class SpriteRenderer;
 };
+
 
 class SceneHandler {
 public:
@@ -621,6 +625,7 @@ private:
     friend class Engine2D;
     friend class RenderingHandler;
 };
+
 
 class InputHandler {
 public:
@@ -684,6 +689,7 @@ private:
     friend class TimeHandler;
 };
 
+
 class TextureHandler {
 public:
     SDL_Texture* LoadTexture(const char* texpath) const;
@@ -694,6 +700,7 @@ private:
 
     friend class Object;
 };
+
 
 class TimeHandler {
 public:
@@ -720,11 +727,13 @@ private:
     friend class Engine2D;
 };
 
+
 class PhysicsHandler {
 private:
     PhysicsHandler();
 
-    std::unique_ptr<b2World> m_World;
+    void StepCurrentWorld(const float deltaTime) const;
+    inline b2World* GetCurrentWorld() const { return Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get(); }
 
     friend class Object;
     friend class BoxCollider;
@@ -754,5 +763,3 @@ private:
 
     bool m_IsRunning;
 };
-
-// CODE ABOVE IS REVIEWED
