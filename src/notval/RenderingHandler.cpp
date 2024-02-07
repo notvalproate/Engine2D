@@ -26,6 +26,18 @@ void RenderingHandler::SetRendererVsync(const bool set) {
 	SDL_RenderSetVSync(m_Renderer, set ? 1 : 0);
 }
 
+void RenderingHandler::RenderLine(const Vector2D src, const Vector2D dest, const Color color) const {
+	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
+	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
+
+	Vector2D srcScreenPosition = currentCamera->WorldToScreenPoint(src);
+	Vector2D destScreenPosition = currentCamera->WorldToScreenPoint(dest);
+
+	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderDrawLine(m_Renderer, srcScreenPosition.x, srcScreenPosition.y, destScreenPosition.x, destScreenPosition.y);
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+}
+
 void RenderingHandler::RenderRect(const Vector2D position, const Vector2D dimensions, const Color color) const {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();

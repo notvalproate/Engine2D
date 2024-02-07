@@ -27,7 +27,12 @@ void PhysicsHandler::RenderColliders() const {
 						Vector2D point1(polygon->m_vertices[i].x, polygon->m_vertices[i].y);
 						Vector2D point2(polygon->m_vertices[j].x, polygon->m_vertices[j].y); 
 
-						//Object::RenderingPipeline.RenderLine(point1, point2, Color(255, 0, 0));
+						point1.x += position.x;
+						point1.y += position.y;
+						point2.x += position.x;
+						point2.y += position.y;
+
+						Object::RenderingPipeline.RenderLine(point1, point2, Color(0, 255, 0));
 					}
 				}
 			}
