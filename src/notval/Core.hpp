@@ -657,6 +657,9 @@ class ScreenHandler {
 public:
     void ToggleFullscreen();
     void SetResolution(const int w, const int h);
+    void SetToInitialResolution();
+    void SetToDisplayResolution();
+
     inline unsigned int GetScreenWidth() const { return m_Width; }
     inline unsigned int GetScreenHeight() const { return m_Height; }
     inline double GetAspectRatio() const { return m_AspectRatio; }

@@ -5,13 +5,13 @@ ScreenHandler::ScreenHandler() : m_Window(nullptr) { }
 
 void ScreenHandler::ToggleFullscreen() {
 	if (!IsFullscreen()) {
-		SetResolution(m_Mode.w, m_Mode.h);
+		SetToDisplayResolution();
 		SDL_SetWindowFullscreen(m_Window, SDL_WINDOW_FULLSCREEN);
 		return;
 	}
 
 	SDL_SetWindowFullscreen(m_Window, 0);
-	SetResolution(m_InitWidth, m_InitHeight);
+	SetToInitialResolution();
 }
 
 void ScreenHandler::SetResolution(const int w, const int h) {
@@ -20,6 +20,14 @@ void ScreenHandler::SetResolution(const int w, const int h) {
 	m_AspectRatio = static_cast<double>(m_Width) / static_cast<double>(m_Height);
 	SDL_SetWindowSize(m_Window, w, h);
 	SDL_SetWindowPosition(m_Window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+}
+
+void ScreenHandler::SetToInitialResolution() {
+	SetResolution(m_InitWidth, m_InitHeight);
+}
+
+void ScreenHandler::SetToDisplayResolution() {
+	SetResolution(m_Mode.w, m_Mode.h);
 }
 
 bool ScreenHandler::InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight) {

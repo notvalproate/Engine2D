@@ -213,7 +213,7 @@ public:
 int main(int argc, char *argv[]) {
 	GameTest myGame;
 
-	myGame.InitGame("Engine2D", "assets/characters/idle/madeline.png", 1280, 720);
+	myGame.InitGame("Engine2D", "assets/characters/idle/madeline.png", 720, 720);
 	myGame.Run();
 
 	return 0;
