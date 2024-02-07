@@ -521,11 +521,19 @@ struct SortingLayer {
     std::vector<GameObject*> m_GameObjectsInLayer;
 };
 
+struct Color {
+    explicit Color() = default;
+    explicit Color(const uint8_t red, const uint8_t green, const uint8_t blue) : r(red), g(green), b(blue), a(255) { }
+    explicit Color(const uint8_t red, const uint8_t green, const uint8_t blue, const uint8_t alpha) : r(red), g(green), b(blue), a(alpha) { }
+
+    uint8_t r{}, g{}, b{}, a{};
+};
 
 class RenderingHandler {
 public:
     void SetRendererVsync(const bool set);
-    void RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform);
+    void RenderRect(const Vector2D position, const Vector2D dimensions, const Color color) const;
+    void RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
     void AddSortingLayer(const std::string& name);
 
 private:
@@ -730,11 +738,19 @@ private:
 
 
 class PhysicsHandler {
+public:
+    void SetRenderColliders(const bool set);
+
 private:
     PhysicsHandler();
 
+    void RenderColliders() const;
+
+    bool m_RenderSceneColliders;
+
     friend class Object;
     friend class BoxCollider;
+    friend class RenderingHandler;
     friend class Engine2D;
 };
 

@@ -26,7 +26,26 @@ void RenderingHandler::SetRendererVsync(const bool set) {
 	SDL_RenderSetVSync(m_Renderer, set ? 1 : 0);
 }
 
-void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) {
+void RenderingHandler::RenderRect(const Vector2D position, const Vector2D dimensions, const Color color) const {
+	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
+	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
+
+	Vector2D screenPosition = currentCamera->WorldToScreenPoint(position);
+	Vector2D newDimensions = dimensions * pixelsPerUnitOnScreen;
+
+	SDL_Rect rect{
+		screenPosition.x - newDimensions.x / 2.0,
+		screenPosition.y - newDimensions.y / 2.0,
+		newDimensions.x,
+		newDimensions.y,
+	};
+
+	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderDrawRect(m_Renderer, &rect);
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+}
+
+void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
 	double angle = transform->rotation;
 	SDL_RendererFlip flipFlag;
 
