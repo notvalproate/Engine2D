@@ -622,8 +622,6 @@ private:
     friend class RenderingHandler;
 };
 
-// CODE ABOVE IS REVIEWED
-
 class InputHandler {
 public:
     bool GetKey(const SDL_Scancode scanCode) const;
@@ -671,12 +669,15 @@ private:
     SDL_Window* m_Window;
     SDL_DisplayMode m_Mode{};
     int m_Width{}, m_Height{};
+    int m_InitWidth{}, m_InitHeight{};
 
     friend class Object;
     friend class Engine2D;
     friend class RenderingHandler;
     friend class TimeHandler;
 };
+
+// CODE ABOVE IS REVIEWED
 
 class TextureHandler : public Object {
 public:

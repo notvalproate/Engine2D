@@ -27,6 +27,8 @@ bool ScreenHandler::InitScreen(const char* title, const char* iconpath, const in
 		std::cout << "Stage: Display Mode Initialized..." << std::endl;
 	}
 
+	m_InitWidth = windowWidth;
+	m_InitHeight = windowHeight;
 	m_Width = windowWidth;
 	m_Height = windowHeight;
 
