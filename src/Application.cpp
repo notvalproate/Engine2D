@@ -80,7 +80,7 @@ public:
 		Vector2D velocity(moveX, moveY);
 		velocity.Normalize();
 
-		transform->Translate(velocity * speed * Time.GetFixedDeltaTime());
+		transform->Translate(velocity * speed * Time.GetDeltaTime());
 
 		if (Input.GetKey(SDL_SCANCODE_R)) {
 			transform->RotateAround(Vector2D(0, 0), rotationSpeed * Time.GetDeltaTime());
@@ -124,7 +124,6 @@ public:
 			//auto go = Instantiate(go1ref, transform->position, 0);
 		//}
 		
-		//Make camera follow player
 		mainCamera->transform->position = transform->position;
 
 		if (!Screen.InFocus()) {
@@ -201,6 +200,8 @@ public:
 	using Engine2D::Engine2D;
 
 	void SetupGame() override {
+		RenderingPipeline.SetRendererVsync(true);
+
 		RenderingPipeline.AddSortingLayer("Background");
 		RenderingPipeline.AddSortingLayer("Player");
 
@@ -213,7 +214,7 @@ public:
 int main(int argc, char *argv[]) {
 	GameTest myGame;
 
-	myGame.InitGame("Engine2D", "assets/characters/idle/madeline.png", 720, 720);
+	myGame.InitGame("Engine2D", "assets/characters/idle/madeline.png", 1280, 720);
 	myGame.Run();
 
 	return 0;

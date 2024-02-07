@@ -524,6 +524,7 @@ struct SortingLayer {
 
 class RenderingHandler {
 public:
+    void SetRendererVsync(const bool set);
     void RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform);
     void AddSortingLayer(const std::string& name);
 
@@ -683,9 +684,7 @@ private:
     friend class TimeHandler;
 };
 
-// CODE ABOVE IS REVIEWED
-
-class TextureHandler : public Object {
+class TextureHandler {
 public:
     SDL_Texture* LoadTexture(const char* texpath) const;
     SDL_Point GetTextureSize(SDL_Texture* texture) const;
@@ -722,6 +721,7 @@ private:
     friend class Engine2D;
 };
 
+// CODE ABOVE IS REVIEWED
 
 class PhysicsHandler {
 private:

@@ -2,7 +2,7 @@
 #include "SDL_image.h"
 
 SDL_Texture* TextureHandler::LoadTexture(const char* texpath) const {
-	return IMG_LoadTexture(RenderingPipeline.m_Renderer, texpath);
+	return IMG_LoadTexture(Object::RenderingPipeline.m_Renderer, texpath);
 }
 
 SDL_Point TextureHandler::GetTextureSize(SDL_Texture* texture) const {

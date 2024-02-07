@@ -3,7 +3,7 @@
 RenderingHandler::RenderingHandler() : m_Renderer(nullptr), m_AvailableSortingLayers({ "Default" }) { }
 
 bool RenderingHandler::InitRenderer() {
-	if (!(m_Renderer = SDL_CreateRenderer(Object::Screen.m_Window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE))) {
+	if (!(m_Renderer = SDL_CreateRenderer(Object::Screen.m_Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE))) {
 		std::cout << "Error: Couldn't Initialize Renderer..." << std::endl;
 		return false;
 	}
@@ -16,6 +16,10 @@ bool RenderingHandler::InitRenderer() {
 	std::cout << "Stage: Initialized Renderer..." << std::endl;
 
 	return true;
+}
+
+void RenderingHandler::SetRendererVsync(const bool set) {
+	SDL_RenderSetVSync(m_Renderer, set ? 1 : 0);
 }
 
 void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) {
