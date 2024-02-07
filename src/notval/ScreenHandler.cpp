@@ -4,17 +4,19 @@
 ScreenHandler::ScreenHandler() : m_Window(nullptr) { }
 
 void ScreenHandler::ToggleFullscreen() {
-	if (!(SDL_GetWindowFlags(m_Window) & SDL_WINDOW_FULLSCREEN)) {
-		SDL_SetWindowSize(m_Window, m_Mode.w, m_Mode.h); 
+	if (!IsFullscreen()) {
+		SetResolution(m_Mode.w, m_Mode.h);
 		SDL_SetWindowFullscreen(m_Window, SDL_WINDOW_FULLSCREEN);
 		return;
 	}
 
-	SDL_SetWindowSize(m_Window, m_Width, m_Height);
 	SDL_SetWindowFullscreen(m_Window, 0);
+	SetResolution(m_InitWidth, m_InitHeight);
 }
 
 void ScreenHandler::SetResolution(const int w, const int h) {
+	m_Width = w;
+	m_Height = h;
 	SDL_SetWindowSize(m_Window, w, h);
 	SDL_SetWindowPosition(m_Window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
@@ -31,6 +33,7 @@ bool ScreenHandler::InitScreen(const char* title, const char* iconpath, const in
 	m_InitHeight = windowHeight;
 	m_Width = windowWidth;
 	m_Height = windowHeight;
+	m_AspectRatio = static_cast<double>(m_Width) / static_cast<double>(m_Height);
 
 	if (!(m_Window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0))) {
 		std::cout << "Error: Couldn't Initialize Window..." << std::endl;

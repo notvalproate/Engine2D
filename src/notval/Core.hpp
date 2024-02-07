@@ -660,7 +660,10 @@ public:
     void SetResolution(const int w, const int h);
     inline unsigned int GetScreenWidth() const { return m_Width; }
     inline unsigned int GetScreenHeight() const { return m_Height; }
+    inline double GetAspectRatio() const { return m_AspectRatio; }
     inline bool InFocus() const { return (SDL_GetWindowFlags(m_Window) & (SDL_WINDOW_MINIMIZED | SDL_WINDOW_INPUT_FOCUS | SDL_WINDOW_MOUSE_FOCUS)); };
+    inline bool IsFullscreen() const { return SDL_GetWindowFlags(m_Window) & SDL_WINDOW_FULLSCREEN; }
+
 private:
     ScreenHandler();
 
@@ -670,6 +673,7 @@ private:
     SDL_DisplayMode m_Mode{};
     int m_Width{}, m_Height{};
     int m_InitWidth{}, m_InitHeight{};
+    double m_AspectRatio;
 
     friend class Object;
     friend class Engine2D;
