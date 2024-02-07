@@ -1,8 +1,6 @@
 #include "Components.hpp"
 
-Camera::Camera(GameObject* gameObject) : Component(gameObject) {
-	m_AspectRatio = static_cast<double>(Screen.GetScreenWidth()) / static_cast<double>(Screen.GetScreenHeight());
-}
+Camera::Camera(GameObject* gameObject) : Component(gameObject) { }
 
 std::unique_ptr<Component> Camera::Clone() const {
 	return std::make_unique<Camera>(*this);
@@ -10,7 +8,7 @@ std::unique_ptr<Component> Camera::Clone() const {
 
 Vector2D Camera::GetUnitsOnScreen() const { 
 	return Vector2D(
-		defaultUnitsY * m_AspectRatio * transform->scale.x, 
+		defaultUnitsY * Screen.GetAspectRatio() * transform->scale.x,
 		defaultUnitsY * transform->scale.y
 	);
 }
