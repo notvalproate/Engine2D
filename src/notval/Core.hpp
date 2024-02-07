@@ -591,6 +591,7 @@ private:
     friend class SceneHandler;
     friend class PhysicsHandler;
     friend class SpriteRenderer;
+    friend class BoxCollider;
 };
 
 
@@ -731,9 +732,6 @@ private:
 class PhysicsHandler {
 private:
     PhysicsHandler();
-
-    void StepCurrentWorld(const float deltaTime) const;
-    inline b2World* GetCurrentWorld() const { return Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get(); }
 
     friend class Object;
     friend class BoxCollider;

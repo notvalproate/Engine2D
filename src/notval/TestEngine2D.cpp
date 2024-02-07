@@ -45,8 +45,6 @@ void Engine2D::Update() {
 		m_IsRunning = false;
 	}
 
-	Physics.StepCurrentWorld(Time.GetDeltaTime());
-
 	SceneManager.m_CurrentScene->Update();
 }
 
