@@ -23,6 +23,6 @@ std::unique_ptr<Component> BoxCollider::Clone() const {
 }
 
 void BoxCollider::Update() {
-	transform->position.x = m_Body->GetPosition().x * 10.0f;
-	transform->position.y = m_Body->GetPosition().y * 10.0f;
+	transform->position.x = m_Body->GetPosition().x;
+	transform->position.y = m_Body->GetPosition().y;
 }

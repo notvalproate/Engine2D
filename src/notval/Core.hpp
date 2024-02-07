@@ -749,9 +749,10 @@ private:
     bool m_RenderSceneColliders;
 
     friend class Object;
-    friend class BoxCollider;
-    friend class RenderingHandler;
+    friend class Scene;
     friend class Engine2D;
+    friend class RenderingHandler;
+    friend class BoxCollider;
 };
 
 
