@@ -508,7 +508,6 @@ private:
 
     Vector2D GetUnitsOnScreen() const;
 
-    double m_AspectRatio;
     static constexpr uint8_t defaultUnitsY = 10;
 
     friend class GameObject;
