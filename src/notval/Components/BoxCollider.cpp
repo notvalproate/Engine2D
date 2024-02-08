@@ -1,12 +1,12 @@
 #include "Components.hpp"
 
 BoxCollider::BoxCollider(GameObject* gameObj) 
-	: Behaviour(gameObj), attachedRigidBody(nullptr), m_Fixture(nullptr), m_CurrentPosition(gameObj->transform.position)
+	: Behaviour(gameObj), attachedRigidBody(nullptr), m_Fixture(nullptr), m_CurrentPosition(gameObj->transform.position), m_StaticBody(nullptr)
 {
-	GetAttachedBody(gameObj);
+	attachedRigidBody = gameObj->GetComponentInParent<RigidBody>();
 
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(0.5, 0.5);
+	boxShape.SetAsBox(0.2, 0.2);
 
 	b2FixtureDef boxFixture;
 	boxFixture.shape = &boxShape;
@@ -17,8 +17,12 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 		m_Fixture = attachedRigidBody->m_Body->CreateFixture(&boxFixture);
 	}
 	else {
-		m_Fixture = gameObj->scene->m_RootStaticBody->CreateFixture(&boxFixture);
-		UpdateFixturePosition();
+		b2BodyDef boxBody;
+		boxBody.type = b2_staticBody;
+		boxBody.position.Set(transform->position.x, transform->position.y);
+
+		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
+		m_Fixture = m_StaticBody->CreateFixture(&boxFixture);
 	}
 }
 
@@ -32,22 +36,11 @@ void BoxCollider::Update() {
 	}
 
 	if (m_CurrentPosition != transform->position) {
-		UpdateFixturePosition();
+		UpdateStaticPosition();
 	}
 }
 
-void BoxCollider::GetAttachedBody(GameObject* gameObj) {
-	attachedRigidBody = gameObj->GetComponentInParent<RigidBody>();
-}
-
-void BoxCollider::UpdateFixturePosition() {
-	b2PolygonShape* polygon = dynamic_cast<b2PolygonShape*>(m_Fixture->GetShape());
-
-	Vector2D distanceMoved = transform->position - m_CurrentPosition;
+void BoxCollider::UpdateStaticPosition() {
 	m_CurrentPosition = transform->position;
-
-	for (int i = 0; i < polygon->m_count; i++) {
-		polygon->m_vertices[i].x += distanceMoved.x;
-		polygon->m_vertices[i].y += distanceMoved.y;
-	}
+	m_StaticBody->SetTransform(b2Vec2(m_CurrentPosition.x, m_CurrentPosition.y), 0);
 }

@@ -43,11 +43,12 @@ private:
 
 	void Update();
 
-	void GetAttachedBody(GameObject* gameObj);
 	void UpdateFixturePosition();
 
 	b2Fixture* m_Fixture;
 	Vector2D m_CurrentPosition;
+
+	b2Body* m_StaticBody;
 
 	friend class GameObject;
 };

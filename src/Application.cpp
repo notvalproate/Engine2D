@@ -136,6 +136,7 @@ public:
 
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<Player>();
+		PlayerObject->transform.Translate(Vector2D(0, 4));
 		PlayerObject->AddComponent<RigidBody, BoxCollider>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
@@ -148,7 +149,7 @@ public:
 		playerRenderer2->SetSortingLayer("Player");
 		playerRenderer2->SetPixelsPerUnit(8);
 		PlayerObject2->AddComponent<BoxCollider>();
-		PlayerObject2->transform.Translate(Vector2D(0.6, -4));
+		PlayerObject2->transform.Translate(Vector2D(0, -4));
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

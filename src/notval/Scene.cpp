@@ -8,12 +8,6 @@ Scene::Scene(const std::string_view name, const std::vector<std::string>& avaiab
     }
 
     m_PhysicsWorld = std::make_unique<b2World>(b2Vec2(0.0f, -2.8f));
-
-    b2BodyDef rootBody;
-    rootBody.type = b2_staticBody;
-    rootBody.position.Set(0, 0);
-
-    m_RootStaticBody = m_PhysicsWorld->CreateBody(&rootBody);
 }
 
 void Scene::Start() {
