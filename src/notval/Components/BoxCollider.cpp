@@ -27,6 +27,10 @@ std::unique_ptr<Component> BoxCollider::Clone() const {
 }
 
 void BoxCollider::Update() {
+	if (attachedRigidBody) {
+		return;
+	}
+
 	if (m_CurrentPosition != transform->position) {
 		UpdateFixturePosition();
 	}
