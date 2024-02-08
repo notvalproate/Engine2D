@@ -11,4 +11,5 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), m_Body(nullptr) 
 void RigidBody::Update() {
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;
+	transform->rotation = -(m_Body->GetAngle() * 180) / M_PI;
 }
