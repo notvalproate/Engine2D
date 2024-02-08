@@ -22,7 +22,7 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 		boxBody.position.Set(transform->position.x, transform->position.y);
 
 		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
-		m_Fixture = m_StaticBody->CreateFixture(&boxFixture);
+		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
 	}
 }
 
@@ -42,5 +42,5 @@ void BoxCollider::Update() {
 
 void BoxCollider::UpdateStaticPosition() {
 	m_CurrentPosition = transform->position;
-	m_StaticBody->SetTransform(b2Vec2(m_CurrentPosition.x, m_CurrentPosition.y), 0);
+	(*m_StaticBody)->SetTransform(b2Vec2(m_CurrentPosition.x, m_CurrentPosition.y), 0);
 }

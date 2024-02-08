@@ -43,12 +43,12 @@ private:
 
 	void Update();
 
-	void UpdateFixturePosition();
+	void UpdateStaticPosition();
 
 	b2Fixture* m_Fixture;
 	Vector2D m_CurrentPosition;
 
-	b2Body* m_StaticBody;
+	std::optional<b2Body*> m_StaticBody;
 
 	friend class GameObject;
 };
