@@ -32,8 +32,17 @@ void RenderingHandler::RenderPoint(const Vector2D point, const uint8_t width, co
 
 	Vector2D screenPosition = currentCamera->WorldToScreenPoint(point);
 
+	int initialX = screenPosition.x - (width / 2);
+	int maxX = screenPosition.x + ((width - 1) / 2);
+	int initialY = screenPosition.y - (width / 2);
+	int maxY = screenPosition.y + ((width - 1) / 2);
+
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
-	SDL_RenderDrawPoint(m_Renderer, screenPosition.x, screenPosition.y);
+	for (int x = initialX; x <= maxX; x++) {
+		for (int y = initialY; y <= maxY; y++) {
+			SDL_RenderDrawPoint(m_Renderer, x, y);
+		}
+	}
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }
 
@@ -74,8 +83,6 @@ void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensi
 
 	SDL_Rect destRect = GetSpriteDestRect(dimensions, pixelsPerUnit, transform);
 	GetFlipAndRotation(transform, angle, flipFlag);
-
-	std::cout << *(transform->name) << ": " << transform->position << std::endl;
 	
 	SDL_RenderCopyEx(m_Renderer, texture, NULL, &destRect, angle, NULL, flipFlag);
 }

@@ -38,7 +38,7 @@ void PhysicsHandler::RenderColliders() const {
 			}
 		}
 
-		Object::RenderingPipeline.RenderPoint(Vector2D(centerOfMass.x, centerOfMass.y), 2, Color(255, 0, 0));
+		Object::RenderingPipeline.RenderPoint(Vector2D(centerOfMass.x, centerOfMass.y), 3, Color(255, 0, 0));
 	}
 }
 

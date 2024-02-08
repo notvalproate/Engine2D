@@ -135,7 +135,7 @@ public:
 		
 		auto PlayerObject2 = CreateGameObject("Player Two");
 		PlayerObject2->AddComponent<BoxCollider>();
-		PlayerObject2->transform.Translate(Vector2D(1, -4));
+		PlayerObject2->transform.Translate(Vector2D(1.5, -4));
 		auto playerRenderer2 = PlayerObject2->AddComponent<SpriteRenderer>();
 		playerRenderer2->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer2->SetSortingLayer("Player");
