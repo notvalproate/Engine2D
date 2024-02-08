@@ -7,7 +7,7 @@ Scene::Scene(const std::string_view name, const std::vector<std::string>& avaiab
         m_SortingLayers.push_back(SortingLayer(layerName));
     }
 
-    m_PhysicsWorld = std::make_unique<b2World>(b2Vec2(0.0f, -1.8f));
+    m_PhysicsWorld = std::make_unique<b2World>(b2Vec2(0.0f, -9.8f));
 
     b2BodyDef rootBody;
     rootBody.type = b2_staticBody;

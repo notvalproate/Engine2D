@@ -127,15 +127,16 @@ public:
 		backgroundRenderer->SetPixelsPerUnit(8);
 
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->AddComponent<Player, BoxCollider>();
+		PlayerObject->AddComponent<Player, RigidBody, BoxCollider>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(8);
 		
-		auto PlayerObject2 = CreateGameObject("Player");
-		PlayerObject2->AddComponent<Player, BoxCollider>();
-		auto playerRenderer2 = PlayerObject->AddComponent<SpriteRenderer>();
+		auto PlayerObject2 = CreateGameObject("Player Two");
+		PlayerObject2->AddComponent<BoxCollider>();
+		PlayerObject2->transform.Translate(Vector2D(1, -4));
+		auto playerRenderer2 = PlayerObject2->AddComponent<SpriteRenderer>();
 		playerRenderer2->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer2->SetSortingLayer("Player");
 		playerRenderer2->SetPixelsPerUnit(8);

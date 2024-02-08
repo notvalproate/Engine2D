@@ -63,6 +63,8 @@ void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensi
 
 	SDL_Rect destRect = GetSpriteDestRect(dimensions, pixelsPerUnit, transform);
 	GetFlipAndRotation(transform, angle, flipFlag);
+
+	std::cout << *(transform->name) << ": " << transform->position << std::endl;
 	
 	SDL_RenderCopyEx(m_Renderer, texture, NULL, &destRect, angle, NULL, flipFlag);
 }

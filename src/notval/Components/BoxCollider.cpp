@@ -6,7 +6,7 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 	GetAttachedBody(gameObj);
 
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(0.5f, 0.5f);
+	boxShape.SetAsBox(1, 1);
 
 	b2FixtureDef boxFixture;
 	boxFixture.shape = &boxShape;
@@ -44,6 +44,7 @@ void BoxCollider::UpdateFixturePosition() {
 	b2PolygonShape* polygon = dynamic_cast<b2PolygonShape*>(m_Fixture->GetShape());
 
 	Vector2D distanceMoved = transform->position - m_CurrentPosition;
+	m_CurrentPosition = transform->position;
 
 	for (int i = 0; i < polygon->m_count; i++) {
 		polygon->m_vertices[i].x += distanceMoved.x;
