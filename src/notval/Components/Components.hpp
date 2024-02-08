@@ -26,8 +26,11 @@ private:
 	RigidBody(GameObject* gameObj);
 
 	void Update() override;
+	void OnColliderAttach();
 
 	b2Body* m_Body;
+
+	std::optional<b2Fixture*> m_SensorFixture;
 
 	friend class GameObject;
 	friend class BoxCollider;

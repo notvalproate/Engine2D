@@ -137,7 +137,7 @@ public:
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<Player>();
 		PlayerObject->transform.Translate(Vector2D(0, 4));
-		PlayerObject->AddComponent<BoxCollider, RigidBody>();
+		PlayerObject->AddComponent<RigidBody, BoxCollider>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
