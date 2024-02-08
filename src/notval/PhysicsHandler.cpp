@@ -34,7 +34,8 @@ void PhysicsHandler::RenderColliders() const {
 						point2.x += centerOfMass.x;
 						point2.y += centerOfMass.y;
 
-						//point1.RotateAround(centerOfMass, -(bodyList->GetAngle() * 180) / M_PI);
+						point1.RotateAround(centerOfMass, -(bodyList->GetAngle() * 180) / M_PI);
+						point2.RotateAround(centerOfMass, -(bodyList->GetAngle() * 180) / M_PI);
 
 						Object::RenderingPipeline.RenderLine(point1, point2, Color(0, 255, 0));
 					}

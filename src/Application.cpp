@@ -85,10 +85,10 @@ public:
 		}
 
 		if (Input.mouseScrollDeltaY > 0) {
-			mainCamera->transform->scale -= Vector2D(0.02, 0.02);
+			mainCamera->transform->scale -= Vector2D(0.08, 0.08);
 		}
 		if (Input.mouseScrollDeltaY < 0) {
-			mainCamera->transform->scale += Vector2D(0.02, 0.02);
+			mainCamera->transform->scale += Vector2D(0.08, 0.08);
 		}
 
 		// FIX INSTANTIATE LATER
@@ -136,19 +136,19 @@ public:
 
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<Player>();
-		//PlayerObject->AddComponent<RigidBody, BoxCollider>();
+		PlayerObject->AddComponent<RigidBody, BoxCollider>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(8);
 		
 		auto PlayerObject2 = CreateGameObject("Player Two");
-		//PlayerObject2->AddComponent<BoxCollider>();
-		PlayerObject2->transform.Translate(Vector2D(1.1, -4));
 		auto playerRenderer2 = PlayerObject2->AddComponent<SpriteRenderer>();
 		playerRenderer2->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer2->SetSortingLayer("Player");
 		playerRenderer2->SetPixelsPerUnit(8);
+		PlayerObject2->AddComponent<BoxCollider>();
+		PlayerObject2->transform.Translate(Vector2D(0.6, -4));
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

@@ -113,7 +113,7 @@ public:
         y *= factor;
     }
 
-    void RotateAround(const Vector2D& point, const double angle) {
+    inline void RotateAround(const Vector2D& point, const double angle) {
         const double angleRadians = angle * M_PI / 180.0;
 
         const double relX = x - point.x, relY = y - point.y;

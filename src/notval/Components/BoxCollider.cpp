@@ -6,7 +6,7 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 	GetAttachedBody(gameObj);
 
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(1, 1);
+	boxShape.SetAsBox(0.5, 0.5);
 
 	b2FixtureDef boxFixture;
 	boxFixture.shape = &boxShape;
