@@ -21,18 +21,8 @@ void Transform::Rotate(const double angle) {
 }
 
 void Transform::RotateAround(const Vector2D& point, const double angle) {
-    const double angleRadians = angle * M_PI / 180.0;
-
-    const double relX = position.x - point.x, relY = position.y - point.y;
-    const double radius = std::sqrt(relX * relX + relY * relY);
-
-    const double currentAngleFromPoint = atan2(relY, relX);
-
-    const double totalAngle = currentAngleFromPoint - angleRadians;
-
-    position.x = (cos(totalAngle) * radius) + point.x;
-    position.y = (sin(totalAngle) * radius) + point.y;
-    //rotation += angle;
+    position.RotateAround(point, angle);
+    rotation += angle;
 
     for(auto& child : m_Children) {
         child->RotateAround(point, angle);

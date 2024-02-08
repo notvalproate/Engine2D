@@ -61,11 +61,6 @@ public:
 		if (Input.GetKey(SDL_SCANCODE_W)) {
 			transform->Translate(Time.GetDeltaTime() * Vector2D::up * 2);
 		}
-
-		if (Input.GetKey(SDL_SCANCODE_R)) {
-			transform->Rotate(Time.GetDeltaTime() * rotationSpeed);
-			std::cout << Time.GetDeltaTime() * rotationSpeed << std::endl;
-		}
 		
 		if (Input.GetKey(SDL_SCANCODE_T)) {
 			transform->RotateAround(Vector2D(0, 0), Time.GetDeltaTime() * 180);
