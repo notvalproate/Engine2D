@@ -592,6 +592,7 @@ private:
     std::vector<Camera*> m_SceneCameras{};
 
     std::unique_ptr<b2World> m_PhysicsWorld;
+    b2Body* m_RootStaticBody;
 
     uint32_t m_LatestSceneInstanceID{};
     bool m_Loaded;

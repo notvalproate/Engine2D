@@ -44,3 +44,7 @@ void PhysicsHandler::RenderColliders() const {
 void PhysicsHandler::SetRenderColliders(const bool set) {
 	m_RenderSceneColliders = set;
 }
+
+void PhysicsHandler::GetRootBody() {
+
+}

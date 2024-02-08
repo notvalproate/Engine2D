@@ -21,9 +21,11 @@ private:
 	friend class GameObject;
 };
 
-class RigidBody final : public Behaviour {
+class RigidBody final : public Component {
 private:
 	RigidBody(GameObject* gameObj);
+
+	void Update() override;
 
 	b2Body* m_Body;
 
@@ -33,13 +35,12 @@ private:
 
 class BoxCollider final : public Behaviour {
 public:
-	RigidBody* attachedBody;
+	RigidBody* attachedRigidBody;
 
 private:
 	BoxCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
-	void Update() override;
 	void GetAttachedBody(GameObject* gameObj);
 
 	b2Fixture* m_Fixture;
