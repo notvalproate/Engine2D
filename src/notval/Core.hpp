@@ -533,6 +533,7 @@ struct Color {
 class RenderingHandler {
 public:
     void SetRendererVsync(const bool set);
+    void RenderPoint(const Vector2D point, const uint8_t width, const Color color) const;
     void RenderLine(const Vector2D src, const Vector2D dest, const Color color) const;
     void RenderRect(const Vector2D position, const Vector2D dimensions, const Color color) const;
     void RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
