@@ -11,7 +11,9 @@ void PhysicsHandler::RenderColliders() const {
 
 	for (b2Body* bodyList = currentWorld->GetBodyList(); bodyList; bodyList = bodyList->GetNext()) {
 
-		b2Vec2 centerOfMass = bodyList->GetWorldCenter();
+		b2Vec2 center = bodyList->GetWorldCenter();
+
+		Vector2D centerOfMass(center.x, center.y);
 
 		for (b2Fixture* fixtureList = bodyList->GetFixtureList(); fixtureList; fixtureList = fixtureList->GetNext()) {
 
@@ -25,12 +27,14 @@ void PhysicsHandler::RenderColliders() const {
 						int j = (i + 1) % polygon->m_count;
 
 						Vector2D point1(polygon->m_vertices[i].x, polygon->m_vertices[i].y);
-						Vector2D point2(polygon->m_vertices[j].x, polygon->m_vertices[j].y); 
+						Vector2D point2(polygon->m_vertices[j].x, polygon->m_vertices[j].y);
 
 						point1.x += centerOfMass.x;
 						point1.y += centerOfMass.y;
 						point2.x += centerOfMass.x;
 						point2.y += centerOfMass.y;
+
+						//point1.RotateAround(centerOfMass, -(bodyList->GetAngle() * 180) / M_PI);
 
 						Object::RenderingPipeline.RenderLine(point1, point2, Color(0, 255, 0));
 					}

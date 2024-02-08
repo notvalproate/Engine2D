@@ -113,6 +113,20 @@ public:
         y *= factor;
     }
 
+    void RotateAround(const Vector2D& point, const double angle) {
+        const double angleRadians = angle * M_PI / 180.0;
+
+        const double relX = x - point.x, relY = y - point.y;
+        const double radius = std::sqrt(relX * relX + relY * relY);
+
+        const double currentAngleFromPoint = atan2(relY, relX);
+
+        const double totalAngle = currentAngleFromPoint - angleRadians;
+
+        x = (cos(totalAngle) * radius) + point.x;
+        y = (sin(totalAngle) * radius) + point.y;
+    }
+
     static constexpr double epsilon = 1e-5;
 
     inline constexpr Vector2D operator+(const Vector2D& other) const {

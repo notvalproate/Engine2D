@@ -32,7 +32,7 @@ void Transform::RotateAround(const Vector2D& point, const double angle) {
 
     position.x = (cos(totalAngle) * radius) + point.x;
     position.y = (sin(totalAngle) * radius) + point.y;
-    rotation += angle;
+    //rotation += angle;
 
     for(auto& child : m_Children) {
         child->RotateAround(point, angle);

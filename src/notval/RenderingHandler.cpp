@@ -79,6 +79,7 @@ void RenderingHandler::RenderRect(const Vector2D position, const Vector2D dimens
 
 void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
 	double angle = transform->rotation;
+
 	SDL_RendererFlip flipFlag;
 
 	SDL_Rect destRect = GetSpriteDestRect(dimensions, pixelsPerUnit, transform);

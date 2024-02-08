@@ -58,6 +58,19 @@ public:
 	}
 
 	void Update() override {
+		if (Input.GetKey(SDL_SCANCODE_W)) {
+			transform->Translate(Time.GetDeltaTime() * Vector2D::up * 2);
+		}
+
+		if (Input.GetKey(SDL_SCANCODE_R)) {
+			transform->Rotate(Time.GetDeltaTime() * rotationSpeed);
+			std::cout << Time.GetDeltaTime() * rotationSpeed << std::endl;
+		}
+		
+		if (Input.GetKey(SDL_SCANCODE_T)) {
+			transform->RotateAround(Vector2D(0, 0), Time.GetDeltaTime() * 180);
+		}
+
 		if (Input.GetKey(SDL_SCANCODE_R)) {
 			transform->Rotate(rotationSpeed * Time.GetDeltaTime());
 		}
@@ -127,15 +140,16 @@ public:
 		backgroundRenderer->SetPixelsPerUnit(8);
 
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->AddComponent<Player, RigidBody, BoxCollider>();
+		PlayerObject->AddComponent<Player>();
+		//PlayerObject->AddComponent<RigidBody, BoxCollider>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(8);
 		
 		auto PlayerObject2 = CreateGameObject("Player Two");
-		PlayerObject2->AddComponent<BoxCollider>();
-		PlayerObject2->transform.Translate(Vector2D(1.5, -4));
+		//PlayerObject2->AddComponent<BoxCollider>();
+		PlayerObject2->transform.Translate(Vector2D(1.1, -4));
 		auto playerRenderer2 = PlayerObject2->AddComponent<SpriteRenderer>();
 		playerRenderer2->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer2->SetSortingLayer("Player");
