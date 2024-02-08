@@ -67,7 +67,7 @@ public:
 		}
 
 		if (Input.GetKey(SDL_SCANCODE_R)) {
-			transform->Rotate(rotationSpeed * Time.GetDeltaTime());
+			transform->Rotate(-rotationSpeed * Time.GetDeltaTime());
 		}
 
 		if (Input.GetKey(SDL_SCANCODE_G)) {
@@ -149,7 +149,7 @@ public:
 		playerRenderer2->SetSortingLayer("Player");
 		playerRenderer2->SetPixelsPerUnit(8);
 		PlayerObject2->AddComponent<BoxCollider>();
-		PlayerObject2->transform.Translate(Vector2D(0, -4));
+		PlayerObject2->transform.Translate(Vector2D(0.6, -4));
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

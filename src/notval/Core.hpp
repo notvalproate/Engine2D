@@ -295,6 +295,8 @@ public:
 private:
     explicit Transform(GameObject* gameObject);
 
+    void AddToRotation(const double angle);
+
     std::vector<Transform*> m_Children{};
     Transform* m_Parent;
 

@@ -12,8 +12,19 @@ void Transform::Translate(const Vector2D& translation) {
     }
 }
 
-void Transform::Rotate(const double angle) {
+void Transform::AddToRotation(const double angle) {
     rotation += angle;
+
+    if (rotation > 360.0) {
+        rotation -= 360;
+    }
+    else if (rotation < 0.0) {
+        rotation += 360;
+    }
+}
+
+void Transform::Rotate(const double angle) {
+    AddToRotation(angle);
 
     for(auto& child : m_Children) {
         child->RotateAround(position, angle);
@@ -22,7 +33,7 @@ void Transform::Rotate(const double angle) {
 
 void Transform::RotateAround(const Vector2D& point, const double angle) {
     position.RotateAround(point, angle);
-    rotation += angle;
+    AddToRotation(angle);
 
     for(auto& child : m_Children) {
         child->RotateAround(point, angle);
