@@ -132,6 +132,13 @@ public:
 		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(8);
+		
+		auto PlayerObject2 = CreateGameObject("Player");
+		PlayerObject2->AddComponent<Player, BoxCollider>();
+		auto playerRenderer2 = PlayerObject->AddComponent<SpriteRenderer>();
+		playerRenderer2->SetSprite("assets/characters/idle/madeline.png");
+		playerRenderer2->SetSortingLayer("Player");
+		playerRenderer2->SetPixelsPerUnit(8);
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

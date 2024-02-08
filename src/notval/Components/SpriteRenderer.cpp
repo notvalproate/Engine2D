@@ -1,10 +1,10 @@
 #include "Components.hpp"
 #include "SDL_image.h"
 
-SpriteRenderer::SpriteRenderer(GameObject* gameObject) 
-	: Component(gameObject), m_Sprite(nullptr), m_Dimensions({0, 0}), m_PixelsPerUnit(10), m_SortingLayer("Default") 
+SpriteRenderer::SpriteRenderer(GameObject* gameObj)
+	: Component(gameObj), m_Sprite(nullptr), m_Dimensions({0, 0}), m_PixelsPerUnit(10), m_SortingLayer("Default")
 {
-	gameObject->scene->AddObjectToSortingLayers(gameObject);
+	gameObj->scene->AddObjectToSortingLayers(gameObj);
 }
 
 std::unique_ptr<Component> SpriteRenderer::Clone() const {

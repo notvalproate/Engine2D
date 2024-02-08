@@ -8,7 +8,7 @@ public:
 	void SetPixelsPerUnit(const uint16_t pixelsPerUnit);
 
 private:
-	SpriteRenderer(GameObject* gameObject);
+	SpriteRenderer(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
 	void Render() const override;
@@ -21,14 +21,27 @@ private:
 	friend class GameObject;
 };
 
-class BoxCollider final : public Behaviour {
+class RigidBody final : public Behaviour {
 private:
-	BoxCollider(GameObject* gameObject);
+	RigidBody(GameObject* gameObj);
+
+	b2Body* m_Body;
+
+	friend class GameObject;
+	friend class BoxCollider;
+};
+
+class BoxCollider final : public Behaviour {
+public:
+	RigidBody* attachedBody;
+
+private:
+	BoxCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
 	void Update() override;
+	void GetAttachedBody(GameObject* gameObj);
 
-	b2Body* m_Body;
 	b2Fixture* m_Fixture;
 
 	friend class GameObject;

@@ -11,7 +11,7 @@ void PhysicsHandler::RenderColliders() const {
 
 	for (b2Body* bodyList = currentWorld->GetBodyList(); bodyList; bodyList = bodyList->GetNext()) {
 
-		b2Vec2 position = bodyList->GetWorldPoint(b2Vec2(0.0f, 0.0f));
+		b2Vec2 position = bodyList->GetWorldCenter();
 
 		for (b2Fixture* fixtureList = bodyList->GetFixtureList(); fixtureList; fixtureList = fixtureList->GetNext()) {
 

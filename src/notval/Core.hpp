@@ -33,6 +33,7 @@ class PhysicsHandler;
 
 class Camera;
 class SpriteRenderer;
+class RigidBody;
 class BoxCollider;
 
 
@@ -600,6 +601,7 @@ private:
     friend class SceneHandler;
     friend class PhysicsHandler;
     friend class SpriteRenderer;
+    friend class RigidBody;
     friend class BoxCollider;
 };
 
