@@ -30,6 +30,22 @@ std::unique_ptr<Component> BoxCollider::Clone() const {
 	return std::make_unique<BoxCollider>(*this);
 }
 
+void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
+	attachedRigidBody = rigidBody;
+
+	b2PolygonShape boxShape;
+	boxShape.SetAsBox(0.2, 0.2);
+
+	b2FixtureDef boxFixture;
+	boxFixture.shape = &boxShape;
+	boxFixture.density = 1.0f;
+	boxFixture.friction = 0.3f;
+	m_Fixture = attachedRigidBody->m_Body->CreateFixture(&boxFixture);
+
+	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
+	m_StaticBody.reset();
+}
+
 void BoxCollider::Update() {
 	if (attachedRigidBody) {
 		return;

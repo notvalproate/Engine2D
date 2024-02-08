@@ -5,7 +5,13 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), m_Body(nullptr) 
 	boxBody.type = b2_dynamicBody;
 	boxBody.position.Set(transform->position.x, transform->position.y);
 
-	m_Body = gameObject->scene->m_PhysicsWorld->CreateBody(&boxBody);
+	m_Body = gameObj->scene->m_PhysicsWorld->CreateBody(&boxBody);
+
+	BoxCollider* collider = gameObj->GetComponent<BoxCollider>();
+
+	if (collider) {
+		collider->AttachRigidBody(this);
+	}
 }
 
 void RigidBody::Update() {

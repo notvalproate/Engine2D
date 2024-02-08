@@ -44,6 +44,7 @@ private:
 	void Update();
 
 	void UpdateStaticPosition();
+	void AttachRigidBody(RigidBody* rigidBody);
 
 	b2Fixture* m_Fixture;
 	Vector2D m_CurrentPosition;
@@ -51,4 +52,5 @@ private:
 	std::optional<b2Body*> m_StaticBody;
 
 	friend class GameObject;
+	friend class RigidBody;
 };
