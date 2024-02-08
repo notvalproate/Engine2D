@@ -41,9 +41,13 @@ private:
 	BoxCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
+	void Update();
+
 	void GetAttachedBody(GameObject* gameObj);
+	void UpdateFixturePosition();
 
 	b2Fixture* m_Fixture;
+	Vector2D m_CurrentPosition;
 
 	friend class GameObject;
 };

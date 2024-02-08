@@ -11,7 +11,7 @@ void PhysicsHandler::RenderColliders() const {
 
 	for (b2Body* bodyList = currentWorld->GetBodyList(); bodyList; bodyList = bodyList->GetNext()) {
 
-		b2Vec2 position = bodyList->GetWorldCenter();
+		b2Vec2 centerOfMass = bodyList->GetWorldCenter();
 
 		for (b2Fixture* fixtureList = bodyList->GetFixtureList(); fixtureList; fixtureList = fixtureList->GetNext()) {
 
@@ -27,10 +27,10 @@ void PhysicsHandler::RenderColliders() const {
 						Vector2D point1(polygon->m_vertices[i].x, polygon->m_vertices[i].y);
 						Vector2D point2(polygon->m_vertices[j].x, polygon->m_vertices[j].y); 
 
-						point1.x += position.x;
-						point1.y += position.y;
-						point2.x += position.x;
-						point2.y += position.y;
+						point1.x += centerOfMass.x;
+						point1.y += centerOfMass.y;
+						point2.x += centerOfMass.x;
+						point2.y += centerOfMass.y;
 
 						Object::RenderingPipeline.RenderLine(point1, point2, Color(0, 255, 0));
 					}
@@ -43,8 +43,4 @@ void PhysicsHandler::RenderColliders() const {
 
 void PhysicsHandler::SetRenderColliders(const bool set) {
 	m_RenderSceneColliders = set;
-}
-
-void PhysicsHandler::GetRootBody() {
-
 }

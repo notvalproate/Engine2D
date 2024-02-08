@@ -1,6 +1,8 @@
 #include "Components.hpp"
 
-BoxCollider::BoxCollider(GameObject* gameObj) : Behaviour(gameObj), attachedRigidBody(nullptr), m_Fixture(nullptr) {
+BoxCollider::BoxCollider(GameObject* gameObj) 
+	: Behaviour(gameObj), attachedRigidBody(nullptr), m_Fixture(nullptr), m_CurrentPosition(gameObj->transform.position)
+{
 	GetAttachedBody(gameObj);
 
 	b2PolygonShape boxShape;
@@ -16,6 +18,7 @@ BoxCollider::BoxCollider(GameObject* gameObj) : Behaviour(gameObj), attachedRigi
 	}
 	else {
 		m_Fixture = gameObj->scene->m_RootStaticBody->CreateFixture(&boxFixture);
+		UpdateFixturePosition();
 	}
 }
 
@@ -23,6 +26,23 @@ std::unique_ptr<Component> BoxCollider::Clone() const {
 	return std::make_unique<BoxCollider>(*this);
 }
 
+void BoxCollider::Update() {
+	if (m_CurrentPosition != transform->position) {
+		UpdateFixturePosition();
+	}
+}
+
 void BoxCollider::GetAttachedBody(GameObject* gameObj) {
 	attachedRigidBody = gameObj->GetComponentInParent<RigidBody>();
+}
+
+void BoxCollider::UpdateFixturePosition() {
+	b2PolygonShape* polygon = dynamic_cast<b2PolygonShape*>(m_Fixture->GetShape());
+
+	Vector2D distanceMoved = transform->position - m_CurrentPosition;
+
+	for (int i = 0; i < polygon->m_count; i++) {
+		polygon->m_vertices[i].x += distanceMoved.x;
+		polygon->m_vertices[i].y += distanceMoved.y;
+	}
 }
