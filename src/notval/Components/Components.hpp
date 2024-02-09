@@ -25,6 +25,9 @@ private:
 };
 
 class RigidBody final : public Component {
+public:
+	void SetGravityScale(const double scale);
+
 private:
 	RigidBody(GameObject* gameObj);
 

@@ -88,6 +88,7 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
+		playerBody->SetGravityScale(4);
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D::zero, 0);
 		

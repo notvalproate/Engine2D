@@ -25,6 +25,10 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), m_Body(nullptr),
 	}
 }
 
+void RigidBody::SetGravityScale(const double scale) {
+	m_Body->SetGravityScale(scale);
+}
+
 void RigidBody::Update() {
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;
