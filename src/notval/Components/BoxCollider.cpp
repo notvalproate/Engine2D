@@ -3,15 +3,24 @@
 BoxCollider::BoxCollider(GameObject* gameObj) 
 	: Behaviour(gameObj), attachedRigidBody(nullptr), m_Fixture(nullptr), m_CurrentPosition(gameObj->transform.position), m_StaticBody(nullptr)
 {
-	attachedRigidBody = gameObj->GetComponentInParent<RigidBody>();
-
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(0.5, 0.5);
+
+	auto spriteRenderer = gameObj->GetComponent<SpriteRenderer>();
+
+	if (spriteRenderer) {
+		Vector2D dimensions = spriteRenderer->GetWorldDimensions();
+		boxShape.SetAsBox(dimensions.x / 2.0, dimensions.y / 2.0);
+	}
+	else {
+		boxShape.SetAsBox(0.5, 0.5);
+	}
 
 	b2FixtureDef boxFixture;
 	boxFixture.shape = &boxShape;
 	boxFixture.density = 1.0f;
 	boxFixture.friction = 0.3f;
+
+	attachedRigidBody = gameObj->GetComponentInParent<RigidBody>();
 
 	if (attachedRigidBody) {
 		m_Fixture = attachedRigidBody->m_Body->CreateFixture(&boxFixture);

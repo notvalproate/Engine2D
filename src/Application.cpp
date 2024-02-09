@@ -40,70 +40,6 @@ public:
 
 #include "notval/Engine2D.hpp"
 
-class Player : public Behaviour {
-public:
-	using Behaviour::Behaviour;
-
-	std::unique_ptr<Component> Clone() const override {
-		return std::make_unique<Player>(*this);
-	}
-
-	void Awake() override {
-		speed = 10;
-		rotationSpeed = 180;
-	}
-
-	void Start() override {
-		mainCamera = FindObjectByName("Main Camera")->GetComponent<Camera>();
-	}
-
-	void Update() override {
-		if (Input.GetKey(SDL_SCANCODE_W)) {
-			transform->Translate(Time.GetDeltaTime() * Vector2D::up * 2);
-		}
-		
-		if (Input.GetKey(SDL_SCANCODE_T)) {
-			transform->RotateAround(Vector2D(0, 0), Time.GetDeltaTime() * 180);
-		}
-
-		if (Input.GetKey(SDL_SCANCODE_R)) {
-			transform->Rotate(-rotationSpeed * Time.GetDeltaTime());
-		}
-
-		if (Input.GetKey(SDL_SCANCODE_G)) {
-			transform->scale = Vector2D(1.0, -1.0);
-		}
-		if (Input.GetKey(SDL_SCANCODE_F)) {
-			transform->scale = Vector2D::one;
-		}
-
-		if (Input.GetKeyDown(SDL_SCANCODE_K)) {
-			SceneManager.LoadScene("Test Scene 2");
-		}
-		if (Input.GetKeyDown(SDL_SCANCODE_L)) {
-			SceneManager.LoadScene("Test Scene");
-		}
-
-		if (Input.mouseScrollDeltaY > 0) {
-			mainCamera->transform->scale -= Vector2D(0.08, 0.08);
-		}
-		if (Input.mouseScrollDeltaY < 0) {
-			mainCamera->transform->scale += Vector2D(0.08, 0.08);
-		}
-
-		// FIX INSTANTIATE LATER
-		//if (Input.GetKeyDown(SDL_SCANCODE_M)) {
-			//auto go = Instantiate(go1ref, transform->position, 0);
-		//}
-	}
-
-	int speed;
-	int rotationSpeed;
-	Camera* mainCamera;
-	GameObject* go1ref;
-	std::vector<SpriteRenderer*> renderers;
-};
-
 class FullscreenToggler : public Behaviour {
 public:
 	using Behaviour::Behaviour;
@@ -129,29 +65,38 @@ public:
 
 	void SetupScene() override {
 		auto Background = CreateGameObject("BG");
-		auto backgroundRenderer = Background->AddComponent<SpriteRenderer>();
-		backgroundRenderer->SetSprite("assets/backgrounds/BG.png");
-		backgroundRenderer->SetSortingLayer("Background");
-		backgroundRenderer->SetPixelsPerUnit(8);
+
+		auto Layer1 = CreateGameObject("Layer 1");
+		Layer1->transform.SetParent(Background);
+		auto L1Renderer = Layer1->AddComponent<SpriteRenderer>();
+		L1Renderer->SetSprite("assets/medieval/Background/layer_1.png");
+		L1Renderer->SetSortingLayer("Background");
+		L1Renderer->SetPixelsPerUnit(16);
+
+		auto Layer2 = CreateGameObject("Layer 2");
+		Layer2->transform.SetParent(Background);
+		Layer2->transform.Translate(Vector2D(0, -2));
+		auto L2Renderer = Layer2->AddComponent<SpriteRenderer>();
+		L2Renderer->SetSprite("assets/medieval/Background/layer_2.png");
+		L2Renderer->SetSortingLayer("Background");
+		L2Renderer->SetPixelsPerUnit(16);
 
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->AddComponent<Player>();
-		PlayerObject->transform.Translate(Vector2D(0, 4));
-		PlayerObject->AddComponent<RigidBody, BoxCollider>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
-		playerRenderer->SetSprite("assets/characters/idle/madeline.png");
+		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
-		playerRenderer->SetPixelsPerUnit(8);
+		playerRenderer->SetPixelsPerUnit(32);
+
+		PlayerObject->AddComponent<BoxCollider>();
 		
-		auto PlayerObject2 = CreateGameObject("Player Two");
-		auto playerRenderer2 = PlayerObject2->AddComponent<SpriteRenderer>();
-		playerRenderer2->SetSprite("assets/characters/idle/madeline.png");
-		playerRenderer2->SetSortingLayer("Player");
-		playerRenderer2->SetPixelsPerUnit(8);
-		PlayerObject2->AddComponent<BoxCollider>();
-		PlayerObject2->transform.Translate(Vector2D(0.6, -4));
+		//auto groundObject = CreateGameObject("Ground");
+		//groundObject->AddComponent<BoxCollider>();
+		//groundObject->transform.Translate(Vector2D(0, -4.5));
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
+
+		auto mainCamera = FindObjectByName("Main Camera");
+		mainCamera->transform.scale = Vector2D::one * 2;
 	}
 };
 
