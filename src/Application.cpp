@@ -87,7 +87,9 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		PlayerObject->AddComponent<BoxCollider>();
+		auto playerBody = PlayerObject->AddComponent<RigidBody>();
+		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D::zero, 0);
 		
 		//auto groundObject = CreateGameObject("Ground");
 		//groundObject->AddComponent<BoxCollider>();

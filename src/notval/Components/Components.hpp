@@ -41,6 +41,8 @@ private:
 
 class BoxCollider final : public Behaviour {
 public:
+	void SetTransform(const Vector2D dimensions, const Vector2D offset, const double rotation);
+
 	RigidBody* attachedRigidBody;
 
 private:
@@ -53,8 +55,11 @@ private:
 	void AttachRigidBody(RigidBody* rigidBody);
 
 	b2Fixture* m_Fixture;
-	Vector2D m_CurrentPosition;
+	Vector2D m_Dimensions;
+	Vector2D m_Offset;
+	double m_Rotation;
 
+	Vector2D m_CurrentPosition; 
 	std::optional<b2Body*> m_StaticBody;
 
 	friend class GameObject;

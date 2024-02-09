@@ -1,19 +1,21 @@
 #include "Components.hpp"
 
 BoxCollider::BoxCollider(GameObject* gameObj) 
-	: Behaviour(gameObj), attachedRigidBody(nullptr), m_Fixture(nullptr), m_CurrentPosition(gameObj->transform.position), m_StaticBody(nullptr)
+	: Behaviour(gameObj), attachedRigidBody(nullptr), m_Fixture(nullptr), m_Dimensions(Vector2D::one), m_Offset({}), m_Rotation(0), m_CurrentPosition(gameObj->transform.position), m_StaticBody(nullptr)
 {
-	b2PolygonShape boxShape;
-
 	auto spriteRenderer = gameObj->GetComponent<SpriteRenderer>();
-
 	if (spriteRenderer) {
-		Vector2D dimensions = spriteRenderer->GetWorldDimensions();
-		boxShape.SetAsBox(dimensions.x / 2.0, dimensions.y / 2.0);
+		m_Dimensions = spriteRenderer->GetWorldDimensions();
+		m_Rotation = gameObj->transform.rotation;
 	}
-	else {
-		boxShape.SetAsBox(0.5, 0.5);
-	}
+
+	b2PolygonShape boxShape;
+	boxShape.SetAsBox(
+		m_Dimensions.x / 2.0,
+		m_Dimensions.y / 2.0,
+		b2Vec2(m_Offset.x, m_Offset.y),
+		(m_Rotation * M_PI) / 180.0
+	);
 
 	b2FixtureDef boxFixture;
 	boxFixture.shape = &boxShape;
@@ -40,11 +42,44 @@ std::unique_ptr<Component> BoxCollider::Clone() const {
 	return std::make_unique<BoxCollider>(*this);
 }
 
+void BoxCollider::SetTransform(const Vector2D dimensions, const Vector2D offset, const double rotation) {
+	m_Dimensions = dimensions;
+	m_Offset = offset;
+	m_Rotation = 0;
+
+	b2PolygonShape boxShape;
+	boxShape.SetAsBox(
+		m_Dimensions.x / 2.0,
+		m_Dimensions.y / 2.0,
+		b2Vec2(m_Offset.x, m_Offset.y),
+		(m_Rotation * M_PI) / 180.0
+	);
+
+	b2FixtureDef boxFixture;
+	boxFixture.shape = &boxShape;
+	boxFixture.density = 1.0f;
+	boxFixture.friction = 0.3f;
+
+	if (attachedRigidBody) {
+		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+		m_Fixture = attachedRigidBody->m_Body->CreateFixture(&boxFixture);
+	}
+	else {
+		(*m_StaticBody)->DestroyFixture(m_Fixture);
+		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
+	}
+}
+
 void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
 	attachedRigidBody = rigidBody;
 
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(0.2, 0.2);
+	boxShape.SetAsBox(
+		m_Dimensions.x / 2.0,
+		m_Dimensions.y / 2.0,
+		b2Vec2(m_Offset.x, m_Offset.y),
+		(m_Rotation * M_PI) / 180.0
+	);
 
 	b2FixtureDef boxFixture;
 	boxFixture.shape = &boxShape;
