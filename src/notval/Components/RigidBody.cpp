@@ -25,6 +25,20 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), m_Body(nullptr),
 	}
 }
 
+void RigidBody::SetMass(const float mass) {
+	float currentMass = m_Body->GetMass();
+	float density = (currentMass > 0.0) ? mass / currentMass : 0.0;
+
+	for (b2Fixture* fixture = m_Body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+		fixture->SetDensity(density);
+		m_Body->ResetMassData();
+	}
+}
+
+void RigidBody::SetBodyType(const RigidBodyType type) {
+	m_Body->SetType((b2BodyType)type);
+}
+
 void RigidBody::SetGravityScale(const double scale) {
 	m_Body->SetGravityScale(scale);
 }

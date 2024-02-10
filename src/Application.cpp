@@ -111,7 +111,7 @@ public:
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		playerBody->SetGravityScale(4);
-		playerBody->FreezeRotation(true);
+
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		playerCollider->SetTransform(Vector2D(2, 2), Vector2D::zero, 0);
 		

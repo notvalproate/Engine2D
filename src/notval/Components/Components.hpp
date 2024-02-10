@@ -24,8 +24,16 @@ private:
 	friend class GameObject;
 };
 
+enum class RigidBodyType {
+	Static = b2_staticBody,
+	Kinematic = b2_kinematicBody,
+	Dynamic = b2_dynamicBody
+};
+
 class RigidBody final : public Component {
 public:
+	void SetMass(const float mass);
+	void SetBodyType(const RigidBodyType type);
 	void SetGravityScale(const double scale);
 	void FreezeRotation(const bool set);
 
