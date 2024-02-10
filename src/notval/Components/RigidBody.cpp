@@ -29,6 +29,10 @@ void RigidBody::SetGravityScale(const double scale) {
 	m_Body->SetGravityScale(scale);
 }
 
+void RigidBody::FreezeRotation(const bool set) {
+	m_Body->SetFixedRotation(set);
+}
+
 void RigidBody::Update() {
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;

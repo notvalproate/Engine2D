@@ -17,11 +17,11 @@ void Scene::Start() {
 }
 
 void Scene::Update() {
-    m_PhysicsWorld->Step(Time.GetDeltaTime(), 6, 2);
-
     for(auto& gameObject : m_SceneGameObjects) {
         gameObject->Update();
     }
+
+    m_PhysicsWorld->Step(Time.GetDeltaTime(), 6, 2);
 
     if(m_StagedForDestruction.size()) {
         for(auto& gO : m_StagedForDestruction) {

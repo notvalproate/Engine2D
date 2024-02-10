@@ -27,6 +27,7 @@ private:
 class RigidBody final : public Component {
 public:
 	void SetGravityScale(const double scale);
+	void FreezeRotation(const bool set);
 
 private:
 	RigidBody(GameObject* gameObj);
@@ -35,7 +36,6 @@ private:
 	void OnColliderAttach();
 
 	b2Body* m_Body;
-
 	std::optional<b2Fixture*> m_SensorFixture;
 
 	friend class GameObject;

@@ -59,6 +59,27 @@ public:
 	}
 };
 
+class PlayerController : public Behaviour {
+public:
+	using Behaviour::Behaviour;
+
+	std::unique_ptr<Component> Clone() const override {
+		return std::make_unique<PlayerController>(*this);
+	}
+
+	void Start() override {
+		mainCamera = FindObjectByName("Main Camera");
+		background = FindObjectByName("Layer 1")->GetComponent<SpriteRenderer>();
+	}
+
+	void Update() override {
+		mainCamera->transform.position = transform->position;
+	}
+
+	GameObject* mainCamera;
+	SpriteRenderer* background;
+};
+
 class TestScene : public Scene {
 public:
 	using Scene::Scene;
@@ -82,6 +103,7 @@ public:
 		L2Renderer->SetPixelsPerUnit(16);
 
 		auto PlayerObject = CreateGameObject("Player");
+		PlayerObject->AddComponent<PlayerController>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
@@ -89,17 +111,52 @@ public:
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		playerBody->SetGravityScale(4);
+		playerBody->FreezeRotation(true);
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
-		playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D::zero, 0);
+		playerCollider->SetTransform(Vector2D(2, 2), Vector2D::zero, 0);
 		
-		//auto groundObject = CreateGameObject("Ground");
-		//groundObject->AddComponent<BoxCollider>();
-		//groundObject->transform.Translate(Vector2D(0, -4.5));
+		auto groundObject = CreateGameObject("Ground");
+
+		auto g1 = CreateGameObject("Ground 1");
+		g1->transform.SetParent(groundObject);
+		g1->transform.Translate(Vector2D(-0.8, 0));
+		auto g1collider = g1->AddComponent<BoxCollider>();
+		auto g1render = g1->AddComponent<SpriteRenderer>();
+		g1render->SetSprite("assets/medieval/Tiles/floor_tile_2.png");
+		g1render->SetPixelsPerUnit(32);
+		g1render->SetSortingLayer("World");
+
+		/*auto g2 = CreateGameObject("Ground 2");
+		g2->transform.SetParent(groundObject);
+		g2->transform.Translate(Vector2D(0.5, 0));
+		auto g2collider = g2->AddComponent<BoxCollider>();
+		auto g2render = g2->AddComponent<SpriteRenderer>();
+		g2render->SetSprite("assets/medieval/Tiles/floor_tile_3.png");
+		g2render->SetPixelsPerUnit(32);
+		g2render->SetSortingLayer("World");
+
+		auto g3 = CreateGameObject("Ground 3");
+		g3->transform.SetParent(groundObject);
+		g3->transform.Translate(Vector2D(1.5, 0));
+		auto g3collider = g3->AddComponent<BoxCollider>();
+		auto g3render = g3->AddComponent<SpriteRenderer>();
+		g3render->SetSprite("assets/medieval/Tiles/floor_tile_4.png");
+		g3render->SetPixelsPerUnit(32);
+		g3render->SetSortingLayer("World");
+
+		auto g4 = CreateGameObject("Ground 2");
+		g4->transform.SetParent(groundObject);
+		g4->transform.Translate(Vector2D(-1.5, 0));
+		auto g4collider = g4->AddComponent<BoxCollider>();
+		auto g4render = g4->AddComponent<SpriteRenderer>();
+		g4render->SetSprite("assets/medieval/Tiles/floor_tile_1.png");
+		g4render->SetPixelsPerUnit(32);
+		g4render->SetSortingLayer("World");
+		*/
+
+		groundObject->transform.Translate(Vector2D(0, -5.5));
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
-
-		auto mainCamera = FindObjectByName("Main Camera");
-		mainCamera->transform.scale = Vector2D::one * 2;
 	}
 };
 
@@ -112,8 +169,9 @@ public:
 
 		RenderingPipeline.AddSortingLayer("Background");
 		RenderingPipeline.AddSortingLayer("Player");
+		RenderingPipeline.AddSortingLayer("World");
 
-		Physics.SetRenderColliders(true);
+		Physics.SetRenderColliders(true); 
 
 		SceneManager.AddScene<TestScene>("Test Scene");
 		SceneManager.AddScene<TestScene>("Test Scene 2");
