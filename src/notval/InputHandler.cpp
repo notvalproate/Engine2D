@@ -42,6 +42,29 @@ bool InputHandler::GetMouseButtonDown(const uint8_t buttonCode) const {
 	return m_CurrentEvent.button.button == buttonCode;
 }
 
+short InputHandler::GetAxisRaw(const std::string& axis) const {
+	if (axis == "Horizontal") {
+		if (GetKey(SDL_SCANCODE_A) || GetKey(SDL_SCANCODE_LEFT)) {
+			return -1;
+		}
+		else if (GetKey(SDL_SCANCODE_D) || GetKey(SDL_SCANCODE_RIGHT)) {
+			return 1;
+		}
+
+		return 0;
+	}
+	else if (axis == "Vertical") {
+		if (GetKey(SDL_SCANCODE_S) || GetKey(SDL_SCANCODE_DOWN)) {
+			return -1;
+		}
+		else if (GetKey(SDL_SCANCODE_W) || GetKey(SDL_SCANCODE_UP)) {
+			return 1;
+		}
+
+		return 0;
+	}
+}
+
 void InputHandler::WaitForEvent() const {
 	SDL_WaitEvent(NULL);
 }

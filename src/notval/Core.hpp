@@ -10,6 +10,7 @@
 #include <functional>
 #include <type_traits>
 #include <chrono>
+#include <unordered_map>
 
 #include <SDL.h>
 #include <box2d.h>
@@ -665,6 +666,8 @@ public:
     bool GetMouseButton(const uint8_t buttonCode) const;
     bool GetMouseButtonUp(const uint8_t buttonCode) const;
     bool GetMouseButtonDown(const uint8_t buttonCode) const;
+
+    short GetAxisRaw(const std::string& axis) const;
 
     void WaitForEvent() const;
 

@@ -74,7 +74,16 @@ public:
 	}
 
 	void Update() override {
+		time += Time.GetDeltaTime();
+		GatherInput();
+
 		mainCamera->transform.position = transform->position;
+	}
+
+	void GatherInput() {
+		JumpDown = Input.GetKeyDown(SDL_SCANCODE_SPACE);
+		JumpHeld = Input.GetKey(SDL_SCANCODE_SPACE);
+		Move = Vector2D(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 	}
 
 	GameObject* mainCamera;
@@ -82,6 +91,8 @@ public:
 	BoxCollider* col;
 
 	bool JumpDown, JumpHeld;
+	Vector2D Move;
+	double time, timeJumpWasPressed;
 };
 
 class TestScene : public Scene {
