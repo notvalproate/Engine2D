@@ -25,6 +25,10 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), m_Body(nullptr),
 	}
 }
 
+void RigidBody::AddForce(const Vector2D force) {
+	m_Body->ApplyForceToCenter(b2Vec2(force.x, force.y), true);
+}
+
 void RigidBody::SetMass(const float mass) {
 	float currentMass = m_Body->GetMass();
 	float density = (currentMass > 0.0) ? mass / currentMass : 0.0;

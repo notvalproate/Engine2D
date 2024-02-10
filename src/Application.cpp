@@ -69,7 +69,8 @@ public:
 
 	void Start() override {
 		mainCamera = FindObjectByName("Main Camera");
-		background = FindObjectByName("Layer 1")->GetComponent<SpriteRenderer>();
+		rb = gameObject->GetComponent<RigidBody>();
+		col = gameObject->GetComponent<BoxCollider>();
 	}
 
 	void Update() override {
@@ -77,7 +78,10 @@ public:
 	}
 
 	GameObject* mainCamera;
-	SpriteRenderer* background;
+	RigidBody* rb;
+	BoxCollider* col;
+
+	bool JumpDown, JumpHeld;
 };
 
 class TestScene : public Scene {
@@ -110,23 +114,22 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		playerBody->SetGravityScale(4);
-
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		playerCollider->SetTransform(Vector2D(2, 2), Vector2D::zero, 0);
 		
+
 		auto groundObject = CreateGameObject("Ground");
 
 		auto g1 = CreateGameObject("Ground 1");
 		g1->transform.SetParent(groundObject);
-		g1->transform.Translate(Vector2D(-0.8, 0));
+		g1->transform.Translate(Vector2D(-0.5, 0));
 		auto g1collider = g1->AddComponent<BoxCollider>();
 		auto g1render = g1->AddComponent<SpriteRenderer>();
 		g1render->SetSprite("assets/medieval/Tiles/floor_tile_2.png");
 		g1render->SetPixelsPerUnit(32);
 		g1render->SetSortingLayer("World");
 
-		/*auto g2 = CreateGameObject("Ground 2");
+		auto g2 = CreateGameObject("Ground 2");
 		g2->transform.SetParent(groundObject);
 		g2->transform.Translate(Vector2D(0.5, 0));
 		auto g2collider = g2->AddComponent<BoxCollider>();
@@ -152,7 +155,7 @@ public:
 		g4render->SetSprite("assets/medieval/Tiles/floor_tile_1.png");
 		g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
-		*/
+		
 
 		groundObject->transform.Translate(Vector2D(0, -5.5));
 

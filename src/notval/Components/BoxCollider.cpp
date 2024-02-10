@@ -20,7 +20,7 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 	b2FixtureDef boxFixture;
 	boxFixture.shape = &boxShape;
 	boxFixture.density = 1.0f;
-	boxFixture.friction = 0.3f;
+	boxFixture.friction = 0.0f;
 
 	attachedRigidBody = gameObj->GetComponentInParent<RigidBody>();
 

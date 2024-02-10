@@ -32,11 +32,12 @@ enum class RigidBodyType {
 
 class RigidBody final : public Component {
 public:
+	void AddForce(const Vector2D force);
+
 	void SetMass(const float mass);
 	void SetBodyType(const RigidBodyType type);
 	void SetGravityScale(const double scale);
 	void FreezeRotation(const bool set);
-
 private:
 	RigidBody(GameObject* gameObj);
 
