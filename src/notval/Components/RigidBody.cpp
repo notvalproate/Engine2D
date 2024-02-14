@@ -55,6 +55,10 @@ void RigidBody::FreezeRotation(const bool set) {
 	m_Body->SetFixedRotation(set);
 }
 
+Vector2D RigidBody::GetVelocity() const {
+	return Vector2D(m_Body->GetLinearVelocity().x, m_Body->GetLinearVelocity().y);
+}
+
 void RigidBody::Update() {
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;

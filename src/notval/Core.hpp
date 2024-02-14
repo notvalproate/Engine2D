@@ -15,6 +15,8 @@
 #include <SDL.h>
 #include <box2d.h>
 
+#include "MathModule.hpp"
+
 class Object;
 class Vector2D;
 class Component;
@@ -65,6 +67,7 @@ public:
     static TextureHandler TextureManager;
     static TimeHandler Time;
     static PhysicsHandler Physics;
+    static MathModule Math;
 
 private:
     static void CopyBehaviours(GameObject* newGameObject, GameObject* originalGameObject);

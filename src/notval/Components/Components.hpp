@@ -34,19 +34,20 @@ class RigidBody final : public Component {
 public:
 	void AddForce(const Vector2D force);
 
-	b2Body* m_Body;
-
 	void SetMass(const float mass);
 	void SetVelocity(const Vector2D vel);
 	void SetBodyType(const RigidBodyType type);
 	void SetGravityScale(const double scale);
 	void FreezeRotation(const bool set);
+
+	Vector2D GetVelocity() const;
 private:
 	RigidBody(GameObject* gameObj);
 
 	void Update() override;
 	void OnColliderAttach();
 
+	b2Body* m_Body;
 	std::optional<b2Fixture*> m_SensorFixture;
 
 	friend class GameObject;

@@ -7,6 +7,7 @@ RenderingHandler Object::RenderingPipeline;
 TextureHandler Object::TextureManager;
 TimeHandler Object::Time;
 PhysicsHandler Object::Physics;
+MathModule Object::Math;
 
 void Object::CopyBehaviours(GameObject* newGameObject, GameObject* originalGameObject) {
     for (auto& behaviour : originalGameObject->m_Behaviours) {

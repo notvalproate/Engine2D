@@ -116,7 +116,7 @@ public:
 		}
 	}
 
-	float frameLeftGround = 0;
+	float frameLeftGrounded = 0;
 	bool grounded = true;
 
 	void CheckCollisions() {
@@ -127,7 +127,13 @@ public:
 
 		if (!grounded && groundHit) {
 			grounded = true;
-
+			coyoteUsable = true;
+			bufferedJumpUsable = true;
+			endedJumpEarly = false;
+		} 
+		else if (grounded && !groundHit) {
+			grounded = false;
+			frameLeftGrounded = time;
 		}
 	}
 
@@ -138,11 +144,34 @@ public:
 	float timeJumpWasPressed;
 
 	void HandleJump() {
+		bool HasBufferedJump = bufferedJumpUsable && (time < (timeJumpWasPressed + 0.1));
+		bool CanUseCoyote = coyoteUsable && !grounded && (time < (frameLeftGrounded + 0.1));
 
+		if (!endedJumpEarly && !grounded && !frameInput.JumpHeld && rb->GetVelocity().y > 0) endedJumpEarly = true;
+
+		if (!jumpToConsume && !HasBufferedJump) return;
+
+		if (grounded || CanUseCoyote) ExecuteJump();
+
+		jumpToConsume = false;
+	}
+
+	void ExecuteJump() {
+		endedJumpEarly = false;
+		timeJumpWasPressed = 0;
+		bufferedJumpUsable = false;
+		coyoteUsable = false;
+		frameVelocity.y = 5;
 	}
 
 	void HandleDirection() {
-
+		if (frameInput.Move.x == 0) {
+			double deceleration = grounded ? -10 : -3;
+			frameVelocity.x = Mathf.MoveTowards(frameVelocity.x, 0, deceleration * Time.GetDeltaTime());
+		}
+		else {
+			frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeed, _stats.Acceleration * Time.fixedDeltaTime);
+		}
 	}
 
 	void HandleGravity() {
