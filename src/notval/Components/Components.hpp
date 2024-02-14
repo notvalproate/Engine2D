@@ -57,6 +57,8 @@ private:
 class BoxCollider final : public Behaviour {
 public:
 	void SetTransform(const Vector2D dimensions, const Vector2D offset, const double rotation);
+	Vector2D GetCenter() const { return transform->position + m_Offset; }
+	Vector2D GetSize() const { return m_Dimensions; }
 
 	RigidBody* attachedRigidBody;
 

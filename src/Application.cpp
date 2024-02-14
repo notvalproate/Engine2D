@@ -139,11 +139,11 @@ public:
 	}
 
 	float frameLeftGrounded = 0;
-	bool grounded = true;
+	bool grounded = false;
 
 	void CheckCollisions() {
-		bool groundHit = false;
-		bool ceilingHit = false;
+		bool groundHit = Physics.BoxCast(col->GetCenter(), col->GetSize(), 0, Vector2D::down, stats.GrounderDistance).hit;
+		bool ceilingHit = Physics.BoxCast(col->GetCenter(), col->GetSize(), 0, Vector2D::up, stats.GrounderDistance).hit;
 
 		if (ceilingHit) frameVelocity.y = std::min(0.0, frameVelocity.y);
 
@@ -159,11 +159,11 @@ public:
 		}
 	}
 
-	bool jumpToConsume;
-	bool bufferedJumpUsable;
-	bool endedJumpEarly;
-	bool coyoteUsable;
-	float timeJumpWasPressed;
+	bool jumpToConsume = false;
+	bool bufferedJumpUsable = true;
+	bool endedJumpEarly = false;
+	bool coyoteUsable = true;
+	float timeJumpWasPressed = -FLT_MAX;
 
 	void HandleJump() {
 		bool HasBufferedJump = bufferedJumpUsable && (time < (timeJumpWasPressed + stats.JumpBuffer));

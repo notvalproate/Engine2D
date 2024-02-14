@@ -83,6 +83,11 @@ public:
 
     double x{}, y{};
 
+    inline Vector2D operator=(const b2Vec2 box2dVec) {
+        x = box2dVec.x;
+        y = box2dVec.y;
+    }
+
     inline constexpr std::string ToString() const {
         return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
     }
@@ -766,6 +771,91 @@ private:
 class PhysicsHandler {
 public:
     void SetRenderColliders(const bool set);
+
+    struct BoxCastResult {
+        bool hit;
+        b2Vec2 point;
+        b2Vec2 normal;
+        float fraction;
+
+        BoxCastResult() : hit(false), fraction(1.0f) {}
+    };
+
+    class BoxCastCallback : public b2QueryCallback {
+    public:
+        BoxCastCallback(const b2Vec2& start, const b2Vec2& end)
+            : m_start(start), m_end(end), m_hit(false), m_fraction(1.0f) {}
+
+        bool ReportFixture(b2Fixture* fixture) override {
+            b2AABB aabb = fixture->GetAABB(0);
+            b2RayCastInput input;
+            input.p1 = m_start;
+            input.p2 = m_end;
+            input.maxFraction = m_fraction;
+
+            b2RayCastOutput output;
+            if (fixture->RayCast(&output, input, 0)) {
+                m_hit = true;
+                m_fraction = output.fraction;
+                m_result.point = input.p1 + m_fraction * (input.p2 - input.p1);
+                m_result.normal = output.normal;
+            }
+
+            return !m_hit;
+        }
+
+        bool DidHit() const {
+            return m_hit;
+        }
+
+        const BoxCastResult& GetResult() const {
+            return m_result;
+        }
+
+        b2AABB ComputeAABB(const b2Vec2& direction, float distance) {
+            b2Vec2 lower = b2Min(m_start, m_end);
+            b2Vec2 upper = b2Max(m_start, m_end);
+
+            b2Vec2 delta = distance * b2Abs(direction);
+            lower -= delta;
+            upper += delta;
+
+            return b2AABB{ lower, upper };
+        }
+    private:
+        b2Vec2 m_start;
+        b2Vec2 m_end;
+        bool m_hit;
+        float m_fraction;
+        BoxCastResult m_result;
+
+        friend class PhysicsHandler;
+    };
+        
+    BoxCastResult BoxCast(const Vector2D& origin, const Vector2D& size, float angle, const Vector2D& direction, float distance) {
+        b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
+
+        b2Vec2 halfSize = b2Vec2(size.x * 0.5, size.y * 0.5);
+        b2Vec2 originB2 = b2Vec2(origin.x, origin.y);
+        b2Vec2 corners[4];
+        corners[0] = originB2 - b2Mul(b2Rot(angle), b2Vec2(halfSize.x, -halfSize.y));
+        corners[1] = originB2 - b2Mul(b2Rot(angle), b2Vec2(halfSize.x, halfSize.y));
+        corners[2] = originB2 + b2Mul(b2Rot(angle), b2Vec2(-halfSize.x, halfSize.y));
+        corners[3] = originB2 + b2Mul(b2Rot(angle), b2Vec2(-halfSize.x, -halfSize.y));
+
+        BoxCastCallback callback(corners[0], corners[1]);
+        for (int i = 1; i < 4; ++i) {
+            callback.m_start = corners[i - 1];
+            callback.m_end = corners[i];
+            world->QueryAABB(&callback, callback.ComputeAABB(b2Vec2(direction.x, direction.y), distance));
+            if (callback.DidHit()) {
+                //std::cout << "Hit!" << std::endl;
+                return callback.GetResult();
+            }
+        }
+
+        return BoxCastResult();
+    }
 
 private:
     PhysicsHandler();
