@@ -39,6 +39,10 @@ void RigidBody::SetMass(const float mass) {
 	}
 }
 
+void RigidBody::SetVelocity(const Vector2D vel) {
+	m_Body->SetLinearVelocity(b2Vec2(vel.x, vel.y));
+}
+
 void RigidBody::SetBodyType(const RigidBodyType type) {
 	m_Body->SetType((b2BodyType)type);
 }

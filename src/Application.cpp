@@ -67,32 +67,96 @@ public:
 		return std::make_unique<PlayerController>(*this);
 	}
 
+	struct FrameInput
+	{
+		bool JumpDown;
+		bool JumpHeld;
+		Vector2D Move;
+	};
+
+	RigidBody* rb;
+	BoxCollider* col;
+	FrameInput frameInput;
+	Vector2D frameVelocity;
+
+	double time;
+
 	void Start() override {
 		mainCamera = FindObjectByName("Main Camera");
 		rb = gameObject->GetComponent<RigidBody>();
 		col = gameObject->GetComponent<BoxCollider>();
+
+		rb->FreezeRotation(true);
+		rb->SetGravityScale(0);
 	}
 
 	void Update() override {
 		time += Time.GetDeltaTime();
 		GatherInput();
 
+		CheckCollisions();
+
+		HandleJump();
+		HandleDirection();
+		HandleGravity();
+
+		ApplyMovement();
+
 		mainCamera->transform.position = transform->position;
 	}
 
 	void GatherInput() {
-		JumpDown = Input.GetKeyDown(SDL_SCANCODE_SPACE);
-		JumpHeld = Input.GetKey(SDL_SCANCODE_SPACE);
-		Move = Vector2D(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+		frameInput.JumpDown = Input.GetKeyDown(SDL_SCANCODE_SPACE);
+		frameInput.JumpHeld = Input.GetKey(SDL_SCANCODE_SPACE);
+		frameInput.Move = Vector2D(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+		if (frameInput.JumpDown) {
+			JumpToConsume = true;
+			timeJumpWasPressed = time;
+		}
 	}
 
-	GameObject* mainCamera;
-	RigidBody* rb;
-	BoxCollider* col;
+	float frameLeftGround = 0;
+	bool grounded = true;
 
-	bool JumpDown, JumpHeld;
-	Vector2D Move;
-	double time, timeJumpWasPressed;
+	void CheckCollisions() {
+		bool groundHit = false;
+		bool ceilingHit = false;
+
+		if (ceilingHit) frameVelocity.y = std::min(0.0, frameVelocity.y);
+
+		if (!grounded && groundHit) {
+			grounded = true;
+
+		}
+	}
+
+	bool jumpToConsume;
+	bool bufferedJumpUsable;
+	bool endedJumpEarly;
+	bool coyoteUsable;
+	float timeJumpWasPressed;
+
+	void HandleJump() {
+
+	}
+
+	void HandleDirection() {
+
+	}
+
+	void HandleGravity() {
+
+	}
+
+	void ApplyMovement() {
+
+	}
+
+	bool JumpToConsume;
+	double timeJumpWasPressed;
+
+	GameObject* mainCamera;
 };
 
 class TestScene : public Scene {
