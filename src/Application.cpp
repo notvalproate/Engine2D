@@ -59,6 +59,10 @@ public:
 	}
 };
 
+// PLAYER CONTROLLER FROM:
+// GitHub: https://github.com/Matthew-J-Spencer/Ultimate-2D-Controller/blob/main/Scripts/PlayerController.cs
+// YouTube: https://www.youtube.com/watch?v=3sWTzMsmdx8
+
 class PlayerController : public Behaviour {
 public:
 	using Behaviour::Behaviour;
