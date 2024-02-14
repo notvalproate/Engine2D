@@ -67,6 +67,23 @@ public:
 		return std::make_unique<PlayerController>(*this);
 	}
 
+	GameObject* mainCamera;
+
+	struct ScriptableStats {
+		float MaxSpeed = 14;
+		float Acceleration = 120;
+		float GroundDeceleration = 60;
+		float AirDeceleration = 30;
+		float GroundingForce = -1.5;
+		float GrounderDistance = 0.05;
+		float JumpPower = 36;
+		float MaxFallSpeed = 40;
+		float FallAcceleration = 110;
+		float JumpEndEarlyGravityModifier = 3;
+		float CoyoteTime = .15f;
+		float JumpBuffer = .2f;
+	};
+
 	struct FrameInput
 	{
 		bool JumpDown;
@@ -78,6 +95,7 @@ public:
 	BoxCollider* col;
 	FrameInput frameInput;
 	Vector2D frameVelocity;
+	const ScriptableStats stats;
 
 	double time;
 
@@ -111,7 +129,7 @@ public:
 		frameInput.Move = Vector2D(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
 		if (frameInput.JumpDown) {
-			JumpToConsume = true;
+			jumpToConsume = true;
 			timeJumpWasPressed = time;
 		}
 	}
@@ -144,8 +162,8 @@ public:
 	float timeJumpWasPressed;
 
 	void HandleJump() {
-		bool HasBufferedJump = bufferedJumpUsable && (time < (timeJumpWasPressed + 0.1));
-		bool CanUseCoyote = coyoteUsable && !grounded && (time < (frameLeftGrounded + 0.1));
+		bool HasBufferedJump = bufferedJumpUsable && (time < (timeJumpWasPressed + stats.JumpBuffer));
+		bool CanUseCoyote = coyoteUsable && !grounded && (time < (frameLeftGrounded + stats.CoyoteTime));
 
 		if (!endedJumpEarly && !grounded && !frameInput.JumpHeld && rb->GetVelocity().y > 0) endedJumpEarly = true;
 
@@ -158,34 +176,36 @@ public:
 
 	void ExecuteJump() {
 		endedJumpEarly = false;
-		timeJumpWasPressed = 0;
+		timeJumpWasPressed = 0;	
 		bufferedJumpUsable = false;
 		coyoteUsable = false;
-		frameVelocity.y = 5;
+		frameVelocity.y = stats.JumpPower;
 	}
 
 	void HandleDirection() {
 		if (frameInput.Move.x == 0) {
-			double deceleration = grounded ? -10 : -3;
-			frameVelocity.x = Mathf.MoveTowards(frameVelocity.x, 0, deceleration * Time.GetDeltaTime());
+			double deceleration = grounded ? stats.GroundDeceleration : stats.AirDeceleration;
+			frameVelocity.x = Math.MoveTowards(frameVelocity.x, 0, deceleration * Time.GetDeltaTime());
 		}
 		else {
-			frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeed, _stats.Acceleration * Time.fixedDeltaTime);
+			frameVelocity.x = Math.MoveTowards(frameVelocity.x, frameInput.Move.x * stats.MaxSpeed, stats.Acceleration * Time.GetDeltaTime());
 		}
 	}
 
 	void HandleGravity() {
-
+		if (grounded && frameVelocity.y <= 0.0) {
+			frameVelocity.y = stats.GroundingForce;
+		}
+		else {
+			double inAirGravity = stats.FallAcceleration;
+			if (endedJumpEarly && frameVelocity.y > 0) inAirGravity *= stats.JumpEndEarlyGravityModifier;
+			frameVelocity.y = Math.MoveTowards(frameVelocity.y, -5, inAirGravity * Time.GetDeltaTime());
+		}
 	}
 
 	void ApplyMovement() {
-
+		rb->SetVelocity(frameVelocity);
 	}
-
-	bool JumpToConsume;
-	double timeJumpWasPressed;
-
-	GameObject* mainCamera;
 };
 
 class TestScene : public Scene {

@@ -108,6 +108,9 @@
     <ClCompile Include="src\notval\Components\RigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\notval\MathModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2.dll" />
@@ -148,6 +151,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\notval\Engine2D.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\notval\MathModule.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
