@@ -50,3 +50,31 @@ void PhysicsHandler::RenderColliders() const {
 void PhysicsHandler::SetRenderColliders(const bool set) {
 	m_RenderSceneColliders = set;
 }
+
+RayCastHit PhysicsHandler::RayCast(const Vector2D origin, const Vector2D direction, float distance) const {
+	b2Vec2 originB2 = b2Vec2(origin.x, origin.y);
+	b2Vec2 directionB2 = b2Vec2(direction.x, direction.y);
+	b2Vec2 endB2 = originB2 + (distance * directionB2);
+
+	b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
+	RayCastCallback callback;
+
+	world->RayCast(&callback, originB2, endB2);
+
+	if (callback.DidHit()) {
+		callback.GetResult().fraction *= distance;
+		return callback.GetResult();
+	}
+	else {
+		return RayCastHit();
+	}
+}
+
+float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) {
+	m_result.hit = true;
+	m_result.point = point;
+	m_result.normal = normal;
+	m_result.fraction = fraction;
+
+	return fraction;
+}

@@ -71,8 +71,6 @@ public:
 		return std::make_unique<PlayerController>(*this);
 	}
 
-	GameObject* mainCamera;
-
 	struct ScriptableStats {
 		float MaxSpeed = 14;
 		float Acceleration = 120;
@@ -104,7 +102,6 @@ public:
 	double time;
 
 	void Start() override {
-		mainCamera = FindObjectByName("Main Camera");
 		rb = gameObject->GetComponent<RigidBody>();
 		col = gameObject->GetComponent<BoxCollider>();
 
@@ -226,6 +223,24 @@ public:
 	}
 };
 
+class CameraFollower : public Behaviour {
+	using Behaviour::Behaviour;
+
+	std::unique_ptr<Component> Clone() const override {
+		return std::make_unique<CameraFollower>(*this);
+	}
+
+	void Start() {
+		mainCamera = FindObjectByName("Main Camera");
+	}
+
+	void Update() {
+		mainCamera->transform.position = transform->position;
+	}
+
+	GameObject* mainCamera;
+};
+
 class TestScene : public Scene {
 public:
 	using Scene::Scene;
@@ -258,7 +273,8 @@ public:
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		playerCollider->SetTransform(Vector2D(2, 2), Vector2D::zero, 0);
-		
+
+		PlayerObject->AddComponent<CameraFollower>();
 
 		auto groundObject = CreateGameObject("Ground");
 
@@ -298,7 +314,6 @@ public:
 		g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
 		
-
 		groundObject->transform.Translate(Vector2D(0, -5.5));
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();

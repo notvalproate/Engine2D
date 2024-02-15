@@ -83,9 +83,10 @@ public:
 
     double x{}, y{};
 
-    inline Vector2D operator=(const b2Vec2 box2dVec) {
+    inline Vector2D& operator=(const b2Vec2 box2dVec) {
         x = box2dVec.x;
         y = box2dVec.y;
+        return *this;
     }
 
     inline constexpr std::string ToString() const {
@@ -767,65 +768,19 @@ private:
     friend class Engine2D;
 };
 
+struct RayCastHit {
+    bool hit{false};
+    Vector2D point;
+    Vector2D normal;
+    float fraction{1.0f};
+
+    RayCastHit() {}
+};
 
 class PhysicsHandler {
 public:
-    void SetRenderColliders(const bool set);
-
-    struct RayCastHit {
-        bool hit;
-        b2Vec2 point;
-        b2Vec2 normal;
-        float fraction;
-
-        RayCastHit() : hit(false), fraction(1.0f) {}
-    };
-
-    class RayCastCallback : public b2RayCastCallback {
-    public:
-        RayCastCallback() : m_hit(false) {}
-
-        float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override {
-            m_hit = true;
-            m_result.hit = true;
-            m_result.point = point;
-            m_result.normal = normal;
-            m_result.fraction = fraction;
-            
-            return fraction;
-        }
-
-        bool DidHit() const {
-            return m_hit;
-        }
-
-        RayCastHit& GetResult() {
-            return m_result;
-        }
-
-    private:
-        bool m_hit;
-        RayCastHit m_result;
-    };
-        
-    RayCastHit RayCast(const Vector2D origin, const Vector2D direction, float distance) {
-        b2Vec2 originB2 = b2Vec2(origin.x, origin.y);
-        b2Vec2 directionB2 = b2Vec2(direction.x, direction.y);
-        b2Vec2 endB2 = originB2 + (distance * directionB2);
-
-        b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
-        RayCastCallback callback;
-
-        world->RayCast(&callback, originB2, endB2);
-
-        if (callback.DidHit()) {
-            callback.GetResult().fraction *= distance;
-            return callback.GetResult();
-        }
-        else {
-            return RayCastHit();
-        }
-    }
+    void SetRenderColliders(const bool set);       
+    RayCastHit RayCast(const Vector2D origin, const Vector2D direction, float distance) const;
 
 private:
     PhysicsHandler();
@@ -839,6 +794,16 @@ private:
     friend class Engine2D;
     friend class RenderingHandler;
     friend class BoxCollider;
+
+    class RayCastCallback : public b2RayCastCallback {
+    public:
+        float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override;
+        inline bool DidHit() const { return m_result.hit; }
+        inline RayCastHit& GetResult() { return m_result; }
+
+    private:
+        RayCastHit m_result;
+    };
 };
 
 
