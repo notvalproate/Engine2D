@@ -260,9 +260,11 @@ public:
 		L2Renderer->SetSprite("assets/medieval/Background/layer_2.png");
 		L2Renderer->SetSortingLayer("Background");
 		L2Renderer->SetPixelsPerUnit(16);
+		
 
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->AddComponent<PlayerController>();
+		PlayerObject->AddComponent<CameraFollower>();
+		//PlayerObject->AddComponent<PlayerController>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
@@ -272,10 +274,10 @@ public:
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		playerCollider->SetTransform(Vector2D(2, 2), Vector2D::zero, 0);
 
-		PlayerObject->AddComponent<CameraFollower>();
-
+		
 		auto groundObject = CreateGameObject("Ground");
 
+		/*
 		auto g1 = CreateGameObject("Ground 1");
 		g1->transform.SetParent(groundObject);
 		g1->transform.Translate(Vector2D(-0.5, 0));
@@ -311,8 +313,10 @@ public:
 		g4render->SetSprite("assets/medieval/Tiles/floor_tile_1.png");
 		g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
-		
+		*/
+
 		groundObject->transform.Translate(Vector2D(0, -5.5));
+		
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}

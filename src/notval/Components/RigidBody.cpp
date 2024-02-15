@@ -64,6 +64,7 @@ Vector2D RigidBody::GetVelocity() const {
 }
 
 void RigidBody::Update() {
+	std::cout << "Body spin: " << m_Body->GetAngle() << std::endl;
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;
 	transform->rotation = -(m_Body->GetAngle() * 180) / M_PI;

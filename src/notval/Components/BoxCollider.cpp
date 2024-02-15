@@ -24,7 +24,7 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 
 	attachedRigidBody = gameObj->GetComponentInParent<RigidBody>();
 
-	if (attachedRigidBody) {
+	if (attachedRigidBody != nullptr) {
 		m_Fixture = attachedRigidBody->m_Body->CreateFixture(&boxFixture);
 		attachedRigidBody->OnColliderAttach();
 	}
