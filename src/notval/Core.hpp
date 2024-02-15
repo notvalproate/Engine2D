@@ -787,6 +787,7 @@ public:
 
         float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override {
             m_hit = true;
+            m_result.hit = true;
             m_result.point = point;
             m_result.normal = normal;
             m_result.fraction = fraction;

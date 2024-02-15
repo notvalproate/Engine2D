@@ -133,6 +133,7 @@ public:
 		frameInput.Move = Vector2D(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
 		if (frameInput.JumpDown) {
+			std::cout << "Set jump to consume" << std::endl;
 			jumpToConsume = true;
 			timeJumpWasPressed = time;
 		}
@@ -142,8 +143,23 @@ public:
 	bool grounded = false;
 
 	void CheckCollisions() {
-		bool groundHit = false;
-		bool ceilingHit = false;
+		Vector2D boxOrigin = col->GetCenter();
+		Vector2D boxHalfDimensions = col->GetSize() / 2.0;
+
+		Vector2D topRight = boxOrigin + boxHalfDimensions;
+		Vector2D topLeft(boxOrigin.x - boxHalfDimensions.x, topRight.y);
+
+		Vector2D bottomLeft = boxOrigin - boxHalfDimensions;
+		Vector2D bottomRight(boxOrigin.x + boxHalfDimensions.x, bottomLeft.y);
+
+		bool topLeftHit = Physics.RayCast(topLeft, Vector2D::up, stats.GrounderDistance).hit;
+		bool topRightHit = Physics.RayCast(topRight, Vector2D::up, stats.GrounderDistance).hit;
+
+		bool bottomLeftHit = Physics.RayCast(bottomLeft, Vector2D::down, stats.GrounderDistance).hit;
+		bool bottomRightHit = Physics.RayCast(bottomRight, Vector2D::down, stats.GrounderDistance).hit;
+
+		bool groundHit = bottomLeftHit || bottomRightHit; 
+		bool ceilingHit = topLeftHit || topRightHit;
 
 		if (ceilingHit) frameVelocity.y = std::min(0.0, frameVelocity.y);
 
