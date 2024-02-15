@@ -32,6 +32,8 @@ enum class RigidBodyType {
 
 class RigidBody final : public Component {
 public:
+	~RigidBody();
+
 	void AddForce(const Vector2D force);
 
 	void SetMass(const float mass);

@@ -86,8 +86,7 @@ public:
 		float JumpBuffer = .2f;
 	};
 
-	struct FrameInput
-	{
+	struct FrameInput {
 		bool JumpDown;
 		bool JumpHeld;
 		Vector2D Move;

@@ -23,6 +23,18 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), m_Body(nullptr),
 
 		m_SensorFixture = m_Body->CreateFixture(&boxFixture);
 	}
+
+	gameObj->scene->m_WorldBodies.push_back(this);
+}
+
+RigidBody::~RigidBody() {
+	auto& worldBodies = gameObject->scene->m_WorldBodies;
+	for (std::size_t i = 0; i < worldBodies.size(); i++) {
+		if (worldBodies[i] == this) {
+			worldBodies.erase(worldBodies.begin() + i);
+			break;
+		}
+	}
 }
 
 void RigidBody::AddForce(const Vector2D force) {

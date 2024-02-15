@@ -619,6 +619,7 @@ private:
     std::vector<Camera*> m_SceneCameras{};
 
     std::unique_ptr<b2World> m_PhysicsWorld;
+    std::vector<RigidBody*> m_WorldBodies;
 
     uint32_t m_LatestSceneInstanceID{};
     bool m_Loaded;
@@ -789,12 +790,6 @@ private:
 
     bool m_RenderSceneColliders;
 
-    friend class Object;
-    friend class Scene;
-    friend class Engine2D;
-    friend class RenderingHandler;
-    friend class BoxCollider;
-
     class RayCastCallback : public b2RayCastCallback {
     public:
         float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override;
@@ -804,6 +799,12 @@ private:
     private:
         RayCastHit m_result;
     };
+
+    friend class Object;
+    friend class Scene;
+    friend class Engine2D;
+    friend class RenderingHandler;
+    friend class BoxCollider;
 };
 
 
