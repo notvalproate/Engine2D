@@ -123,8 +123,6 @@ public:
 		HandleGravity();
 
 		ApplyMovement();
-
-		mainCamera->transform.position = transform->position;
 	}
 
 	void GatherInput() {
@@ -219,7 +217,7 @@ public:
 		else {
 			double inAirGravity = stats.FallAcceleration;
 			if (endedJumpEarly && frameVelocity.y > 0) inAirGravity *= stats.JumpEndEarlyGravityModifier;
-			frameVelocity.y = Math.MoveTowards(frameVelocity.y, -5, inAirGravity * Time.GetDeltaTime());
+			frameVelocity.y = Math.MoveTowards(frameVelocity.y, -stats.MaxFallSpeed, inAirGravity * Time.GetDeltaTime());
 		}
 	}
 
@@ -318,7 +316,7 @@ public:
 		RenderingPipeline.AddSortingLayer("Player");
 		RenderingPipeline.AddSortingLayer("World");
 
-		Physics.SetRenderColliders(true); 
+		//Physics.SetRenderColliders(true); 
 
 		SceneManager.AddScene<TestScene>("Test Scene");
 		SceneManager.AddScene<TestScene>("Test Scene 2");
