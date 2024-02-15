@@ -17,6 +17,8 @@ void Scene::Start() {
 }
 
 void Scene::Update() {
+    m_PhysicsWorld->Step(Time.GetDeltaTime(), 6, 2);
+
     for(auto& gameObject : m_SceneGameObjects) {
         gameObject->Update();
     }
@@ -28,8 +30,6 @@ void Scene::Update() {
         }
         m_StagedForDestruction.clear();
     }
-
-    m_PhysicsWorld->Step(Time.GetDeltaTime(), 6, 2);
 }
 
 void Scene::Render() const {

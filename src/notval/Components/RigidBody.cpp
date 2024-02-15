@@ -26,7 +26,7 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), m_Body(nullptr),
 }
 
 RigidBody::~RigidBody() {
-	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(m_Body);
+
 }
 
 void RigidBody::AddForce(const Vector2D force) {

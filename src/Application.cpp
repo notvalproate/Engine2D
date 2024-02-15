@@ -127,7 +127,6 @@ public:
 		frameInput.Move = Vector2D(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
 		if (frameInput.JumpDown) {
-			std::cout << "Set jump to consume" << std::endl;
 			jumpToConsume = true;
 			timeJumpWasPressed = time;
 		}
@@ -330,7 +329,7 @@ public:
 		RenderingPipeline.AddSortingLayer("Player");
 		RenderingPipeline.AddSortingLayer("World");
 
-		//Physics.SetRenderColliders(true); 
+		Physics.SetRenderColliders(true); 
 
 		SceneManager.AddScene<TestScene>("Test Scene");
 		SceneManager.AddScene<TestScene>("Test Scene 2");
