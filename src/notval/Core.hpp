@@ -772,89 +772,58 @@ class PhysicsHandler {
 public:
     void SetRenderColliders(const bool set);
 
-    struct BoxCastResult {
+    struct RayCastHit {
         bool hit;
         b2Vec2 point;
         b2Vec2 normal;
         float fraction;
 
-        BoxCastResult() : hit(false), fraction(1.0f) {}
+        RayCastHit() : hit(false), fraction(1.0f) {}
     };
 
-    class BoxCastCallback : public b2QueryCallback {
+    class RayCastCallback : public b2RayCastCallback {
     public:
-        BoxCastCallback(const b2Vec2& start, const b2Vec2& end)
-            : m_start(start), m_end(end), m_hit(false), m_fraction(1.0f) {}
+        RayCastCallback() : m_hit(false) {}
 
-        bool ReportFixture(b2Fixture* fixture) override {
-            b2AABB aabb = fixture->GetAABB(0);
-            b2RayCastInput input;
-            input.p1 = m_start;
-            input.p2 = m_end;
-            input.maxFraction = m_fraction;
-
-            b2RayCastOutput output;
-            if (fixture->RayCast(&output, input, 0)) {
-                m_hit = true;
-                m_fraction = output.fraction;
-                m_result.point = input.p1 + m_fraction * (input.p2 - input.p1);
-                m_result.normal = output.normal;
-            }
-
-            return !m_hit;
+        float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override {
+            m_hit = true;
+            m_result.point = point;
+            m_result.normal = normal;
+            m_result.fraction = fraction;
+            
+            return fraction;
         }
 
         bool DidHit() const {
             return m_hit;
         }
 
-        const BoxCastResult& GetResult() const {
+        RayCastHit& GetResult() {
             return m_result;
         }
 
-        b2AABB ComputeAABB(const b2Vec2& direction, float distance) {
-            b2Vec2 lower = b2Min(m_start, m_end);
-            b2Vec2 upper = b2Max(m_start, m_end);
-
-            b2Vec2 delta = distance * b2Abs(direction);
-            lower -= delta;
-            upper += delta;
-
-            return b2AABB{ lower, upper };
-        }
     private:
-        b2Vec2 m_start;
-        b2Vec2 m_end;
         bool m_hit;
-        float m_fraction;
-        BoxCastResult m_result;
-
-        friend class PhysicsHandler;
+        RayCastHit m_result;
     };
         
-    BoxCastResult BoxCast(const Vector2D& origin, const Vector2D& size, float angle, const Vector2D& direction, float distance) {
-        b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
-
-        b2Vec2 halfSize = b2Vec2(size.x * 0.5, size.y * 0.5);
+    RayCastHit RayCast(const Vector2D origin, const Vector2D direction, float distance) {
         b2Vec2 originB2 = b2Vec2(origin.x, origin.y);
-        b2Vec2 corners[4];
-        corners[0] = originB2 - b2Mul(b2Rot(angle), b2Vec2(halfSize.x, -halfSize.y));
-        corners[1] = originB2 - b2Mul(b2Rot(angle), b2Vec2(halfSize.x, halfSize.y));
-        corners[2] = originB2 + b2Mul(b2Rot(angle), b2Vec2(-halfSize.x, halfSize.y));
-        corners[3] = originB2 + b2Mul(b2Rot(angle), b2Vec2(-halfSize.x, -halfSize.y));
+        b2Vec2 directionB2 = b2Vec2(direction.x, direction.y);
+        b2Vec2 endB2 = originB2 + (distance * directionB2);
 
-        BoxCastCallback callback(corners[0], corners[1]);
-        for (int i = 1; i < 4; ++i) {
-            callback.m_start = corners[i - 1];
-            callback.m_end = corners[i];
-            world->QueryAABB(&callback, callback.ComputeAABB(b2Vec2(direction.x, direction.y), distance));
-            if (callback.DidHit()) {
-                //std::cout << "Hit!" << std::endl;
-                return callback.GetResult();
-            }
+        b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
+        RayCastCallback callback;
+
+        world->RayCast(&callback, originB2, endB2);
+
+        if (callback.DidHit()) {
+            callback.GetResult().fraction *= distance;
+            return callback.GetResult();
         }
-
-        return BoxCastResult();
+        else {
+            return RayCastHit();
+        }
     }
 
 private:

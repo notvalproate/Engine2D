@@ -142,8 +142,8 @@ public:
 	bool grounded = false;
 
 	void CheckCollisions() {
-		bool groundHit = Physics.BoxCast(col->GetCenter(), col->GetSize(), 0, Vector2D::down, stats.GrounderDistance).hit;
-		bool ceilingHit = Physics.BoxCast(col->GetCenter(), col->GetSize(), 0, Vector2D::up, stats.GrounderDistance).hit;
+		bool groundHit = false;
+		bool ceilingHit = false;
 
 		if (ceilingHit) frameVelocity.y = std::min(0.0, frameVelocity.y);
 
