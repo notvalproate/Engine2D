@@ -8,22 +8,32 @@ GameObject::GameObject(const std::string_view goName, Scene* scene, const uint32
 
 void GameObject::Start() {
     m_Started = true;
+
+    for (auto& component : m_Components) {
+        component->Start();
+    }
+
     for (auto& behaviour : m_Behaviours) {
         behaviour->Start();
-    }
-    for(auto& component : m_Components) {
-        component->Start();
     }
 }
 
 void GameObject::Update() {
+    for (auto& component : m_Components) {
+        component->Update();
+    }
+
     for (auto& behaviour : m_Behaviours) {
         if(behaviour->enabled) {
             behaviour->Update();
         }
     }
-    for(auto& component : m_Components) {
-        component->Update();
+
+    if (m_ComponentsStagedForDestruction.size()) {
+        for (auto& component : m_ComponentsStagedForDestruction) {
+            RemoveComponent(component);
+        }
+        m_ComponentsStagedForDestruction.clear();
     }
 
     if(m_BehavioursStagedForDestruction.size()) {
@@ -33,21 +43,6 @@ void GameObject::Update() {
         m_BehavioursStagedForDestruction.clear();
     }
 
-    if(m_ComponentsStagedForDestruction.size()) {
-        for(auto& component : m_ComponentsStagedForDestruction) {
-            RemoveComponent(component);
-        }
-        m_ComponentsStagedForDestruction.clear();
-    }
-    
-    if (m_BehavioursStagedForAdding.size()) {
-        m_Behaviours.insert(m_Behaviours.end(),
-            std::make_move_iterator(m_BehavioursStagedForAdding.begin()),
-            std::make_move_iterator(m_BehavioursStagedForAdding.end())
-        );
-        m_BehavioursStagedForAdding.clear();
-    }
-    
     if (m_ComponentsStagedForAdding.size()) {
         m_Components.insert(m_Components.end(),
             std::make_move_iterator(m_ComponentsStagedForAdding.begin()),
@@ -55,6 +50,14 @@ void GameObject::Update() {
         );
         m_ComponentsStagedForAdding.clear();
     }
+
+    if (m_BehavioursStagedForAdding.size()) {
+        m_Behaviours.insert(m_Behaviours.end(),
+            std::make_move_iterator(m_BehavioursStagedForAdding.begin()),
+            std::make_move_iterator(m_BehavioursStagedForAdding.end())
+        );
+        m_BehavioursStagedForAdding.clear();
+    } 
 }
 
 void GameObject::Render() const {

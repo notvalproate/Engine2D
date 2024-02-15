@@ -54,6 +54,7 @@ private:
 
 	friend class GameObject;
 	friend class BoxCollider;
+	friend class Scene;
 };
 
 class BoxCollider final : public Behaviour {
