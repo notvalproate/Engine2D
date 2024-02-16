@@ -278,9 +278,11 @@ public:
     std::string* tag;
     std::string* name;
 
-    void Translate(const Vector2D& translation);
+    void Translate(const Vector2D translation);
     void Rotate(const double angle);
-    void RotateAround(const Vector2D& point, const double angle);
+    void RotateAround(const Vector2D point, const double angle);
+    void Scale(const Vector2D scaleSet);
+    void SetScale(const Vector2D scaleSet);
 
     void DetachChildren();
     void DetachFromParent();

@@ -276,7 +276,6 @@ public:
 
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
-		groundObject->transform.scale = Vector2D(1.5, 1.5);
 		
 		auto g1 = CreateGameObject("Ground 1", groundObject, Vector2D(-0.5, 0), 0);
 		auto g1render = g1->AddComponent<SpriteRenderer>();
@@ -305,6 +304,8 @@ public:
 		g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
 		auto g4collider = g4->AddComponent<BoxCollider>();
+
+		groundObject->transform.Scale(Vector2D(1.5, 1.5));
 		
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
