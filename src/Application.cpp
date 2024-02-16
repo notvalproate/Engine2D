@@ -156,7 +156,7 @@ public:
 			std::cout << *(bottomLeftRayCastHit.collider->name) << std::endl;
 		}
 
-		bool bottomLeftHit = Physics.RayCast(bottomLeft, Vector2D::down, stats.GrounderDistance).hit;
+		bool bottomLeftHit = bottomLeftRayCastHit.hit;
 		bool bottomRightHit = Physics.RayCast(bottomRight, Vector2D::down, stats.GrounderDistance).hit;
 
 		bool groundHit = bottomLeftHit || bottomRightHit; 
