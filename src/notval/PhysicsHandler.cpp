@@ -1,6 +1,6 @@
 #include "Core.hpp"
 
-PhysicsHandler::PhysicsHandler() : m_RenderSceneColliders(false) { }
+PhysicsHandler::PhysicsHandler() : m_RenderSceneColliders(false), fixtureColliderMap{} { }
 
 void PhysicsHandler::RenderColliders() const {
 	if (!m_RenderSceneColliders) {
@@ -47,6 +47,20 @@ void PhysicsHandler::RenderColliders() const {
 	}
 }
 
+void PhysicsHandler::AddFixtureToMap(b2Fixture* fixture, BoxCollider* collider) {
+	fixtureColliderMap[fixture] = collider;
+}
+
+void PhysicsHandler::RemoveFixtureFromMap(b2Fixture* fixture) {
+	auto it = fixtureColliderMap.find(fixture);
+
+	if (it != fixtureColliderMap.end()) {
+		std::cout << "Erased" << std::endl;
+		fixtureColliderMap.erase(it);
+	}
+
+}
+
 void PhysicsHandler::SetRenderColliders(const bool set) {
 	m_RenderSceneColliders = set;
 }
@@ -62,8 +76,15 @@ RayCastHit PhysicsHandler::RayCast(const Vector2D origin, const Vector2D directi
 	world->RayCast(&callback, originB2, endB2);
 
 	if (callback.DidHit()) {
-		callback.GetResult().fraction *= distance;
-		return callback.GetResult();
+		RayCastHit& result = callback.GetResult(); 
+		result.distance = distance * result.fraction;
+		auto it = fixtureColliderMap.find(callback.GetFixture());
+
+		if (it != fixtureColliderMap.end()) {
+			result.collider = it->second;
+		}
+
+		return result;
 	}
 	else {
 		return RayCastHit();
@@ -75,6 +96,8 @@ float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b
 	m_result.point = point;
 	m_result.normal = normal;
 	m_result.fraction = fraction;
+
+	fixtureHit = fixture;
 
 	return fraction;
 }

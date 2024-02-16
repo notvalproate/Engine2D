@@ -21,7 +21,7 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 	b2FixtureDef boxFixture;
 	boxFixture.shape = &boxShape;
 	boxFixture.density = 1.0f;
-	boxFixture.friction = 0.0f;
+	boxFixture.friction = 0.3f;
 
 	attachedRigidBody = gameObj->GetComponentInParent<RigidBody>();
 
@@ -37,6 +37,9 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
 		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
 	}
+
+	// IG UNSAFE? DOESNT REMOVE FIXTURE FROM MAP ON DESTRUCTION
+	Physics.AddFixtureToMap(m_Fixture, this);
 }
 
 std::unique_ptr<Component> BoxCollider::Clone() const {
@@ -44,6 +47,8 @@ std::unique_ptr<Component> BoxCollider::Clone() const {
 }
 
 void BoxCollider::SetTransform(const Vector2D dimensions, const Vector2D offset, const double rotation) {
+	Physics.RemoveFixtureFromMap(m_Fixture);
+
 	m_Dimensions = dimensions;
 	m_Offset = offset;
 	m_Rotation = 0;
@@ -69,9 +74,13 @@ void BoxCollider::SetTransform(const Vector2D dimensions, const Vector2D offset,
 		(*m_StaticBody)->DestroyFixture(m_Fixture);
 		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
 	}
+
+	Physics.AddFixtureToMap(m_Fixture, this);
 }
 
 void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
+	Physics.RemoveFixtureFromMap(m_Fixture);
+
 	attachedRigidBody = rigidBody;
 
 	b2PolygonShape boxShape;
@@ -90,6 +99,8 @@ void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
 
 	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 	m_StaticBody.reset();
+
+	Physics.AddFixtureToMap(m_Fixture, this);
 }
 
 void BoxCollider::Update() {

@@ -106,6 +106,8 @@ public:
 
 		rb->FreezeRotation(true);
 		rb->SetGravityScale(0);
+
+		time = 0;
 	}
 
 	void Update() override {
@@ -147,6 +149,12 @@ public:
 
 		bool topLeftHit = Physics.RayCast(topLeft, Vector2D::up, stats.GrounderDistance).hit;
 		bool topRightHit = Physics.RayCast(topRight, Vector2D::up, stats.GrounderDistance).hit;
+
+		auto bottomLeftRayCastHit = Physics.RayCast(bottomLeft, Vector2D::down, stats.GrounderDistance);
+
+		if (bottomLeftRayCastHit.collider) {
+			std::cout << *(bottomLeftRayCastHit.collider->name) << std::endl;
+		}
 
 		bool bottomLeftHit = Physics.RayCast(bottomLeft, Vector2D::down, stats.GrounderDistance).hit;
 		bool bottomRightHit = Physics.RayCast(bottomRight, Vector2D::down, stats.GrounderDistance).hit;
@@ -264,7 +272,7 @@ public:
 
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<CameraFollower>();
-		//PlayerObject->AddComponent<PlayerController>();
+		PlayerObject->AddComponent<PlayerController>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
@@ -273,7 +281,6 @@ public:
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		playerCollider->SetTransform(Vector2D(2, 2), Vector2D::zero, 0);
-
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
@@ -304,8 +311,6 @@ public:
 		g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
 		auto g4collider = g4->AddComponent<BoxCollider>();
-
-		groundObject->transform.Scale(Vector2D(1.5, 1.5));
 		
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();

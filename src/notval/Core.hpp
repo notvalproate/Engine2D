@@ -782,31 +782,38 @@ struct RayCastHit {
     bool hit{false};
     Vector2D point;
     Vector2D normal;
-    float fraction{1.0f};
+    float fraction{0.0f};
+    float distance{0.0f};
+    BoxCollider* collider{nullptr};
 
     RayCastHit() {}
 };
 
 class PhysicsHandler {
 public:
-    void SetRenderColliders(const bool set);       
+    void SetRenderColliders(const bool set);
     RayCastHit RayCast(const Vector2D origin, const Vector2D direction, float distance) const;
 
 private:
     PhysicsHandler();
 
     void RenderColliders() const;
+    void AddFixtureToMap(b2Fixture* fixture, BoxCollider* collider);
+    void RemoveFixtureFromMap(b2Fixture* fixture);
 
     bool m_RenderSceneColliders;
+    std::unordered_map<b2Fixture*, BoxCollider*> fixtureColliderMap;
 
     class RayCastCallback : public b2RayCastCallback {
     public:
         float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override;
         inline bool DidHit() const { return m_result.hit; }
         inline RayCastHit& GetResult() { return m_result; }
+        inline b2Fixture* GetFixture() { return fixtureHit; }
 
     private:
         RayCastHit m_result;
+        b2Fixture* fixtureHit;
     };
 
     friend class Object;
@@ -814,6 +821,7 @@ private:
     friend class Engine2D;
     friend class RenderingHandler;
     friend class BoxCollider;
+    friend class RayCastCallback;
 };
 
 
