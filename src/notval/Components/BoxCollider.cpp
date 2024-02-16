@@ -5,7 +5,8 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 {
 	auto spriteRenderer = gameObj->GetComponent<SpriteRenderer>();
 	if (spriteRenderer) {
-		m_Dimensions = spriteRenderer->GetWorldDimensions();
+		m_Dimensions.x = spriteRenderer->GetWorldDimensions().x * gameObj->transform.scale.x;
+		m_Dimensions.y = spriteRenderer->GetWorldDimensions().y * gameObj->transform.scale.y;
 		m_Rotation = gameObj->transform.rotation;
 	}
 

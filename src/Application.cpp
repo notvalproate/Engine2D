@@ -275,41 +275,36 @@ public:
 		playerCollider->SetTransform(Vector2D(2, 2), Vector2D::zero, 0);
 
 		
-		auto groundObject = CreateGameObject("Ground");
-		groundObject->transform.Translate(Vector2D(0, -5.5));
-
+		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
+		groundObject->transform.scale = Vector2D(1.5, 1.5);
 		
-		auto g1 = CreateGameObject("Ground 1", groundObject);
-		g1->transform.Translate(Vector2D(-0.5, 0));
-		auto g1collider = g1->AddComponent<BoxCollider>();
+		auto g1 = CreateGameObject("Ground 1", groundObject, Vector2D(-0.5, 0), 0);
 		auto g1render = g1->AddComponent<SpriteRenderer>();
 		g1render->SetSprite("assets/medieval/Tiles/floor_tile_2.png");
 		g1render->SetPixelsPerUnit(32);
 		g1render->SetSortingLayer("World");
+		auto g1collider = g1->AddComponent<BoxCollider>();
 
-		auto g2 = CreateGameObject("Ground 2", groundObject);
-		g2->transform.Translate(Vector2D(0.5, 0));
-		auto g2collider = g2->AddComponent<BoxCollider>();
+		auto g2 = CreateGameObject("Ground 2", groundObject, Vector2D(0.5, 0), 0);
 		auto g2render = g2->AddComponent<SpriteRenderer>();
 		g2render->SetSprite("assets/medieval/Tiles/floor_tile_3.png");
 		g2render->SetPixelsPerUnit(32);
 		g2render->SetSortingLayer("World");
+		auto g2collider = g2->AddComponent<BoxCollider>();
 
-		auto g3 = CreateGameObject("Ground 3", groundObject);
-		g3->transform.Translate(Vector2D(1.5, 0));
-		auto g3collider = g3->AddComponent<BoxCollider>();
+		auto g3 = CreateGameObject("Ground 3", groundObject, Vector2D(1.5, 0), 0);
 		auto g3render = g3->AddComponent<SpriteRenderer>();
 		g3render->SetSprite("assets/medieval/Tiles/floor_tile_4.png");
 		g3render->SetPixelsPerUnit(32);
 		g3render->SetSortingLayer("World");
+		auto g3collider = g3->AddComponent<BoxCollider>();
 
-		auto g4 = CreateGameObject("Ground 2", groundObject);
-		g4->transform.Translate(Vector2D(-1.5, 0));
-		auto g4collider = g4->AddComponent<BoxCollider>();
+		auto g4 = CreateGameObject("Ground 4", groundObject, Vector2D(-1.5, 0), 0);
 		auto g4render = g4->AddComponent<SpriteRenderer>();
 		g4render->SetSprite("assets/medieval/Tiles/floor_tile_1.png");
 		g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
+		auto g4collider = g4->AddComponent<BoxCollider>();
 		
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
