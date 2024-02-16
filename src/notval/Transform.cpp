@@ -131,18 +131,25 @@ bool Transform::IsChildOf(GameObject* parentGo) const {
     return IsChildOf(&parentGo->transform);
 }
 
-void Transform::SetParent(Transform* parentTransform) {
+void Transform::SetParent(Transform* parentTransform, bool instantiateInWorldSpace) {
     DetachFromParent();
 
     m_Parent = parentTransform;
     m_Parent->m_Children.push_back(this);
     m_Parent->childCount++;
+
+    if (!instantiateInWorldSpace) {
+        position += m_Parent->position;
+        rotation += m_Parent->rotation;
+        scale.x *= m_Parent->scale.x;
+        scale.y *= m_Parent->scale.y;
+    }
 }
 
-void Transform::SetParent(Transform& parentTransform) {
-    SetParent(&parentTransform);
+void Transform::SetParent(Transform& parentTransform, bool instantiateInWorldSpace) {
+    SetParent(&parentTransform,  instantiateInWorldSpace);
 }
 
-void Transform::SetParent(GameObject* parentGo) {
-    SetParent(&parentGo->transform);
+void Transform::SetParent(GameObject* parentGo, bool instantiateInWorldSpace) {
+    SetParent(&parentGo->transform, instantiateInWorldSpace);
 }

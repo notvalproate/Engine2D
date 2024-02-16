@@ -295,9 +295,9 @@ public:
     bool IsChildOf(Transform& parentTransform) const;
     bool IsChildOf(GameObject* parentGo) const;
 
-    void SetParent(Transform* parentTransform);
-    void SetParent(Transform& parentTransform);
-    void SetParent(GameObject* parentGo);
+    void SetParent(Transform* parentTransform, bool instantiateInWorldSpace = false);
+    void SetParent(Transform& parentTransform, bool instantiateInWorldSpace = false);
+    void SetParent(GameObject* parentGo, bool instantiateInWorldSpace = false);
 
     inline Transform* GetParent() const { return m_Parent; }
     inline std::vector<Transform*> GetChildren() const { return m_Children; }
@@ -464,6 +464,7 @@ public:
 private:
     explicit GameObject(Scene* scene, const uint32_t id);
     explicit GameObject(const std::string_view goName, Scene* scene, const uint32_t id);
+    explicit GameObject(const std::string_view goName, Transform* parent, bool instantiateInWorldSpace, Scene* scene, const uint32_t id);
 
     void Start();
     void Update();
@@ -590,6 +591,11 @@ class Scene : public Object {
 public:
     GameObject* CreateGameObject();
     GameObject* CreateGameObject(const std::string_view goName);
+    GameObject* CreateGameObject(const std::string_view goName, const Vector2D position, double rotation);
+    GameObject* CreateGameObject(const std::string_view goName, Transform* parent, bool instantiateInWorldSpace = false);
+    GameObject* CreateGameObject(const std::string_view goName, Transform& parent, bool instantiateInWorldSpace = false);
+    GameObject* CreateGameObject(const std::string_view goName, GameObject* parent, bool instantiateInWorldSpace = false);
+    GameObject* CreateGameObject(const std::string_view goName, GameObject* parent, const Vector2D position, double rotation, bool instantiateInWorldSpace = false);
     Camera* CreateCamera(const std::string_view camName);
 
     std::vector<GameObject*> FindObjectsByTag(const std::string_view searchTag) const;

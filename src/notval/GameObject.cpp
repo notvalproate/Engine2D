@@ -2,9 +2,17 @@
 
 #include <ranges>
 
-GameObject::GameObject(Scene* scene, const uint32_t id) : name({}), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false) { }
+GameObject::GameObject(Scene* scene, const uint32_t id) 
+    : name({}), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false) { }
 
-GameObject::GameObject(const std::string_view goName, Scene* scene, const uint32_t id) : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id) { }
+GameObject::GameObject(const std::string_view goName, Scene* scene, const uint32_t id)
+    : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id) { }
+
+GameObject::GameObject(const std::string_view goName, Transform* parent, bool instantiateInWorldSpace, Scene* scene, const uint32_t id)
+    : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id) 
+{ 
+    transform.SetParent(parent, instantiateInWorldSpace);
+}
 
 void GameObject::Start() {
     m_Started = true;

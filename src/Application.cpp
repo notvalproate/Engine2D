@@ -276,10 +276,10 @@ public:
 
 		
 		auto groundObject = CreateGameObject("Ground");
+		groundObject->transform.Translate(Vector2D(0, -5.5));
 
-		/*
-		auto g1 = CreateGameObject("Ground 1");
-		g1->transform.SetParent(groundObject);
+		
+		auto g1 = CreateGameObject("Ground 1", groundObject);
 		g1->transform.Translate(Vector2D(-0.5, 0));
 		auto g1collider = g1->AddComponent<BoxCollider>();
 		auto g1render = g1->AddComponent<SpriteRenderer>();
@@ -287,8 +287,7 @@ public:
 		g1render->SetPixelsPerUnit(32);
 		g1render->SetSortingLayer("World");
 
-		auto g2 = CreateGameObject("Ground 2");
-		g2->transform.SetParent(groundObject);
+		auto g2 = CreateGameObject("Ground 2", groundObject);
 		g2->transform.Translate(Vector2D(0.5, 0));
 		auto g2collider = g2->AddComponent<BoxCollider>();
 		auto g2render = g2->AddComponent<SpriteRenderer>();
@@ -296,8 +295,7 @@ public:
 		g2render->SetPixelsPerUnit(32);
 		g2render->SetSortingLayer("World");
 
-		auto g3 = CreateGameObject("Ground 3");
-		g3->transform.SetParent(groundObject);
+		auto g3 = CreateGameObject("Ground 3", groundObject);
 		g3->transform.Translate(Vector2D(1.5, 0));
 		auto g3collider = g3->AddComponent<BoxCollider>();
 		auto g3render = g3->AddComponent<SpriteRenderer>();
@@ -305,17 +303,13 @@ public:
 		g3render->SetPixelsPerUnit(32);
 		g3render->SetSortingLayer("World");
 
-		auto g4 = CreateGameObject("Ground 2");
-		g4->transform.SetParent(groundObject);
+		auto g4 = CreateGameObject("Ground 2", groundObject);
 		g4->transform.Translate(Vector2D(-1.5, 0));
 		auto g4collider = g4->AddComponent<BoxCollider>();
 		auto g4render = g4->AddComponent<SpriteRenderer>();
 		g4render->SetSprite("assets/medieval/Tiles/floor_tile_1.png");
 		g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
-		*/
-
-		groundObject->transform.Translate(Vector2D(0, -5.5));
 		
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
