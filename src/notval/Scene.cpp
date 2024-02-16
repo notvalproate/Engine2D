@@ -73,6 +73,30 @@ GameObject* Scene::CreateGameObject(const std::string_view goName, GameObject* p
     return CreateGameObject(goName, &parent->transform, instantiateInWorldSpace);
 }
 
+GameObject* Scene::CreateGameObject(const std::string_view goName, Transform* parent, const Vector2D position, double rotation, bool instantiateInWorldSpace) {
+    auto gO = CreateGameObject(goName, parent, instantiateInWorldSpace);
+    gO->transform.Translate(position);
+    gO->transform.Rotate(rotation);
+
+    return gO;
+}
+
+GameObject* Scene::CreateGameObject(const std::string_view goName, Transform& parent, const Vector2D position, double rotation, bool instantiateInWorldSpace) {
+    auto gO = CreateGameObject(goName, &parent, instantiateInWorldSpace);
+    gO->transform.Translate(position);
+    gO->transform.Rotate(rotation);
+
+    return gO;
+}
+
+GameObject* Scene::CreateGameObject(const std::string_view goName, GameObject* parent, const Vector2D position, double rotation, bool instantiateInWorldSpace) {
+    auto gO = CreateGameObject(goName, &parent->transform, instantiateInWorldSpace);
+    gO->transform.Translate(position);
+    gO->transform.Rotate(rotation);
+
+    return gO;
+}
+
 Camera* Scene::CreateCamera(const std::string_view camName) {
     auto cameraObj = CreateGameObject(camName);
     auto cameraComp = cameraObj->AddComponent<Camera>();

@@ -595,6 +595,8 @@ public:
     GameObject* CreateGameObject(const std::string_view goName, Transform* parent, bool instantiateInWorldSpace = false);
     GameObject* CreateGameObject(const std::string_view goName, Transform& parent, bool instantiateInWorldSpace = false);
     GameObject* CreateGameObject(const std::string_view goName, GameObject* parent, bool instantiateInWorldSpace = false);
+    GameObject* CreateGameObject(const std::string_view goName, Transform* parent, const Vector2D position, double rotation, bool instantiateInWorldSpace = false);
+    GameObject* CreateGameObject(const std::string_view goName, Transform& parent, const Vector2D position, double rotation, bool instantiateInWorldSpace = false);
     GameObject* CreateGameObject(const std::string_view goName, GameObject* parent, const Vector2D position, double rotation, bool instantiateInWorldSpace = false);
     Camera* CreateCamera(const std::string_view camName);
 
