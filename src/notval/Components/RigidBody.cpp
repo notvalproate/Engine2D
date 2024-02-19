@@ -25,10 +25,6 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), m_Body(nullptr),
 	}
 }
 
-RigidBody::~RigidBody() {
-
-}
-
 void RigidBody::AddForce(const Vector2D force) {
 	m_Body->ApplyForceToCenter(b2Vec2(force.x, force.y), true);
 }

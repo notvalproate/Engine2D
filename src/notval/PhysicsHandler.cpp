@@ -1,6 +1,6 @@
 #include "Core.hpp"
 
-PhysicsHandler::PhysicsHandler() : m_RenderSceneColliders(false), fixtureColliderMap{} { }
+PhysicsHandler::PhysicsHandler() : m_RenderSceneColliders(false) { }
 
 void PhysicsHandler::RenderColliders() const {
 	if (!m_RenderSceneColliders) {
@@ -48,15 +48,18 @@ void PhysicsHandler::RenderColliders() const {
 }
 
 void PhysicsHandler::AddFixtureToMap(b2Fixture* fixture, BoxCollider* collider) {
-	fixtureColliderMap[fixture] = collider;
+	auto& sceneColliderMap = Object::SceneManager.GetCurrentScene()->m_FixtureColliderMap;
+
+	sceneColliderMap[fixture] = collider;
 }
 
 void PhysicsHandler::RemoveFixtureFromMap(b2Fixture* fixture) {
-	auto it = fixtureColliderMap.find(fixture);
+	auto& sceneColliderMap = Object::SceneManager.GetCurrentScene()->m_FixtureColliderMap;
 
-	if (it != fixtureColliderMap.end()) {
-		std::cout << "Erased" << std::endl;
-		fixtureColliderMap.erase(it);
+	auto it = sceneColliderMap.find(fixture);
+
+	if (it != sceneColliderMap.end()) {
+		sceneColliderMap.erase(it);
 	}
 
 }
@@ -71,6 +74,8 @@ RayCastHit PhysicsHandler::RayCast(const Vector2D origin, const Vector2D directi
 	b2Vec2 endB2 = originB2 + (distance * directionB2);
 
 	b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
+	auto& sceneColliderMap = Object::SceneManager.GetCurrentScene()->m_FixtureColliderMap;
+
 	RayCastCallback callback;
 
 	world->RayCast(&callback, originB2, endB2);
@@ -78,9 +83,9 @@ RayCastHit PhysicsHandler::RayCast(const Vector2D origin, const Vector2D directi
 	if (callback.DidHit()) {
 		RayCastHit& result = callback.GetResult(); 
 		result.distance = distance * result.fraction;
-		auto it = fixtureColliderMap.find(callback.GetFixture());
+		auto it = sceneColliderMap.find(callback.GetFixture());
 
-		if (it != fixtureColliderMap.end()) {
+		if (it != sceneColliderMap.end()) {
 			result.collider = it->second;
 		}
 

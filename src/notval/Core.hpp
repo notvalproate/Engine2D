@@ -629,6 +629,7 @@ private:
     std::vector<Camera*> m_SceneCameras{};
 
     std::unique_ptr<b2World> m_PhysicsWorld;
+    std::unordered_map<b2Fixture*, BoxCollider*> m_FixtureColliderMap{};
 
     uint32_t m_LatestSceneInstanceID{};
     bool m_Loaded;
@@ -802,7 +803,6 @@ private:
     void RemoveFixtureFromMap(b2Fixture* fixture);
 
     bool m_RenderSceneColliders;
-    std::unordered_map<b2Fixture*, BoxCollider*> fixtureColliderMap;
 
     class RayCastCallback : public b2RayCastCallback {
     public:

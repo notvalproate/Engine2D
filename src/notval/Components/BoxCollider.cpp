@@ -38,7 +38,7 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
 	}
 
-	// IG UNSAFE? DOESNT REMOVE FIXTURE FROM MAP ON DESTRUCTION
+	// IG UNSAFE? DOESNT REMOVE FIXTURE FROM MAP ON DESTRUCTION FOR NOW
 	Physics.AddFixtureToMap(m_Fixture, this);
 }
 

@@ -13,27 +13,6 @@ public:
 
 		m_Level = std::make_unique<notval::Tilemap>("assets/tilemaps/tuxemon-town.json", m_Renderer);
 		m_Level->RenderToBuffer();
-		
-		//Player
-
-		SDL_Rect playerRect = { 0, 0, 26, 36 };
-		m_Player = std::make_unique<notval::Player>(m_Renderer, "assets/characters/idle/madeline.png", playerRect, 400, 600, 1280);
-
-		//Collider
-
-		m_PlayerCollider = std::make_unique<notval::DynamicCollider2D>(26, 36, 0, 0);
-		m_PlayerCollider->SetCollisionLayer(m_Level);
-		m_PlayerCollider->SetPlayer(m_Player);
-
-		//m_Camera->SetDimensions(640, 360);
-		//m_Camera->SetPosition(0, 400);
-
-		m_ColliderDebugger->SetCollisionLayer(m_Level->GetCollisionLayer());
-	}
-
-	void OnUserRender() override {
-		//m_ColliderDebugger->DebugRender(*m_PlayerCollider, m_DeltaTime, m_Camera);
-	}
 };
 */
 
@@ -150,13 +129,7 @@ public:
 		bool topLeftHit = Physics.RayCast(topLeft, Vector2D::up, stats.GrounderDistance).hit;
 		bool topRightHit = Physics.RayCast(topRight, Vector2D::up, stats.GrounderDistance).hit;
 
-		auto bottomLeftRayCastHit = Physics.RayCast(bottomLeft, Vector2D::down, stats.GrounderDistance);
-
-		if (bottomLeftRayCastHit.collider) {
-			std::cout << *(bottomLeftRayCastHit.collider->name) << std::endl;
-		}
-
-		bool bottomLeftHit = bottomLeftRayCastHit.hit;
+		bool bottomLeftHit = Physics.RayCast(bottomLeft, Vector2D::down, stats.GrounderDistance).hit;
 		bool bottomRightHit = Physics.RayCast(bottomRight, Vector2D::down, stats.GrounderDistance).hit;
 
 		bool groundHit = bottomLeftHit || bottomRightHit; 
@@ -280,7 +253,6 @@ public:
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
-		playerCollider->SetTransform(Vector2D(2, 2), Vector2D::zero, 0);
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
