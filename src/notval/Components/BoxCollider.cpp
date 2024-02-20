@@ -1,7 +1,7 @@
 #include "Components.hpp"
 
 BoxCollider::BoxCollider(GameObject* gameObj) 
-	: Behaviour(gameObj), attachedRigidBody(nullptr), m_Fixture(nullptr), m_Dimensions(Vector2D::one), m_Offset({}), m_Rotation(0), m_CurrentPosition(gameObj->transform.position), m_StaticBody(nullptr)
+	: Behaviour(gameObj), attachedRigidBody(nullptr), m_Fixture(nullptr), m_Dimensions(Vector2D::one), m_Offset(0, 0), m_Rotation(0), m_CurrentPosition(gameObj->transform.position), m_StaticBody(nullptr)
 {
 	auto spriteRenderer = gameObj->GetComponent<SpriteRenderer>();
 	if (spriteRenderer) {

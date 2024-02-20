@@ -41,6 +41,8 @@ public:
 	void FreezeRotation(const bool set);
 
 	Vector2D GetVelocity() const;
+
+	double drag;
 private:
 	RigidBody(GameObject* gameObj);
 

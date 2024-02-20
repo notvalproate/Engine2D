@@ -1,6 +1,6 @@
 #include "Components.hpp"
 
-RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), m_Body(nullptr), m_SensorFixture(nullptr) {
+RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), m_Body(nullptr), m_SensorFixture(nullptr) {
 	b2BodyDef boxBody;
 	boxBody.type = b2_dynamicBody;
 	boxBody.position.Set(transform->position.x, transform->position.y);
@@ -63,6 +63,11 @@ void RigidBody::Update() {
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;
 	transform->rotation = -(m_Body->GetAngle() * 180) / M_PI;
+
+	Vector2D direction(m_Body->GetLinearVelocity());
+	direction.Normalize();
+
+	AddForce(Vector2D::up * drag);
 }
 
 void RigidBody::OnColliderAttach() {

@@ -78,10 +78,12 @@ private:
 
 class Vector2D {
 public:
-    inline constexpr Vector2D() = default;
-    inline constexpr Vector2D(double x, double y) : x(x), y(y) {}
+    explicit inline constexpr Vector2D() = default;
+    explicit inline constexpr Vector2D(double x, double y) : x(x), y(y) {}
+    explicit inline Vector2D(const b2Vec2 box2dVec) : x(box2dVec.x), y(box2dVec.y) { }
 
     double x{}, y{};
+
 
     inline Vector2D& operator=(const b2Vec2 box2dVec) {
         x = box2dVec.x;
@@ -159,6 +161,10 @@ public:
         y -= other.y;
 
         return *this;
+    }
+
+    inline constexpr Vector2D operator-() const {
+        return Vector2D(-x, -y);
     }
 
     inline constexpr double operator*(const Vector2D other) const {

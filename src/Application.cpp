@@ -220,6 +220,26 @@ class CameraFollower : public Behaviour {
 	GameObject* mainCamera;
 };
 
+class Controller : public Behaviour {
+	using Behaviour::Behaviour;
+
+	std::unique_ptr<Component> Clone() const override {
+		return std::make_unique<Controller>(*this);
+	}
+
+	void Start() {
+		rb = gameObject->GetComponent<RigidBody>();
+	}
+
+	void Update() {
+		if (Input.GetKey(SDL_SCANCODE_W)) {
+			rb->AddForce(Vector2D::up * 500);
+		}
+	}
+
+	RigidBody* rb;
+};
+
 class TestScene : public Scene {
 public:
 	using Scene::Scene;
@@ -245,13 +265,15 @@ public:
 
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<CameraFollower>();
-		PlayerObject->AddComponent<PlayerController>();
+		//PlayerObject->AddComponent<PlayerController>();
+		PlayerObject->AddComponent<Controller>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
+		playerBody->drag = 500;
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
