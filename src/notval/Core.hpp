@@ -139,7 +139,7 @@ public:
         y = (sin(totalAngle) * radius) + point.y;
     }
 
-    static constexpr double epsilon = 1e-5;
+    static constexpr double epsilon = 1e-4;
 
     inline constexpr Vector2D operator+(const Vector2D& other) const {
         return Vector2D(x + other.x, y + other.y);

@@ -64,10 +64,12 @@ void RigidBody::Update() {
 	transform->position.y = m_Body->GetPosition().y;
 	transform->rotation = -(m_Body->GetAngle() * 180) / M_PI;
 
-	Vector2D direction(m_Body->GetLinearVelocity());
-	direction.Normalize();
+	Vector2D velocity(m_Body->GetLinearVelocity());
 
-	AddForce(Vector2D::up * drag);
+	if (velocity != Vector2D::zero) {
+		Vector2D dragForce = -drag * velocity.GetMagnitude() * velocity;
+		AddForce(dragForce);
+	}
 }
 
 void RigidBody::OnColliderAttach() {

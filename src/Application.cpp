@@ -273,7 +273,6 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		playerBody->drag = 500;
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
