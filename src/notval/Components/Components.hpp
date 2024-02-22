@@ -42,6 +42,7 @@ public:
 	void FreezeRotation(const bool set);
 
 	Vector2D GetVelocity() const;
+	float GetAngularVelocity() const;
 
 	double drag;
 	double angularDrag;

@@ -63,6 +63,10 @@ Vector2D RigidBody::GetVelocity() const {
 	return Vector2D(m_Body->GetLinearVelocity());
 }
 
+float RigidBody::GetAngularVelocity() const {
+	return m_Body->GetAngularVelocity();
+}
+
 void RigidBody::Update() {
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;
