@@ -67,6 +67,10 @@ float RigidBody::GetAngularVelocity() const {
 	return m_Body->GetAngularVelocity();
 }
 
+RigidBodyType RigidBody::GetBodyType() const {
+	return (RigidBodyType)m_Body->GetType();
+}
+
 void RigidBody::Update() {
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;

@@ -235,6 +235,10 @@ class Controller : public Behaviour {
 	}
 
 	void Update() {
+		if (rb->GetBodyType() == RigidBodyType::Static) {
+			std::cout << "Works" << std::endl;
+		}
+
 		if (Input.GetKey(SDL_SCANCODE_W)) {
 			rb->AddForce(Vector2D::up * 20);
 		}
@@ -243,6 +247,10 @@ class Controller : public Behaviour {
 		}
 		if (Input.GetKey(SDL_SCANCODE_A)) {
 			rb->AddForce(Vector2D::left * 20);
+		}
+
+		if (Input.GetKeyDown(SDL_SCANCODE_G)) {
+			rb->SetBodyType(RigidBodyType::Static);
 		}
 	}
 

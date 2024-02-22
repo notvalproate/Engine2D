@@ -43,6 +43,7 @@ public:
 
 	Vector2D GetVelocity() const;
 	float GetAngularVelocity() const;
+	RigidBodyType GetBodyType() const;
 
 	double drag;
 	double angularDrag;
