@@ -1,6 +1,6 @@
 #include "Components.hpp"
 
-RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), m_Body(nullptr), m_SensorFixture(nullptr) {
+RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), m_Body(nullptr), m_SensorFixture(nullptr) {
 	b2BodyDef boxBody;
 	boxBody.type = b2_dynamicBody;
 	boxBody.position.Set(transform->position.x, transform->position.y);
@@ -27,6 +27,10 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), m_Bod
 
 void RigidBody::AddForce(const Vector2D force) {
 	m_Body->ApplyForceToCenter(b2Vec2(force.x, force.y), true);
+}
+
+void RigidBody::AddTorque(const double force) {
+	m_Body->ApplyTorque(force, true);
 }
 
 void RigidBody::SetMass(const float mass) {
@@ -56,7 +60,7 @@ void RigidBody::FreezeRotation(const bool set) {
 }
 
 Vector2D RigidBody::GetVelocity() const {
-	return Vector2D(m_Body->GetLinearVelocity().x, m_Body->GetLinearVelocity().y);
+	return Vector2D(m_Body->GetLinearVelocity());
 }
 
 void RigidBody::Update() {
@@ -67,8 +71,16 @@ void RigidBody::Update() {
 	Vector2D velocity(m_Body->GetLinearVelocity());
 
 	if (velocity != Vector2D::zero) {
-		Vector2D dragForce = -drag * velocity.GetMagnitude() * velocity;
+		double magSquare = velocity.GetMagnitudeSquared();
+		velocity.Normalize();
+		Vector2D dragForce = -drag * magSquare * velocity;
 		AddForce(dragForce);
+	}
+
+	float angularVelocity(m_Body->GetAngularVelocity());
+
+	if (std::abs(angularVelocity) > 0.001) {
+		AddTorque(-angularDrag * angularVelocity);
 	}
 }
 

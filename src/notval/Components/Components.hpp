@@ -33,6 +33,7 @@ enum class RigidBodyType {
 class RigidBody final : public Component {
 public:
 	void AddForce(const Vector2D force);
+	void AddTorque(const double force);
 
 	void SetMass(const float mass);
 	void SetVelocity(const Vector2D vel);
@@ -43,6 +44,7 @@ public:
 	Vector2D GetVelocity() const;
 
 	double drag;
+	double angularDrag;
 private:
 	RigidBody(GameObject* gameObj);
 

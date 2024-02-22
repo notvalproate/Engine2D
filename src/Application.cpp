@@ -229,11 +229,20 @@ class Controller : public Behaviour {
 
 	void Start() {
 		rb = gameObject->GetComponent<RigidBody>();
+		rb->SetMass(1);
+		rb->drag = 1;
+		rb->angularDrag = 1;
 	}
 
 	void Update() {
 		if (Input.GetKey(SDL_SCANCODE_W)) {
-			rb->AddForce(Vector2D::up * 500);
+			rb->AddForce(Vector2D::up * 20);
+		}
+		if (Input.GetKey(SDL_SCANCODE_D)) {
+			rb->AddForce(Vector2D::right * 20);
+		}
+		if (Input.GetKey(SDL_SCANCODE_A)) {
+			rb->AddForce(Vector2D::left * 20);
 		}
 	}
 
