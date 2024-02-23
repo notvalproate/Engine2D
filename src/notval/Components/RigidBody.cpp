@@ -59,6 +59,10 @@ void RigidBody::FreezeRotation(const bool set) {
 	m_Body->SetFixedRotation(set);
 }
 
+float RigidBody::GetMass() const {
+	return m_Body->GetMass();
+}
+
 Vector2D RigidBody::GetVelocity() const {
 	return Vector2D(m_Body->GetLinearVelocity());
 }
@@ -69,6 +73,10 @@ float RigidBody::GetAngularVelocity() const {
 
 RigidBodyType RigidBody::GetBodyType() const {
 	return (RigidBodyType)m_Body->GetType();
+}
+
+Vector2D RigidBody::GetCentreOfMass() const {
+	return Vector2D(m_Body->GetWorldCenter());
 }
 
 void RigidBody::Update() {

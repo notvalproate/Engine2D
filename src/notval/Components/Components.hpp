@@ -41,9 +41,11 @@ public:
 	void SetGravityScale(const double scale);
 	void FreezeRotation(const bool set);
 
+	float GetMass() const;
 	Vector2D GetVelocity() const;
-	float GetAngularVelocity() const;
 	RigidBodyType GetBodyType() const;
+	float GetAngularVelocity() const;
+	Vector2D GetCentreOfMass() const;
 
 	double drag;
 	double angularDrag;

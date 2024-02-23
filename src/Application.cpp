@@ -250,7 +250,7 @@ class Controller : public Behaviour {
 		}
 
 		if (Input.GetKeyDown(SDL_SCANCODE_G)) {
-			rb->SetBodyType(RigidBodyType::Static);
+			rb->SetBodyType(RigidBodyType::Kinematic);
 		}
 	}
 
