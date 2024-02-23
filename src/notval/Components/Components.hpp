@@ -37,18 +37,21 @@ public:
 
 	void SetMass(const float mass);
 	void SetVelocity(const Vector2D vel);
+	void SetAngularVelocity(const float vel);
 	void SetBodyType(const RigidBodyType type);
 	void SetGravityScale(const double scale);
 	void FreezeRotation(const bool set);
 
 	float GetMass() const;
 	Vector2D GetVelocity() const;
-	RigidBodyType GetBodyType() const;
 	float GetAngularVelocity() const;
+	RigidBodyType GetBodyType() const;
 	Vector2D GetCentreOfMass() const;
 
 	double drag;
 	double angularDrag;
+	Vector2D totalForce;
+
 private:
 	RigidBody(GameObject* gameObj);
 

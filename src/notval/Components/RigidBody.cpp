@@ -47,6 +47,10 @@ void RigidBody::SetVelocity(const Vector2D vel) {
 	m_Body->SetLinearVelocity(b2Vec2(vel.x, vel.y));
 }
 
+void RigidBody::SetAngularVelocity(const float vel) {
+	m_Body->SetAngularVelocity(vel);
+}
+
 void RigidBody::SetBodyType(const RigidBodyType type) {
 	m_Body->SetType((b2BodyType)type);
 }
@@ -83,6 +87,12 @@ void RigidBody::Update() {
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;
 	transform->rotation = -(m_Body->GetAngle() * 180) / M_PI;
+
+	if (GetBodyType() != RigidBodyType::Dynamic) {
+		return;
+	}
+
+	m_Body->ApplyForceToCenter(b2Vec2(0, Physics.gravity), true);
 
 	Vector2D velocity(m_Body->GetLinearVelocity());
 

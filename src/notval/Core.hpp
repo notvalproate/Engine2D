@@ -801,6 +801,7 @@ public:
     void SetRenderColliders(const bool set);
     RayCastHit RayCast(const Vector2D origin, const Vector2D direction, float distance) const;
 
+    double gravity;
 private:
     PhysicsHandler();
 

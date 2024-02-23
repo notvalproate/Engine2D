@@ -230,8 +230,8 @@ class Controller : public Behaviour {
 	void Start() {
 		rb = gameObject->GetComponent<RigidBody>();
 		rb->SetMass(1);
-		rb->drag = 1;
-		rb->angularDrag = 1;
+		rb->drag = 0.1;
+		rb->angularDrag = 0.1;
 	}
 
 	void Update() {

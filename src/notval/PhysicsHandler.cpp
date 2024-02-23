@@ -1,6 +1,6 @@
 #include "Core.hpp"
 
-PhysicsHandler::PhysicsHandler() : m_RenderSceneColliders(false) { }
+PhysicsHandler::PhysicsHandler() : gravity(-9.8), m_RenderSceneColliders(false) { }
 
 void PhysicsHandler::RenderColliders() const {
 	if (!m_RenderSceneColliders) {
