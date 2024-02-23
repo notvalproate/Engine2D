@@ -51,12 +51,18 @@ public:
 	double drag;
 	double angularDrag;
 	Vector2D totalForce;
+	double totalTorque;
 
 private:
 	RigidBody(GameObject* gameObj);
 
 	void Update() override;
 	void OnColliderAttach();
+
+	void AddGravity();
+	void AddDrag();
+	void AddAngularDrag();
+	void ApplyTotalForces();
 
 	b2Body* m_Body;
 	std::optional<b2Fixture*> m_SensorFixture;
@@ -66,6 +72,7 @@ private:
 	friend class Scene;
 };
 
+// ADD ABILITY TO DISABLE BOXCOLLIDER
 class BoxCollider final : public Behaviour {
 public:
 	void SetTransform(const Vector2D dimensions, const Vector2D offset, const double rotation);
