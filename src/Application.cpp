@@ -228,20 +228,15 @@ class Controller : public Behaviour {
 	}
 
 	void Start() {
-		/*rb = gameObject->GetComponent<RigidBody>();
+		rb = gameObject->GetComponent<RigidBody>();
 		rb->SetMass(1);
 		rb->drag = 1;
-		rb->angularDrag = 1;
+		rb->angularDrag = 0;
 
 		Physics.gravity = 0;
-		*/
 	}
 
 	void Update() {
-		if (Input.GetKey(SDL_SCANCODE_R)) {
-			gameObject->transform.position.RotateAround(Vector2D(5, 0), 180 * Time.GetDeltaTime());
-		}
-		/*
 		rb->totalForce = Vector2D::zero;
 
 		if (rb->GetBodyType() == RigidBodyType::Static) {
@@ -262,14 +257,13 @@ class Controller : public Behaviour {
 		}
 
 		if (Input.GetKey(SDL_SCANCODE_G)) {
-			rb->AddForceAtPosition(Vector2D::right * 20, Vector2D::zero);
+			rb->AddRelativeForce(Vector2D::up * 20);
 		}
 
 		std::cout << rb->GetAngularVelocity() << std::endl;
-		*/
 	}
 
-	//RigidBody* rb;
+	RigidBody* rb;
 };
 
 class TestScene : public Scene {
@@ -305,8 +299,8 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		//auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		//auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		auto playerBody = PlayerObject->AddComponent<RigidBody>();
+		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		

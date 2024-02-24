@@ -34,8 +34,9 @@ void RigidBody::AddForceAtPosition(const Vector2D force, const Vector2D position
 	AddTorque(Vector2D::Cross(position - GetCentreOfMass(), force));
 }
 
-void RigidBody::AddRelativeForce(const Vector2D force) {
-	
+void RigidBody::AddRelativeForce(Vector2D force) {
+	force.Rotate(transform->rotation);
+	AddForce(force);
 }
 
 void RigidBody::AddTorque(const double force) {
