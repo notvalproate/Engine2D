@@ -195,12 +195,8 @@ public:
         return *this;
     }
 
-    static inline constexpr double absoluteOf(const double x) {
-        return x < 0 ? -x : x;
-    }
-
     inline constexpr bool operator==(const Vector2D other) const {
-        return (absoluteOf(x - other.x) < epsilon) && (absoluteOf(y - other.y) < epsilon);
+        return (Object::Math.Abs(x - other.x) < epsilon) && (Object::Math.Abs(y - other.y) < epsilon);
     }
 
     inline constexpr bool operator!=(const Vector2D other) const {
@@ -210,6 +206,10 @@ public:
     friend inline std::ostream& operator<<(std::ostream& os, const Vector2D vec) {
         os << vec.ToString();
         return os;
+    }
+
+    static inline constexpr double Cross(const Vector2D v1, const Vector2D v2) {
+        return (v1.x * v2.y) - (v1.y * v2.x);
     }
 
     static const Vector2D up;
