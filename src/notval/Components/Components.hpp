@@ -34,6 +34,7 @@ class RigidBody final : public Component {
 public:
 	void AddForce(const Vector2D force);
 	void AddForceAtPosition(const Vector2D force, const Vector2D position);
+	void AddRelativeForce(const Vector2D force);
 	void AddTorque(const double force);
 
 	void SetMass(const float mass);

@@ -84,7 +84,6 @@ public:
 
     double x{}, y{};
 
-
     inline Vector2D& operator=(const b2Vec2 box2dVec) {
         x = box2dVec.x;
         y = box2dVec.y;
@@ -125,18 +124,23 @@ public:
         y *= factor;
     }
 
-    inline void RotateAround(const Vector2D& point, const double angle) {
+    inline void Rotate(const double angle) {
         const double angleRadians = angle * M_PI / 180.0;
 
-        const double relX = x - point.x, relY = y - point.y;
-        const double radius = std::sqrt(relX * relX + relY * relY);
+        const double sinTheta = sin(angleRadians);
+        const double cosTheta = cos(angleRadians);
+        
+        const double newX = x * cosTheta + y * sinTheta;
+        const double newY = y * cosTheta - x * sinTheta;
 
-        const double currentAngleFromPoint = atan2(relY, relX);
-
-        const double totalAngle = currentAngleFromPoint - angleRadians;
-
-        x = (cos(totalAngle) * radius) + point.x;
-        y = (sin(totalAngle) * radius) + point.y;
+        x = newX;
+        y = newY;
+    }
+    
+    inline void RotateAround(const Vector2D& point, const double angle) {
+        *this -= point;
+        Rotate(angle);
+        *this += point;
     }
 
     static constexpr double epsilon = 1e-4;

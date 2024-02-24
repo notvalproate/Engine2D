@@ -228,15 +228,20 @@ class Controller : public Behaviour {
 	}
 
 	void Start() {
-		rb = gameObject->GetComponent<RigidBody>();
+		/*rb = gameObject->GetComponent<RigidBody>();
 		rb->SetMass(1);
 		rb->drag = 1;
 		rb->angularDrag = 1;
 
 		Physics.gravity = 0;
+		*/
 	}
 
 	void Update() {
+		if (Input.GetKey(SDL_SCANCODE_R)) {
+			gameObject->transform.position.RotateAround(Vector2D(5, 0), 180 * Time.GetDeltaTime());
+		}
+		/*
 		rb->totalForce = Vector2D::zero;
 
 		if (rb->GetBodyType() == RigidBodyType::Static) {
@@ -261,9 +266,10 @@ class Controller : public Behaviour {
 		}
 
 		std::cout << rb->GetAngularVelocity() << std::endl;
+		*/
 	}
 
-	RigidBody* rb;
+	//RigidBody* rb;
 };
 
 class TestScene : public Scene {
@@ -291,16 +297,16 @@ public:
 
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->transform.position = Vector2D(0.0, 1.0);
+		PlayerObject->AddComponent<Controller>();
 		PlayerObject->AddComponent<CameraFollower>();
 		//PlayerObject->AddComponent<PlayerController>();
-		PlayerObject->AddComponent<Controller>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		//auto playerBody = PlayerObject->AddComponent<RigidBody>();
+		//auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
