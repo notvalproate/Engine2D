@@ -102,29 +102,30 @@ public:
         return x * x + y * y;
     }
 
-    inline void Normalize() {
+    inline Vector2D& Normalize() {
         if (x == 0 && y == 0) {
-            return;
+            return *this;
         }
 
         double k = std::sqrt(x * x + y * y);
         x /= k;
         y /= k;
+
+        return *this;
     }
     
     inline Vector2D GetNormalized() const {
-        Vector2D vec(*this);
-        vec.Normalize();
-
-        return vec;
+        return Vector2D(*this).Normalize();
     }
 
-    inline void Scale(const int factor) {
+    inline Vector2D& Scale(const int factor) {
         x *= factor;
         y *= factor;
+
+        return *this;
     }
 
-    inline void Rotate(const double angle) {
+    inline Vector2D& Rotate(const double angle) {
         const double angleRadians = angle * M_PI / 180.0;
 
         const double sinTheta = sin(angleRadians);
@@ -135,12 +136,16 @@ public:
 
         x = newX;
         y = newY;
+
+        return *this;
     }
     
-    inline void RotateAround(const Vector2D& point, const double angle) {
+    inline Vector2D& RotateAround(const Vector2D& point, const double angle) {
         *this -= point;
         Rotate(angle);
         *this += point;
+
+        return *this;
     }
 
     static constexpr double epsilon = 1e-4;
@@ -171,7 +176,7 @@ public:
         return Vector2D(-x, -y);
     }
 
-    inline constexpr double operator*(const Vector2D other) const {
+    inline constexpr double operator*(const Vector2D& other) const {
         return x * other.x + y * other.y;
     }
 
@@ -179,7 +184,7 @@ public:
         return Vector2D(x * k, y * k);
     }
 
-    friend inline constexpr Vector2D operator*(const double k, const Vector2D vec) {
+    friend inline constexpr Vector2D operator*(const double k, const Vector2D& vec) {
         return vec * k;
     }
 
@@ -199,20 +204,20 @@ public:
         return *this;
     }
 
-    inline constexpr bool operator==(const Vector2D other) const {
+    inline constexpr bool operator==(const Vector2D& other) const {
         return (Object::Math.Abs(x - other.x) < epsilon) && (Object::Math.Abs(y - other.y) < epsilon);
     }
 
-    inline constexpr bool operator!=(const Vector2D other) const {
+    inline constexpr bool operator!=(const Vector2D& other) const {
         return !(*this == other);
     }
 
-    friend inline std::ostream& operator<<(std::ostream& os, const Vector2D vec) {
+    friend inline std::ostream& operator<<(std::ostream& os, const Vector2D& vec) {
         os << vec.ToString();
         return os;
     }
 
-    static inline constexpr double Cross(const Vector2D v1, const Vector2D v2) {
+    static inline constexpr double Cross(const Vector2D& v1, const Vector2D& v2) {
         return (v1.x * v2.y) - (v1.y * v2.x);
     }
 
@@ -288,11 +293,11 @@ public:
     std::string* tag;
     std::string* name;
 
-    void Translate(const Vector2D translation);
+    void Translate(const Vector2D& translation);
     void Rotate(const double angle);
-    void RotateAround(const Vector2D point, const double angle);
-    void Scale(const Vector2D scaleSet);
-    void SetScale(const Vector2D scaleSet);
+    void RotateAround(const Vector2D& point, const double angle);
+    void Scale(const Vector2D& scaleSet);
+    void SetScale(const Vector2D& scaleSet);
 
     void DetachChildren();
     void DetachFromParent();
@@ -531,14 +536,14 @@ private:
 
 class Camera final : public Component {
 public:
-    Vector2D ScreenToViewportPoint(const Vector2D pos) const;
-    Vector2D ScreenToWorldPoint(const Vector2D pos) const;
+    Vector2D ScreenToViewportPoint(const Vector2D& pos) const;
+    Vector2D ScreenToWorldPoint(const Vector2D& pos) const;
 
-    Vector2D ViewportToScreenPoint(const Vector2D pos) const;
-    Vector2D ViewportToWorldPoint(const Vector2D pos) const;
+    Vector2D ViewportToScreenPoint(const Vector2D& pos) const;
+    Vector2D ViewportToWorldPoint(const Vector2D& pos) const;
 
-    Vector2D WorldToScreenPoint(const Vector2D pos) const;
-    Vector2D WorldToViewportPoint(const Vector2D pos) const;
+    Vector2D WorldToScreenPoint(const Vector2D& pos) const;
+    Vector2D WorldToViewportPoint(const Vector2D& pos) const;
 
     double GetPixelsPerUnit() const;
 
@@ -572,10 +577,10 @@ struct Color {
 class RenderingHandler {
 public:
     void SetRendererVsync(const bool set);
-    void RenderPoint(const Vector2D point, const uint8_t width, const Color color) const;
-    void RenderLine(const Vector2D src, const Vector2D dest, const Color color) const;
-    void RenderRect(const Vector2D position, const Vector2D dimensions, const Color color) const;
-    void RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
+    void RenderPoint(const Vector2D& point, const uint8_t width, const Color color) const;
+    void RenderLine(const Vector2D& src, const Vector2D& dest, const Color color) const;
+    void RenderRect(const Vector2D& position, const Vector2D& dimensions, const Color color) const;
+    void RenderSprite(SDL_Texture* texture, const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
     void AddSortingLayer(const std::string& name);
 
 private:
@@ -584,7 +589,7 @@ private:
     bool InitRenderer();
     void PresentRenderer();
 
-    SDL_Rect GetSpriteDestRect(const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
+    SDL_Rect GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
     void GetFlipAndRotation(const Transform* transform, double& rotation, SDL_RendererFlip& flipFlag) const;
     const std::vector<std::string>& GetAvailableSortingLayers() const;
 
@@ -603,13 +608,13 @@ class Scene : public Object {
 public:
     GameObject* CreateGameObject();
     GameObject* CreateGameObject(const std::string_view goName);
-    GameObject* CreateGameObject(const std::string_view goName, const Vector2D position, double rotation);
+    GameObject* CreateGameObject(const std::string_view goName, const Vector2D& position, double rotation);
     GameObject* CreateGameObject(const std::string_view goName, Transform* parent, bool instantiateInWorldSpace = false);
     GameObject* CreateGameObject(const std::string_view goName, Transform& parent, bool instantiateInWorldSpace = false);
     GameObject* CreateGameObject(const std::string_view goName, GameObject* parent, bool instantiateInWorldSpace = false);
-    GameObject* CreateGameObject(const std::string_view goName, Transform* parent, const Vector2D position, double rotation, bool instantiateInWorldSpace = false);
-    GameObject* CreateGameObject(const std::string_view goName, Transform& parent, const Vector2D position, double rotation, bool instantiateInWorldSpace = false);
-    GameObject* CreateGameObject(const std::string_view goName, GameObject* parent, const Vector2D position, double rotation, bool instantiateInWorldSpace = false);
+    GameObject* CreateGameObject(const std::string_view goName, Transform* parent, const Vector2D& position, double rotation, bool instantiateInWorldSpace = false);
+    GameObject* CreateGameObject(const std::string_view goName, Transform& parent, const Vector2D& position, double rotation, bool instantiateInWorldSpace = false);
+    GameObject* CreateGameObject(const std::string_view goName, GameObject* parent, const Vector2D& position, double rotation, bool instantiateInWorldSpace = false);
     Camera* CreateCamera(const std::string_view camName);
 
     std::vector<GameObject*> FindObjectsByTag(const std::string_view searchTag) const;
@@ -803,7 +808,7 @@ struct RayCastHit {
 class PhysicsHandler {
 public:
     void SetRenderColliders(const bool set);
-    RayCastHit RayCast(const Vector2D origin, const Vector2D direction, float distance) const;
+    RayCastHit RayCast(const Vector2D& origin, const Vector2D& direction, float distance) const;
 
     double gravity;
 private:

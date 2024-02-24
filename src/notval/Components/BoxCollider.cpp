@@ -46,7 +46,7 @@ std::unique_ptr<Component> BoxCollider::Clone() const {
 	return std::make_unique<BoxCollider>(*this);
 }
 
-void BoxCollider::SetTransform(const Vector2D dimensions, const Vector2D offset, const double rotation) {
+void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offset, const double rotation) {
 	Physics.RemoveFixtureFromMap(m_Fixture);
 
 	m_Dimensions = dimensions;

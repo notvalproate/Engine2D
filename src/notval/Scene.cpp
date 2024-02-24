@@ -52,7 +52,7 @@ GameObject* Scene::CreateGameObject(const std::string_view goName) {
     return m_SceneGameObjects.back().get();
 }
 
-GameObject* Scene::CreateGameObject(const std::string_view goName, const Vector2D position, double rotation) {
+GameObject* Scene::CreateGameObject(const std::string_view goName, const Vector2D& position, double rotation) {
     auto gO = CreateGameObject(goName);
     gO->transform.Translate(position);
     gO->transform.Rotate(rotation);
@@ -73,7 +73,7 @@ GameObject* Scene::CreateGameObject(const std::string_view goName, GameObject* p
     return CreateGameObject(goName, &parent->transform, instantiateInWorldSpace);
 }
 
-GameObject* Scene::CreateGameObject(const std::string_view goName, Transform* parent, const Vector2D position, double rotation, bool instantiateInWorldSpace) {
+GameObject* Scene::CreateGameObject(const std::string_view goName, Transform* parent, const Vector2D& position, double rotation, bool instantiateInWorldSpace) {
     auto gO = CreateGameObject(goName, parent, instantiateInWorldSpace);
     gO->transform.Translate(position);
     gO->transform.Rotate(rotation);
@@ -81,7 +81,7 @@ GameObject* Scene::CreateGameObject(const std::string_view goName, Transform* pa
     return gO;
 }
 
-GameObject* Scene::CreateGameObject(const std::string_view goName, Transform& parent, const Vector2D position, double rotation, bool instantiateInWorldSpace) {
+GameObject* Scene::CreateGameObject(const std::string_view goName, Transform& parent, const Vector2D& position, double rotation, bool instantiateInWorldSpace) {
     auto gO = CreateGameObject(goName, &parent, instantiateInWorldSpace);
     gO->transform.Translate(position);
     gO->transform.Rotate(rotation);
@@ -89,7 +89,7 @@ GameObject* Scene::CreateGameObject(const std::string_view goName, Transform& pa
     return gO;
 }
 
-GameObject* Scene::CreateGameObject(const std::string_view goName, GameObject* parent, const Vector2D position, double rotation, bool instantiateInWorldSpace) {
+GameObject* Scene::CreateGameObject(const std::string_view goName, GameObject* parent, const Vector2D& position, double rotation, bool instantiateInWorldSpace) {
     auto gO = CreateGameObject(goName, &parent->transform, instantiateInWorldSpace);
     gO->transform.Translate(position);
     gO->transform.Rotate(rotation);

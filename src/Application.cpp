@@ -239,10 +239,6 @@ class Controller : public Behaviour {
 	void Update() {
 		rb->totalForce = Vector2D::zero;
 
-		if (rb->GetBodyType() == RigidBodyType::Static) {
-			std::cout << "Works" << std::endl;
-		}
-
 		if (Input.GetKey(SDL_SCANCODE_W)) {
 			rb->AddForce(Vector2D::up * 20);
 		}
@@ -259,8 +255,6 @@ class Controller : public Behaviour {
 		if (Input.GetKey(SDL_SCANCODE_G)) {
 			rb->AddRelativeForce(Vector2D::up * 20);
 		}
-
-		std::cout << rb->GetAngularVelocity() << std::endl;
 	}
 
 	RigidBody* rb;
@@ -342,7 +336,7 @@ public:
 	using Engine2D::Engine2D;
 
 	void SetupGame() override {
-		RenderingPipeline.SetRendererVsync(true);
+		//RenderingPipeline.SetRendererVsync(true);
 
 		RenderingPipeline.AddSortingLayer("Background");
 		RenderingPipeline.AddSortingLayer("Player");

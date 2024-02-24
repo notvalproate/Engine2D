@@ -32,13 +32,13 @@ enum class RigidBodyType {
 
 class RigidBody final : public Component {
 public:
-	void AddForce(const Vector2D force);
-	void AddForceAtPosition(const Vector2D force, const Vector2D position);
-	void AddRelativeForce(const Vector2D force);
+	void AddForce(const Vector2D& force);
+	void AddForceAtPosition(const Vector2D& force, const Vector2D& position);
+	void AddRelativeForce(Vector2D force);
 	void AddTorque(const double force);
 
 	void SetMass(const float mass);
-	void SetVelocity(const Vector2D vel);
+	void SetVelocity(const Vector2D& vel);
 	void SetAngularVelocity(const float vel);
 	void SetBodyType(const RigidBodyType type);
 	void SetGravityScale(const double scale);
@@ -77,7 +77,7 @@ private:
 // ADD ABILITY TO DISABLE BOXCOLLIDER
 class BoxCollider final : public Behaviour {
 public:
-	void SetTransform(const Vector2D dimensions, const Vector2D offset, const double rotation);
+	void SetTransform(const Vector2D& dimensions, const Vector2D& offset, const double rotation);
 	Vector2D GetCenter() const { return transform->position + m_Offset; }
 	Vector2D GetSize() const { return m_Dimensions; }
 

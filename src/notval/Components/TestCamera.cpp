@@ -17,25 +17,25 @@ double Camera::GetPixelsPerUnit() const {
 	return Screen.GetScreenHeight() / (defaultUnitsY * transform->scale.y);
 }
 
-Vector2D Camera::ScreenToViewportPoint(const Vector2D pos) const {
+Vector2D Camera::ScreenToViewportPoint(const Vector2D& pos) const {
 	return Vector2D(
 		pos.x / Screen.GetScreenWidth(),
 		pos.y / Screen.GetScreenHeight()
 	);
 }
 
-Vector2D Camera::ScreenToWorldPoint(const Vector2D pos) const {
+Vector2D Camera::ScreenToWorldPoint(const Vector2D& pos) const {
 	return ViewportToWorldPoint( ScreenToViewportPoint(pos) );
 }
 
-Vector2D Camera::ViewportToScreenPoint(const Vector2D pos) const {
+Vector2D Camera::ViewportToScreenPoint(const Vector2D& pos) const {
 	return Vector2D(
 		pos.x * Screen.GetScreenWidth(),
 		pos.y * Screen.GetScreenHeight()
 	);
 }
 
-Vector2D Camera::ViewportToWorldPoint(const Vector2D pos) const {
+Vector2D Camera::ViewportToWorldPoint(const Vector2D& pos) const {
 	Vector2D unitsOnScreen = GetUnitsOnScreen();
 	
 	return Vector2D(
@@ -44,7 +44,7 @@ Vector2D Camera::ViewportToWorldPoint(const Vector2D pos) const {
 	);
 }
 
-Vector2D Camera::WorldToViewportPoint(const Vector2D pos) const {
+Vector2D Camera::WorldToViewportPoint(const Vector2D& pos) const {
 	Vector2D unitsOnScreen = GetUnitsOnScreen();
 
 	return Vector2D(
@@ -53,6 +53,6 @@ Vector2D Camera::WorldToViewportPoint(const Vector2D pos) const {
 	);
 }
 
-Vector2D Camera::WorldToScreenPoint(const Vector2D pos) const {
+Vector2D Camera::WorldToScreenPoint(const Vector2D& pos) const {
 	return ViewportToScreenPoint( WorldToViewportPoint(pos) );
 }

@@ -68,7 +68,7 @@ void PhysicsHandler::SetRenderColliders(const bool set) {
 	m_RenderSceneColliders = set;
 }
 
-RayCastHit PhysicsHandler::RayCast(const Vector2D origin, const Vector2D direction, float distance) const {
+RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direction, float distance) const {
 	b2Vec2 originB2 = b2Vec2(origin.x, origin.y);
 	b2Vec2 directionB2 = b2Vec2(direction.x, direction.y);
 	b2Vec2 endB2 = originB2 + (distance * directionB2);

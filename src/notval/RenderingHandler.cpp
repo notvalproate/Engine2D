@@ -26,7 +26,7 @@ void RenderingHandler::SetRendererVsync(const bool set) {
 	SDL_RenderSetVSync(m_Renderer, set ? 1 : 0);
 }
 
-void RenderingHandler::RenderPoint(const Vector2D point, const uint8_t width, const Color color) const {
+void RenderingHandler::RenderPoint(const Vector2D& point, const uint8_t width, const Color color) const {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 
@@ -46,7 +46,7 @@ void RenderingHandler::RenderPoint(const Vector2D point, const uint8_t width, co
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }
 
-void RenderingHandler::RenderLine(const Vector2D src, const Vector2D dest, const Color color) const {
+void RenderingHandler::RenderLine(const Vector2D& src, const Vector2D& dest, const Color color) const {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 
@@ -58,7 +58,7 @@ void RenderingHandler::RenderLine(const Vector2D src, const Vector2D dest, const
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }
 
-void RenderingHandler::RenderRect(const Vector2D position, const Vector2D dimensions, const Color color) const {
+void RenderingHandler::RenderRect(const Vector2D& position, const Vector2D& dimensions, const Color color) const {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 
@@ -77,7 +77,7 @@ void RenderingHandler::RenderRect(const Vector2D position, const Vector2D dimens
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }
 
-void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
+void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
 	double angle = transform->rotation;
 
 	SDL_RendererFlip flipFlag;
@@ -88,7 +88,7 @@ void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D dimensi
 	SDL_RenderCopyEx(m_Renderer, texture, NULL, &destRect, angle, NULL, flipFlag);
 }
 
-SDL_Rect RenderingHandler::GetSpriteDestRect(const Vector2D dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
+SDL_Rect RenderingHandler::GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 

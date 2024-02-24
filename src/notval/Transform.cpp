@@ -3,7 +3,7 @@
 
 Transform::Transform(GameObject* gameObject) : gameObject(gameObject), m_Parent(nullptr), tag(&gameObject->tag), name(&gameObject->name) { };
 
-void Transform::Translate(const Vector2D translation) {
+void Transform::Translate(const Vector2D& translation) {
     position.x += translation.x;
     position.y += translation.y;
 
@@ -31,7 +31,7 @@ void Transform::Rotate(const double angle) {
     }
 }
 
-void Transform::RotateAround(const Vector2D point, const double angle) {
+void Transform::RotateAround(const Vector2D& point, const double angle) {
     position.RotateAround(point, angle);
     AddToRotation(angle);
 
@@ -40,7 +40,7 @@ void Transform::RotateAround(const Vector2D point, const double angle) {
     }
 }
 
-void Transform::Scale(const Vector2D scaleSet) {
+void Transform::Scale(const Vector2D& scaleSet) {
     scale.x *= scaleSet.x;
     scale.y *= scaleSet.y;
 
@@ -49,7 +49,7 @@ void Transform::Scale(const Vector2D scaleSet) {
     }
 }
 
-void Transform::SetScale(const Vector2D scaleSet) {
+void Transform::SetScale(const Vector2D& scaleSet) {
     scale = scaleSet;
 
     for (auto& child : m_Children) {

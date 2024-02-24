@@ -25,11 +25,11 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angul
 	}
 }
 
-void RigidBody::AddForce(const Vector2D force) {
+void RigidBody::AddForce(const Vector2D& force) {
 	totalForce += force;
 }
 
-void RigidBody::AddForceAtPosition(const Vector2D force, const Vector2D position) {
+void RigidBody::AddForceAtPosition(const Vector2D& force, const Vector2D& position) {
 	AddForce(force);
 	AddTorque(Vector2D::Cross(position - GetCentreOfMass(), force));
 }
@@ -53,7 +53,7 @@ void RigidBody::SetMass(const float mass) {
 	}
 }
 
-void RigidBody::SetVelocity(const Vector2D vel) {
+void RigidBody::SetVelocity(const Vector2D& vel) {
 	m_Body->SetLinearVelocity(b2Vec2(vel.x, vel.y));
 }
 
