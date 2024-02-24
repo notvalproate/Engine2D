@@ -232,6 +232,8 @@ class Controller : public Behaviour {
 		rb->SetMass(1);
 		rb->drag = 1;
 		rb->angularDrag = 1;
+
+		Physics.gravity = 0;
 	}
 
 	void Update() {
@@ -244,6 +246,9 @@ class Controller : public Behaviour {
 		if (Input.GetKey(SDL_SCANCODE_W)) {
 			rb->AddForce(Vector2D::up * 20);
 		}
+		if (Input.GetKey(SDL_SCANCODE_S)) {
+			rb->AddForce(Vector2D::down * 20);
+		}
 		if (Input.GetKey(SDL_SCANCODE_D)) {
 			rb->AddForce(Vector2D::right * 20);
 		}
@@ -251,9 +256,11 @@ class Controller : public Behaviour {
 			rb->AddForce(Vector2D::left * 20);
 		}
 
-		if (Input.GetKeyDown(SDL_SCANCODE_G)) {
-			rb->SetBodyType(RigidBodyType::Kinematic);
+		if (Input.GetKey(SDL_SCANCODE_G)) {
+			rb->AddForceAtPosition(Vector2D::right * 20, Vector2D::zero);
 		}
+
+		std::cout << rb->GetAngularVelocity() << std::endl;
 	}
 
 	RigidBody* rb;
@@ -283,6 +290,7 @@ public:
 		
 
 		auto PlayerObject = CreateGameObject("Player");
+		PlayerObject->transform.position = Vector2D(0.0, 1.0);
 		PlayerObject->AddComponent<CameraFollower>();
 		//PlayerObject->AddComponent<PlayerController>();
 		PlayerObject->AddComponent<Controller>();

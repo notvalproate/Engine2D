@@ -29,6 +29,12 @@ void RigidBody::AddForce(const Vector2D force) {
 	totalForce += force;
 }
 
+void RigidBody::AddForceAtPosition(const Vector2D force, const Vector2D position) {
+	AddForce(force);
+	Vector2D r = position - GetCentreOfMass();
+	AddTorque(r.x * force.y - r.y * force.x);
+}
+
 void RigidBody::AddTorque(const double force) {
 	totalTorque += force;
 }
