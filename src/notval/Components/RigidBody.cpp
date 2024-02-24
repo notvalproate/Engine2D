@@ -1,16 +1,18 @@
 #include "Components.hpp"
 
-RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_SensorFixture(nullptr) {
+RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_AttachedColliders({}), m_SensorFixture(nullptr) {
 	b2BodyDef boxBody;
 	boxBody.type = b2_dynamicBody;
 	boxBody.position.Set(transform->position.x, transform->position.y);
 
 	m_Body = gameObj->scene->m_PhysicsWorld->CreateBody(&boxBody);
 
-	BoxCollider* collider = gameObj->GetComponent<BoxCollider>();
+	m_AttachedColliders = gameObj->GetComponents<BoxCollider>();
 
-	if (collider) {
-		collider->AttachRigidBody(this);
+	if (m_AttachedColliders.size()) {
+		for (auto& collider : m_AttachedColliders) {
+			collider->AttachRigidBody(this);
+		}
 	}
 	else {
 		b2PolygonShape boxShape;
@@ -93,6 +95,10 @@ Vector2D RigidBody::GetCentreOfMass() const {
 	return Vector2D(m_Body->GetWorldCenter());
 }
 
+std::vector<BoxCollider*> RigidBody::GetAttachedColliders() const {
+	return m_AttachedColliders;
+}
+
 void RigidBody::Update() {
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;
@@ -141,7 +147,11 @@ void RigidBody::ApplyTotalForces() {
 	totalTorque = 0;
 }
 
-void RigidBody::OnColliderAttach() {
-	m_Body->DestroyFixture(*m_SensorFixture);
-	m_SensorFixture.reset();
+void RigidBody::AttachCollider(BoxCollider* collider) {
+	if (m_SensorFixture.has_value()) {
+		m_Body->DestroyFixture(*m_SensorFixture);
+		m_SensorFixture.reset();
+	}
+
+	m_AttachedColliders.push_back(collider);
 }

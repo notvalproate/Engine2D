@@ -49,6 +49,7 @@ public:
 	float GetAngularVelocity() const;
 	RigidBodyType GetBodyType() const;
 	Vector2D GetCentreOfMass() const;
+	std::vector<BoxCollider*> GetAttachedColliders() const;
 
 	double drag;
 	double angularDrag;
@@ -59,7 +60,7 @@ private:
 	RigidBody(GameObject* gameObj);
 
 	void Update() override;
-	void OnColliderAttach();
+	void AttachCollider(BoxCollider* collider);
 
 	void AddGravity();
 	void AddDrag();
@@ -67,6 +68,7 @@ private:
 	void ApplyTotalForces();
 
 	b2Body* m_Body;
+	std::vector<BoxCollider*> m_AttachedColliders;
 	std::optional<b2Fixture*> m_SensorFixture;
 
 	friend class GameObject;
@@ -75,6 +77,7 @@ private:
 };
 
 // ADD ABILITY TO DISABLE BOXCOLLIDER
+// MASS OF THE RIGIDBODY NOT USED WHEN IT ATTACHES TO A RIGID BODY
 class BoxCollider final : public Behaviour {
 public:
 	void SetTransform(const Vector2D& dimensions, const Vector2D& offset, const double rotation);

@@ -231,7 +231,7 @@ class Controller : public Behaviour {
 		rb = gameObject->GetComponent<RigidBody>();
 		rb->SetMass(1);
 		rb->drag = 1;
-		rb->angularDrag = 0;
+		rb->angularDrag = 1;
 
 		Physics.gravity = 0;
 	}
@@ -254,6 +254,10 @@ class Controller : public Behaviour {
 
 		if (Input.GetKey(SDL_SCANCODE_G)) {
 			rb->AddRelativeForce(Vector2D::up * 20);
+		}
+
+		if (rb->GetAttachedColliders()[0] = gameObject->GetComponent<BoxCollider>()) {
+			std::cout << "Working" << std::endl;
 		}
 	}
 
@@ -336,7 +340,7 @@ public:
 	using Engine2D::Engine2D;
 
 	void SetupGame() override {
-		//RenderingPipeline.SetRendererVsync(true);
+		RenderingPipeline.SetRendererVsync(true);
 
 		RenderingPipeline.AddSortingLayer("Background");
 		RenderingPipeline.AddSortingLayer("Player");
