@@ -251,8 +251,9 @@ class Controller : public Behaviour {
 			rb->AddForce(Vector2D::left * 20);
 		}
 
-		if (Input.GetKey(SDL_SCANCODE_G)) {
+		if (Input.GetKeyDown(SDL_SCANCODE_G)) {
 			rb->SetRotation(45);
+			rb->SetPosition(Vector2D::zero);
 		}
 	}
 

@@ -60,7 +60,11 @@ void RigidBody::SetVelocity(const Vector2D& vel) {
 }
 
 void RigidBody::SetAngularVelocity(const float vel) {
-	m_Body->SetAngularVelocity(vel);
+	m_Body->SetAngularVelocity(-vel * M_PI / 180.0);
+}
+
+void RigidBody::SetPosition(const Vector2D& pos) {
+	m_Body->SetTransform(b2Vec2(pos.x, pos.y), m_Body->GetAngle());
 }
 
 void RigidBody::SetRotation(const double rotation) {
