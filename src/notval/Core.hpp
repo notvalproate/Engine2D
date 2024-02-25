@@ -212,6 +212,14 @@ public:
         return vec;
     }
 
+    static inline constexpr Vector2D Min(const Vector2D& v1, const Vector2D& v2) {
+        return Vector2D(std::min(v1.x, v2.x), std::min(v1.y, v2.y));
+    }
+    
+    static inline constexpr Vector2D Max(const Vector2D& v1, const Vector2D& v2) {
+        return Vector2D(std::max(v1.x, v2.x), std::max(v1.y, v2.y));
+    }
+
     static constexpr double epsilon = 1e-4;
 
     inline constexpr Vector2D operator+(const Vector2D& other) const {
