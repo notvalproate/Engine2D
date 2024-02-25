@@ -41,6 +41,7 @@ public:
 	void SetMass(const float mass);
 	void SetVelocity(const Vector2D& vel);
 	void SetAngularVelocity(const float vel);
+	void SetRotation(const double rotation);
 	void SetBodyType(const RigidBodyType type);
 	void SetGravityScale(const double scale);
 	void FreezeRotation(const bool set);

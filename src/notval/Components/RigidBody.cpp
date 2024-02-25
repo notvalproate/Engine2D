@@ -63,6 +63,10 @@ void RigidBody::SetAngularVelocity(const float vel) {
 	m_Body->SetAngularVelocity(vel);
 }
 
+void RigidBody::SetRotation(const double rotation) {
+	m_Body->SetTransform(m_Body->GetPosition(), -rotation * M_PI / 180.0);
+}
+
 void RigidBody::SetBodyType(const RigidBodyType type) {
 	m_Body->SetType((b2BodyType)type);
 }

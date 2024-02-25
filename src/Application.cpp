@@ -84,7 +84,6 @@ public:
 		col = gameObject->GetComponent<BoxCollider>();
 
 		rb->FreezeRotation(true);
-		rb->SetGravityScale(0);
 
 		time = 0;
 	}
@@ -253,10 +252,8 @@ class Controller : public Behaviour {
 		}
 
 		if (Input.GetKey(SDL_SCANCODE_G)) {
-			rb->AddRelativeForce(Vector2D::up * 20);
+			rb->SetRotation(45);
 		}
-
-		std::cout << rb->totalForce << std::endl;
 	}
 
 	RigidBody* rb;
@@ -288,8 +285,8 @@ public:
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->transform.position = Vector2D(0.0, 1.0);
 		PlayerObject->AddComponent<CameraFollower>();
-		//PlayerObject->AddComponent<Controller>();
-		PlayerObject->AddComponent<PlayerController>();
+		PlayerObject->AddComponent<Controller>();
+		//PlayerObject->AddComponent<PlayerController>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
