@@ -164,6 +164,30 @@ public:
         return dx * dx + dy * dy;
     }
 
+    static inline double Angle(const Vector2D& from, const Vector2D& to) {
+        if (from == to) {
+            return 0;
+        }
+
+        if (from == -to) {
+            return 180.0;
+        }
+
+        double dot = from * to;
+
+        if (dot == 0) {
+            return 90.0;
+        }
+
+        double magnitudeFromTo = from.GetMagnitude() * to.GetMagnitude();
+
+        double cosAngle = std::clamp(dot / magnitudeFromTo, -1.0, 1.0);
+        double angleRadians = std::acos(cosAngle);
+        double angleDegrees = angleRadians * (180.0 / M_PI);
+
+        return angleDegrees;
+    }
+
     static constexpr double epsilon = 1e-4;
 
     inline constexpr Vector2D operator+(const Vector2D& other) const {

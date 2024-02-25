@@ -255,6 +255,8 @@ class Controller : public Behaviour {
 			rb->SetRotation(45);
 			rb->SetPosition(Vector2D::zero);
 		}
+
+		std::cout << Vector2D::Angle(Vector2D::one, transform->position) << std::endl;
 	}
 
 	RigidBody* rb;
