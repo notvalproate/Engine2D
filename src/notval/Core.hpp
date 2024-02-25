@@ -125,7 +125,7 @@ public:
         return *this;
     }
 
-    inline Vector2D& Rotate(const double angle) {
+    Vector2D& Rotate(const double angle) {
         const double angleRadians = angle * M_PI / 180.0;
 
         const double sinTheta = sin(angleRadians);
@@ -149,7 +149,7 @@ public:
     }
 
     static inline constexpr double Cross(const Vector2D& v1, const Vector2D& v2) {
-        return (v1.x * v2.y) - (v1.y * v2.x);
+        return (v1.x * v2.y) - (v1.y * v2.x); 
     }
 
     static inline double Distance(const Vector2D& v1, const Vector2D& v2) {
@@ -164,7 +164,7 @@ public:
         return dx * dx + dy * dy;
     }
 
-    static inline double Angle(const Vector2D& from, const Vector2D& to) {
+    static double Angle(const Vector2D& from, const Vector2D& to) {
         if (from == to) {
             return 0.0;
         }
@@ -192,7 +192,7 @@ public:
         return angleDegrees;
     }
 
-    static inline double SignedAngle(const Vector2D& from, const Vector2D& to) {
+    static double SignedAngle(const Vector2D& from, const Vector2D& to) {
         double angle = Angle(from, to);
         double crossProduct = Cross(from, to);
         angle *= Object::Math.Sign(-crossProduct);
@@ -239,7 +239,7 @@ public:
         return Vector2D(v1.x + (v2.x - v1.x) * t, v1.y + (v2.y - v1.y) * t);
     }
 
-    static inline Vector2D MoveTowards(const Vector2D& current, const Vector2D& target, double maxDistanceDelta) {
+    static Vector2D MoveTowards(const Vector2D& current, const Vector2D& target, double maxDistanceDelta) {
         Vector2D vectorToTarget = target - current;
 
         double distanceSquared = vectorToTarget.GetMagnitudeSquared();
