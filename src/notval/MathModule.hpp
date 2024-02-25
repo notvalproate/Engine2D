@@ -12,5 +12,10 @@ public:
 		return val < 0 ? -val : val;
 	}
 
-	static double MoveTowards(double current, double target, double maxDelta);
+	static constexpr double MoveTowards(double current, double target, double maxDelta) {
+		if (Abs(target - current) <= maxDelta) {
+			return target;
+		}
+		return current + (Sign(target - current) * maxDelta);
+	}
 };

@@ -234,6 +234,24 @@ public:
         t = std::clamp(t, 0.0, 1.0);
         return Vector2D(v1.x + (v2.x - v1.x) * t, v1.y + (v2.y - v1.y) * t);
     }
+    
+    static inline constexpr Vector2D LerpUnclamped(const Vector2D& v1, const Vector2D& v2, double t) {
+        return Vector2D(v1.x + (v2.x - v1.x) * t, v1.y + (v2.y - v1.y) * t);
+    }
+
+    static inline Vector2D MoveTowards(const Vector2D& current, const Vector2D& target, double maxDistanceDelta) {
+        Vector2D vectorToTarget = target - current;
+
+        double distanceSquared = vectorToTarget.GetMagnitudeSquared();
+
+        if (distanceSquared == 0.0 || (maxDistanceDelta >= 0 && distanceSquared <= maxDistanceDelta * maxDistanceDelta)) {
+            return target;
+        }
+
+        double distance = std::sqrt(distanceSquared);
+
+        return current + ((vectorToTarget * maxDistanceDelta) / distance);
+    }
 
     static constexpr double epsilon = 1e-4;
 
