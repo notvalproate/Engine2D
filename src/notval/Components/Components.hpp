@@ -30,8 +30,6 @@ enum class RigidBodyType {
 	Dynamic = b2_dynamicBody
 };
 
-// OPTIMIZE RIGIDBODY NEVER FALLING ASLEEP IF GRAVITY IS NON ZERO
-
 class RigidBody final : public Component {
 public:
 	void AddForce(const Vector2D& force);

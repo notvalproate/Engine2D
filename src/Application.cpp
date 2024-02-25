@@ -233,7 +233,7 @@ class Controller : public Behaviour {
 		rb->drag = 1;
 		rb->angularDrag = 1;
 
-		Physics.gravity = 0;
+		Physics.SetGravity(Vector2D::zero);
 	}
 
 	void Update() {
@@ -254,13 +254,6 @@ class Controller : public Behaviour {
 
 		if (Input.GetKey(SDL_SCANCODE_G)) {
 			rb->AddRelativeForce(Vector2D::up * 20);
-		}
-
-		if (rb->IsAwake()) {
-			std::cout << "Awake" << std::endl;
-		}
-		else {
-			std::cout << "Sleeping" << std::endl;
 		}
 	}
 

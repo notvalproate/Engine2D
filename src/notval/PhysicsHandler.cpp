@@ -1,6 +1,6 @@
 #include "Core.hpp"
 
-PhysicsHandler::PhysicsHandler() : gravity(-9.8), m_RenderSceneColliders(false) { }
+PhysicsHandler::PhysicsHandler() : m_RenderSceneColliders(false) { }
 
 void PhysicsHandler::RenderColliders() const {
 	if (!m_RenderSceneColliders) {
@@ -66,6 +66,14 @@ void PhysicsHandler::RemoveFixtureFromMap(b2Fixture* fixture) {
 
 void PhysicsHandler::SetRenderColliders(const bool set) {
 	m_RenderSceneColliders = set;
+}
+
+void PhysicsHandler::SetGravity(const Vector2D& gravity) const {
+	Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get()->SetGravity(b2Vec2(gravity.x, gravity.y));
+}
+
+Vector2D PhysicsHandler::GetGravity() const {
+	return Vector2D(Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get()->GetGravity());
 }
 
 RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direction, float distance) const {

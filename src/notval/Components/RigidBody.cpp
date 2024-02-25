@@ -112,15 +112,10 @@ void RigidBody::Update() {
 		return;
 	}
 
-	AddGravity();
 	AddDrag();
 	AddAngularDrag();
 
 	ApplyTotalForces();
-}
-
-void RigidBody::AddGravity() {
-	AddForce(Vector2D(0, Physics.gravity));
 }
 
 void RigidBody::AddDrag() {
