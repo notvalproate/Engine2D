@@ -23,8 +23,8 @@ void Scene::Update() {
         gameObject->Update();
     }
 
-    if(m_StagedForDestruction.size()) {
-        for(auto& gO : m_StagedForDestruction) {
+    if (m_StagedForDestruction.size()) {
+        for (auto& gO : m_StagedForDestruction) {
 
             GameObject::DestroyImmediate(gO);
         }

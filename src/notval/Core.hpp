@@ -272,6 +272,8 @@ protected:
 private:
     std::unique_ptr<Component> Clone() const override;
 
+    virtual void LateUpdate() {};
+
     void Render() const override final { };
     void AttachGameObject(GameObject* newGameObject) override final;
 
@@ -486,6 +488,8 @@ private:
     void Start();
     void Update();
     void Render() const;
+
+    void HandleDestructions();
 
     std::size_t GetComponentIndex(Component* component);
     std::size_t GetBehaviourIndex(Behaviour* behaviour);

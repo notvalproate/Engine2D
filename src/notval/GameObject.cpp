@@ -6,10 +6,10 @@ GameObject::GameObject(Scene* scene, const uint32_t id)
     : name({}), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false) { }
 
 GameObject::GameObject(const std::string_view goName, Scene* scene, const uint32_t id)
-    : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id) { }
+    : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false) { }
 
 GameObject::GameObject(const std::string_view goName, Transform* parent, bool instantiateInWorldSpace, Scene* scene, const uint32_t id)
-    : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id) 
+    : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false)
 { 
     transform.SetParent(parent, instantiateInWorldSpace);
 }
@@ -37,6 +37,22 @@ void GameObject::Update() {
         }
     }
 
+    for (auto& behaviour : m_Behaviours) {
+        if (behaviour->enabled) {
+            behaviour->LateUpdate();
+        }
+    }
+
+    HandleDestructions();
+}
+
+void GameObject::Render() const {
+    for(const auto& component : m_Components) {
+        component->Render();
+    }
+}
+
+void GameObject::HandleDestructions() {
     if (m_ComponentsStagedForDestruction.size()) {
         for (auto& component : m_ComponentsStagedForDestruction) {
             RemoveComponent(component);
@@ -44,8 +60,8 @@ void GameObject::Update() {
         m_ComponentsStagedForDestruction.clear();
     }
 
-    if(m_BehavioursStagedForDestruction.size()) {
-        for(auto& behaviour : m_BehavioursStagedForDestruction) {
+    if (m_BehavioursStagedForDestruction.size()) {
+        for (auto& behaviour : m_BehavioursStagedForDestruction) {
             RemoveBehaviour(behaviour);
         }
         m_BehavioursStagedForDestruction.clear();
@@ -65,12 +81,6 @@ void GameObject::Update() {
             std::make_move_iterator(m_BehavioursStagedForAdding.end())
         );
         m_BehavioursStagedForAdding.clear();
-    } 
-}
-
-void GameObject::Render() const {
-    for(const auto& component : m_Components) {
-        component->Render();
     }
 }
 

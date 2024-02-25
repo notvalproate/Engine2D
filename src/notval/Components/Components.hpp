@@ -63,7 +63,6 @@ private:
 	void Update() override;
 	void AttachCollider(BoxCollider* collider);
 
-	void AddGravity();
 	void AddDrag();
 	void AddAngularDrag();
 	void ApplyTotalForces();
