@@ -75,6 +75,14 @@ void RigidBody::FreezeRotation(const bool set) {
 	m_Body->SetFixedRotation(set);
 }
 
+void RigidBody::WakeUp() {
+	m_Body->SetAwake(true);
+}
+
+void RigidBody::Sleep() {
+	m_Body->SetAwake(false);
+}
+
 float RigidBody::GetMass() const {
 	return m_Body->GetMass();
 }
@@ -101,6 +109,10 @@ std::vector<BoxCollider*> RigidBody::GetAttachedColliders() const {
 
 bool RigidBody::IsAwake() const {
 	return m_Body->IsAwake();
+}
+
+bool RigidBody::IsSleeping() const {
+	return !m_Body->IsAwake();
 }
 
 void RigidBody::Update() {

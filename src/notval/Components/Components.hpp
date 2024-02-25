@@ -30,6 +30,7 @@ enum class RigidBodyType {
 	Dynamic = b2_dynamicBody
 };
 
+// TOTAL FORCE AND TOTAL TORQUE ARE ALWAYS ZERO IN THE UPDATE LOOPS OF BEHAVIOURS
 class RigidBody final : public Component {
 public:
 	void AddForce(const Vector2D& force);
@@ -43,6 +44,8 @@ public:
 	void SetBodyType(const RigidBodyType type);
 	void SetGravityScale(const double scale);
 	void FreezeRotation(const bool set);
+	void WakeUp();
+	void Sleep();
 
 	float GetMass() const;
 	Vector2D GetVelocity() const;
@@ -51,6 +54,7 @@ public:
 	Vector2D GetCentreOfMass() const;
 	std::vector<BoxCollider*> GetAttachedColliders() const;
 	bool IsAwake() const;
+	bool IsSleeping() const;
 
 	double drag;
 	double angularDrag;
