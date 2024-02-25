@@ -118,7 +118,7 @@ public:
         return Vector2D(*this).Normalize();
     }
 
-    inline Vector2D& Scale(const int factor) {
+    inline constexpr Vector2D& Scale(const int factor) {
         x *= factor;
         y *= factor;
 
@@ -158,7 +158,7 @@ public:
         return std::sqrt(dx * dx + dy * dy);
     }
 
-    static inline double SquaredDistance(const Vector2D& v1, const Vector2D& v2) {
+    static inline constexpr double SquaredDistance(const Vector2D& v1, const Vector2D& v2) {
         double dx = v2.x - v1.x;
         double dy = v2.y - v1.y;
         return dx * dx + dy * dy;
@@ -218,6 +218,21 @@ public:
     
     static inline constexpr Vector2D Max(const Vector2D& v1, const Vector2D& v2) {
         return Vector2D(std::max(v1.x, v2.x), std::max(v1.y, v2.y));
+    }
+
+    static inline constexpr Vector2D Perpendicular(const Vector2D& vec) {
+        return Vector2D(vec.y, -(vec.x));
+    }
+
+    static inline constexpr Vector2D Reflect(const Vector2D& inDirection, const Vector2D& inNormal) {
+        double dotProduct = 2.0 * (inDirection * inNormal);
+        double magnitudeSquared = inNormal.GetMagnitudeSquared();
+        return inDirection - ((dotProduct / magnitudeSquared) * inNormal);
+    }
+
+    static inline constexpr Vector2D Lerp(const Vector2D& v1, const Vector2D& v2, double t) {
+        t = std::clamp(t, 0.0, 1.0);
+        return Vector2D(v1.x + (v2.x - v1.x) * t, v1.y + (v2.y - v1.y) * t);
     }
 
     static constexpr double epsilon = 1e-4;
