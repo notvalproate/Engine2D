@@ -166,7 +166,7 @@ public:
 
     static inline double Angle(const Vector2D& from, const Vector2D& to) {
         if (from == to) {
-            return 0;
+            return 0.0;
         }
 
         if (from == -to) {
@@ -181,6 +181,10 @@ public:
 
         double magnitudeFromTo = from.GetMagnitude() * to.GetMagnitude();
 
+        if (magnitudeFromTo == 0.0) {
+            return 0.0;
+        }
+
         double cosAngle = std::clamp(dot / magnitudeFromTo, -1.0, 1.0);
         double angleRadians = std::acos(cosAngle);
         double angleDegrees = angleRadians * (180.0 / M_PI);
@@ -194,6 +198,18 @@ public:
         angle *= Object::Math.Sign(-crossProduct);
 
         return angle;
+    }
+
+    static inline Vector2D ClampMagnitude(Vector2D vec, const double maxLength) {
+        double currentMagnitude = vec.GetMagnitude();
+
+        if (currentMagnitude > maxLength && currentMagnitude > 0.0) {
+            double scaleFactor = maxLength / currentMagnitude;
+            vec.x *= scaleFactor;
+            vec.y *= scaleFactor;
+        }
+
+        return vec;
     }
 
     static constexpr double epsilon = 1e-4;
