@@ -99,6 +99,10 @@ std::vector<BoxCollider*> RigidBody::GetAttachedColliders() const {
 	return m_AttachedColliders;
 }
 
+bool RigidBody::IsAwake() const {
+	return m_Body->IsAwake();
+}
+
 void RigidBody::Update() {
 	transform->position.x = m_Body->GetPosition().x;
 	transform->position.y = m_Body->GetPosition().y;
@@ -122,23 +126,26 @@ void RigidBody::AddGravity() {
 void RigidBody::AddDrag() {
 	Vector2D velocity(m_Body->GetLinearVelocity());
 
-	if (velocity != Vector2D::zero) {
-		double magSquare = velocity.GetMagnitudeSquared();
-		velocity.Normalize();
-		Vector2D dragForce = -drag * magSquare * velocity;
-		AddForce(dragForce);
+	if (velocity == Vector2D::zero) {
+		return;
 	}
+
+	double magSquare = velocity.GetMagnitudeSquared();
+	velocity.Normalize();
+	Vector2D dragForce = -drag * magSquare * velocity;
+	AddForce(dragForce);
 }
 
 void RigidBody::AddAngularDrag() {
 	float angularVelocity(m_Body->GetAngularVelocity());
-
-	if (std::abs(angularVelocity) > 0.001) {
-		AddTorque(-angularDrag * angularVelocity);
-	}
+	AddTorque(-angularDrag * angularVelocity);
 }
 
 void RigidBody::ApplyTotalForces() {
+	if (totalForce == Vector2D::zero && totalTorque == 0) {
+		return;
+	}
+
 	m_Body->ApplyForceToCenter(b2Vec2(totalForce.x, totalForce.y), true);
 	m_Body->ApplyTorque(totalTorque, true);
 

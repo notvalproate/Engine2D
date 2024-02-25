@@ -256,8 +256,11 @@ class Controller : public Behaviour {
 			rb->AddRelativeForce(Vector2D::up * 20);
 		}
 
-		if (rb->GetAttachedColliders()[0] = gameObject->GetComponent<BoxCollider>()) {
-			std::cout << "Working" << std::endl;
+		if (rb->IsAwake()) {
+			std::cout << "Awake" << std::endl;
+		}
+		else {
+			std::cout << "Sleeping" << std::endl;
 		}
 	}
 
