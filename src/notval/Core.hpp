@@ -148,6 +148,22 @@ public:
         return *this;
     }
 
+    static inline constexpr double Cross(const Vector2D& v1, const Vector2D& v2) {
+        return (v1.x * v2.y) - (v1.y * v2.x);
+    }
+
+    static inline double Distance(const Vector2D& v1, const Vector2D& v2) {
+        double dx = v2.x - v1.x;
+        double dy = v2.y - v1.y;
+        return std::sqrt(dx * dx + dy * dy);
+    }
+
+    static inline double SquaredDistance(const Vector2D& v1, const Vector2D& v2) {
+        double dx = v2.x - v1.x;
+        double dy = v2.y - v1.y;
+        return dx * dx + dy * dy;
+    }
+
     static constexpr double epsilon = 1e-4;
 
     inline constexpr Vector2D operator+(const Vector2D& other) const {
@@ -215,10 +231,6 @@ public:
     friend inline std::ostream& operator<<(std::ostream& os, const Vector2D& vec) {
         os << vec.ToString();
         return os;
-    }
-
-    static inline constexpr double Cross(const Vector2D& v1, const Vector2D& v2) {
-        return (v1.x * v2.y) - (v1.y * v2.x);
     }
 
     static const Vector2D up;
