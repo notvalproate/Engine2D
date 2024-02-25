@@ -210,12 +210,24 @@ class CameraFollower : public Behaviour {
 
 	void Start() {
 		mainCamera = FindObjectByName("Main Camera");
+		velocity = Vector2D::zero;
 	}
 
-	void Update() {
+	void LateUpdate() {
+		// FIX ISSUES WITH HOW CAMERA HAS UNDETERMINISTIC VALUES FOR RENDERING SPRITES
+		/*mainCamera->transform.position =
+			Vector2D::SmoothDamp(
+				mainCamera->transform.position,
+				transform->position,
+				velocity,
+				0.5,
+				Time.GetDeltaTime()
+			);
+		*/
 		mainCamera->transform.position = transform->position;
 	}
 
+	Vector2D velocity;
 	GameObject* mainCamera;
 };
 
@@ -227,6 +239,8 @@ class Controller : public Behaviour {
 	}
 
 	void Start() {
+		mainCamera = FindObjectByName("Main Camera")->GetComponent<Camera>();
+
 		rb = gameObject->GetComponent<RigidBody>();
 		rb->SetMass(1);
 		rb->drag = 1;
@@ -251,14 +265,17 @@ class Controller : public Behaviour {
 			rb->AddForce(Vector2D::left * 20);
 		}
 
-		if (Input.GetKeyDown(SDL_SCANCODE_G)) {
-			rb->SetRotation(45);
-			rb->SetPosition(Vector2D::zero);
+		if (Input.GetMouseButton(1)) {
+			Vector2D direction(Input.mousePositionX, Input.mousePositionY);
+			direction = mainCamera->ScreenToWorldPoint(direction);
+			direction -= transform->position;
+			direction.Normalize();
+			std::cout << direction << std::endl;
+			rb->AddForce(direction * 20);
 		}
-
-		std::cout << Vector2D::SignedAngle(Vector2D::one, transform->position) << std::endl;
 	}
 
+	Camera* mainCamera;
 	RigidBody* rb;
 };
 
@@ -286,7 +303,6 @@ public:
 		
 
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->transform.position = Vector2D(0.0, 1.0);
 		PlayerObject->AddComponent<CameraFollower>();
 		PlayerObject->AddComponent<Controller>();
 		//PlayerObject->AddComponent<PlayerController>();

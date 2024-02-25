@@ -148,6 +148,10 @@ public:
         return *this;
     }
 
+    inline constexpr bool Equals(const Vector2D& other, const double epsil) const {
+        return (Object::Math.Abs(x - other.x) < epsil) && (Object::Math.Abs(y - other.y) < epsil);
+    }
+
     static inline constexpr double Cross(const Vector2D& v1, const Vector2D& v2) {
         return (v1.x * v2.y) - (v1.y * v2.x); 
     }
@@ -251,6 +255,45 @@ public:
         double distance = std::sqrt(distanceSquared);
 
         return current + ((vectorToTarget * maxDistanceDelta) / distance);
+    }
+
+    static Vector2D SmoothDamp(
+        const Vector2D& current,
+        const Vector2D& target,
+        Vector2D& currentVelocity,
+        double smoothTime,
+        double deltaTime,
+        double maxSpeed = std::numeric_limits<double>::infinity()
+        )
+    {
+        if (current == target) {
+            currentVelocity = Vector2D::zero;
+            return target;
+        }
+
+        float omega = 2.0 / smoothTime;
+        float x = omega * deltaTime;
+        float exp = 1.0 / (1.0 + x + 0.48 * x * x + 0.235 * x * x * x);
+
+        Vector2D change = current - target;
+        Vector2D tempTarget = target + (change + currentVelocity * smoothTime) * deltaTime;
+        Vector2D tempVelocity = (currentVelocity - change * omega) * deltaTime;
+        Vector2D newVelocity = (currentVelocity - tempVelocity * omega) * exp;
+
+        Vector2D output = target + (change + tempVelocity) * exp;
+        if (maxSpeed != std::numeric_limits<double>::infinity()) {
+            Vector2D outputDir = output - target;
+            double outputSpeed = outputDir.GetMagnitude();
+            if (outputSpeed > maxSpeed) {
+                outputDir = outputDir.GetNormalized() * maxSpeed;
+                output = target + outputDir;
+                newVelocity = (output - target) / deltaTime;
+            }
+        }
+
+        currentVelocity = newVelocity;
+
+        return output;
     }
 
     static constexpr double epsilon = 1e-4;

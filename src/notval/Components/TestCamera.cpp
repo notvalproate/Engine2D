@@ -40,7 +40,7 @@ Vector2D Camera::ViewportToWorldPoint(const Vector2D& pos) const {
 	
 	return Vector2D(
 		(pos.x - 0.5) * unitsOnScreen.x + transform->position.x,
-		(pos.y - 0.5) * unitsOnScreen.y + transform->position.y * -1
+		((pos.y - 0.5) * unitsOnScreen.y + transform->position.y) * -1
 	);
 }
 
