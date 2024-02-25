@@ -256,7 +256,7 @@ class Controller : public Behaviour {
 			rb->SetPosition(Vector2D::zero);
 		}
 
-		std::cout << Vector2D::Angle(Vector2D::one, transform->position) << std::endl;
+		std::cout << Vector2D::SignedAngle(Vector2D::one, transform->position) << std::endl;
 	}
 
 	RigidBody* rb;

@@ -188,6 +188,14 @@ public:
         return angleDegrees;
     }
 
+    static inline double SignedAngle(const Vector2D& from, const Vector2D& to) {
+        double angle = Angle(from, to);
+        double crossProduct = Cross(from, to);
+        angle *= Object::Math.Sign(-crossProduct);
+
+        return angle;
+    }
+
     static constexpr double epsilon = 1e-4;
 
     inline constexpr Vector2D operator+(const Vector2D& other) const {
