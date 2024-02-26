@@ -21,6 +21,8 @@ void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth
 
 	Time.InitTime();
 
+	Cursor.InitSystemCursors();
+
 	SetupGame();
 }
 

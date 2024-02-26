@@ -999,20 +999,20 @@ enum class CursorLockMode : uint8 {
     Confined = 2
 };
 
-enum class SystemCursor {
-    Arrow = SDL_SYSTEM_CURSOR_ARROW,
-    IBeam = SDL_SYSTEM_CURSOR_IBEAM,
-    Wait = SDL_SYSTEM_CURSOR_WAIT,
-    Crosshair = SDL_SYSTEM_CURSOR_CROSSHAIR,
-    WaitArrow = SDL_SYSTEM_CURSOR_WAITARROW,
-    NWSEArrow = SDL_SYSTEM_CURSOR_SIZENWSE,
-    NESWArrow = SDL_SYSTEM_CURSOR_SIZENESW,
-    EWArrow = SDL_SYSTEM_CURSOR_SIZEWE,
-    NSArrow = SDL_SYSTEM_CURSOR_SIZENS,
-    AllArrow = SDL_SYSTEM_CURSOR_SIZEALL,
-    No = SDL_SYSTEM_CURSOR_NO,
-    Hand = SDL_SYSTEM_CURSOR_HAND, 
-    SystemCursorCount = SDL_NUM_SYSTEM_CURSORS
+enum class SystemCursor : uint8 {
+    Arrow = 0,
+    IBeam = 1,
+    Wait = 2,
+    Crosshair = 3,
+    WaitArrow = 4,
+    NWSEArrow = 5,
+    NESWArrow = 6,
+    EWArrow = 7,
+    NSArrow = 8,
+    AllArrow = 9,
+    No = 10,
+    Hand = 11, 
+    SystemCursorCount = 12
 };
 
 class CursorHandler {
@@ -1024,8 +1024,16 @@ public:
     bool GetVisibility() const;
     CursorLockMode GetLockState() const;
 private:
+    CursorHandler();
+
+    void InitSystemCursors();
+
     bool m_Visibility;
     CursorLockMode m_LockState;
+    std::vector<SDL_Cursor*> m_SystemCursors;
+
+    friend class Object;
+    friend class Engine2D;
 };
 
 class Engine2D : public Object {
