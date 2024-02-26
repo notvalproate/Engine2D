@@ -82,25 +82,25 @@ void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D& dimens
 
 	SDL_RendererFlip flipFlag;
 
-	SDL_Rect destRect = GetSpriteDestRect(dimensions, pixelsPerUnit, transform);
+	SDL_FRect destRect = GetSpriteDestRect(dimensions, pixelsPerUnit, transform);
 	GetFlipAndRotation(transform, angle, flipFlag);
 	
-	SDL_RenderCopyEx(m_Renderer, texture, NULL, &destRect, angle, NULL, flipFlag);
+	SDL_RenderCopyExF(m_Renderer, texture, NULL, &destRect, angle, NULL, flipFlag);
 }
 
-SDL_Rect RenderingHandler::GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
+SDL_FRect RenderingHandler::GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 
 	Vector2D screenPosition = currentCamera->WorldToScreenPoint(transform->position);
-	Vector2D newDimensions = (dimensions * pixelsPerUnitOnScreen) / pixelsPerUnit;
+	Vector2D newDimensions = (dimensions * pixelsPerUnitOnScreen) / (double)pixelsPerUnit;
 
 	newDimensions.x = newDimensions.x * std::abs(transform->scale.x);
 	newDimensions.y = newDimensions.y * std::abs(transform->scale.y);
 
-	SDL_Rect destRect{
-		screenPosition.x - newDimensions.x / 2.0,
-		screenPosition.y - newDimensions.y / 2.0,
+	SDL_FRect destRect{
+		(2 * screenPosition.x - newDimensions.x) / 2.0,
+		(2 * screenPosition.y - newDimensions.y) / 2.0,
 		newDimensions.x,
 		newDimensions.y,
 	};

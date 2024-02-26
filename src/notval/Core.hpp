@@ -737,7 +737,7 @@ private:
     bool InitRenderer();
     void PresentRenderer();
 
-    SDL_Rect GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
+    SDL_FRect GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
     void GetFlipAndRotation(const Transform* transform, double& rotation, SDL_RendererFlip& flipFlag) const;
     const std::vector<std::string>& GetAvailableSortingLayers() const;
 

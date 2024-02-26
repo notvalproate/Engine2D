@@ -220,7 +220,7 @@ class CameraFollower : public Behaviour {
 				mainCamera->transform.position,
 				transform->position,
 				velocity,
-				0.5,
+				1,
 				Time.GetDeltaTime()
 			);
 		
@@ -302,7 +302,7 @@ public:
 		
 
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->transform.position = Vector2D::one;
+		//PlayerObject->transform.position = Vector2D::one;
 		PlayerObject->AddComponent<CameraFollower>();
 		PlayerObject->AddComponent<Controller>();
 		//PlayerObject->AddComponent<PlayerController>();
@@ -360,7 +360,7 @@ public:
 		RenderingPipeline.AddSortingLayer("Player");
 		RenderingPipeline.AddSortingLayer("World");
 
-		Physics.SetRenderColliders(true); 
+		Physics.SetRenderColliders(true);
 
 		SceneManager.AddScene<TestScene>("Test Scene");
 		SceneManager.AddScene<TestScene>("Test Scene 2");
