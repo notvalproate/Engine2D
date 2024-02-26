@@ -33,6 +33,7 @@ class RenderingHandler;
 class TextureHandler;
 class TimeHandler;
 class PhysicsHandler;
+class CursorHandler;
 
 class Camera;
 class SpriteRenderer;
@@ -67,6 +68,7 @@ public:
     static TextureHandler TextureManager;
     static TimeHandler Time;
     static PhysicsHandler Physics;
+    static CursorHandler Cursor;
     static MathModule Math;
 
 private:
@@ -989,6 +991,12 @@ private:
     friend class RayCastCallback;
 };
 
+class CursorHandler {
+public:
+    void SetVisibility(bool visible);
+private:
+    
+};
 
 class Engine2D : public Object {
 public:

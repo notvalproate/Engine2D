@@ -85,6 +85,7 @@
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\notval\Behaviour.cpp" />
     <ClCompile Include="src\notval\Components\RigidBody.cpp" />
+    <ClCompile Include="src\notval\CursorHandler.cpp" />
     <ClCompile Include="src\notval\MathModule.cpp" />
     <ClCompile Include="src\notval\PhysicsHandler.cpp" />
     <ClCompile Include="src\notval\Component.cpp" />

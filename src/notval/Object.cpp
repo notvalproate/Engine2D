@@ -7,6 +7,7 @@ RenderingHandler Object::RenderingPipeline;
 TextureHandler Object::TextureManager;
 TimeHandler Object::Time;
 PhysicsHandler Object::Physics;
+CursorHandler Object::Cursor;
 MathModule Object::Math;
 
 void Object::CopyBehaviours(GameObject* newGameObject, GameObject* originalGameObject) {
