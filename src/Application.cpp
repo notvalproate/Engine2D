@@ -261,6 +261,13 @@ class Controller : public Behaviour {
 		if (Input.GetKey(SDL_SCANCODE_A)) {
 			rb->AddForce(Vector2D::left * 20);
 		}
+		
+		if (Input.GetKey(SDL_SCANCODE_G)) {
+			Cursor.SetCursor(SystemCursor::IBeam);
+		}
+		if (Input.GetKey(SDL_SCANCODE_H)) {
+			Cursor.SetCursor(SystemCursor::No);
+		}
 
 		if (Input.GetMouseButton(1)) {
 			Vector2D direction(Input.mouseRelX, Input.mouseRelY);

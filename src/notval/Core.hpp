@@ -999,10 +999,27 @@ enum class CursorLockMode : uint8 {
     Confined = 2
 };
 
+enum class SystemCursor {
+    Arrow = SDL_SYSTEM_CURSOR_ARROW,
+    IBeam = SDL_SYSTEM_CURSOR_IBEAM,
+    Wait = SDL_SYSTEM_CURSOR_WAIT,
+    Crosshair = SDL_SYSTEM_CURSOR_CROSSHAIR,
+    WaitArrow = SDL_SYSTEM_CURSOR_WAITARROW,
+    NWSEArrow = SDL_SYSTEM_CURSOR_SIZENWSE,
+    NESWArrow = SDL_SYSTEM_CURSOR_SIZENESW,
+    EWArrow = SDL_SYSTEM_CURSOR_SIZEWE,
+    NSArrow = SDL_SYSTEM_CURSOR_SIZENS,
+    AllArrow = SDL_SYSTEM_CURSOR_SIZEALL,
+    No = SDL_SYSTEM_CURSOR_NO,
+    Hand = SDL_SYSTEM_CURSOR_HAND, 
+    SystemCursorCount = SDL_NUM_SYSTEM_CURSORS
+};
+
 class CursorHandler {
 public:
     void SetVisibility(bool visible);
     void SetLockState(CursorLockMode lockType);
+    void SetCursor(SystemCursor cursor);
 
     bool GetVisibility() const;
     CursorLockMode GetLockState() const;

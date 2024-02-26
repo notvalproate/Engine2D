@@ -31,6 +31,10 @@ void CursorHandler::SetLockState(CursorLockMode lockMode) {
 	m_LockState = lockMode;
 };
 
+void CursorHandler::SetCursor(SystemCursor cursor) {
+	SDL_SetCursor(SDL_CreateSystemCursor((SDL_SystemCursor)cursor));
+}
+
 bool CursorHandler::GetVisibility() const {
 	return m_Visibility;
 }
