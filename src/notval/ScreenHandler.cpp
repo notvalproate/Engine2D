@@ -56,5 +56,7 @@ bool ScreenHandler::InitScreen(const char* title, const char* iconpath, const in
 	SDL_FreeSurface(TempSurface);
 	std::cout << "Stage: Initialized Window..." << std::endl;
 
+	SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
+
 	return true;
 }

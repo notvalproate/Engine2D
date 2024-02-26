@@ -89,7 +89,7 @@ void InputHandler::PollEvents() {
 void InputHandler::SetProperties() {
 	if (m_CurrentEvent.type == SDL_MOUSEMOTION) {
 		SDL_GetMouseState(&mousePositionX, &mousePositionY);
-		SDL_GetRelativeMouseState(&mouseRelY, &mouseRelY);
+		SDL_GetRelativeMouseState(&mouseRelX, &mouseRelY);
 	}
 	else if (
 		m_CurrentEvent.type == SDL_KEYDOWN && 
