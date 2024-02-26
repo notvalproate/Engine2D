@@ -215,7 +215,7 @@ class CameraFollower : public Behaviour {
 
 	void LateUpdate() {
 		// FIX ISSUES WITH HOW CAMERA HAS UNDETERMINISTIC VALUES FOR RENDERING SPRITES
-		/*mainCamera->transform.position =
+		mainCamera->transform.position =
 			Vector2D::SmoothDamp(
 				mainCamera->transform.position,
 				transform->position,
@@ -223,8 +223,8 @@ class CameraFollower : public Behaviour {
 				0.5,
 				Time.GetDeltaTime()
 			);
-		*/
-		mainCamera->transform.position = transform->position;
+		
+		//mainCamera->transform.position = transform->position;
 	}
 
 	Vector2D velocity;
@@ -270,7 +270,6 @@ class Controller : public Behaviour {
 			direction = mainCamera->ScreenToWorldPoint(direction);
 			direction -= transform->position;
 			direction.Normalize();
-			std::cout << direction << std::endl;
 			rb->AddForce(direction * 20);
 		}
 	}
@@ -303,6 +302,7 @@ public:
 		
 
 		auto PlayerObject = CreateGameObject("Player");
+		PlayerObject->transform.position = Vector2D::one;
 		PlayerObject->AddComponent<CameraFollower>();
 		PlayerObject->AddComponent<Controller>();
 		//PlayerObject->AddComponent<PlayerController>();

@@ -39,8 +39,8 @@ Vector2D Camera::ViewportToWorldPoint(const Vector2D& pos) const {
 	Vector2D unitsOnScreen = GetUnitsOnScreen();
 	
 	return Vector2D(
-		(pos.x - 0.5) * unitsOnScreen.x + transform->position.x,
-		((pos.y - 0.5) * unitsOnScreen.y + transform->position.y) * -1
+		((pos.x - 0.5) * unitsOnScreen.x) + transform->position.x,
+		((0.5 - pos.y) * unitsOnScreen.y) + transform->position.y
 	);
 }
 
