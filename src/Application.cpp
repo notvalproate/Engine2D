@@ -211,6 +211,8 @@ class CameraFollower : public Behaviour {
 	void Start() {
 		mainCamera = FindObjectByName("Main Camera");
 		velocity = Vector2D::zero;
+
+		Cursor.SetLockState(CursorLockMode::Locked);
 	}
 
 	void LateUpdate() {
@@ -262,8 +264,10 @@ class Controller : public Behaviour {
 			rb->AddForce(Vector2D::left * 20);
 		}
 
+		std::cout << Input.mouseRelX << " " << Input.mouseRelY << std::endl;
+
 		if (Input.GetMouseButton(1)) {
-			Vector2D direction(Input.mousePositionX, Input.mousePositionY);
+			Vector2D direction(Input.mouseRelX, Input.mouseRelY);
 			direction = mainCamera->ScreenToWorldPoint(direction);
 			direction -= transform->position;
 			direction.Normalize();

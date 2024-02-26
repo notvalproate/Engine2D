@@ -859,6 +859,7 @@ public:
     inline const SDL_Event& GetCurrentEvent() const { return m_CurrentEvent; }
 
     int mousePositionX, mousePositionY;
+    int mouseRelX, mouseRelY;
     int mouseScrollDeltaX, mouseScrollDeltaY;
     std::string inputString;
 
@@ -904,6 +905,7 @@ private:
     friend class Engine2D;
     friend class RenderingHandler;
     friend class TimeHandler;
+    friend class CursorHandler;
 };
 
 
@@ -991,11 +993,22 @@ private:
     friend class RayCastCallback;
 };
 
+enum class CursorLockMode : uint8 {
+    None = 0,
+    Locked = 1,
+    Confined = 2
+};
+
 class CursorHandler {
 public:
     void SetVisibility(bool visible);
+    void SetLockState(CursorLockMode lockType);
+
+    bool GetVisibility() const;
+    CursorLockMode GetLockState() const;
 private:
-    
+    bool m_Visibility;
+    CursorLockMode m_LockState;
 };
 
 class Engine2D : public Object {
