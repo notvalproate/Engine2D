@@ -12,6 +12,14 @@ CustomCursor::~CustomCursor() {
 
 CursorHandler::CursorHandler() : m_Visibility(true), m_LockState(CursorLockMode::None), m_SystemCursors({}) { }
 
+CursorHandler::~CursorHandler() {
+	for (auto& cursor : m_SystemCursors) {
+		SDL_FreeCursor(cursor);
+	}
+
+	m_SystemCursors.clear();
+}
+
 void CursorHandler::SetVisibility(bool visible) {
 	SDL_ShowCursor(visible);
 	m_Visibility = visible;

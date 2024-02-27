@@ -420,6 +420,7 @@ private:
     std::unique_ptr<Component> Clone() const override;
 
     virtual void LateUpdate() {};
+    virtual void OnDestroy() {};
 
     void Render() const override final { };
     void AttachGameObject(GameObject* newGameObject) override final;
@@ -1037,6 +1038,7 @@ public:
     CursorLockMode GetLockState() const;
 private:
     CursorHandler();
+    ~CursorHandler();
 
     void InitSystemCursors();
 
