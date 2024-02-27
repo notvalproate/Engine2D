@@ -20,15 +20,17 @@ void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth
 	}
 
 	Time.InitTime();
-
+	Input.InitInput();
 	Cursor.InitSystemCursors();
 
 	SetupGame();
 }
 
 Engine2D::~Engine2D() {
-	SDL_DestroyWindow(Screen.m_Window);
-	SDL_DestroyRenderer(RenderingPipeline.m_Renderer);
+	SceneManager.DestroyScenes();
+	Screen.DestroyScreen();
+	RenderingPipeline.DestroyRenderer();
+	Cursor.DestroySystemCursors();
 	SDL_Quit();
 }
 

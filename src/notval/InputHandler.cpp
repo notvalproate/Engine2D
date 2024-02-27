@@ -1,6 +1,10 @@
 #include "Core.hpp"
 
-InputHandler::InputHandler() : m_KeyboardState(SDL_GetKeyboardState(NULL)) { }
+InputHandler::InputHandler() : m_KeyboardState(nullptr) { }
+
+void InputHandler::InitInput() {
+	m_KeyboardState = SDL_GetKeyboardState(NULL);
+}
 
 bool InputHandler::GetKey(const SDL_Scancode scanCode) const {
 	return m_KeyboardState[scanCode] == 1;

@@ -135,3 +135,7 @@ void RenderingHandler::PresentRenderer() {
 	SDL_RenderPresent(m_Renderer);
 	SDL_RenderClear(m_Renderer);
 }
+
+void RenderingHandler::DestroyRenderer() {
+	SDL_DestroyRenderer(m_Renderer);
+}

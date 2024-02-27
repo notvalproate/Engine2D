@@ -740,6 +740,7 @@ private:
 
     bool InitRenderer();
     void PresentRenderer();
+    void DestroyRenderer();
 
     SDL_FRect GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
     void GetFlipAndRotation(const Transform* transform, double& rotation, SDL_RendererFlip& flipFlag) const;
@@ -827,6 +828,8 @@ public:
 private:
     SceneHandler();
 
+    void DestroyScenes();
+
     std::vector<std::unique_ptr<Scene>> m_Scenes{};
     Scene* m_CurrentScene;
 
@@ -868,6 +871,8 @@ public:
 private:
     InputHandler();
 
+    void InitInput();
+
     void PollEvents();
     void SetProperties();
 
@@ -896,6 +901,7 @@ private:
     ScreenHandler();
 
     bool InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight);
+    void DestroyScreen();
     
     SDL_Window* m_Window;
     SDL_DisplayMode m_Mode{};
@@ -1038,9 +1044,9 @@ public:
     CursorLockMode GetLockState() const;
 private:
     CursorHandler();
-    ~CursorHandler();
 
     void InitSystemCursors();
+    void DestroySystemCursors();
 
     bool m_Visibility;
     CursorLockMode m_LockState;

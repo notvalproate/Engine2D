@@ -60,3 +60,7 @@ bool ScreenHandler::InitScreen(const char* title, const char* iconpath, const in
 
 	return true;
 }
+
+void ScreenHandler::DestroyScreen() {
+	SDL_DestroyWindow(m_Window);
+}

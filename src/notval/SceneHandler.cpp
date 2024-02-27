@@ -2,6 +2,11 @@
 
 SceneHandler::SceneHandler() : m_CurrentScene(nullptr) { }
 
+void SceneHandler::DestroyScenes() {
+	m_CurrentScene = nullptr;
+	m_Scenes.clear();
+}
+
 void SceneHandler::LoadScene(std::size_t sceneID) {
 	if (sceneID >= m_Scenes.size()) {
 		std::cout << "Scene was not loaded! Invalid scene ID" << std::endl;
