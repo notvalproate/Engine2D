@@ -244,6 +244,8 @@ class Controller : public Behaviour {
 		rb->angularDrag = 1;
 
 		Physics.SetGravity(Vector2D::zero);
+
+		mcCursor = new CustomCursor("assets/cursor.png", Vector2D::zero);
 	}
 
 	void Update() {
@@ -263,10 +265,7 @@ class Controller : public Behaviour {
 		}
 		
 		if (Input.GetKey(SDL_SCANCODE_G)) {
-			Cursor.SetCursor(SystemCursor::IBeam);
-		}
-		if (Input.GetKey(SDL_SCANCODE_H)) {
-			Cursor.SetCursor(SystemCursor::No);
+			Cursor.SetCursor(*mcCursor);
 		}
 
 		if (Input.GetMouseButton(1)) {
@@ -278,6 +277,7 @@ class Controller : public Behaviour {
 
 	Camera* mainCamera;
 	RigidBody* rb;
+	CustomCursor* mcCursor;
 };
 
 class TestScene : public Scene {

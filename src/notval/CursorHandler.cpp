@@ -1,4 +1,14 @@
 #include "Core.hpp"
+#include "SDL_image.h"
+
+CustomCursor::CustomCursor(const char* cursorPath, const Vector2D& hotspot) : m_Cursor(nullptr) {
+	SDL_Surface* surface = IMG_Load(cursorPath);
+	m_Cursor = SDL_CreateColorCursor(surface, hotspot.x, hotspot.y);
+}
+
+CustomCursor::~CustomCursor() {
+	SDL_FreeCursor(m_Cursor);
+}
 
 CursorHandler::CursorHandler() : m_Visibility(true), m_LockState(CursorLockMode::None), m_SystemCursors({}) { }
 
@@ -33,12 +43,16 @@ void CursorHandler::SetLockState(CursorLockMode lockMode) {
 	m_LockState = lockMode;
 };
 
-void CursorHandler::SetCursor(SystemCursor cursor) {
-	if ((uint8)cursor >= (uint8)SystemCursor::SystemCursorCount) {
-		cursor = SystemCursor::Arrow;
+void CursorHandler::SetCursor(SystemCursorType cursor) {
+	if ((uint8)cursor >= (uint8)SystemCursorType::SystemCursorCount) {
+		cursor = SystemCursorType::Arrow;
 	}
 
 	SDL_SetCursor(m_SystemCursors[(uint8)cursor]);
+}
+
+void CursorHandler::SetCursor(const CustomCursor& cursor) {
+	SDL_SetCursor(cursor.m_Cursor);
 }
 
 bool CursorHandler::GetVisibility() const {

@@ -33,6 +33,7 @@ class RenderingHandler;
 class TextureHandler;
 class TimeHandler;
 class PhysicsHandler;
+class Cursor;
 class CursorHandler;
 
 class Camera;
@@ -999,7 +1000,7 @@ enum class CursorLockMode : uint8 {
     Confined = 2
 };
 
-enum class SystemCursor : uint8 {
+enum class SystemCursorType : uint8 {
     Arrow = 0,
     IBeam = 1,
     Wait = 2,
@@ -1015,11 +1016,22 @@ enum class SystemCursor : uint8 {
     SystemCursorCount = 12
 };
 
+class CustomCursor {
+public:
+    CustomCursor(const char* cursorPath, const Vector2D& hotspot);
+    ~CustomCursor();
+private:
+    SDL_Cursor* m_Cursor;
+
+    friend class CursorHandler;
+};
+
 class CursorHandler {
 public:
     void SetVisibility(bool visible);
     void SetLockState(CursorLockMode lockType);
-    void SetCursor(SystemCursor cursor);
+    void SetCursor(SystemCursorType cursor);
+    void SetCursor(const CustomCursor& cursor);
 
     bool GetVisibility() const;
     CursorLockMode GetLockState() const;
