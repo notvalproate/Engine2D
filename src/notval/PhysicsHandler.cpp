@@ -23,16 +23,17 @@ void PhysicsHandler::RenderColliders() const {
 				b2PolygonShape* polygon = dynamic_cast<b2PolygonShape*>(shape);
 
 				if (polygon) {
+					Vector2D centroid(polygon->m_centroid);
+					Vector2D offset = centerOfMass - centroid;
+
 					for (int i = 0; i < polygon->m_count; i++) {
 						int j = (i + 1) % polygon->m_count;
 
 						Vector2D point1(polygon->m_vertices[i].x, polygon->m_vertices[i].y);
 						Vector2D point2(polygon->m_vertices[j].x, polygon->m_vertices[j].y);
 
-						point1.x += centerOfMass.x;
-						point1.y += centerOfMass.y;
-						point2.x += centerOfMass.x;
-						point2.y += centerOfMass.y;
+						point1 += offset;
+						point2 += offset;
 
 						point1.RotateAround(centerOfMass, -(bodyList->GetAngle() * 180) / M_PI);
 						point2.RotateAround(centerOfMass, -(bodyList->GetAngle() * 180) / M_PI);

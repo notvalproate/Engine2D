@@ -820,6 +820,7 @@ public:
         m_Scenes.push_back(std::unique_ptr<T>(new T(sceneName, Object::RenderingPipeline.GetAvailableSortingLayers())));
     }
 
+    // WORRY ABOUT HOW ADDITIVE SCENE LOADING IS CURRENLTY THE ONLY WAY. FIND OUT WAY TO NON ADDITIVELY LOAD / UNLOAD THE CURRENTSCENE
     void LoadScene(std::size_t sceneID);
     void LoadScene(const std::string_view sceneName);
 

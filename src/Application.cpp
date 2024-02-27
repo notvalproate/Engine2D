@@ -301,7 +301,6 @@ public:
 		L2Renderer->SetSprite("assets/medieval/Background/layer_2.png");
 		L2Renderer->SetSortingLayer("Background");
 		L2Renderer->SetPixelsPerUnit(16);
-		
 
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->transform.position = Vector2D::one;
@@ -318,7 +317,7 @@ public:
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
-		auto g1 = CreateGameObject("Ground 1", groundObject, Vector2D(-0.5, 0), 0);
+		auto g1 = CreateGameObject("Ground 1", groundObject, Vector2D(-0.5, 0), 0, true); 
 		auto g1render = g1->AddComponent<SpriteRenderer>();
 		g1render->SetSprite("assets/medieval/Tiles/floor_tile_2.png");
 		g1render->SetPixelsPerUnit(32);
@@ -351,6 +350,54 @@ public:
 	}
 };
 
+class Boy : public Behaviour {
+public:
+	using Behaviour::Behaviour;
+
+	std::unique_ptr<Component> Clone() const override {
+		return std::make_unique<Boy>(*this);
+	}
+
+	void Start() override {
+		rb = gameObject->GetComponent<RigidBody>();
+		rb->SetMass(1);
+		rb->SetGravityScale(0);
+	}
+
+	void Update() override {
+		move.x = Input.GetAxisRaw("Horizontal");
+		move.y = Input.GetAxisRaw("Vertical");
+
+		rb->AddForce(move * speed * 3);
+	}
+
+	int speed = 5;
+	Vector2D move;
+	RigidBody* rb;
+};
+
+class SceneBoy : public Scene {
+public:
+	using Scene::Scene;
+
+	void SetupScene() override {
+		auto player = CreateGameObject("Player One");
+		player->AddComponent<Boy>();
+		auto playerRenderer = player->AddComponent<SpriteRenderer>();
+		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
+		playerRenderer->SetPixelsPerUnit(32);
+		player->AddComponent<RigidBody>();
+		auto collider = player->AddComponent<BoxCollider>();
+		collider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 90);
+		
+		auto g1 = CreateGameObject("Ground 1", Vector2D(0, -4), 0);
+		auto g1render = g1->AddComponent<SpriteRenderer>();
+		g1render->SetSprite("assets/medieval/Tiles/floor_tile_2.png");
+		g1render->SetPixelsPerUnit(32);
+		auto g1collider = g1->AddComponent<BoxCollider>();
+	}
+};
+
 class GameTest : public Engine2D {
 public:
 	using Engine2D::Engine2D;
@@ -366,7 +413,8 @@ public:
 
 		SceneManager.AddScene<TestScene>("Test Scene");
 		SceneManager.AddScene<TestScene>("Test Scene 2");
-		SceneManager.LoadScene("Test Scene");
+		SceneManager.AddScene<SceneBoy>("SceneBoy");
+		SceneManager.LoadScene("SceneBoy");
 	}
 };
 
