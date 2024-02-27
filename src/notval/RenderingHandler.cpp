@@ -28,6 +28,11 @@ void RenderingHandler::SetRendererVsync(const bool set) {
 
 void RenderingHandler::RenderPoint(const Vector2D& point, const uint8_t width, const Color color) const {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
+
+	if (!currentCamera) {
+		return;
+	}
+
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 
 	Vector2D screenPosition = currentCamera->WorldToScreenPoint(point);
@@ -48,6 +53,11 @@ void RenderingHandler::RenderPoint(const Vector2D& point, const uint8_t width, c
 
 void RenderingHandler::RenderLine(const Vector2D& src, const Vector2D& dest, const Color color) const {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
+
+	if (!currentCamera) {
+		return;
+	}
+
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 
 	Vector2D srcScreenPosition = currentCamera->WorldToScreenPoint(src);
@@ -60,6 +70,11 @@ void RenderingHandler::RenderLine(const Vector2D& src, const Vector2D& dest, con
 
 void RenderingHandler::RenderRect(const Vector2D& position, const Vector2D& dimensions, const Color color) const {
 	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
+
+	if (!currentCamera) {
+		return;
+	}
+
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 
 	Vector2D screenPosition = currentCamera->WorldToScreenPoint(position);
@@ -78,18 +93,22 @@ void RenderingHandler::RenderRect(const Vector2D& position, const Vector2D& dime
 }
 
 void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
-	double angle = transform->rotation;
+	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
 
+	if (!currentCamera) {
+		return;
+	}
+
+	double angle = transform->rotation;
 	SDL_RendererFlip flipFlag;
 
-	SDL_FRect destRect = GetSpriteDestRect(dimensions, pixelsPerUnit, transform);
+	SDL_FRect destRect = GetSpriteDestRect(dimensions, pixelsPerUnit, transform, currentCamera);
 	GetFlipAndRotation(transform, angle, flipFlag);
 	
 	SDL_RenderCopyExF(m_Renderer, texture, NULL, &destRect, angle, NULL, flipFlag);
 }
 
-SDL_FRect RenderingHandler::GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const {
-	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
+SDL_FRect RenderingHandler::GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform, const Camera* currentCamera) const {
 	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
 
 	Vector2D screenPosition = currentCamera->WorldToScreenPoint(transform->position);

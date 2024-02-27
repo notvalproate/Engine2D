@@ -190,3 +190,20 @@ bool Scene::SetSortingLayer(GameObject* gameObject, const std::string_view layer
     (*it2).m_GameObjectsInLayer.push_back(gameObject);
     return true;
 }
+
+void Scene::DestroyCamera(Camera* cam) {
+    if (m_CurrentCamera == cam) {
+        m_CurrentCamera = nullptr;
+    }
+
+    std::size_t i = 0;
+    while (i < m_SceneCameras.size()) {
+        if (m_SceneCameras[i] == cam) {
+            break;
+        }
+    }
+
+    if (i != m_SceneCameras.size()) {
+        m_SceneCameras.erase(m_SceneCameras.begin() + i);
+    }
+}

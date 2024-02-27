@@ -688,6 +688,8 @@ private:
 
 class Camera final : public Component {
 public:
+    ~Camera();
+
     Vector2D ScreenToViewportPoint(const Vector2D& pos) const;
     Vector2D ScreenToWorldPoint(const Vector2D& pos) const;
 
@@ -701,6 +703,7 @@ public:
 
 private:
     explicit Camera(GameObject* gameObject);
+
     std::unique_ptr<Component> Clone() const;
 
     Vector2D GetUnitsOnScreen() const;
@@ -742,7 +745,7 @@ private:
     void PresentRenderer();
     void DestroyRenderer();
 
-    SDL_FRect GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
+    SDL_FRect GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform, const Camera* currentCamera) const;
     void GetFlipAndRotation(const Transform* transform, double& rotation, SDL_RendererFlip& flipFlag) const;
     const std::vector<std::string>& GetAvailableSortingLayers() const;
 
@@ -788,6 +791,7 @@ private:
     void AddObjectToSortingLayers(GameObject* gameObject);
     void RemoveObjectFromSortingLayers(GameObject* gameObject, const std::string_view layerName);
     bool SetSortingLayer(GameObject* gameObject, const std::string_view layerName, const std::string_view previousLayer);
+    void DestroyCamera(Camera* cam);
 
     std::vector<std::unique_ptr<GameObject>> m_SceneGameObjects{};
     std::vector<GameObject*> m_StagedForDestruction{};
@@ -809,6 +813,7 @@ private:
     friend class SpriteRenderer;
     friend class RigidBody;
     friend class BoxCollider;
+    friend class Camera;
 };
 
 

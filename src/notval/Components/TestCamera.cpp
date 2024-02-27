@@ -2,6 +2,10 @@
 
 Camera::Camera(GameObject* gameObject) : Component(gameObject) { }
 
+Camera::~Camera() {
+	gameObject->scene->DestroyCamera(this);
+}
+
 std::unique_ptr<Component> Camera::Clone() const {
 	return std::make_unique<Camera>(*this);
 }
