@@ -3,6 +3,8 @@
 
 class SpriteRenderer final : public Component {
 public:
+	~SpriteRenderer();
+
 	void SetSprite(const char* spritePath);
 	void SetSortingLayer(const std::string_view layerName);
 	void SetPixelsPerUnit(const uint16_t pixelsPerUnit);
@@ -12,7 +14,6 @@ public:
 
 private:
 	SpriteRenderer(GameObject* gameObj);
-	~SpriteRenderer();
 	std::unique_ptr<Component> Clone() const;
 
 	void Render() const override;

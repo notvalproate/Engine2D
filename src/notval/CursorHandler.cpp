@@ -4,6 +4,7 @@
 CustomCursor::CustomCursor(const char* cursorPath, const Vector2D& hotspot) : m_Cursor(nullptr) {
 	SDL_Surface* surface = IMG_Load(cursorPath);
 	m_Cursor = SDL_CreateColorCursor(surface, hotspot.x, hotspot.y);
+	SDL_FreeSurface(surface);
 }
 
 CustomCursor::~CustomCursor() {
