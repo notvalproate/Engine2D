@@ -7,11 +7,19 @@ SpriteRenderer::SpriteRenderer(GameObject* gameObj)
 	gameObj->scene->AddObjectToSortingLayers(gameObj);
 }
 
+SpriteRenderer::~SpriteRenderer() {
+	SDL_DestroyTexture(m_Sprite);
+}
+
 std::unique_ptr<Component> SpriteRenderer::Clone() const {
 	return std::make_unique<SpriteRenderer>(*this);
 }
 
 void SpriteRenderer::SetSprite(const char* spritePath) {
+	if (m_Sprite) {
+		SDL_DestroyTexture(m_Sprite);
+	}
+
 	m_Sprite = TextureManager.LoadTexture(spritePath);
 	SDL_Point size = TextureManager.GetTextureSize(m_Sprite);
 

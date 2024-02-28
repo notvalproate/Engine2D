@@ -12,6 +12,7 @@ public:
 
 private:
 	SpriteRenderer(GameObject* gameObj);
+	~SpriteRenderer();
 	std::unique_ptr<Component> Clone() const;
 
 	void Render() const override;

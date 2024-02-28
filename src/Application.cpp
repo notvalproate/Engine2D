@@ -293,8 +293,6 @@ public:
 	using Scene::Scene;
 
 	void SetupScene() override {
-		CreateCamera("Camera 2");
-
 		auto Background = CreateGameObject("BG");
 
 		auto Layer1 = CreateGameObject("Layer 1");

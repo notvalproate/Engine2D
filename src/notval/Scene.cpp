@@ -25,7 +25,6 @@ void Scene::Update() {
 
     if (m_StagedForDestruction.size()) {
         for (auto& gO : m_StagedForDestruction) {
-
             GameObject::DestroyImmediate(gO);
         }
         m_StagedForDestruction.clear();
