@@ -1010,7 +1010,8 @@ private:
 enum class CursorLockMode : uint8 {
     None = 0,
     Locked = 1,
-    Confined = 2
+    Confined = 2,
+    CursorLockModeCount = 3
 };
 
 enum class SystemCursorType : uint8 {
@@ -1025,7 +1026,7 @@ enum class SystemCursorType : uint8 {
     NSArrow = 8,
     AllArrow = 9,
     No = 10,
-    Hand = 11, 
+    Hand = 11,
     SystemCursorCount = 12
 };
 

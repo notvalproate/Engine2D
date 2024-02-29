@@ -35,6 +35,8 @@ enum class RigidBodyType {
 // TOTAL FORCE AND TOTAL TORQUE ARE ALWAYS ZERO IN THE UPDATE LOOPS OF BEHAVIOURS
 class RigidBody final : public Component {
 public:
+	~RigidBody();
+
 	void AddForce(const Vector2D& force);
 	void AddForceAtPosition(const Vector2D& force, const Vector2D& position);
 	void AddRelativeForce(Vector2D force);

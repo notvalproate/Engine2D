@@ -11,10 +11,6 @@ void PhysicsHandler::RenderColliders() const {
 
 	for (b2Body* bodyList = currentWorld->GetBodyList(); bodyList; bodyList = bodyList->GetNext()) {
 
-		b2Vec2 center = bodyList->GetWorldCenter();
-
-		Vector2D centerOfMass(center.x, center.y);
-
 		for (b2Fixture* fixtureList = bodyList->GetFixtureList(); fixtureList; fixtureList = fixtureList->GetNext()) {
 
 			b2Shape* shape = fixtureList->GetShape();
@@ -23,20 +19,11 @@ void PhysicsHandler::RenderColliders() const {
 				b2PolygonShape* polygon = dynamic_cast<b2PolygonShape*>(shape);
 
 				if (polygon) {
-					Vector2D centroid(polygon->m_centroid);
-					Vector2D offset = centerOfMass - centroid;
-
 					for (int i = 0; i < polygon->m_count; i++) {
 						int j = (i + 1) % polygon->m_count;
 
-						Vector2D point1(polygon->m_vertices[i].x, polygon->m_vertices[i].y);
-						Vector2D point2(polygon->m_vertices[j].x, polygon->m_vertices[j].y);
-
-						point1 += offset;
-						point2 += offset;
-
-						point1.RotateAround(centerOfMass, -(bodyList->GetAngle() * 180) / M_PI);
-						point2.RotateAround(centerOfMass, -(bodyList->GetAngle() * 180) / M_PI);
+						Vector2D point1(bodyList->GetWorldPoint(polygon->m_vertices[i]));
+						Vector2D point2(bodyList->GetWorldPoint(polygon->m_vertices[j]));
 
 						Object::RenderingPipeline.RenderLine(point1, point2, Color(0, 255, 0));
 					}
@@ -44,7 +31,8 @@ void PhysicsHandler::RenderColliders() const {
 			}
 		}
 
-		Object::RenderingPipeline.RenderPoint(Vector2D(centerOfMass.x, centerOfMass.y), 3, Color(255, 0, 0));
+		Vector2D centerOfMass(bodyList->GetWorldCenter());
+		Object::RenderingPipeline.RenderPoint(centerOfMass, 3, Color(255, 0, 0));
 	}
 }
 

@@ -27,6 +27,10 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angul
 	}
 }
 
+RigidBody::~RigidBody() {
+
+}
+
 void RigidBody::AddForce(const Vector2D& force) {
 	totalForce += force;
 }
