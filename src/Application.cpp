@@ -238,19 +238,12 @@ class Controller : public Behaviour {
 	void Start() {
 		mainCamera = FindObjectByName("Main Camera")->GetComponent<Camera>();
 
-		rb = gameObject->GetComponent<RigidBody>();
-		rb->SetMass(1);
-		rb->drag = 1;
-		rb->angularDrag = 1;
-
 		Physics.SetGravity(Vector2D::zero);
 
 		mcCursor = new CustomCursor("assets/cursor.png", Vector2D::zero);
 	}
 
 	void Update() {
-		rb->totalForce = Vector2D::zero;
-
 		if (Input.GetKey(SDL_SCANCODE_W)) {
 			rb->AddForce(Vector2D::up * 20);
 		}
@@ -275,7 +268,12 @@ class Controller : public Behaviour {
 		}
 
 		if (Input.GetKeyDown(SDL_SCANCODE_K)) {
-			Destroy(mainCamera->gameObject);
+			rb = gameObject->AddComponent<RigidBody>();
+			rb->SetMass(1);
+			rb->drag = 1;
+			rb->angularDrag = 1;
+			auto playerCollider = gameObject->AddComponent<BoxCollider>();
+			playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 0);
 		}
 
 		if (Input.GetKeyDown(SDL_SCANCODE_L)) {
@@ -320,11 +318,11 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
-		auto playerCollider2 = PlayerObject->AddComponent<BoxCollider>();
-		playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 0);
-		playerCollider2->SetTransform(Vector2D(1, 1.5), Vector2D(3, -0.25), 0);
+		//auto playerBody = PlayerObject->AddComponent<RigidBody>();
+		//auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		//auto playerCollider2 = PlayerObject->AddComponent<BoxCollider>();
+		//playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 0);
+		//playerCollider2->SetTransform(Vector2D(1, 1.5), Vector2D(3, -0.25), 0);
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		

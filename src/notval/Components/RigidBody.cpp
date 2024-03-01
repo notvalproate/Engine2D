@@ -25,10 +25,19 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angul
 
 		m_SensorFixture = m_Body->CreateFixture(&boxFixture);
 	}
+
+	std::cout << m_Body << std::endl;
 }
 
 RigidBody::~RigidBody() {
+	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(m_Body);
 
+	//for (auto& col : m_AttachedColliders) {
+		//col->attachedRigidBody = nullptr;
+		//col->SetTransform(col->m_Dimensions, col->m_Offset, col->m_Rotation + transform->rotation);
+	//}
+
+	//m_AttachedColliders.clear();
 }
 
 void RigidBody::AddForce(const Vector2D& force) {

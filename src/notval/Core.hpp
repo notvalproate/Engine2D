@@ -653,14 +653,14 @@ private:
             m_BehavioursStagedForAdding.back().get()->Awake();
             m_BehavioursStagedForAdding.back().get()->Start();
 
-            return static_cast<T*>(m_Behaviours.back().get());
+            return static_cast<T*>(m_BehavioursStagedForAdding.back().get());
         }
 
         m_ComponentsStagedForAdding.push_back(std::unique_ptr<T>(new T(this)));
         m_ComponentsStagedForAdding.back().get()->Awake();
         m_ComponentsStagedForAdding.back().get()->Start();
 
-        return static_cast<T*>(m_Components.back().get());
+        return static_cast<T*>(m_ComponentsStagedForAdding.back().get());
     }
 
     template<typename T>
@@ -793,15 +793,15 @@ private:
     bool SetSortingLayer(GameObject* gameObject, const std::string_view layerName, const std::string_view previousLayer);
     void DestroyCamera(Camera* cam);
 
+    std::unique_ptr<b2World> m_PhysicsWorld;
+    std::unordered_map<b2Fixture*, BoxCollider*> m_FixtureColliderMap{};
+
     std::vector<std::unique_ptr<GameObject>> m_SceneGameObjects{};
     std::vector<GameObject*> m_StagedForDestruction{};
     std::vector<SortingLayer> m_SortingLayers;
 
     Camera* m_CurrentCamera;
     std::vector<Camera*> m_SceneCameras{};
-
-    std::unique_ptr<b2World> m_PhysicsWorld;
-    std::unordered_map<b2Fixture*, BoxCollider*> m_FixtureColliderMap{};
 
     uint32_t m_LatestSceneInstanceID{};
     bool m_Loaded;

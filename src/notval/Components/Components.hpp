@@ -67,6 +67,7 @@ public:
 	Vector2D totalForce;
 	double totalTorque;
 
+	b2Body* m_Body;
 private:
 	RigidBody(GameObject* gameObj);
 
@@ -77,7 +78,6 @@ private:
 	void AddAngularDrag();
 	void ApplyTotalForces();
 
-	b2Body* m_Body;
 	std::vector<BoxCollider*> m_AttachedColliders;
 	std::optional<b2Fixture*> m_SensorFixture;
 
