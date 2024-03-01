@@ -521,9 +521,23 @@ public:
                     return ptr;
                 }
             }
+            for(auto& behaviour : m_BehavioursStagedForAdding) {
+                auto ptr = dynamic_cast<T*>(behaviour.get());
+
+                if(ptr != nullptr) {
+                    return ptr;
+                }
+            }
         }
         else {
             for(auto& component : m_Components) {
+                auto ptr = dynamic_cast<T*>(component.get());
+
+                if(ptr != nullptr) {
+                    return ptr;
+                }
+            }
+            for(auto& component : m_ComponentsStagedForAdding) {
                 auto ptr = dynamic_cast<T*>(component.get());
 
                 if(ptr != nullptr) {
@@ -581,9 +595,23 @@ public:
                     components.push_back(ptr);
                 }
             }
+            for(auto& behaviour : m_BehavioursStagedForAdding) {
+                auto ptr = dynamic_cast<T*>(behaviour.get());
+
+                if(ptr != nullptr) {
+                    components.push_back(ptr);
+                }
+            }
         }
         else {
             for(auto& component : m_Components) {
+                auto ptr = dynamic_cast<T*>(component.get());
+
+                if(ptr != nullptr) {
+                    components.push_back(ptr);
+                }
+            }
+            for(auto& component : m_ComponentsStagedForAdding) {
                 auto ptr = dynamic_cast<T*>(component.get());
 
                 if(ptr != nullptr) {

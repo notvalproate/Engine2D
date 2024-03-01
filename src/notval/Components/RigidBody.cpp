@@ -30,7 +30,7 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angul
 }
 
 RigidBody::~RigidBody() {
-	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(m_Body);
+	//gameObject->scene->m_PhysicsWorld.get()->DestroyBody(m_Body);
 
 	//for (auto& col : m_AttachedColliders) {
 		//col->attachedRigidBody = nullptr;

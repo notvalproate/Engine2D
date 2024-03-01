@@ -270,7 +270,7 @@ class Controller : public Behaviour {
 		if (Input.GetKeyDown(SDL_SCANCODE_K)) {
 			rb = gameObject->AddComponent<RigidBody>();
 			rb->SetMass(1);
-			rb->drag = 1;
+			rb->drag = 1; 
 			rb->angularDrag = 1;
 			auto playerCollider = gameObject->AddComponent<BoxCollider>();
 			playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 0);
