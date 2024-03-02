@@ -167,6 +167,7 @@ void BoxCollider::DeatachRigidBody() {
 
 	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
 	m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
+	m_CurrentPosition = transform->position;
 
 	Physics.AddFixtureToMap(m_Fixture, this);
 }
@@ -183,7 +184,7 @@ void BoxCollider::Update() {
 
 void BoxCollider::UpdateStaticPosition() {
 	Vector2D newPosition((*m_StaticBody)->GetTransform().p);
-	//newPosition += transform->position - m_CurrentPosition;
+	newPosition += transform->position - m_CurrentPosition;
 	(*m_StaticBody)->SetTransform(b2Vec2(newPosition.x, newPosition.y), (*m_StaticBody)->GetTransform().q.GetAngle());
 	m_CurrentPosition = transform->position;
 }
