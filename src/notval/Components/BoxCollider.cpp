@@ -67,12 +67,6 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 	m_Rotation = 0;
 
 	b2PolygonShape boxShape;
-	boxShape.SetAsBox(
-		m_Dimensions.x / 2.0,
-		m_Dimensions.y / 2.0,
-		b2Vec2(m_Offset.x, m_Offset.y),
-		(m_Rotation * M_PI) / 180.0
-	);
 
 	b2FixtureDef boxFixture;
 	boxFixture.shape = &boxShape;
@@ -80,10 +74,24 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 	boxFixture.friction = 0.3f;
 
 	if (attachedRigidBody) {
+		boxShape.SetAsBox(
+			m_Dimensions.x / 2.0,
+			m_Dimensions.y / 2.0,
+			b2Vec2(m_Offset.x, m_Offset.y),
+			(m_Rotation * M_PI) / 180.0
+		);
+
 		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 		m_Fixture = attachedRigidBody->m_Body->CreateFixture(&boxFixture);
 	}
 	else {
+		boxShape.SetAsBox(
+			m_Dimensions.x / 2.0,
+			m_Dimensions.y / 2.0,
+			b2Vec2(m_Offset.x + transform->position.x, m_Offset.y + transform->position.y),
+			(m_Rotation * M_PI) / 180.0
+		);
+
 		(*m_StaticBody)->DestroyFixture(m_Fixture);
 		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
 	}
@@ -129,8 +137,8 @@ void BoxCollider::DeatachRigidBody() {
 	boxShape.SetAsBox(
 		m_Dimensions.x / 2.0,
 		m_Dimensions.y / 2.0,
-		b2Vec2(m_Offset.x, m_Offset.y),
-		(m_Rotation * M_PI) / 180.0
+		b2Vec2(0, 0),
+		((m_Rotation - transform->rotation) * M_PI) / 180.0
 	);
 
 	b2FixtureDef boxFixture;
@@ -140,7 +148,10 @@ void BoxCollider::DeatachRigidBody() {
 
 	b2BodyDef boxBody;
 	boxBody.type = b2_staticBody;
-	boxBody.position.Set(transform->position.x, transform->position.y);
+
+	Vector2D newPosition = transform->position + m_Offset;
+	newPosition.RotateAround(transform->position, transform->rotation);
+	boxBody.position.Set(newPosition.x, newPosition.y);
 
 	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
 	m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
@@ -159,6 +170,8 @@ void BoxCollider::Update() {
 }
 
 void BoxCollider::UpdateStaticPosition() {
-	m_CurrentPosition = transform->position + m_Offset;
-	(*m_StaticBody)->SetTransform(b2Vec2(m_CurrentPosition.x, m_CurrentPosition.y), 0);
+	Vector2D newPosition((*m_StaticBody)->GetTransform().p);
+	//newPosition += transform->position - m_CurrentPosition;
+	(*m_StaticBody)->SetTransform(b2Vec2(newPosition.x, newPosition.y), (*m_StaticBody)->GetTransform().q.GetAngle());
+	m_CurrentPosition = transform->position;
 }

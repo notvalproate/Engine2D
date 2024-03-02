@@ -325,9 +325,9 @@ public:
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
-		auto playerCollider2 = PlayerObject->AddComponent<BoxCollider>();
+		//auto playerCollider2 = PlayerObject->AddComponent<BoxCollider>();
 		playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 0);
-		playerCollider2->SetTransform(Vector2D(1, 1.5), Vector2D(3, -0.25), 0);
+		//playerCollider2->SetTransform(Vector2D(1, 1.5), Vector2D(3, -0.25), 0);
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
@@ -377,7 +377,6 @@ public:
 		Physics.SetRenderColliders(true);
 
 		SceneManager.AddScene<TestScene>("Test Scene");
-		//SceneManager.AddScene<TestScene>("Test Scene 2");
 		SceneManager.LoadScene("Test Scene");
 	}
 };
