@@ -100,7 +100,7 @@ std::size_t GameObject::GetComponentIndex(Component* component) {
 std::size_t GameObject::GetBehaviourIndex(Behaviour* behaviour) {
     std::size_t i = 0;
 
-    for(const auto& comp : m_Components) {
+    for(const auto& comp : m_Behaviours) {
         if(behaviour == comp.get()) {
             return i;
         }

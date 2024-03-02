@@ -52,6 +52,11 @@ BoxCollider::~BoxCollider() {
 				break;
 			}
 		}
+
+		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+	}
+	else {
+		gameObject->scene->m_PhysicsWorld.get()->DestroyBody((*m_StaticBody));
 	}
 }
 
