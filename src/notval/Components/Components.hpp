@@ -90,6 +90,8 @@ private:
 // MASS OF THE RIGIDBODY NOT USED WHEN IT ATTACHES TO A RIGID BODY
 class BoxCollider final : public Behaviour {
 public:
+	~BoxCollider();
+
 	void SetTransform(const Vector2D& dimensions, const Vector2D& offset, const double rotation);
 	Vector2D GetCenter() const { return transform->position + m_Offset; }
 	Vector2D GetSize() const { return m_Dimensions; }
@@ -104,6 +106,7 @@ private:
 
 	void UpdateStaticPosition();
 	void AttachRigidBody(RigidBody* rigidBody);
+	void DeatachRigidBody();
 
 	b2Fixture* m_Fixture;
 	Vector2D m_Dimensions;

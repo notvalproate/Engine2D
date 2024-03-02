@@ -42,6 +42,19 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 	Physics.AddFixtureToMap(m_Fixture, this);
 }
 
+BoxCollider::~BoxCollider() {
+	if (attachedRigidBody) {
+		auto& rbColliders = attachedRigidBody->m_AttachedColliders;
+
+		for (size_t i = 0; i < rbColliders.size(); i++) {
+			if (rbColliders[i] == this) {
+				rbColliders.erase(rbColliders.begin() + i);
+				break;
+			}
+		}
+	}
+}
+
 std::unique_ptr<Component> BoxCollider::Clone() const {
 	return std::make_unique<BoxCollider>(*this);
 }
@@ -79,6 +92,10 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 }
 
 void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
+	if (attachedRigidBody) {
+		return;
+	}
+
 	Physics.RemoveFixtureFromMap(m_Fixture);
 
 	attachedRigidBody = rigidBody;
@@ -103,6 +120,34 @@ void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
 	Physics.AddFixtureToMap(m_Fixture, this);
 }
 
+void BoxCollider::DeatachRigidBody() {
+	Physics.RemoveFixtureFromMap(m_Fixture);
+
+	attachedRigidBody = nullptr;
+
+	b2PolygonShape boxShape;
+	boxShape.SetAsBox(
+		m_Dimensions.x / 2.0,
+		m_Dimensions.y / 2.0,
+		b2Vec2(m_Offset.x, m_Offset.y),
+		(m_Rotation * M_PI) / 180.0
+	);
+
+	b2FixtureDef boxFixture;
+	boxFixture.shape = &boxShape;
+	boxFixture.density = 1.0f;
+	boxFixture.friction = 0.3f;
+
+	b2BodyDef boxBody;
+	boxBody.type = b2_staticBody;
+	boxBody.position.Set(transform->position.x, transform->position.y);
+
+	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
+	m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
+
+	Physics.AddFixtureToMap(m_Fixture, this);
+}
+
 void BoxCollider::Update() {
 	if (attachedRigidBody) {
 		return;
@@ -114,6 +159,6 @@ void BoxCollider::Update() {
 }
 
 void BoxCollider::UpdateStaticPosition() {
-	m_CurrentPosition = transform->position;
+	m_CurrentPosition = transform->position + m_Offset;
 	(*m_StaticBody)->SetTransform(b2Vec2(m_CurrentPosition.x, m_CurrentPosition.y), 0);
 }

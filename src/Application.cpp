@@ -241,6 +241,11 @@ class Controller : public Behaviour {
 		Physics.SetGravity(Vector2D::zero);
 
 		mcCursor = new CustomCursor("assets/cursor.png", Vector2D::zero);
+
+		rb = gameObject->GetComponent<RigidBody>();
+		rb->SetMass(1);
+		rb->drag = 1;
+		rb->angularDrag = 1;
 	}
 
 	void Update() {
@@ -268,17 +273,17 @@ class Controller : public Behaviour {
 		}
 
 		if (Input.GetKeyDown(SDL_SCANCODE_K)) {
-			rb = gameObject->AddComponent<RigidBody>();
-			rb->SetMass(1);
-			rb->drag = 1; 
-			rb->angularDrag = 1;
-			auto playerCollider = gameObject->AddComponent<BoxCollider>();
-			playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 0);
+			Destroy(rb);
 		}
-
+		
+		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
+			rb = gameObject->AddComponent<RigidBody>();
+		}
+		
 		if (Input.GetKeyDown(SDL_SCANCODE_L)) {
 			gameObject->scene->SwitchToCamera("Camera 2");
 		}
+
 	}
 
 	Camera* mainCamera;
@@ -318,11 +323,11 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		//auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		//auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
-		//auto playerCollider2 = PlayerObject->AddComponent<BoxCollider>();
-		//playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 0);
-		//playerCollider2->SetTransform(Vector2D(1, 1.5), Vector2D(3, -0.25), 0);
+		auto playerBody = PlayerObject->AddComponent<RigidBody>();
+		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		auto playerCollider2 = PlayerObject->AddComponent<BoxCollider>();
+		playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 0);
+		playerCollider2->SetTransform(Vector2D(1, 1.5), Vector2D(3, -0.25), 0);
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
@@ -372,7 +377,7 @@ public:
 		Physics.SetRenderColliders(true);
 
 		SceneManager.AddScene<TestScene>("Test Scene");
-		SceneManager.AddScene<TestScene>("Test Scene 2");
+		//SceneManager.AddScene<TestScene>("Test Scene 2");
 		SceneManager.LoadScene("Test Scene");
 	}
 };
