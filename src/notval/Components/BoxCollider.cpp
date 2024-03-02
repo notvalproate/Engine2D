@@ -15,7 +15,7 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 		m_Dimensions.x / 2.0,
 		m_Dimensions.y / 2.0,
 		b2Vec2(m_Offset.x, m_Offset.y),
-		(m_Rotation * M_PI) / 180.0
+		-m_Rotation * M_PI / 180.0
 	);
 
 	b2FixtureDef boxFixture;
@@ -78,7 +78,7 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 			m_Dimensions.x / 2.0,
 			m_Dimensions.y / 2.0,
 			b2Vec2(m_Offset.x, m_Offset.y),
-			(m_Rotation * M_PI) / 180.0
+			-m_Rotation * M_PI / 180.0
 		);
 
 		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
@@ -90,7 +90,7 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 			m_Dimensions.x / 2.0,
 			m_Dimensions.y / 2.0,
 			b2Vec2(0, 0),
-			0
+			-m_Rotation * M_PI / 180.0
 		);
 
 		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
@@ -124,7 +124,7 @@ void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
 		m_Dimensions.x / 2.0,
 		m_Dimensions.y / 2.0,
 		b2Vec2(m_Offset.x, m_Offset.y),
-		(m_Rotation * M_PI) / 180.0
+		-m_Rotation * M_PI / 180.0
 	);
 
 	b2FixtureDef boxFixture;
@@ -149,7 +149,7 @@ void BoxCollider::DeatachRigidBody() {
 		m_Dimensions.x / 2.0,
 		m_Dimensions.y / 2.0,
 		b2Vec2(0, 0),
-		0
+		-m_Rotation * M_PI / 180.0
 	);
 
 	b2FixtureDef boxFixture;
