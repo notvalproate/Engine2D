@@ -64,7 +64,7 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 
 	m_Dimensions = dimensions;
 	m_Offset = offset;
-	m_Rotation = 0;
+	m_Rotation = rotation;
 
 	b2PolygonShape boxShape;
 
@@ -85,14 +85,25 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 		m_Fixture = attachedRigidBody->m_Body->CreateFixture(&boxFixture);
 	}
 	else {
+		b2PolygonShape boxShape;
 		boxShape.SetAsBox(
 			m_Dimensions.x / 2.0,
 			m_Dimensions.y / 2.0,
-			b2Vec2(m_Offset.x + transform->position.x, m_Offset.y + transform->position.y),
-			(m_Rotation * M_PI) / 180.0
+			b2Vec2(0, 0),
+			0
 		);
 
-		(*m_StaticBody)->DestroyFixture(m_Fixture);
+		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
+
+		b2BodyDef boxBody;
+		boxBody.type = b2_staticBody;
+
+		Vector2D newPosition = transform->position + m_Offset;
+		newPosition.RotateAround(transform->position, transform->rotation);
+		boxBody.position.Set(newPosition.x, newPosition.y);
+		boxBody.angle = -transform->rotation * M_PI / 180.0;
+
+		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
 		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
 	}
 
@@ -138,7 +149,7 @@ void BoxCollider::DeatachRigidBody() {
 		m_Dimensions.x / 2.0,
 		m_Dimensions.y / 2.0,
 		b2Vec2(0, 0),
-		((m_Rotation - transform->rotation) * M_PI) / 180.0
+		0
 	);
 
 	b2FixtureDef boxFixture;
@@ -152,6 +163,7 @@ void BoxCollider::DeatachRigidBody() {
 	Vector2D newPosition = transform->position + m_Offset;
 	newPosition.RotateAround(transform->position, transform->rotation);
 	boxBody.position.Set(newPosition.x, newPosition.y);
+	boxBody.angle = -transform->rotation * M_PI / 180.0;
 
 	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
 	m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
