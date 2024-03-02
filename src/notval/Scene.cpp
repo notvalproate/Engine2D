@@ -7,7 +7,7 @@ Scene::Scene(const std::string_view name, const std::vector<std::string>& avaiab
         m_SortingLayers.push_back(SortingLayer(layerName));
     }
 
-    m_PhysicsWorld = std::make_unique<b2World>(b2Vec2(0, -9.8));
+    m_PhysicsWorld = std::make_unique<b2World>(b2Vec2(0, -9.81));
 }
 
 void Scene::Start() {
