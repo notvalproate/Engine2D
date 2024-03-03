@@ -36,22 +36,6 @@ void PhysicsHandler::RenderColliders() const {
 	}
 }
 
-void PhysicsHandler::AddFixtureToMap(b2Fixture* fixture, BoxCollider* collider) {
-	auto& sceneColliderMap = Object::SceneManager.GetCurrentScene()->m_FixtureColliderMap;
-
-	sceneColliderMap[fixture] = collider;
-}
-
-void PhysicsHandler::RemoveFixtureFromMap(b2Fixture* fixture) {
-	auto& sceneColliderMap = Object::SceneManager.GetCurrentScene()->m_FixtureColliderMap;
-
-	auto it = sceneColliderMap.find(fixture);
-
-	if (it != sceneColliderMap.end()) {
-		sceneColliderMap.erase(it);
-	}
-}
-
 void PhysicsHandler::SetRenderColliders(const bool set) {
 	m_RenderSceneColliders = set;
 }

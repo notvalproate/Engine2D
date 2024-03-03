@@ -107,6 +107,8 @@ private:
 	void UpdateStaticPosition();
 	void AttachRigidBody(RigidBody* rigidBody);
 	void DeatachRigidBody();
+	void RemoveFixtureFromMap();
+	void AddFixtureToMap();
 
 	b2Fixture* m_Fixture;
 	Vector2D m_Dimensions;

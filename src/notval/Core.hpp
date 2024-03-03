@@ -1010,8 +1010,6 @@ private:
     PhysicsHandler();
 
     void RenderColliders() const;
-    void AddFixtureToMap(b2Fixture* fixture, BoxCollider* collider);
-    void RemoveFixtureFromMap(b2Fixture* fixture);
 
     bool m_RenderSceneColliders;
 

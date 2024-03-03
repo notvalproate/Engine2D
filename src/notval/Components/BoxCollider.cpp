@@ -38,12 +38,11 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
 	}
 
-	// IG UNSAFE? DOESNT REMOVE FIXTURE FROM MAP ON DESTRUCTION FOR NOW
-	Physics.AddFixtureToMap(m_Fixture, this);
+	AddFixtureToMap();
 }
 
 BoxCollider::~BoxCollider() {
-	Physics.RemoveFixtureFromMap(m_Fixture);
+	RemoveFixtureFromMap();
 
 	if (attachedRigidBody) {
 		auto& rbColliders = attachedRigidBody->m_AttachedColliders;
@@ -67,7 +66,7 @@ std::unique_ptr<Component> BoxCollider::Clone() const {
 }
 
 void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offset, const double rotation) {
-	Physics.RemoveFixtureFromMap(m_Fixture);
+	RemoveFixtureFromMap();
 
 	m_Dimensions = dimensions;
 	m_Offset = offset;
@@ -114,7 +113,7 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
 	}
 
-	Physics.AddFixtureToMap(m_Fixture, this);
+	AddFixtureToMap();
 }
 
 void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
@@ -122,7 +121,7 @@ void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
 		return;
 	}
 
-	Physics.RemoveFixtureFromMap(m_Fixture);
+	RemoveFixtureFromMap();
 
 	attachedRigidBody = rigidBody;
 
@@ -143,11 +142,11 @@ void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
 	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 	m_StaticBody.reset();
 
-	Physics.AddFixtureToMap(m_Fixture, this);
+	AddFixtureToMap();
 }
 
 void BoxCollider::DeatachRigidBody() {
-	Physics.RemoveFixtureFromMap(m_Fixture);
+	RemoveFixtureFromMap();
 
 	attachedRigidBody = nullptr;
 
@@ -176,7 +175,7 @@ void BoxCollider::DeatachRigidBody() {
 	m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
 	m_CurrentPosition = transform->position;
 
-	Physics.AddFixtureToMap(m_Fixture, this);
+	AddFixtureToMap();
 }
 
 void BoxCollider::Update() {
@@ -194,4 +193,18 @@ void BoxCollider::UpdateStaticPosition() {
 	newPosition += transform->position - m_CurrentPosition;
 	(*m_StaticBody)->SetTransform(b2Vec2(newPosition.x, newPosition.y), (*m_StaticBody)->GetTransform().q.GetAngle());
 	m_CurrentPosition = transform->position;
+}
+
+void BoxCollider::RemoveFixtureFromMap() {
+	auto& sceneColliderMap = gameObject->scene->m_FixtureColliderMap;
+
+	auto it = sceneColliderMap.find(m_Fixture);
+
+	if (it != sceneColliderMap.end()) {
+		sceneColliderMap.erase(it);
+	}
+}
+
+void BoxCollider::AddFixtureToMap() {
+	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
 }

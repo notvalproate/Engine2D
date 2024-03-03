@@ -4,7 +4,6 @@ SceneHandler::SceneHandler() : m_CurrentScene(nullptr) { }
 
 void SceneHandler::DestroyScenes() {
 	m_Scenes.clear();
-	m_CurrentScene = nullptr;
 }
 
 void SceneHandler::LoadScene(std::size_t sceneID) {
