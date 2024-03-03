@@ -88,10 +88,18 @@ GameObject* Object::Instantiate(GameObject* gameObject, const Vector2D& position
 }
 
 void Object::Destroy(GameObject* gameObject) {
+    if (!gameObject) {
+        return;
+    }
+
     gameObject->scene->m_StagedForDestruction.push_back(gameObject);
 }
 
 void Object::DestroyImmediate(GameObject* gameObject) {
+    if (!gameObject) {
+        return;
+    }
+
     gameObject->transform.DetachFromParent();
 
     DestroyChildren(gameObject);
@@ -125,10 +133,25 @@ Behaviour* Object::Instantiate(Behaviour* behaviour, const Vector2D& position, c
 }
 
 void Object::Destroy(Behaviour* behaviour) {
+    if (!behaviour) {
+        return;
+    }
+
     behaviour->gameObject->m_BehavioursStagedForDestruction.push_back(behaviour);
 }
 
 void Object::DestroyImmediate(Behaviour* behaviour) {
+    if (!behaviour) {
+        return;
+    }
+
+    try {
+        (*behaviour).enabled;
+    }
+    catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
+
     behaviour->gameObject->RemoveBehaviour(behaviour);
 }
 
@@ -151,9 +174,17 @@ Component* Object::Instantiate(Component* component, const Vector2D& position, c
 }
 
 void Object::Destroy(Component* component) {
+    if (!component) {
+        return;
+    }
+
     component->gameObject->m_ComponentsStagedForDestruction.push_back(component);
 }
 
 void Object::DestroyImmediate(Component* component) {
+    if (!component) {
+        return;
+    }
+
     component->gameObject->RemoveComponent(component);
 }

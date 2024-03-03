@@ -2,7 +2,7 @@
 #include "SDL_image.h"
 
 SpriteRenderer::SpriteRenderer(GameObject* gameObj)
-	: Component(gameObj), m_Sprite(nullptr), m_Dimensions(0, 0), m_PixelsPerUnit(10), m_SortingLayer("Default")
+	: Component(gameObj), m_Sprite(nullptr), m_Dimensions(0, 0), m_PixelsPerUnit(100), m_SortingLayer("Default")
 {
 	gameObj->scene->AddObjectToSortingLayers(gameObj);
 }
