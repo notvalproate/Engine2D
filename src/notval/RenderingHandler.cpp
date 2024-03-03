@@ -17,7 +17,7 @@ bool RenderingHandler::InitRenderer() {
 
 	SDL_RendererInfo info;
 	SDL_GetRendererInfo(m_Renderer, &info);
-	std::cout << "renderer chosen: " << info.name << std::endl;
+	std::cout << "Using Renderer:" << info.name << std::endl;
 
 	return true;
 }

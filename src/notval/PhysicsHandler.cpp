@@ -50,7 +50,6 @@ void PhysicsHandler::RemoveFixtureFromMap(b2Fixture* fixture) {
 	if (it != sceneColliderMap.end()) {
 		sceneColliderMap.erase(it);
 	}
-
 }
 
 void PhysicsHandler::SetRenderColliders(const bool set) {

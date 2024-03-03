@@ -43,6 +43,8 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 }
 
 BoxCollider::~BoxCollider() {
+	Physics.RemoveFixtureFromMap(m_Fixture);
+
 	if (attachedRigidBody) {
 		auto& rbColliders = attachedRigidBody->m_AttachedColliders;
 

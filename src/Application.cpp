@@ -335,6 +335,7 @@ public:
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 		playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 10);
 		
+		/*
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
 		auto g1 = CreateGameObject("Ground 1", groundObject, Vector2D(-0.5, 0), 0); 
@@ -364,7 +365,7 @@ public:
 		g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
 		auto g4collider = g4->AddComponent<BoxCollider>();
-		
+		*/
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}
 };
