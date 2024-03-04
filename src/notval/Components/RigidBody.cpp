@@ -57,13 +57,22 @@ void RigidBody::AddTorque(const double force) {
 }
 
 void RigidBody::SetMass(const float mass) {
-	float currentMass = m_Body->GetMass();
-	float density = (currentMass > 0.0) ? mass / currentMass : 0.0;
+	float totalArea = 0;
 
 	for (b2Fixture* fixture = m_Body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
-		fixture->SetDensity(density);
-		m_Body->ResetMassData();
+		b2MassData massData;
+		m_Body->GetMassData(&massData);
+		fixture->GetMassData(&massData);
+		totalArea += massData.mass / fixture->GetDensity();
 	}
+
+	float newDensity = (totalArea == 0 ? 0 : mass / totalArea); 
+
+	for (b2Fixture* fixture = m_Body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+		fixture->SetDensity(newDensity);
+	}
+
+	m_Body->ResetMassData();
 }
 
 void RigidBody::SetVelocity(const Vector2D& vel) {

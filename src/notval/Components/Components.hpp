@@ -125,7 +125,6 @@ protected:
 };
 
 // ADD ABILITY TO DISABLE BOXCOLLIDER
-// MASS OF THE RIGIDBODY NOT USED WHEN IT ATTACHES TO A RIGID BODY
 class BoxCollider final : public Collider {
 public:
 	void SetTransform(const Vector2D& dimensions, const Vector2D& offset, const double rotation);
