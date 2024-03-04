@@ -97,7 +97,7 @@ protected:
 
 	void Update() override;
 	void UpdateStaticPosition();
-	void RemoveFixtureFromMap();
+	void RemoveFixtureFromMap() const;
 	void AddFixtureToMap();
 
 	virtual void AttachRigidBody(RigidBody* rigidBody) = 0;
@@ -106,6 +106,8 @@ protected:
 	void CreateColliderOnRigidBody(const b2FixtureDef* fixtureDef);
 	void CreateStaticCollider(const b2BodyDef* bodyDef, const b2FixtureDef* fixtureDef);
 	void DestroyStaticCollider();
+
+	b2BodyDef GetStaticBodyDef() const;
 
 	b2Fixture* m_Fixture;
 	Vector2D m_Offset;

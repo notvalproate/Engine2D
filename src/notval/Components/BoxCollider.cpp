@@ -29,9 +29,7 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 		CreateColliderOnRigidBody(&boxFixture);
 	}
 	else {
-		b2BodyDef boxBody;
-		boxBody.type = b2_staticBody;
-		boxBody.position.Set(transform->position.x, transform->position.y);
+		b2BodyDef boxBody = GetStaticBodyDef();
 
 		CreateStaticCollider(&boxBody, &boxFixture);
 	}
@@ -79,13 +77,7 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 			-m_Rotation * M_PI / 180.0
 		);
 
-		b2BodyDef boxBody;
-		boxBody.type = b2_staticBody;
-
-		Vector2D newPosition = transform->position + m_Offset;
-		newPosition.RotateAround(transform->position, transform->rotation);
-		boxBody.position.Set(newPosition.x, newPosition.y);
-		boxBody.angle = -transform->rotation * M_PI / 180.0;
+		b2BodyDef boxBody = GetStaticBodyDef();
 
 		CreateStaticCollider(&boxBody, &boxFixture);
 	}
@@ -138,13 +130,7 @@ void BoxCollider::DeatachRigidBody() {
 	boxFixture.density = 1.0f;
 	boxFixture.friction = 0.3f;
 
-	b2BodyDef boxBody;
-	boxBody.type = b2_staticBody;
-
-	Vector2D newPosition = transform->position + m_Offset;
-	newPosition.RotateAround(transform->position, transform->rotation);
-	boxBody.position.Set(newPosition.x, newPosition.y);
-	boxBody.angle = -transform->rotation * M_PI / 180.0;
+	b2BodyDef boxBody = GetStaticBodyDef();
 
 	CreateStaticCollider(&boxBody, &boxFixture);
 	m_CurrentPosition = transform->position;

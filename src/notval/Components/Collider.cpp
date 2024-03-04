@@ -43,7 +43,7 @@ void Collider::UpdateStaticPosition() {
 	m_CurrentPosition = transform->position;
 }
 
-void Collider::RemoveFixtureFromMap() {
+void Collider::RemoveFixtureFromMap() const {
 	auto& sceneColliderMap = gameObject->scene->m_FixtureColliderMap;
 
 	auto it = sceneColliderMap.find(m_Fixture);
@@ -71,4 +71,16 @@ void Collider::DestroyStaticCollider() {
 	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 	m_StaticBody.reset();
 	m_Fixture = nullptr;
+}
+
+b2BodyDef Collider::GetStaticBodyDef() const {
+	Vector2D newPosition = transform->position + m_Offset;
+	newPosition.RotateAround(transform->position, transform->rotation);
+
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position = b2Vec2(newPosition.x, newPosition.y);
+	body.angle = -transform->rotation * M_PI / 180.0;
+
+	return body;
 }
