@@ -39,6 +39,7 @@ class CursorHandler;
 class Camera;
 class SpriteRenderer;
 class RigidBody;
+class Collider;
 class BoxCollider;
 
 
@@ -822,7 +823,7 @@ private:
     void DestroyCamera(Camera* cam);
 
     std::unique_ptr<b2World> m_PhysicsWorld;
-    std::unordered_map<b2Fixture*, BoxCollider*> m_FixtureColliderMap{};
+    std::unordered_map<b2Fixture*, Collider*> m_FixtureColliderMap{};
 
     std::vector<std::unique_ptr<GameObject>> m_SceneGameObjects{};
     std::vector<GameObject*> m_StagedForDestruction{};
@@ -840,7 +841,7 @@ private:
     friend class PhysicsHandler;
     friend class SpriteRenderer;
     friend class RigidBody;
-    friend class BoxCollider;
+    friend class Collider;
     friend class Camera;
 };
 
@@ -994,7 +995,7 @@ struct RayCastHit {
     Vector2D normal;
     float fraction{0.0f};
     float distance{0.0f};
-    BoxCollider* collider{nullptr};
+    Collider* collider{nullptr};
 
     RayCastHit() {}
 };

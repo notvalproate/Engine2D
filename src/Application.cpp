@@ -281,6 +281,7 @@ class Controller : public Behaviour {
 
 		if (Input.GetKeyDown(SDL_SCANCODE_K)) {
 			Destroy(test);
+			test = nullptr;
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {

@@ -86,9 +86,34 @@ private:
 	friend class Scene;
 };
 
+// All colliders must inherit from this class.
+class Collider : public Behaviour {
+public:
+	virtual ~Collider();
+
+	RigidBody* attachedRigidBody;
+protected:
+	Collider(GameObject* gameObj);
+
+	void Update() override;
+	void UpdateStaticPosition();
+	void RemoveFixtureFromMap();
+	void AddFixtureToMap();
+
+	b2Fixture* m_Fixture;
+	Vector2D m_Offset;
+	double m_Rotation;
+
+	Vector2D m_CurrentPosition;
+	std::optional<b2Body*> m_StaticBody;
+
+	friend class GameObject;
+	friend class RigidBody;
+};
+
 // ADD ABILITY TO DISABLE BOXCOLLIDER
 // MASS OF THE RIGIDBODY NOT USED WHEN IT ATTACHES TO A RIGID BODY
-class BoxCollider final : public Behaviour {
+class BoxCollider final : public Collider {
 public:
 	~BoxCollider();
 
@@ -96,27 +121,14 @@ public:
 	Vector2D GetCenter() const { return transform->position + m_Offset; }
 	Vector2D GetSize() const { return m_Dimensions; }
 
-	RigidBody* attachedRigidBody;
-
 private:
 	BoxCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
-	void Update();
-
-	void UpdateStaticPosition();
 	void AttachRigidBody(RigidBody* rigidBody);
 	void DeatachRigidBody();
-	void RemoveFixtureFromMap();
-	void AddFixtureToMap();
 
-	b2Fixture* m_Fixture;
 	Vector2D m_Dimensions;
-	Vector2D m_Offset;
-	double m_Rotation;
-
-	Vector2D m_CurrentPosition; 
-	std::optional<b2Body*> m_StaticBody;
 
 	friend class GameObject;
 	friend class RigidBody;
