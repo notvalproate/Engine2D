@@ -5,7 +5,7 @@ Collider::Collider(GameObject* gameObj)
 	attachedRigidBody(nullptr),
 	m_Fixture(nullptr),
 	m_Offset(0, 0),
-	m_Rotation(gameObj->transform.rotation), 
+	m_Rotation(0), 
 	m_CurrentPosition(gameObj->transform.position), 
 	m_StaticBody(nullptr)
 {
