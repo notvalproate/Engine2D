@@ -8,7 +8,7 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angul
 
 	m_Body = gameObj->scene->m_PhysicsWorld->CreateBody(&boxBody);
 
-	m_AttachedColliders = gameObj->GetComponents<BoxCollider>();
+	m_AttachedColliders = gameObj->GetComponents<Collider>();
 
 	if (m_AttachedColliders.size()) {
 		for (auto& collider : m_AttachedColliders) {
@@ -122,7 +122,7 @@ Vector2D RigidBody::GetCentreOfMass() const {
 	return Vector2D(m_Body->GetWorldCenter());
 }
 
-std::vector<BoxCollider*> RigidBody::GetAttachedColliders() const {
+std::vector<Collider*> RigidBody::GetAttachedColliders() const {
 	return m_AttachedColliders;
 }
 
@@ -180,7 +180,7 @@ void RigidBody::ApplyTotalForces() {
 	totalTorque = 0;
 }
 
-void RigidBody::AttachCollider(BoxCollider* collider) {
+void RigidBody::AttachCollider(Collider* collider) {
 	if (m_SensorFixture.has_value()) {
 		m_Body->DestroyFixture(*m_SensorFixture);
 		m_SensorFixture.reset();

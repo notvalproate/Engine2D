@@ -58,7 +58,7 @@ public:
 	float GetAngularVelocity() const;
 	RigidBodyType GetBodyType() const;
 	Vector2D GetCentreOfMass() const;
-	std::vector<BoxCollider*> GetAttachedColliders() const;
+	std::vector<Collider*> GetAttachedColliders() const;
 	bool IsAwake() const;
 	bool IsSleeping() const;
 
@@ -72,17 +72,17 @@ private:
 	RigidBody(GameObject* gameObj);
 
 	void Update() override;
-	void AttachCollider(BoxCollider* collider);
+	void AttachCollider(Collider* collider);
 
 	void AddDrag();
 	void AddAngularDrag();
 	void ApplyTotalForces();
 
-	std::vector<BoxCollider*> m_AttachedColliders;
+	std::vector<Collider*> m_AttachedColliders;
 	std::optional<b2Fixture*> m_SensorFixture;
 
 	friend class GameObject;
-	friend class BoxCollider;
+	friend class Collider;
 	friend class Scene;
 };
 
@@ -100,6 +100,13 @@ protected:
 	void RemoveFixtureFromMap();
 	void AddFixtureToMap();
 
+	virtual void AttachRigidBody(RigidBody* rigidBody) = 0;
+	virtual void DeatachRigidBody() = 0;
+
+	void CreateColliderOnRigidBody(const b2FixtureDef* fixtureDef);
+	void CreateStaticCollider(const b2BodyDef* bodyDef, const b2FixtureDef* fixtureDef);
+	void DestroyStaticCollider();
+
 	b2Fixture* m_Fixture;
 	Vector2D m_Offset;
 	double m_Rotation;
@@ -115,8 +122,6 @@ protected:
 // MASS OF THE RIGIDBODY NOT USED WHEN IT ATTACHES TO A RIGID BODY
 class BoxCollider final : public Collider {
 public:
-	~BoxCollider();
-
 	void SetTransform(const Vector2D& dimensions, const Vector2D& offset, const double rotation);
 	Vector2D GetCenter() const { return transform->position + m_Offset; }
 	Vector2D GetSize() const { return m_Dimensions; }

@@ -26,39 +26,17 @@ BoxCollider::BoxCollider(GameObject* gameObj)
 	attachedRigidBody = gameObj->GetComponentInParent<RigidBody>();
 
 	if (attachedRigidBody != nullptr) {
-		m_Fixture = attachedRigidBody->m_Body->CreateFixture(&boxFixture);
-		attachedRigidBody->AttachCollider(this);
+		CreateColliderOnRigidBody(&boxFixture);
 	}
 	else {
 		b2BodyDef boxBody;
 		boxBody.type = b2_staticBody;
 		boxBody.position.Set(transform->position.x, transform->position.y);
 
-		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
-		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
+		CreateStaticCollider(&boxBody, &boxFixture);
 	}
 
 	AddFixtureToMap();
-}
-
-BoxCollider::~BoxCollider() {
-	RemoveFixtureFromMap();
-
-	if (attachedRigidBody) {
-		auto& rbColliders = attachedRigidBody->m_AttachedColliders;
-
-		for (size_t i = 0; i < rbColliders.size(); i++) {
-			if (rbColliders[i] == this) {
-				rbColliders.erase(rbColliders.begin() + i);
-				break;
-			}
-		}
-
-		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
-	}
-	else {
-		gameObject->scene->m_PhysicsWorld.get()->DestroyBody((*m_StaticBody));
-	}
 }
 
 std::unique_ptr<Component> BoxCollider::Clone() const {
@@ -91,6 +69,8 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 		m_Fixture = attachedRigidBody->m_Body->CreateFixture(&boxFixture);
 	}
 	else {
+		DestroyStaticCollider();
+
 		b2PolygonShape boxShape;
 		boxShape.SetAsBox(
 			m_Dimensions.x / 2.0,
@@ -98,8 +78,6 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 			b2Vec2(0, 0),
 			-m_Rotation * M_PI / 180.0
 		);
-
-		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 
 		b2BodyDef boxBody;
 		boxBody.type = b2_staticBody;
@@ -109,8 +87,7 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 		boxBody.position.Set(newPosition.x, newPosition.y);
 		boxBody.angle = -transform->rotation * M_PI / 180.0;
 
-		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
-		m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
+		CreateStaticCollider(&boxBody, &boxFixture);
 	}
 
 	AddFixtureToMap();
@@ -122,6 +99,7 @@ void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
 	}
 
 	RemoveFixtureFromMap();
+	DestroyStaticCollider();
 
 	attachedRigidBody = rigidBody;
 
@@ -138,9 +116,6 @@ void BoxCollider::AttachRigidBody(RigidBody* rigidBody) {
 	boxFixture.density = 1.0f;
 	boxFixture.friction = 0.3f;
 	m_Fixture = attachedRigidBody->m_Body->CreateFixture(&boxFixture);
-
-	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
-	m_StaticBody.reset();
 
 	AddFixtureToMap();
 }
@@ -171,8 +146,7 @@ void BoxCollider::DeatachRigidBody() {
 	boxBody.position.Set(newPosition.x, newPosition.y);
 	boxBody.angle = -transform->rotation * M_PI / 180.0;
 
-	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&boxBody);
-	m_Fixture = (*m_StaticBody)->CreateFixture(&boxFixture);
+	CreateStaticCollider(&boxBody, &boxFixture);
 	m_CurrentPosition = transform->position;
 
 	AddFixtureToMap();

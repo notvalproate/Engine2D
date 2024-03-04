@@ -7,7 +7,23 @@ Collider::Collider(GameObject* gameObj)
 }
 
 Collider::~Collider() {
+	RemoveFixtureFromMap();
 
+	if (attachedRigidBody) {
+		auto& rbColliders = attachedRigidBody->m_AttachedColliders;
+
+		for (size_t i = 0; i < rbColliders.size(); i++) {
+			if (rbColliders[i] == this) {
+				rbColliders.erase(rbColliders.begin() + i);
+				break;
+			}
+		}
+
+		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+	}
+	else {
+		gameObject->scene->m_PhysicsWorld.get()->DestroyBody((*m_StaticBody));
+	}
 }
 
 void Collider::Update() {
@@ -39,4 +55,20 @@ void Collider::RemoveFixtureFromMap() {
 
 void Collider::AddFixtureToMap() {
 	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
+}
+
+void Collider::CreateColliderOnRigidBody(const b2FixtureDef* fixtureDef) {
+	m_Fixture = attachedRigidBody->m_Body->CreateFixture(fixtureDef);
+	attachedRigidBody->AttachCollider(this);
+}
+
+void Collider::CreateStaticCollider(const b2BodyDef* bodyDef, const b2FixtureDef* fixtureDef) {
+	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(bodyDef);
+	m_Fixture = (*m_StaticBody)->CreateFixture(fixtureDef);
+}
+
+void Collider::DestroyStaticCollider() {
+	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
+	m_StaticBody.reset();
+	m_Fixture = nullptr;
 }
