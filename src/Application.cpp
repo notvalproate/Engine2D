@@ -286,7 +286,6 @@ class Controller : public Behaviour {
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
 			test = gameObject->AddComponent<BoxCollider>();
-			test->SetTransform(Vector2D(1, 1.5), Vector2D(3, -0.25), 0);
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_L)) {
@@ -334,8 +333,6 @@ public:
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
-		playerCollider->SetTransform(Vector2D(1, 1.5), Vector2D(0, -0.25), 10);
-		
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		

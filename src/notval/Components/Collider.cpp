@@ -1,9 +1,15 @@
 #include "Components.hpp"
 
 Collider::Collider(GameObject* gameObj) 
-	: Behaviour(gameObj), attachedRigidBody(nullptr), m_Fixture(nullptr), m_Offset(0, 0), m_Rotation(0), m_CurrentPosition(gameObj->transform.position), m_StaticBody(nullptr) 
+	: Behaviour(gameObj), 
+	attachedRigidBody(nullptr),
+	m_Fixture(nullptr),
+	m_Offset(0, 0),
+	m_Rotation(gameObj->transform.rotation), 
+	m_CurrentPosition(gameObj->transform.position), 
+	m_StaticBody(nullptr)
 {
-
+	
 }
 
 Collider::~Collider() {
@@ -26,6 +32,24 @@ Collider::~Collider() {
 	}
 }
 
+void Collider::Awake() {
+	b2Shape* boxShape = GetShape(true);
+
+	attachedRigidBody = gameObject->GetComponentInParent<RigidBody>();
+
+	if (attachedRigidBody != nullptr) {
+		CreateColliderOnRigidBody(boxShape);
+		attachedRigidBody->AttachCollider(this);
+	}
+	else {
+		CreateStaticCollider(boxShape);
+	}
+
+	delete boxShape;
+
+	AddFixtureToMap();
+}
+
 void Collider::Update() {
 	if (attachedRigidBody) {
 		return;
@@ -43,6 +67,31 @@ void Collider::UpdateStaticPosition() {
 	m_CurrentPosition = transform->position;
 }
 
+void Collider::ResetShape() {
+	RemoveFixtureFromMap();
+
+	if (attachedRigidBody) {
+		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+
+		b2Shape* boxShape = GetShape(true);
+
+		CreateColliderOnRigidBody(boxShape);
+
+		delete boxShape;
+	}
+	else {
+		DestroyStaticCollider();
+
+		b2Shape* boxShape = GetShape();
+
+		CreateStaticCollider(boxShape);
+
+		delete boxShape;
+	}
+
+	AddFixtureToMap();
+}
+
 void Collider::RemoveFixtureFromMap() const {
 	auto& sceneColliderMap = gameObject->scene->m_FixtureColliderMap;
 
@@ -57,14 +106,61 @@ void Collider::AddFixtureToMap() {
 	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
 }
 
-void Collider::CreateColliderOnRigidBody(const b2FixtureDef* fixtureDef) {
-	m_Fixture = attachedRigidBody->m_Body->CreateFixture(fixtureDef);
+void Collider::AttachRigidBody(RigidBody* rigidBody) {
+	if (attachedRigidBody) {
+		return;
+	}
+
+	RemoveFixtureFromMap();
+	DestroyStaticCollider();
+
+	attachedRigidBody = rigidBody;
+
+	b2Shape* shape = GetShape(true);
+
+	CreateColliderOnRigidBody(shape);
+
+	delete shape;
+
 	attachedRigidBody->AttachCollider(this);
+	AddFixtureToMap();
 }
 
-void Collider::CreateStaticCollider(const b2BodyDef* bodyDef, const b2FixtureDef* fixtureDef) {
-	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(bodyDef);
-	m_Fixture = (*m_StaticBody)->CreateFixture(fixtureDef);
+void Collider::DeatachRigidBody() {
+	RemoveFixtureFromMap();
+
+	attachedRigidBody = nullptr;
+
+	b2Shape* shape = GetShape(false);
+
+	CreateStaticCollider(shape);
+
+	delete shape;
+
+	m_CurrentPosition = transform->position;
+
+	AddFixtureToMap();
+}
+
+void Collider::CreateColliderOnRigidBody(const b2Shape* colShape) {
+	b2FixtureDef fixture;
+	fixture.shape = colShape;
+	fixture.density = 1.0f;
+	fixture.friction = 0.3f;
+
+	m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
+}
+
+void Collider::CreateStaticCollider(const b2Shape* colShape) {
+	b2BodyDef body = GetStaticBodyDef();
+
+	b2FixtureDef fixture;
+	fixture.shape = colShape;
+	fixture.density = 1.0f;
+	fixture.friction = 0.3f;
+
+	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
+	m_Fixture = (*m_StaticBody)->CreateFixture(&fixture);
 }
 
 void Collider::DestroyStaticCollider() {

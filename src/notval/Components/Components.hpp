@@ -83,6 +83,7 @@ private:
 
 	friend class GameObject;
 	friend class Collider;
+	friend class BoxCollider;
 	friend class Scene;
 };
 
@@ -95,19 +96,22 @@ public:
 protected:
 	Collider(GameObject* gameObj);
 
+	void Awake() override;
 	void Update() override;
 	void UpdateStaticPosition();
+	void ResetShape();
 	void RemoveFixtureFromMap() const;
 	void AddFixtureToMap();
 
-	virtual void AttachRigidBody(RigidBody* rigidBody) = 0;
-	virtual void DeatachRigidBody() = 0;
+	void AttachRigidBody(RigidBody* rigidBody);
+	void DeatachRigidBody();
 
-	void CreateColliderOnRigidBody(const b2FixtureDef* fixtureDef);
-	void CreateStaticCollider(const b2BodyDef* bodyDef, const b2FixtureDef* fixtureDef);
+	void CreateColliderOnRigidBody(const b2Shape* colShape);
+	void CreateStaticCollider(const b2Shape* colShape);
 	void DestroyStaticCollider();
-
 	b2BodyDef GetStaticBodyDef() const;
+
+	virtual b2Shape* GetShape(bool useOffset = false) = 0;
 
 	b2Fixture* m_Fixture;
 	Vector2D m_Offset;
@@ -132,8 +136,7 @@ private:
 	BoxCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
-	void AttachRigidBody(RigidBody* rigidBody);
-	void DeatachRigidBody();
+	b2Shape* GetShape(bool useOffset = false) override;
 
 	Vector2D m_Dimensions;
 
