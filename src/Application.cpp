@@ -332,7 +332,7 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
