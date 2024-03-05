@@ -83,21 +83,22 @@ private:
 
 	friend class GameObject;
 	friend class Collider;
-	friend class BoxCollider;
 	friend class Scene;
 };
 
 // All colliders must inherit from this class.
 class Collider : public Behaviour {
 public:
+	Vector2D GetCenter() const { return transform->position + m_Offset; }
+
 	virtual ~Collider();
 
 	RigidBody* attachedRigidBody;
 protected:
 	Collider(GameObject* gameObj);
 
-	void Awake() override;
-	void Update() override;
+	void Awake() override final;
+	void Update() override final;
 	void UpdateStaticPosition();
 	void ResetShape();
 	void RemoveFixtureFromMap() const;
@@ -128,7 +129,6 @@ protected:
 class BoxCollider final : public Collider {
 public:
 	void SetTransform(const Vector2D& dimensions, const Vector2D& offset, const double rotation);
-	Vector2D GetCenter() const { return transform->position + m_Offset; }
 	Vector2D GetSize() const { return m_Dimensions; }
 
 private:
@@ -138,6 +138,23 @@ private:
 	b2Shape* GetShape(bool useOffset = false) override;
 
 	Vector2D m_Dimensions;
+
+	friend class GameObject;
+	friend class RigidBody;
+};
+
+class CircleCollider final : public Collider {
+public:
+	void SetTransform(const double radius, const Vector2D& offset, const double rotation);
+	double GetRadius() const { return m_Radius; }
+
+private:
+	CircleCollider(GameObject* gameObj);
+	std::unique_ptr<Component> Clone() const;
+
+	b2Shape* GetShape(bool useOffset = false) override;
+
+	double m_Radius;
 
 	friend class GameObject;
 	friend class RigidBody;
