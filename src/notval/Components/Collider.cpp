@@ -70,7 +70,6 @@ void Collider::UpdateStaticPosition() {
 void Collider::ResetShape() {
 	RemoveFixtureFromMap();
 
-	
 	if (attachedRigidBody) {
 		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 
@@ -145,8 +144,6 @@ void Collider::DeatachRigidBody() {
 }
 
 void Collider::CreateColliderOnRigidBody(const b2Shape* colShape) {
-	float oldMass = attachedRigidBody->GetMass();
-
 	b2FixtureDef fixture;
 	fixture.shape = colShape;
 	fixture.density = 1.0f;
@@ -154,7 +151,7 @@ void Collider::CreateColliderOnRigidBody(const b2Shape* colShape) {
 
 	m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
 
-	attachedRigidBody->SetMass(oldMass);
+	attachedRigidBody->SetMass(attachedRigidBody->GetMass());
 }
 
 void Collider::CreateStaticCollider(const b2Shape* colShape) {

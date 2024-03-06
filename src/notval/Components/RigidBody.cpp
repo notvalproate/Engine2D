@@ -1,6 +1,6 @@
 #include "Components.hpp"
 
-RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_AttachedColliders({}), m_SensorFixture(nullptr) {
+RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_Mass(1), m_AttachedColliders({}), m_SensorFixture(nullptr) {
 	b2BodyDef boxBody;
 	boxBody.type = b2_dynamicBody;
 	boxBody.position.Set(transform->position.x, transform->position.y);
@@ -57,7 +57,11 @@ void RigidBody::AddTorque(const double force) {
 }
 
 void RigidBody::SetMass(const float mass) {
+	m_Mass = mass;
+
 	float totalArea = 0;
+
+	// TRY TO CACHE THE TOTAL AREA SO ITS FASTER TO SET TRANSFORM AND SET MASS EVERY FRAME
 
 	for (b2Fixture* fixture = m_Body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
 		b2MassData massData;
@@ -66,7 +70,7 @@ void RigidBody::SetMass(const float mass) {
 		totalArea += massData.mass / fixture->GetDensity();
 	}
 
-	float newDensity = (totalArea == 0 ? 0 : mass / totalArea); 
+	float newDensity = (totalArea == 0 ? 1 : mass / totalArea); 
 
 	for (b2Fixture* fixture = m_Body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
 		fixture->SetDensity(newDensity);
@@ -112,7 +116,7 @@ void RigidBody::Sleep() {
 }
 
 float RigidBody::GetMass() const {
-	return m_Body->GetMass();
+	return m_Mass;
 }
 
 Vector2D RigidBody::GetVelocity() const {
