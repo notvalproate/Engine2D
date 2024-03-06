@@ -151,7 +151,7 @@ void Collider::CreateColliderOnRigidBody(const b2Shape* colShape) {
 
 	m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
 
-	attachedRigidBody->SetMass(attachedRigidBody->GetMass());
+	attachedRigidBody->SetMass(attachedRigidBody->m_Mass);
 }
 
 void Collider::CreateStaticCollider(const b2Shape* colShape) {

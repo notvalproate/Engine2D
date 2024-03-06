@@ -283,7 +283,6 @@ class Controller : public Behaviour {
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
-			// Limit reached for circle points
 			test->SetTransform(radius += 0.1, Vector2D::zero, 0);
 		}
 		
@@ -333,8 +332,6 @@ public:
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
-		auto playerCollider2 = PlayerObject->AddComponent<CircleCollider>();
-		playerCollider2->SetTransform(0.5, Vector2D(3, 0), 0);
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
