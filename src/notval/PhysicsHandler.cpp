@@ -33,7 +33,7 @@ void PhysicsHandler::RenderColliders() const {
 				b2CircleShape* circle = dynamic_cast<b2CircleShape*>(shape);
 
 				if (circle) {
-					Object::RenderingPipeline.RenderCircle(Vector2D(circle->m_p + bodyList->GetPosition()), circle->m_radius, Color(0, 255, 0));
+					Object::RenderingPipeline.RenderCircle(Vector2D(bodyList->GetWorldPoint(circle->m_p)), circle->m_radius, Color(0, 255, 0));
 				}
 			}
 		}

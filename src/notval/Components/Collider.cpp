@@ -70,6 +70,7 @@ void Collider::UpdateStaticPosition() {
 void Collider::ResetShape() {
 	RemoveFixtureFromMap();
 
+	
 	if (attachedRigidBody) {
 		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 
@@ -88,6 +89,7 @@ void Collider::ResetShape() {
 
 		delete boxShape;
 	}
+
 
 	AddFixtureToMap();
 }
