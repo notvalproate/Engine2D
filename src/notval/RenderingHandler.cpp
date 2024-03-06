@@ -107,14 +107,14 @@ void RenderingHandler::RenderCircle(const Vector2D& center, const double radius,
 
 	// Circle Rendering Algorithm using Midpoint Circle Algorithm
 	// Scotty Stephens & JanSordid: https://stackoverflow.com/a/48291620 & https://stackoverflow.com/a/74745126
-	const int vecSize = RoundUpToMultipleOfEight(radius * 8 * 35 / 49);
+	Vector2D screenCenter = currentCamera->WorldToScreenPoint(center);
+	double screenRadius = radius * currentCamera->GetPixelsPerUnit();
+
+	const int vecSize = RoundUpToMultipleOfEight(screenRadius * 8 * 35 / 49);
 
 	if (vecSize > m_CirclePoints.size()) {
 		m_CirclePoints.resize(vecSize);
 	}
-
-	Vector2D screenCenter = currentCamera->WorldToScreenPoint(center);
-	double screenRadius = radius * currentCamera->GetPixelsPerUnit();
 
 	int drawCount = 0;
 
