@@ -782,7 +782,7 @@ private:
 
     SDL_Renderer* m_Renderer;
     std::vector<std::string> m_AvailableSortingLayers;
-    mutable std::vector<SDL_Point> m_CirclePoints;
+    mutable std::vector<SDL_Point> m_CirclePointsReserve;
 
     friend class Object;
     friend class GameObject;

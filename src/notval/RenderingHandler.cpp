@@ -1,6 +1,6 @@
 #include "Core.hpp"
 
-RenderingHandler::RenderingHandler() : m_Renderer(nullptr), m_AvailableSortingLayers({ "Default" }), m_CirclePoints(1000) { }
+RenderingHandler::RenderingHandler() : m_Renderer(nullptr), m_AvailableSortingLayers({ "Default" }), m_CirclePointsReserve(1000) { }
 
 bool RenderingHandler::InitRenderer() {
 	if (!(m_Renderer = SDL_CreateRenderer(Object::Screen.m_Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE))) {
@@ -112,8 +112,8 @@ void RenderingHandler::RenderCircle(const Vector2D& center, const double radius,
 
 	const int vecSize = RoundUpToMultipleOfEight(screenRadius * 8 * 35 / 49);
 
-	if (vecSize > m_CirclePoints.size()) {
-		m_CirclePoints.resize(vecSize);
+	if (vecSize > m_CirclePointsReserve.size()) {
+		m_CirclePointsReserve.resize(vecSize);
 	}
 
 	int drawCount = 0;
@@ -129,14 +129,14 @@ void RenderingHandler::RenderCircle(const Vector2D& center, const double radius,
 	int error = tx - diameter;
 
 	while (x >= y) {
-		m_CirclePoints.at(drawCount++) = { centerX + x, centerY - y };
-		m_CirclePoints.at(drawCount++) = { centerX + x, centerY + y };
-		m_CirclePoints.at(drawCount++) = { centerX - x, centerY - y };
-		m_CirclePoints.at(drawCount++) = { centerX - x, centerY + y };
-		m_CirclePoints.at(drawCount++) = { centerX + y, centerY - x };
-		m_CirclePoints.at(drawCount++) = { centerX + y, centerY + x };
-		m_CirclePoints.at(drawCount++) = { centerX - y, centerY - x };
-		m_CirclePoints.at(drawCount++) = { centerX - y, centerY + x };
+		m_CirclePointsReserve.at(drawCount++) = { centerX + x, centerY - y };
+		m_CirclePointsReserve.at(drawCount++) = { centerX + x, centerY + y };
+		m_CirclePointsReserve.at(drawCount++) = { centerX - x, centerY - y };
+		m_CirclePointsReserve.at(drawCount++) = { centerX - x, centerY + y };
+		m_CirclePointsReserve.at(drawCount++) = { centerX + y, centerY - x };
+		m_CirclePointsReserve.at(drawCount++) = { centerX + y, centerY + x };
+		m_CirclePointsReserve.at(drawCount++) = { centerX - y, centerY - x };
+		m_CirclePointsReserve.at(drawCount++) = { centerX - y, centerY + x };
 
 		if (error <= 0) {
 			++y;
@@ -151,7 +151,7 @@ void RenderingHandler::RenderCircle(const Vector2D& center, const double radius,
 		}
 	}
 
-	SDL_RenderDrawPoints(m_Renderer, &m_CirclePoints[0], drawCount);
+	SDL_RenderDrawPoints(m_Renderer, &m_CirclePointsReserve[0], drawCount);
 
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }

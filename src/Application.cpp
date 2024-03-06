@@ -244,11 +244,12 @@ class Controller : public Behaviour {
 
 		rb = gameObject->GetComponent<RigidBody>();
 		rb->SetMass(1);
-		rb->drag = 1;
-		rb->angularDrag = 1;
+		//rb->drag = 1;
+		//rb->angularDrag = 1;
 
 		test = gameObject->GetComponent<CircleCollider>();
 		radius = test->GetRadius();
+		test->SetBounciness(1);
 	}
 
 	void Update() {
@@ -332,6 +333,11 @@ public:
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
+
+		//auto testObj = CreateGameObject("Test");
+		//testObj->transform.Translate(Vector2D::down * 2);
+		//testObj->AddComponent<RigidBody>();
+		//testObj->AddComponent<BoxCollider>();
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		

@@ -1,5 +1,7 @@
 #include "Components.hpp"
 
+// CIRCLE COLLIDER BOUNCES, BUT NOT WHEN SLOW.
+// BOX COLLIDER DOESNT BOUNCE AT ALL
 Collider::Collider(GameObject* gameObj) 
 	: Behaviour(gameObj), 
 	attachedRigidBody(nullptr),
@@ -32,6 +34,14 @@ Collider::~Collider() {
 	}
 }
 
+void Collider::SetBounciness(const double bounciness) {
+	m_Fixture->SetRestitution(bounciness);
+}
+
+double Collider::GetBounciness() const {
+	return m_Fixture->GetRestitutionThreshold();
+}
+
 void Collider::Awake() {
 	b2Shape* boxShape = GetShape(true);
 
@@ -40,6 +50,7 @@ void Collider::Awake() {
 	if (attachedRigidBody != nullptr) {
 		CreateColliderOnRigidBody(boxShape);
 		attachedRigidBody->AttachCollider(this);
+		m_Fixture->SetRestitutionThreshold(0.01);
 	}
 	else {
 		CreateStaticCollider(boxShape);
@@ -88,7 +99,6 @@ void Collider::ResetShape() {
 
 		delete boxShape;
 	}
-
 
 	AddFixtureToMap();
 }

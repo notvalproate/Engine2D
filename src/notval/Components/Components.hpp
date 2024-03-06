@@ -90,9 +90,12 @@ private:
 // All colliders must inherit from this class.
 class Collider : public Behaviour {
 public:
-	Vector2D GetCenter() const { return transform->position + m_Offset; }
-
 	virtual ~Collider();
+
+	void SetBounciness(const double bounciness);
+
+	Vector2D GetCenter() const { return transform->position + m_Offset; }
+	double GetBounciness() const;
 
 	RigidBody* attachedRigidBody;
 protected:
