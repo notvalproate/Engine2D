@@ -246,6 +246,9 @@ class Controller : public Behaviour {
 		rb->SetMass(1);
 		rb->drag = 1;
 		rb->angularDrag = 1;
+
+		test = gameObject->GetComponent<CircleCollider>();
+		radius = test->GetRadius();
 	}
 
 	void Update() {
@@ -278,14 +281,9 @@ class Controller : public Behaviour {
 			direction.y = -direction.y;
 			rb->AddForce(direction * 2);
 		}
-
-		if (Input.GetKeyDown(SDL_SCANCODE_K)) {
-			Destroy(test);
-			test = nullptr;
-		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
-			test = gameObject->AddComponent<BoxCollider>();
+			test->SetTransform(radius += 0.1, Vector2D::zero, 0);
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_L)) {
@@ -296,8 +294,9 @@ class Controller : public Behaviour {
 	
 	Camera* mainCamera;
 	RigidBody* rb;
-	BoxCollider* test;
+	CircleCollider* test;
 	CustomCursor* mcCursor;
+	double radius;
 };
 
 class TestScene : public Scene {
@@ -373,7 +372,7 @@ public:
 	using Engine2D::Engine2D;
 
 	void SetupGame() override {
-		RenderingPipeline.SetRendererVsync(true);
+		RenderingPipeline.SetRendererVsync(true); 
 
 		RenderingPipeline.AddSortingLayer("Background");
 		RenderingPipeline.AddSortingLayer("Player");

@@ -1,6 +1,6 @@
 #include "Core.hpp"
 
-RenderingHandler::RenderingHandler() : m_Renderer(nullptr), m_AvailableSortingLayers({ "Default" }) { }
+RenderingHandler::RenderingHandler() : m_Renderer(nullptr), m_AvailableSortingLayers({ "Default" }), m_CirclePoints(1000) { }
 
 bool RenderingHandler::InitRenderer() {
 	if (!(m_Renderer = SDL_CreateRenderer(Object::Screen.m_Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE))) {
@@ -89,6 +89,70 @@ void RenderingHandler::RenderRect(const Vector2D& position, const Vector2D& dime
 
 	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderDrawRect(m_Renderer, &rect);
+	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
+}
+
+int RenderingHandler::RoundUpToMultipleOfEight(const int v) const {
+	return (v + (8 - 1)) & -8;
+}
+
+void RenderingHandler::RenderCircle(const Vector2D& center, const double radius, const Color color) const {
+	Camera* currentCamera = Object::SceneManager.GetCurrentCamera();
+
+	if (!currentCamera) {
+		return;
+	}
+
+	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+
+	// Circle Rendering Algorithm using Midpoint Circle Algorithm
+	// Scotty Stephens & JanSordid: https://stackoverflow.com/a/48291620 & https://stackoverflow.com/a/74745126
+	const int vecSize = RoundUpToMultipleOfEight(radius * 8 * 35 / 49);
+
+	if (vecSize > m_CirclePoints.size()) {
+		m_CirclePoints.resize(vecSize);
+	}
+
+	Vector2D screenCenter = currentCamera->WorldToScreenPoint(center);
+	double screenRadius = radius * currentCamera->GetPixelsPerUnit();
+
+	int drawCount = 0;
+
+	const int diameter = screenRadius * 2;
+	const int centerX = screenCenter.x;
+	const int centerY = screenCenter.y;
+
+	int x = screenRadius - 1;
+	int y = 0;
+	int tx = 1;
+	int ty = 1;
+	int error = tx - diameter;
+
+	while (x >= y) {
+		m_CirclePoints.at(drawCount++) = { centerX + x, centerY - y };
+		m_CirclePoints.at(drawCount++) = { centerX + x, centerY + y };
+		m_CirclePoints.at(drawCount++) = { centerX - x, centerY - y };
+		m_CirclePoints.at(drawCount++) = { centerX - x, centerY + y };
+		m_CirclePoints.at(drawCount++) = { centerX + y, centerY - x };
+		m_CirclePoints.at(drawCount++) = { centerX + y, centerY + x };
+		m_CirclePoints.at(drawCount++) = { centerX - y, centerY - x };
+		m_CirclePoints.at(drawCount++) = { centerX - y, centerY + x };
+
+		if (error <= 0) {
+			++y;
+			error += ty;
+			ty += 2;
+		}
+
+		if (error > 0) {
+			--x;
+			tx += 2;
+			error += (tx - diameter);
+		}
+	}
+
+	SDL_RenderDrawPoints(m_Renderer, &m_CirclePoints[0], drawCount);
+
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }
 

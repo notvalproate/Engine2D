@@ -764,6 +764,7 @@ public:
     void RenderPoint(const Vector2D& point, const uint8_t width, const Color color) const;
     void RenderLine(const Vector2D& src, const Vector2D& dest, const Color color) const;
     void RenderRect(const Vector2D& position, const Vector2D& dimensions, const Color color) const;
+    void RenderCircle(const Vector2D& position, const double radius, const Color color) const;
     void RenderSprite(SDL_Texture* texture, const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform) const;
     void AddSortingLayer(const std::string& name);
 
@@ -777,9 +778,11 @@ private:
     SDL_FRect GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform, const Camera* currentCamera) const;
     void GetFlipAndRotation(const Transform* transform, double& rotation, SDL_RendererFlip& flipFlag) const;
     const std::vector<std::string>& GetAvailableSortingLayers() const;
+    int RoundUpToMultipleOfEight(const int v) const;
 
     SDL_Renderer* m_Renderer;
     std::vector<std::string> m_AvailableSortingLayers;
+    mutable std::vector<SDL_Point> m_CirclePoints;
 
     friend class Object;
     friend class GameObject;
