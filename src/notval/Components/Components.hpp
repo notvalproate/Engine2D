@@ -89,6 +89,15 @@ private:
 	friend class Scene;
 };
 
+struct Bounds {
+public:
+	Vector2D center;
+	Vector2D extents;
+	Vector2D max;
+	Vector2D min;
+	Vector2D size;
+};
+
 // All colliders must inherit from this class.
 class Collider : public Behaviour {
 public:
@@ -101,6 +110,7 @@ public:
 
 	Vector2D GetCenter() const { return transform->position + m_Offset; }
 	Vector2D GetOffset() const { return m_Offset; }
+	Bounds GetBounds() const { return m_BoundingBox; }
 	double GetDensity() const;
 	double GetFriction(const double bounciness) const;
 	double GetBounciness() const;
@@ -112,6 +122,7 @@ protected:
 
 	void Awake() override final;
 	void Update() override final;
+	void UpdateBounds();
 	void UpdateStaticPosition();
 	void ResetShape();
 	void ResetDensity();
@@ -132,6 +143,9 @@ protected:
 	b2Fixture* m_Fixture;
 	Vector2D m_Offset;
 	double m_Rotation;
+
+	Bounds m_BoundingBox;
+
 	double m_Density;
 	double m_Friction;
 	double m_Bounciness;

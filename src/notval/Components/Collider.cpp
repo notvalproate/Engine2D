@@ -102,6 +102,8 @@ void Collider::Awake() {
 }
 
 void Collider::Update() {
+	UpdateBounds();
+
 	if (attachedRigidBody) {
 		return;
 	}
@@ -109,6 +111,15 @@ void Collider::Update() {
 	if (m_CurrentPosition != transform->position) {
 		UpdateStaticPosition();
 	}
+}
+
+void Collider::UpdateBounds() {
+	b2AABB boundingBox = m_Fixture->GetAABB(0);
+	m_BoundingBox.center = boundingBox.GetCenter();
+	m_BoundingBox.extents = boundingBox.GetExtents();
+	m_BoundingBox.max = m_BoundingBox.center + m_BoundingBox.extents;
+	m_BoundingBox.min = m_BoundingBox.center - m_BoundingBox.extents;
+	m_BoundingBox.size = m_BoundingBox.extents * 2;
 }
 
 void Collider::UpdateStaticPosition() {

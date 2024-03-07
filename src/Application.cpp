@@ -243,10 +243,9 @@ class Controller : public Behaviour {
 		mcCursor = new CustomCursor("assets/cursor.png", Vector2D::zero);
 
 		rb = gameObject->GetComponent<RigidBody>();
-		//rb->drag = 1;
-		//rb->angularDrag = 1;
-
 		test = gameObject->GetComponent<CircleCollider>();
+		test->SetBounciness(0.8);
+		// FIX BOUNCINESS THRESHOLD NOT WOKRING
 	}
 
 	void Update() {
