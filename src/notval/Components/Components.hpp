@@ -43,6 +43,7 @@ public:
 	void AddTorque(const double force);
 
 	void SetMass(const float mass);
+	void SetAutoMass(const bool use);
 	void SetVelocity(const Vector2D& vel);
 	void SetAngularVelocity(const float vel);
 	void SetPosition(const Vector2D& pos);
@@ -79,6 +80,7 @@ private:
 
 	b2Body* m_Body;
 	double m_Mass;
+	bool m_AutoMassEnabled;
 	std::vector<Collider*> m_AttachedColliders;
 	std::optional<b2Fixture*> m_SensorFixture;
 
@@ -92,12 +94,15 @@ class Collider : public Behaviour {
 public:
 	virtual ~Collider();
 
+	void SetDensity(const double density);
 	void SetFriction(const double friction);
 	void SetBounciness(const double bounciness);
 	void SetBouncinessThreshold(const double threshold);
 
 	Vector2D GetCenter() const { return transform->position + m_Offset; }
-	double GetFriction(const double bounciness);
+	Vector2D GetOffset() const { return m_Offset; }
+	double GetDensity() const;
+	double GetFriction(const double bounciness) const;
 	double GetBounciness() const;
 	double GetBouncinessThreshold() const;
 
@@ -109,6 +114,7 @@ protected:
 	void Update() override final;
 	void UpdateStaticPosition();
 	void ResetShape();
+	void ResetDensity();
 	void RemoveFixtureFromMap() const;
 	void AddFixtureToMap();
 
@@ -126,6 +132,7 @@ protected:
 	b2Fixture* m_Fixture;
 	Vector2D m_Offset;
 	double m_Rotation;
+	double m_Density;
 	double m_Friction;
 	double m_Bounciness;
 	double m_BouncinessThreshold;

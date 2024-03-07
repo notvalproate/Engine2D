@@ -1,6 +1,6 @@
 #include "Components.hpp"
 
-RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_Mass(1), m_AttachedColliders({}), m_SensorFixture(nullptr) {
+RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_Mass(1), m_AutoMassEnabled(false), m_AttachedColliders({}), m_SensorFixture(nullptr) {
 	b2BodyDef boxBody;
 	boxBody.type = b2_dynamicBody;
 	boxBody.position.Set(transform->position.x, transform->position.y);
@@ -57,6 +57,10 @@ void RigidBody::AddTorque(const double force) {
 }
 
 void RigidBody::SetMass(const float mass) {
+	if (m_AutoMassEnabled) {
+		return;
+	}
+
 	m_Mass = mass;
 
 	float totalArea = 0;
@@ -77,6 +81,22 @@ void RigidBody::SetMass(const float mass) {
 	}
 
 	m_Body->ResetMassData();
+}
+
+void RigidBody::SetAutoMass(const bool use) {
+	if (use && !m_AutoMassEnabled) {
+		for (auto& collider : m_AttachedColliders) {
+			collider->ResetDensity();
+		}
+		m_Body->ResetMassData();
+		m_AutoMassEnabled = true;
+		return;
+	}
+
+	if (!use && m_AutoMassEnabled){
+		SetMass(m_Mass);
+		m_AutoMassEnabled = false;
+	}
 }
 
 void RigidBody::SetVelocity(const Vector2D& vel) {

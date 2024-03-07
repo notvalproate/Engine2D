@@ -243,13 +243,10 @@ class Controller : public Behaviour {
 		mcCursor = new CustomCursor("assets/cursor.png", Vector2D::zero);
 
 		rb = gameObject->GetComponent<RigidBody>();
-		rb->SetMass(1);
 		//rb->drag = 1;
 		//rb->angularDrag = 1;
 
 		test = gameObject->GetComponent<CircleCollider>();
-		radius = test->GetRadius();
-		test->SetBounciness(0.95);
 	}
 
 	void Update() {
@@ -284,7 +281,8 @@ class Controller : public Behaviour {
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
-			test->SetTransform(radius += 0.1, Vector2D::zero, 0);
+			test->SetDensity(1.0f);
+			rb->SetAutoMass(true);
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_L)) {

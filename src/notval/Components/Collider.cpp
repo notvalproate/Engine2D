@@ -8,6 +8,7 @@ Collider::Collider(GameObject* gameObj)
 	m_Fixture(nullptr),
 	m_Offset(0, 0),
 	m_Rotation(0),
+	m_Density(1.0f),
 	m_Friction(0.3f),
 	m_Bounciness(0),
 	m_BouncinessThreshold(0.2),
@@ -37,6 +38,20 @@ Collider::~Collider() {
 	}
 }
 
+void Collider::SetDensity(const double density) {
+	if (density <= 0) {
+		m_Density = 1.0f;
+	}
+	else {
+		m_Density = density;
+	}
+
+	if (attachedRigidBody->m_AutoMassEnabled) {
+		m_Fixture->SetDensity(m_Density);
+		attachedRigidBody->m_Body->ResetMassData();
+	}
+}
+
 void Collider::SetFriction(const double friction) {
 	m_Friction = friction;
 	m_Fixture->SetFriction(friction);
@@ -52,16 +67,20 @@ void Collider::SetBouncinessThreshold(const double threshold) {
 	m_Fixture->SetRestitutionThreshold(threshold);
 }
 
+double Collider::GetDensity() const {
+	return m_Density;
+}
+
+double Collider::GetFriction(const double bounciness) const {
+	return m_Friction;
+}
+
 double Collider::GetBounciness() const {
 	return m_Bounciness;
 }
 
 double Collider::GetBouncinessThreshold() const {
 	return m_BouncinessThreshold;
-}
-
-double Collider::GetFriction(const double bounciness) {
-	return m_Friction;
 }
 
 void Collider::Awake() {
@@ -122,6 +141,10 @@ void Collider::ResetShape() {
 	}
 
 	AddFixtureToMap();
+}
+
+void Collider::ResetDensity() {
+	m_Fixture->SetDensity(m_Density);
 }
 
 void Collider::RemoveFixtureFromMap() const {
@@ -210,7 +233,7 @@ b2BodyDef Collider::GetStaticBodyDef() const {
 b2FixtureDef Collider::GetFixtureDef(const b2Shape* colShape) const {
 	b2FixtureDef fixture;
 	fixture.shape = colShape;
-	fixture.density = 1.0f;
+	fixture.density = m_Density;
 	fixture.friction = m_Friction;
 	fixture.restitutionThreshold = m_BouncinessThreshold;
 	fixture.restitution = m_Bounciness;
