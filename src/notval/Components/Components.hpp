@@ -92,10 +92,12 @@ class Collider : public Behaviour {
 public:
 	virtual ~Collider();
 
+	void SetFriction(const double friction);
 	void SetBounciness(const double bounciness);
 	void SetBouncinessThreshold(const double threshold);
 
 	Vector2D GetCenter() const { return transform->position + m_Offset; }
+	double GetFriction(const double bounciness);
 	double GetBounciness() const;
 	double GetBouncinessThreshold() const;
 
@@ -124,6 +126,7 @@ protected:
 	b2Fixture* m_Fixture;
 	Vector2D m_Offset;
 	double m_Rotation;
+	double m_Friction;
 	double m_Bounciness;
 	double m_BouncinessThreshold;
 

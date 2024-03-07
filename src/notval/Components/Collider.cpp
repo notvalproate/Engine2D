@@ -2,13 +2,15 @@
 
 // CIRCLE COLLIDER BOUNCES, BUT NOT WHEN SLOW.
 // BOX COLLIDER DOESNT BOUNCE AT ALL
-Collider::Collider(GameObject* gameObj) 
-	: Behaviour(gameObj), 
+Collider::Collider(GameObject* gameObj)
+	: Behaviour(gameObj),
 	attachedRigidBody(nullptr),
 	m_Fixture(nullptr),
 	m_Offset(0, 0),
-	m_Rotation(0), 
+	m_Rotation(0),
+	m_Friction(0.3f),
 	m_Bounciness(0),
+	m_BouncinessThreshold(0.2),
 	m_CurrentPosition(gameObj->transform.position), 
 	m_StaticBody(nullptr)
 {
@@ -35,6 +37,11 @@ Collider::~Collider() {
 	}
 }
 
+void Collider::SetFriction(const double friction) {
+	m_Friction = friction;
+	m_Fixture->SetFriction(friction);
+}
+
 void Collider::SetBounciness(const double bounciness) {
 	m_Bounciness = bounciness;
 	m_Fixture->SetRestitution(bounciness);
@@ -51,6 +58,10 @@ double Collider::GetBounciness() const {
 
 double Collider::GetBouncinessThreshold() const {
 	return m_BouncinessThreshold;
+}
+
+double Collider::GetFriction(const double bounciness) {
+	return m_Friction;
 }
 
 void Collider::Awake() {
@@ -200,8 +211,8 @@ b2FixtureDef Collider::GetFixtureDef(const b2Shape* colShape) const {
 	b2FixtureDef fixture;
 	fixture.shape = colShape;
 	fixture.density = 1.0f;
-	fixture.friction = 0.3f;
-	fixture.restitutionThreshold = 0.2f;
+	fixture.friction = m_Friction;
+	fixture.restitutionThreshold = m_BouncinessThreshold;
 	fixture.restitution = m_Bounciness;
 
 	return fixture;
