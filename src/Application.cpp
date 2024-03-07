@@ -249,7 +249,7 @@ class Controller : public Behaviour {
 
 		test = gameObject->GetComponent<CircleCollider>();
 		radius = test->GetRadius();
-		test->SetBounciness(1);
+		test->SetBounciness(0.95);
 	}
 
 	void Update() {
@@ -272,7 +272,7 @@ class Controller : public Behaviour {
 		if (Input.GetKey(SDL_SCANCODE_P)) {
 			transform->Translate(Vector2D::up * Time.GetDeltaTime());
 		}
-		
+
 		if (Input.GetKey(SDL_SCANCODE_G)) {
 			Cursor.SetCursor(*mcCursor);
 		}

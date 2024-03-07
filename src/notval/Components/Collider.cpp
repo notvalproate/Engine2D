@@ -8,6 +8,7 @@ Collider::Collider(GameObject* gameObj)
 	m_Fixture(nullptr),
 	m_Offset(0, 0),
 	m_Rotation(0), 
+	m_Bounciness(0),
 	m_CurrentPosition(gameObj->transform.position), 
 	m_StaticBody(nullptr)
 {
@@ -35,11 +36,21 @@ Collider::~Collider() {
 }
 
 void Collider::SetBounciness(const double bounciness) {
+	m_Bounciness = bounciness;
 	m_Fixture->SetRestitution(bounciness);
 }
 
+void Collider::SetBouncinessThreshold(const double threshold) {
+	m_BouncinessThreshold = threshold;
+	m_Fixture->SetRestitutionThreshold(threshold);
+}
+
 double Collider::GetBounciness() const {
-	return m_Fixture->GetRestitutionThreshold();
+	return m_Bounciness;
+}
+
+double Collider::GetBouncinessThreshold() const {
+	return m_BouncinessThreshold;
 }
 
 void Collider::Awake() {
@@ -50,7 +61,6 @@ void Collider::Awake() {
 	if (attachedRigidBody != nullptr) {
 		CreateColliderOnRigidBody(boxShape);
 		attachedRigidBody->AttachCollider(this);
-		m_Fixture->SetRestitutionThreshold(0.01);
 	}
 	else {
 		CreateStaticCollider(boxShape);
@@ -154,23 +164,15 @@ void Collider::DeatachRigidBody() {
 }
 
 void Collider::CreateColliderOnRigidBody(const b2Shape* colShape) {
-	b2FixtureDef fixture;
-	fixture.shape = colShape;
-	fixture.density = 1.0f;
-	fixture.friction = 0.3f;
+	b2FixtureDef fixture = GetFixtureDef(colShape);
 
 	m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
-
 	attachedRigidBody->SetMass(attachedRigidBody->m_Mass);
 }
 
 void Collider::CreateStaticCollider(const b2Shape* colShape) {
 	b2BodyDef body = GetStaticBodyDef();
-
-	b2FixtureDef fixture;
-	fixture.shape = colShape;
-	fixture.density = 1.0f;
-	fixture.friction = 0.3f;
+	b2FixtureDef fixture = GetFixtureDef(colShape);
 
 	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
 	m_Fixture = (*m_StaticBody)->CreateFixture(&fixture);
@@ -192,4 +194,15 @@ b2BodyDef Collider::GetStaticBodyDef() const {
 	body.angle = -transform->rotation * M_PI / 180.0;
 
 	return body;
+}
+
+b2FixtureDef Collider::GetFixtureDef(const b2Shape* colShape) const {
+	b2FixtureDef fixture;
+	fixture.shape = colShape;
+	fixture.density = 1.0f;
+	fixture.friction = 0.3f;
+	fixture.restitutionThreshold = 0.2f;
+	fixture.restitution = m_Bounciness;
+
+	return fixture;
 }

@@ -93,9 +93,11 @@ public:
 	virtual ~Collider();
 
 	void SetBounciness(const double bounciness);
+	void SetBouncinessThreshold(const double threshold);
 
 	Vector2D GetCenter() const { return transform->position + m_Offset; }
 	double GetBounciness() const;
+	double GetBouncinessThreshold() const;
 
 	RigidBody* attachedRigidBody;
 protected:
@@ -115,12 +117,15 @@ protected:
 	void CreateStaticCollider(const b2Shape* colShape);
 	void DestroyStaticCollider();
 	b2BodyDef GetStaticBodyDef() const;
+	b2FixtureDef GetFixtureDef(const b2Shape* colShape) const;
 
 	virtual b2Shape* GetShape(bool useOffset = false) = 0;
 
 	b2Fixture* m_Fixture;
 	Vector2D m_Offset;
 	double m_Rotation;
+	double m_Bounciness;
+	double m_BouncinessThreshold;
 
 	Vector2D m_CurrentPosition;
 	std::optional<b2Body*> m_StaticBody;
