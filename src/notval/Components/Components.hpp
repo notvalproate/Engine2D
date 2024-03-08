@@ -106,15 +106,13 @@ public:
 	void SetDensity(const double density);
 	void SetFriction(const double friction);
 	void SetBounciness(const double bounciness);
-	void SetBouncinessThreshold(const double threshold);
 
 	Vector2D GetCenter() const { return transform->position + m_Offset; }
 	Vector2D GetOffset() const { return m_Offset; }
 	Bounds GetBounds() const { return m_BoundingBox; }
 	double GetDensity() const;
-	double GetFriction(const double bounciness) const;
+	double GetFriction() const;
 	double GetBounciness() const;
-	double GetBouncinessThreshold() const;
 
 	RigidBody* attachedRigidBody;
 protected:
@@ -147,9 +145,8 @@ protected:
 	Bounds m_BoundingBox;
 
 	double m_Density;
-	double m_Friction;
 	double m_Bounciness;
-	double m_BouncinessThreshold;
+	double m_Friction;
 
 	Vector2D m_CurrentPosition;
 	std::optional<b2Body*> m_StaticBody;

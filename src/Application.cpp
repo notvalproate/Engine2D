@@ -245,7 +245,8 @@ class Controller : public Behaviour {
 		rb = gameObject->GetComponent<RigidBody>();
 		test = gameObject->GetComponent<CircleCollider>();
 		test->SetBounciness(0.8);
-		// FIX BOUNCINESS THRESHOLD NOT WOKRING
+
+		Cursor.SetLockState(CursorLockMode::Locked);
 	}
 
 	void Update() {
@@ -272,22 +273,10 @@ class Controller : public Behaviour {
 		if (Input.GetKey(SDL_SCANCODE_G)) {
 			Cursor.SetCursor(*mcCursor);
 		}
-
-		if (Input.GetMouseButton(1)) {
-			Vector2D direction(Input.mouseRelX, Input.mouseRelY);
-			direction.y = -direction.y;
-			rb->AddForce(direction * 2);
-		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
-			test->SetDensity(1.0f);
-			rb->SetAutoMass(true);
+			test->SetFriction(0.0f);
 		}
-		
-		if (Input.GetKeyDown(SDL_SCANCODE_L)) {
-			gameObject->scene->SwitchToCamera("Camera 2");
-		}
-
 	}
 	
 	Camera* mainCamera;

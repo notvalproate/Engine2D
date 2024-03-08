@@ -9,9 +9,8 @@ Collider::Collider(GameObject* gameObj)
 	m_Offset(0, 0),
 	m_Rotation(0),
 	m_Density(1.0f),
-	m_Friction(0.3f),
 	m_Bounciness(0),
-	m_BouncinessThreshold(0.2),
+	m_Friction(0.3f),
 	m_CurrentPosition(gameObj->transform.position), 
 	m_StaticBody(nullptr)
 {
@@ -54,7 +53,7 @@ void Collider::SetDensity(const double density) {
 
 void Collider::SetFriction(const double friction) {
 	m_Friction = friction;
-	m_Fixture->SetFriction(friction);
+	ResetShape();
 }
 
 void Collider::SetBounciness(const double bounciness) {
@@ -62,25 +61,16 @@ void Collider::SetBounciness(const double bounciness) {
 	m_Fixture->SetRestitution(bounciness);
 }
 
-void Collider::SetBouncinessThreshold(const double threshold) {
-	m_BouncinessThreshold = threshold;
-	m_Fixture->SetRestitutionThreshold(threshold);
-}
-
 double Collider::GetDensity() const {
 	return m_Density;
 }
 
-double Collider::GetFriction(const double bounciness) const {
+double Collider::GetFriction() const {
 	return m_Friction;
 }
 
 double Collider::GetBounciness() const {
 	return m_Bounciness;
-}
-
-double Collider::GetBouncinessThreshold() const {
-	return m_BouncinessThreshold;
 }
 
 void Collider::Awake() {
@@ -98,13 +88,14 @@ void Collider::Awake() {
 
 	delete boxShape;
 
+	UpdateBounds();
+
 	AddFixtureToMap();
 }
 
 void Collider::Update() {
-	UpdateBounds();
-
 	if (attachedRigidBody) {
+		UpdateBounds();
 		return;
 	}
 
@@ -246,7 +237,7 @@ b2FixtureDef Collider::GetFixtureDef(const b2Shape* colShape) const {
 	fixture.shape = colShape;
 	fixture.density = m_Density;
 	fixture.friction = m_Friction;
-	fixture.restitutionThreshold = m_BouncinessThreshold;
+	fixture.restitutionThreshold = Physics.bouncinessThreshold;
 	fixture.restitution = m_Bounciness;
 
 	return fixture;

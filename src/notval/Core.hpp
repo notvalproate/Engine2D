@@ -1010,6 +1010,8 @@ public:
 
     void SetGravity(const Vector2D& gravity) const;
     Vector2D GetGravity() const;
+
+    double bouncinessThreshold;
 private:
     PhysicsHandler();
 
