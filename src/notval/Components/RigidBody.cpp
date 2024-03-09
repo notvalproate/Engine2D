@@ -103,7 +103,9 @@ void RigidBody::SetMaterial(const PhysicsMaterial& material) {
 	m_Material = material;
 
 	for (auto& col : m_AttachedColliders) {
-		col->ResetShape();
+		if (!col->m_Material.has_value()) {
+			col->ResetShape();
+		}
 	}
 }
 

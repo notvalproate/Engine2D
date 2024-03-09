@@ -115,6 +115,7 @@ public:
 	virtual ~Collider();
 
 	void SetDensity(const double density);
+	void SetMaterial(const PhysicsMaterial& material);
 	void SetFriction(const double friction);
 	void SetBounciness(const double bounciness);
 
@@ -122,6 +123,7 @@ public:
 	Vector2D GetOffset() const { return m_Offset; }
 	Bounds GetBounds() const { return m_BoundingBox; }
 	double GetDensity() const;
+	std::optional<PhysicsMaterial> GetMaterial() const;
 	double GetFriction() const;
 	double GetBounciness() const;
 

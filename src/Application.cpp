@@ -244,8 +244,6 @@ class Controller : public Behaviour {
 
 		rb = gameObject->GetComponent<RigidBody>();
 		test = gameObject->GetComponent<CircleCollider>();
-
-		Cursor.SetLockState(CursorLockMode::Locked);
 	}
 
 	void Update() {
@@ -274,7 +272,7 @@ class Controller : public Behaviour {
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
-			test->SetFriction(0.0f);
+
 		}
 	}
 	
@@ -316,14 +314,12 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
+		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
+		auto boxCollider = PlayerObject->AddComponent<BoxCollider>();
+		boxCollider->SetTransform(Vector2D::one, Vector2D(2, 0), 0);
+		boxCollider->SetMaterial(PhysicsMaterial(0, 1.0));
 		playerBody->SetMaterial(PhysicsMaterial(1, 0));
-
-		//auto testObj = CreateGameObject("Test");
-		//testObj->transform.Translate(Vector2D::down * 2);
-		//testObj->AddComponent<RigidBody>();
-		//testObj->AddComponent<BoxCollider>();
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		

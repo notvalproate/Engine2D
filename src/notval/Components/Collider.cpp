@@ -50,6 +50,12 @@ void Collider::SetDensity(const double density) {
 	}
 }
 
+void Collider::SetMaterial(const PhysicsMaterial& material) {
+	m_Material = material;
+
+	ResetShape();
+}
+
 void Collider::SetFriction(const double friction) {
 	if (m_Material.has_value()) {
 		(*m_Material).friction = friction;
@@ -66,6 +72,10 @@ void Collider::SetBounciness(const double bounciness) {
 
 double Collider::GetDensity() const {
 	return m_Density;
+}
+
+std::optional<PhysicsMaterial> Collider::GetMaterial() const {
+	return m_Material;
 }
 
 double Collider::GetFriction() const {
