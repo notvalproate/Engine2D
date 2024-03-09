@@ -244,7 +244,6 @@ class Controller : public Behaviour {
 
 		rb = gameObject->GetComponent<RigidBody>();
 		test = gameObject->GetComponent<CircleCollider>();
-		test->SetBounciness(0.8);
 
 		Cursor.SetLockState(CursorLockMode::Locked);
 	}
@@ -317,8 +316,9 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
+		auto playerBody = PlayerObject->AddComponent<RigidBody>();
+		playerBody->SetMaterial(PhysicsMaterial(1, 0));
 
 		//auto testObj = CreateGameObject("Test");
 		//testObj->transform.Translate(Vector2D::down * 2);

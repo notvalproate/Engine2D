@@ -99,6 +99,14 @@ void RigidBody::SetAutoMass(const bool use) {
 	}
 }
 
+void RigidBody::SetMaterial(const PhysicsMaterial& material) {
+	m_Material = material;
+
+	for (auto& col : m_AttachedColliders) {
+		col->ResetShape();
+	}
+}
+
 void RigidBody::SetVelocity(const Vector2D& vel) {
 	m_Body->SetLinearVelocity(b2Vec2(vel.x, vel.y));
 }
@@ -137,6 +145,10 @@ void RigidBody::Sleep() {
 
 float RigidBody::GetMass() const {
 	return m_Mass;
+}
+
+PhysicsMaterial RigidBody::GetMaterial() const {
+	return m_Material;
 }
 
 Vector2D RigidBody::GetVelocity() const {

@@ -26,6 +26,14 @@ private:
 	friend class GameObject;
 };
 
+struct PhysicsMaterial {
+	double bounciness = 0.0;
+	double friction = 0.3f;
+
+	explicit inline PhysicsMaterial() = default;
+	explicit inline PhysicsMaterial(const double bounciness, const double friction) : bounciness(bounciness), friction(friction) { }
+};
+
 enum class RigidBodyType {
 	Static = b2_staticBody,
 	Kinematic = b2_kinematicBody,
@@ -44,6 +52,7 @@ public:
 
 	void SetMass(const float mass);
 	void SetAutoMass(const bool use);
+	void SetMaterial(const PhysicsMaterial& material);
 	void SetVelocity(const Vector2D& vel);
 	void SetAngularVelocity(const float vel);
 	void SetPosition(const Vector2D& pos);
@@ -55,6 +64,7 @@ public:
 	void Sleep();
 
 	float GetMass() const;
+	PhysicsMaterial GetMaterial() const;
 	Vector2D GetVelocity() const;
 	float GetAngularVelocity() const;
 	RigidBodyType GetBodyType() const;
@@ -81,6 +91,7 @@ private:
 	b2Body* m_Body;
 	double m_Mass;
 	bool m_AutoMassEnabled;
+	PhysicsMaterial m_Material;
 	std::vector<Collider*> m_AttachedColliders;
 	std::optional<b2Fixture*> m_SensorFixture;
 
@@ -143,10 +154,9 @@ protected:
 	double m_Rotation;
 
 	Bounds m_BoundingBox;
+	std::optional<PhysicsMaterial> m_Material;
 
 	double m_Density;
-	double m_Bounciness;
-	double m_Friction;
 
 	Vector2D m_CurrentPosition;
 	std::optional<b2Body*> m_StaticBody;

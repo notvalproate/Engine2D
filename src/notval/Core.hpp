@@ -751,9 +751,9 @@ struct SortingLayer {
 };
 
 struct Color {
-    explicit Color() = default;
-    explicit Color(const uint8_t red, const uint8_t green, const uint8_t blue) : r(red), g(green), b(blue), a(255) { }
-    explicit Color(const uint8_t red, const uint8_t green, const uint8_t blue, const uint8_t alpha) : r(red), g(green), b(blue), a(alpha) { }
+    explicit inline Color() = default;
+    explicit inline Color(const uint8_t r, const uint8_t g, const uint8_t b) : r(r), g(g), b(b), a(255) { }
+    explicit inline Color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a) : r(r), g(g), b(b), a(a) { }
 
     uint8_t r{}, g{}, b{}, a{};
 };

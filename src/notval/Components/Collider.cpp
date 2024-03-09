@@ -8,13 +8,12 @@ Collider::Collider(GameObject* gameObj)
 	m_Fixture(nullptr),
 	m_Offset(0, 0),
 	m_Rotation(0),
+	m_Material(),
 	m_Density(1.0f),
-	m_Bounciness(0),
-	m_Friction(0.3f),
 	m_CurrentPosition(gameObj->transform.position), 
 	m_StaticBody(nullptr)
 {
-	
+
 }
 
 Collider::~Collider() {
@@ -52,13 +51,17 @@ void Collider::SetDensity(const double density) {
 }
 
 void Collider::SetFriction(const double friction) {
-	m_Friction = friction;
-	ResetShape();
+	if (m_Material.has_value()) {
+		(*m_Material).friction = friction;
+		ResetShape();
+	}
 }
 
 void Collider::SetBounciness(const double bounciness) {
-	m_Bounciness = bounciness;
-	m_Fixture->SetRestitution(bounciness);
+	if (m_Material.has_value()) {
+		(*m_Material).bounciness = bounciness;
+		m_Fixture->SetRestitution(bounciness);
+	}
 }
 
 double Collider::GetDensity() const {
@@ -66,11 +69,27 @@ double Collider::GetDensity() const {
 }
 
 double Collider::GetFriction() const {
-	return m_Friction;
+	if (m_Material.has_value()) {
+		return (*m_Material).friction;
+	}
+
+	if (attachedRigidBody) {
+		return attachedRigidBody->m_Material.friction;
+	}
+
+	return 0;
 }
 
 double Collider::GetBounciness() const {
-	return m_Bounciness;
+	if (m_Material.has_value()) {
+		return (*m_Material).bounciness;
+	}
+
+	if (attachedRigidBody) {
+		return attachedRigidBody->m_Material.bounciness;
+	}
+
+	return 0;
 }
 
 void Collider::Awake() {
@@ -83,6 +102,7 @@ void Collider::Awake() {
 		attachedRigidBody->AttachCollider(this);
 	}
 	else {
+		m_Material.emplace();
 		CreateStaticCollider(boxShape);
 	}
 
@@ -168,6 +188,7 @@ void Collider::AttachRigidBody(RigidBody* rigidBody) {
 		return;
 	}
 
+	m_Material.reset();
 	RemoveFixtureFromMap();
 	DestroyStaticCollider();
 
@@ -236,9 +257,16 @@ b2FixtureDef Collider::GetFixtureDef(const b2Shape* colShape) const {
 	b2FixtureDef fixture;
 	fixture.shape = colShape;
 	fixture.density = m_Density;
-	fixture.friction = m_Friction;
 	fixture.restitutionThreshold = Physics.bouncinessThreshold;
-	fixture.restitution = m_Bounciness;
+
+	if (m_Material.has_value()) {
+		fixture.friction = (*m_Material).friction;
+		fixture.restitution = (*m_Material).bounciness;
+	}
+	else {
+		fixture.friction = attachedRigidBody->m_Material.friction;
+		fixture.restitution = attachedRigidBody->m_Material.bounciness;
+	}
 
 	return fixture;
 }
