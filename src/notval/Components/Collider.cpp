@@ -220,6 +220,7 @@ void Collider::DeatachRigidBody() {
 
 	b2Shape* shape = GetShape(false);
 
+	m_Material.emplace();
 	CreateStaticCollider(shape);
 
 	delete shape;

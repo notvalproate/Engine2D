@@ -272,7 +272,6 @@ class Controller : public Behaviour {
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
-
 		}
 	}
 	
@@ -314,14 +313,14 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
-		auto boxCollider = PlayerObject->AddComponent<CircleCollider>();
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		//auto boxCollider = PlayerObject->AddComponent<BoxCollider>();
-		//boxCollider->SetTransform(Vector2D::one, Vector2D(2, 0), 0);
-		//boxCollider->SetMaterial(PhysicsMaterial(0, 1.0));
-		
+		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
+
+		PhysicsMaterial ice(0, 0);
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
+		auto groundBody = groundObject->AddComponent<RigidBody>();
+		groundBody->SetBodyType(RigidBodyType::Static);
+		groundBody->SetMaterial(ice);
 		
 		auto g1 = CreateGameObject("Ground 1", groundObject, Vector2D(-0.5, 0), 0); 
 		auto g1render = g1->AddComponent<SpriteRenderer>();

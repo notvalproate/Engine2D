@@ -8,7 +8,7 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angul
 
 	m_Body = gameObj->scene->m_PhysicsWorld->CreateBody(&boxBody);
 
-	m_AttachedColliders = gameObj->GetComponents<Collider>();
+	m_AttachedColliders = gameObj->GetComponentsInChildren<Collider>();
 
 	if (m_AttachedColliders.size()) {
 		for (auto& collider : m_AttachedColliders) {
