@@ -210,7 +210,6 @@ void Collider::AttachRigidBody(RigidBody* rigidBody) {
 
 	delete shape;
 
-	attachedRigidBody->AttachCollider(this);
 	AddFixtureToMap();
 }
 

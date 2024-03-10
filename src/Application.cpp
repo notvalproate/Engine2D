@@ -314,7 +314,8 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
+		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		auto boxCollider = PlayerObject->AddComponent<CircleCollider>();
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		//auto boxCollider = PlayerObject->AddComponent<BoxCollider>();
 		//boxCollider->SetTransform(Vector2D::one, Vector2D(2, 0), 0);
@@ -346,7 +347,7 @@ public:
 		auto g4 = CreateGameObject("Ground 4", groundObject, Vector2D(-1.5, 0), 0);
 		auto g4render = g4->AddComponent<SpriteRenderer>();
 		g4render->SetSprite("assets/medieval/Tiles/floor_tile_1.png");
-		g4render->SetPixelsPerUnit(32);
+		 g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
 		auto g4collider = g4->AddComponent<BoxCollider>();
 		
