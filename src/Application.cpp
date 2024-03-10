@@ -314,12 +314,11 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
-		auto boxCollider = PlayerObject->AddComponent<BoxCollider>();
-		boxCollider->SetTransform(Vector2D::one, Vector2D(2, 0), 0);
-		boxCollider->SetMaterial(PhysicsMaterial(0, 1.0));
-		playerBody->SetMaterial(PhysicsMaterial(1, 0));
+		auto playerBody = PlayerObject->AddComponent<RigidBody>();
+		//auto boxCollider = PlayerObject->AddComponent<BoxCollider>();
+		//boxCollider->SetTransform(Vector2D::one, Vector2D(2, 0), 0);
+		//boxCollider->SetMaterial(PhysicsMaterial(0, 1.0));
 		
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
