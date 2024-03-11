@@ -243,7 +243,7 @@ class Controller : public Behaviour {
 		mcCursor = new CustomCursor("assets/cursor.png", Vector2D::zero);
 
 		rb = gameObject->GetComponent<RigidBody>();
-		test = gameObject->GetComponent<CircleCollider>();
+		test = gameObject->GetComponent<PolygonCollider>();
 	}
 
 	void Update() {
@@ -272,12 +272,14 @@ class Controller : public Behaviour {
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
+			std::vector<Vector2D> points = {Vector2D(0, 0), Vector2D(0, 1), Vector2D(1, 0)};
+			test->SetPoints(points);
 		}
 	}
 	
 	Camera* mainCamera;
 	RigidBody* rb;
-	CircleCollider* test;
+	PolygonCollider* test;
 	CustomCursor* mcCursor;
 	double radius;
 };

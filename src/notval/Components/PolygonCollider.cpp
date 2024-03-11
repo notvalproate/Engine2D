@@ -10,12 +10,22 @@ std::unique_ptr<Component> PolygonCollider::Clone() const {
 	return std::make_unique<PolygonCollider>(*this);
 }
 
-void PolygonCollider::SetPoints(const std::vector<Vector2D>& points, const Vector2D& offset, const double rotation) {
+void PolygonCollider::SetPoints(const std::vector<Vector2D>& points) {
+	m_Points = points;
 
+	ResetShape();
 }
 
-void PolygonCollider::AddPoint(const Vector2D& point, const double rotation) {
+void PolygonCollider::AddPoint(const Vector2D& point) {
+	m_Points.push_back(point);
 
+	ResetShape();
+}
+
+void PolygonCollider::SetOffset(const Vector2D& offset) {
+	m_Offset = offset;
+
+	ResetShape();
 }
 
 b2Shape* PolygonCollider::GetShape(bool useOffset) const {

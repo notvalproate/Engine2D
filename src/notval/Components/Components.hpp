@@ -187,8 +187,9 @@ private:
 
 class PolygonCollider final : public Collider {
 public:
-	void SetPoints(const std::vector<Vector2D>& points, const Vector2D& offset, const double rotation);
-	void AddPoint(const Vector2D& point, const double rotation);
+	void SetPoints(const std::vector<Vector2D>& points);
+	void AddPoint(const Vector2D& point);
+	void SetOffset(const Vector2D& offset);
 	std::vector<Vector2D> GetPoints() const { return std::vector<Vector2D>(); }
 
 private:
