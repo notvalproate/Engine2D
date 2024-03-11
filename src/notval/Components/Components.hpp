@@ -185,6 +185,24 @@ private:
 	friend class RigidBody;
 };
 
+class PolygonCollider final : public Collider {
+public:
+	void SetPoints(const std::vector<Vector2D>& points, const Vector2D& offset, const double rotation);
+	void AddPoint(const Vector2D& point, const double rotation);
+	std::vector<Vector2D> GetPoints() const { return m_Points; }
+
+private:
+	PolygonCollider(GameObject* gameObj);
+	std::unique_ptr<Component> Clone() const;
+
+	b2Shape* GetShape(bool useOffset = false) override;
+
+	std::vector<Vector2D> m_Points;
+
+	friend class GameObject;
+	friend class RigidBody;
+};
+
 class CircleCollider final : public Collider {
 public:
 	void SetTransform(const double radius, const Vector2D& offset, const double rotation);

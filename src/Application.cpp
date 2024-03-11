@@ -317,6 +317,7 @@ public:
 		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
 
 		PhysicsMaterial ice(0, 0);
+
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		auto groundBody = groundObject->AddComponent<RigidBody>();
 		groundBody->SetBodyType(RigidBodyType::Static);
