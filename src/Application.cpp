@@ -314,7 +314,7 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<CircleCollider>();
+		auto playerCollider = PlayerObject->AddComponent<PolygonCollider>();
 
 		PhysicsMaterial ice(0, 0);
 

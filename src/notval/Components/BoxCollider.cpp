@@ -20,7 +20,7 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 	ResetShape();
 }
 
-b2Shape* BoxCollider::GetShape(bool useOffset) {
+b2Shape* BoxCollider::GetShape(bool useOffset) const {
 	b2PolygonShape* boxShape = new b2PolygonShape();
 	b2Vec2 offset(0, 0);
 	

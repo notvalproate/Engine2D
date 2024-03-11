@@ -21,7 +21,7 @@ void CircleCollider::SetTransform(const double radius, const Vector2D& offset, c
 	ResetShape();
 }
 
-b2Shape* CircleCollider::GetShape(bool useOffset) {
+b2Shape* CircleCollider::GetShape(bool useOffset) const {
 	b2CircleShape* circleShape = new b2CircleShape();
 	b2Vec2 offset(0, 0);
 

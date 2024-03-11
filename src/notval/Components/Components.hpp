@@ -149,7 +149,7 @@ protected:
 	b2BodyDef GetStaticBodyDef() const;
 	b2FixtureDef GetFixtureDef(const b2Shape* colShape) const;
 
-	virtual b2Shape* GetShape(bool useOffset = false) = 0;
+	virtual b2Shape* GetShape(bool useOffset = false) const = 0;
 
 	b2Fixture* m_Fixture;
 	Vector2D m_Offset;
@@ -177,7 +177,7 @@ private:
 	BoxCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
-	b2Shape* GetShape(bool useOffset = false) override;
+	b2Shape* GetShape(bool useOffset = false) const override;
 
 	Vector2D m_Dimensions;
 
@@ -189,13 +189,13 @@ class PolygonCollider final : public Collider {
 public:
 	void SetPoints(const std::vector<Vector2D>& points, const Vector2D& offset, const double rotation);
 	void AddPoint(const Vector2D& point, const double rotation);
-	std::vector<Vector2D> GetPoints() const { return m_Points; }
+	std::vector<Vector2D> GetPoints() const { return std::vector<Vector2D>(); }
 
 private:
 	PolygonCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
-	b2Shape* GetShape(bool useOffset = false) override;
+	b2Shape* GetShape(bool useOffset = false) const override;
 
 	std::vector<Vector2D> m_Points;
 
@@ -212,7 +212,7 @@ private:
 	CircleCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
-	b2Shape* GetShape(bool useOffset = false) override;
+	b2Shape* GetShape(bool useOffset = false) const override;
 
 	double m_Radius;
 
