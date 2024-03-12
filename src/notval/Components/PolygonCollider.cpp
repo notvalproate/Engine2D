@@ -104,11 +104,18 @@ bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) con
 void PolygonCollider::ReducePointsToPolygons() {
 	m_ReducedPolygons.clear();
 
-	for (std::size_t i = 0; i < m_Points.size(); i++) {
-		if (m_ReducedPolygons.size() <= i / 8) {
-			m_ReducedPolygons.push_back({});
+	for (std::size_t prevEnd = 1; prevEnd < m_Points.size() - 1; ) {
+		std::size_t endIndex = std::min(prevEnd + 6, m_Points.size() - 1);
+
+		m_ReducedPolygons.push_back({ 
+			b2Vec2(m_Points[0].x, m_Points[0].y), 
+			b2Vec2(m_Points[prevEnd].x, m_Points[prevEnd].y) 
+		});
+
+		for (std::size_t i = prevEnd + 1; i <= endIndex; i++) {
+			m_ReducedPolygons.back().push_back(b2Vec2(m_Points[i].x, m_Points[i].y));
 		}
 
-		m_ReducedPolygons.back().push_back(b2Vec2(m_Points[i].x, m_Points[i].y));
+		prevEnd = endIndex;
 	}
 }
