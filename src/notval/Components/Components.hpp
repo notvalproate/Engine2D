@@ -188,7 +188,6 @@ private:
 class PolygonCollider final : public Collider {
 public:
 	void SetPoints(const std::vector<Vector2D>& points);
-	void AddPoint(const Vector2D& point);
 	void SetOffset(const Vector2D& offset);
 	std::vector<Vector2D> GetPoints() const { return std::vector<Vector2D>(); }
 
@@ -197,8 +196,11 @@ private:
 	std::unique_ptr<Component> Clone() const;
 
 	b2Shape* GetShape(bool useOffset = false) const override;
+	bool ContainsConcavity(const std::vector<Vector2D>& points) const;
+	void TriangulatePoints();
 
 	std::vector<Vector2D> m_Points;
+	std::vector<std::vector<Vector2D>> m_TriangulatedPolygon;
 
 	friend class GameObject;
 	friend class RigidBody;
