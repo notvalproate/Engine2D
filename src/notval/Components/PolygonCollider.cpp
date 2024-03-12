@@ -2,7 +2,9 @@
 
 PolygonCollider::PolygonCollider(GameObject* gameObj) 
 	: Collider(gameObj), 
-	m_Points({Vector2D(-0.5, -0.5), Vector2D(-0.5, 0.5), Vector2D(0.5, 0.5), Vector2D(0.5, -0.5)}) {
+	m_Points({Vector2D(-0.5, -0.5), Vector2D(-0.5, 0.5), Vector2D(0.5, 0.5), Vector2D(0.5, -0.5)}),
+	m_ReducedPolygons({ {b2Vec2(-0.5, -0.5), b2Vec2(-0.5, 0.5), b2Vec2(0.5, 0.5), b2Vec2(0.5, -0.5)} })
+{
 	
 }
 
@@ -11,12 +13,18 @@ std::unique_ptr<Component> PolygonCollider::Clone() const {
 }
 
 void PolygonCollider::SetPoints(const std::vector<Vector2D>& points) {
+	if (points.size() < 3) {
+		std::cout << "Polygon provided does not have enough points! (less than 3)" << std::endl;
+		return;
+	}
+
 	if (ContainsConcavity(points)) {
-		std::cout << "Polygon provided has concavity" << std::endl;
+		std::cout << "Polygon provided has concavity(s)" << std::endl;
 		return;
 	}
 
 	m_Points = points;
+	ReducePointsToPolygons();
 	ResetShape();
 }
 
@@ -32,25 +40,16 @@ b2Shape* PolygonCollider::GetShape(bool useOffset) const {
 
 	if (useOffset) {
 		offset.Set(m_Offset.x, m_Offset.y);
-	}
+	}	
 
-	std::vector<std::vector<b2Vec2>> polygons{};
-
-	for (std::size_t i = 0; i < m_Points.size(); i++) {
-		if (polygons.size() <= i / 8) {
-			polygons.push_back({});
-		}
-
-		polygons.back().push_back(b2Vec2(m_Points[i].x, m_Points[i].y));
-	}
-
-	boxShape->Set(&polygons[0][0], polygons[0].size());
+	boxShape->Set(&m_ReducedPolygons[0][0], m_ReducedPolygons[0].size());
 
 	return boxShape;
 }
 
+// O(n) solution to find out if the list of points contain a concavity. Algorithm terminates as soon as concavity is detected.
+// Requires points to be supplied as clockwise winding ordered boundary points of a polygon.
 bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) const {
-	bool hasConcavity = false;
 	std::size_t prevPrev = 0;
 	std::size_t prev = 1;
 	std::size_t curr = 2;
@@ -62,21 +61,16 @@ bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) con
 
 		double dy = (second.y - first.y);
 		double dx = (second.x - first.x);
+
 		bool infiniteSlope = dx == 0;
-		bool upward = dy > 0;
+		bool goingUp = dy > 0;
+
+		bool upLeft = goingUp && current.x < second.x;
+		bool downRight = !goingUp && current.x > second.x;
 
 		if (infiniteSlope) {
-			if (upward) {
-				if (current.x < second.x) {
-					hasConcavity = true;
-					break;
-				}
-			}
-			else {
-				if (current.x > second.x) {
-					hasConcavity = true;
-					break;
-				}
+			if ((upLeft || downRight)) {
+				return true;
 			}
 		}
 		else {
@@ -91,8 +85,7 @@ bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) con
 			above = forward ? above : !above;
 
 			if (above) {
-				hasConcavity = true;
-				break;
+				return true;
 			}
 		}
 
@@ -102,12 +95,20 @@ bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) con
 
 		prevPrev++;
 		prev++;
-		curr = (curr + 1) % points.size();
+		curr = ++curr % points.size();
 	}
 
-	return hasConcavity;
+	return false;
 }
 
-void PolygonCollider::TriangulatePoints() {
-	
+void PolygonCollider::ReducePointsToPolygons() {
+	m_ReducedPolygons.clear();
+
+	for (std::size_t i = 0; i < m_Points.size(); i++) {
+		if (m_ReducedPolygons.size() <= i / 8) {
+			m_ReducedPolygons.push_back({});
+		}
+
+		m_ReducedPolygons.back().push_back(b2Vec2(m_Points[i].x, m_Points[i].y));
+	}
 }

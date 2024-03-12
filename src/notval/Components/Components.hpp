@@ -197,10 +197,10 @@ private:
 
 	b2Shape* GetShape(bool useOffset = false) const override;
 	bool ContainsConcavity(const std::vector<Vector2D>& points) const;
-	void TriangulatePoints();
+	void ReducePointsToPolygons();
 
 	std::vector<Vector2D> m_Points;
-	std::vector<std::vector<Vector2D>> m_TriangulatedPolygon;
+	std::vector<std::vector<b2Vec2>> m_ReducedPolygons;
 
 	friend class GameObject;
 	friend class RigidBody;
