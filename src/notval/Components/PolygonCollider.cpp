@@ -9,6 +9,17 @@ PolygonCollider::PolygonCollider(GameObject* gameObj)
 	
 }
 
+PolygonCollider::~PolygonCollider() {
+	if (attachedRigidBody) {
+		for (auto& fixture : m_FixtureVector) {
+			attachedRigidBody->m_Body->DestroyFixture(fixture);
+		}
+	}
+	else {
+		gameObject->scene->m_PhysicsWorld.get()->DestroyBody((*m_StaticBody));
+	}
+}
+
 std::unique_ptr<Component> PolygonCollider::Clone() const {
 	return std::make_unique<PolygonCollider>(*this);
 }

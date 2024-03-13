@@ -188,6 +188,8 @@ private:
 
 class PolygonCollider final : public Collider {
 public:
+	~PolygonCollider() override;
+
 	void SetPoints(const std::vector<Vector2D>& points);
 	void SetOffset(const Vector2D& offset);
 	std::vector<Vector2D> GetPoints() const { return std::vector<Vector2D>(); }

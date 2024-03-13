@@ -240,8 +240,6 @@ class Controller : public Behaviour {
 
 		Physics.SetGravity(Vector2D::zero);
 
-		mcCursor = new CustomCursor("assets/cursor.png", Vector2D::zero);
-
 		rb = gameObject->GetComponent<RigidBody>();
 		test = gameObject->GetComponent<PolygonCollider>();
 		boo = true;
@@ -266,10 +264,6 @@ class Controller : public Behaviour {
 		
 		if (Input.GetKey(SDL_SCANCODE_P)) {
 			transform->Translate(Vector2D::up * Time.GetDeltaTime());
-		}
-
-		if (Input.GetKey(SDL_SCANCODE_G)) {
-			Cursor.SetCursor(*mcCursor);
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
@@ -300,7 +294,6 @@ class Controller : public Behaviour {
 	Camera* mainCamera;
 	RigidBody* rb;
 	PolygonCollider* test;
-	CustomCursor* mcCursor;
 	double radius;
 	bool boo;
 };
