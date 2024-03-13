@@ -115,7 +115,7 @@ class Collider : public Behaviour {
 public:
 	virtual ~Collider();
 
-	void SetDensity(const double density);
+	virtual void SetDensity(const double density);
 	void SetMaterial(const PhysicsMaterial& material);
 	void SetFriction(const double friction);
 	void SetBounciness(const double bounciness);
@@ -194,6 +194,7 @@ public:
 	void SetOffset(const Vector2D& offset);
 	std::vector<Vector2D> GetPoints() const { return std::vector<Vector2D>(); }
 
+	void SetDensity(const double density) override;
 private:
 	PolygonCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;

@@ -42,6 +42,25 @@ void PolygonCollider::SetOffset(const Vector2D& offset) {
 	ResetShape();
 }
 
+void PolygonCollider::SetDensity(const double density) {
+	if (density <= 0) {
+		m_Density = 1.0f;
+	}
+	else {
+		m_Density = density;
+	}
+
+	if (attachedRigidBody->m_AutoMassEnabled) {
+		m_Fixture->SetDensity(m_Density);
+
+		for (auto& fixture : m_FixtureVector) {
+			fixture->SetDensity(m_Density);
+		}
+
+		attachedRigidBody->m_Body->ResetMassData();
+	}
+}
+
 b2Shape* PolygonCollider::GetShape(bool useOffset) const {
 	b2PolygonShape* boxShape = new b2PolygonShape();
 
@@ -172,7 +191,6 @@ void PolygonCollider::ReducePointsToPolygons() {
 
 			m_FixtureVector.push_back((*m_StaticBody)->CreateFixture(&fixture));
 		}
-
 	}
 
 	AddFixtureToMap();
