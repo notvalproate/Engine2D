@@ -262,8 +262,8 @@ class Controller : public Behaviour {
 			rb->AddForce(Vector2D::left * 20);
 		}
 		
-		if (Input.GetKey(SDL_SCANCODE_P)) {
-			transform->Translate(Vector2D::up * Time.GetDeltaTime());
+		if (Input.GetKeyDown(SDL_SCANCODE_P)) {
+			Destroy(rb);
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {

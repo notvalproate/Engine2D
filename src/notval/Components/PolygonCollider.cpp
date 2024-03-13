@@ -15,9 +15,6 @@ PolygonCollider::~PolygonCollider() {
 			attachedRigidBody->m_Body->DestroyFixture(fixture);
 		}
 	}
-	else {
-		gameObject->scene->m_PhysicsWorld.get()->DestroyBody((*m_StaticBody));
-	}
 }
 
 std::unique_ptr<Component> PolygonCollider::Clone() const {
