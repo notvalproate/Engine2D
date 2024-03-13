@@ -137,8 +137,8 @@ protected:
 	void UpdateStaticPosition();
 	void ResetShape();
 	void ResetDensity();
-	void RemoveFixtureFromMap() const;
-	void AddFixtureToMap();
+	virtual void RemoveFixtureFromMap() const;
+	virtual void AddFixtureToMap();
 
 	void AttachRigidBody(RigidBody* rigidBody);
 	void DeatachRigidBody();
@@ -199,8 +199,12 @@ private:
 	bool ContainsConcavity(const std::vector<Vector2D>& points) const;
 	void ReducePointsToPolygons();
 
+	void RemoveFixtureFromMap() const override;
+	void AddFixtureToMap() override;
+
 	std::vector<Vector2D> m_Points;
 	std::vector<std::vector<b2Vec2>> m_ReducedPolygons;
+	std::vector<b2Fixture*> m_FixtureVector;
 
 	friend class GameObject;
 	friend class RigidBody;

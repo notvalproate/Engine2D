@@ -3,7 +3,8 @@
 PolygonCollider::PolygonCollider(GameObject* gameObj) 
 	: Collider(gameObj), 
 	m_Points({Vector2D(-0.5, -0.5), Vector2D(-0.5, 0.5), Vector2D(0.5, 0.5), Vector2D(0.5, -0.5)}),
-	m_ReducedPolygons({ {b2Vec2(-0.5, -0.5), b2Vec2(-0.5, 0.5), b2Vec2(0.5, 0.5), b2Vec2(0.5, -0.5)} })
+	m_ReducedPolygons({ {b2Vec2(-0.5, -0.5), b2Vec2(-0.5, 0.5), b2Vec2(0.5, 0.5), b2Vec2(0.5, -0.5)} }),
+	m_FixtureVector({})
 {
 	
 }
@@ -118,4 +119,30 @@ void PolygonCollider::ReducePointsToPolygons() {
 
 		prevEnd = endIndex;
 	}
+}
+
+void PolygonCollider::RemoveFixtureFromMap() const {
+	auto& sceneColliderMap = gameObject->scene->m_FixtureColliderMap;
+
+	auto it = sceneColliderMap.find(m_Fixture);
+
+	if (it != sceneColliderMap.end()) {
+		sceneColliderMap.erase(it);
+	}
+
+	for (auto& fixture : m_FixtureVector) {
+		auto it = sceneColliderMap.find(fixture);
+
+		if (it != sceneColliderMap.end()) {
+			sceneColliderMap.erase(fixture);
+		}
+	}
+}
+
+void PolygonCollider::AddFixtureToMap() {
+	for (auto& fixture : m_FixtureVector) {
+		gameObject->scene->m_FixtureColliderMap[fixture] = this;
+	}
+
+	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
 }

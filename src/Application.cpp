@@ -273,7 +273,17 @@ class Controller : public Behaviour {
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
 			std::vector<Vector2D> points = {Vector2D(0, 0), Vector2D(0, 1), Vector2D(1, 0)};
-			std::vector<Vector2D> points2 = { Vector2D(-1, -1), Vector2D(-0.5, 0), Vector2D(1, 1), Vector2D(2, 0), Vector2D(1, -1) };
+			std::vector<Vector2D> points2 = { 
+				Vector2D(-1, -0.6), 
+				Vector2D(-0.5, 0), 
+				Vector2D(0, 0.5),
+				Vector2D(1, 1),
+				Vector2D(1.5, 0.8),
+				Vector2D(2, 0),
+				Vector2D(1.7, -0.8),
+				Vector2D(1, -1),
+				Vector2D(0, -1)
+			};
 			test->SetPoints(points2);
 		}
 	}
