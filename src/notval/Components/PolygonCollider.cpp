@@ -26,7 +26,6 @@ void PolygonCollider::SetPoints(const std::vector<Vector2D>& points) {
 
 	m_Points = points;
 	ReducePointsToPolygons();
-	ResetShape();
 }
 
 void PolygonCollider::SetOffset(const Vector2D& offset) {
@@ -37,11 +36,6 @@ void PolygonCollider::SetOffset(const Vector2D& offset) {
 
 b2Shape* PolygonCollider::GetShape(bool useOffset) const {
 	b2PolygonShape* boxShape = new b2PolygonShape();
-	b2Vec2 offset(0, 0);
-
-	if (useOffset) {
-		offset.Set(m_Offset.x, m_Offset.y);
-	}	
 
 	boxShape->Set(&m_ReducedPolygons[0][0], m_ReducedPolygons[0].size());
 
@@ -119,6 +113,61 @@ void PolygonCollider::ReducePointsToPolygons() {
 
 		prevEnd = endIndex;
 	}
+
+	RemoveFixtureFromMap();
+
+	if (attachedRigidBody) {
+		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+
+		for (auto& fixture : m_FixtureVector) {
+			attachedRigidBody->m_Body->DestroyFixture(fixture);
+		}
+
+		m_Fixture = nullptr;
+		m_FixtureVector.clear();
+
+		for (std::size_t i = 0; i < m_ReducedPolygons.size(); i++) {
+			b2PolygonShape polygonShape;
+			polygonShape.Set(&m_ReducedPolygons[i][0], m_ReducedPolygons[i].size());
+
+			b2FixtureDef fixture = GetFixtureDef(&polygonShape);
+
+			if (i == 0) {
+				m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
+				continue;
+			}
+
+			m_FixtureVector.push_back(attachedRigidBody->m_Body->CreateFixture(&fixture));
+		}
+
+		attachedRigidBody->SetMass(attachedRigidBody->m_Mass);
+	}
+	else {
+		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
+		m_StaticBody.reset();
+		m_Fixture = nullptr;
+		m_FixtureVector.clear();
+
+		b2BodyDef body = GetStaticBodyDef();
+		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
+
+		for (std::size_t i = 0; i < m_ReducedPolygons.size(); i++) {
+			b2PolygonShape polygonShape;
+			polygonShape.Set(&m_ReducedPolygons[i][0], m_ReducedPolygons[i].size());
+			
+			b2FixtureDef fixture = GetFixtureDef(&polygonShape);
+
+			if (i == 0) {
+				m_Fixture = (*m_StaticBody)->CreateFixture(&fixture);
+				continue;
+			}
+
+			m_FixtureVector.push_back((*m_StaticBody)->CreateFixture(&fixture));
+		}
+
+	}
+
+	AddFixtureToMap();
 }
 
 void PolygonCollider::RemoveFixtureFromMap() const {

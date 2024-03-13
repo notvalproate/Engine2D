@@ -244,6 +244,7 @@ class Controller : public Behaviour {
 
 		rb = gameObject->GetComponent<RigidBody>();
 		test = gameObject->GetComponent<PolygonCollider>();
+		boo = true;
 	}
 
 	void Update() {
@@ -284,7 +285,15 @@ class Controller : public Behaviour {
 				Vector2D(1, -1),
 				Vector2D(0, -1)
 			};
-			test->SetPoints(points2);
+
+			auto& ref = points;
+
+			if (boo) {
+				ref = points2;
+			}
+
+			boo = !boo;
+			test->SetPoints(ref);
 		}
 	}
 	
@@ -293,6 +302,7 @@ class Controller : public Behaviour {
 	PolygonCollider* test;
 	CustomCursor* mcCursor;
 	double radius;
+	bool boo;
 };
 
 class TestScene : public Scene {

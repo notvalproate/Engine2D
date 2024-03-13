@@ -97,6 +97,7 @@ private:
 
 	friend class GameObject;
 	friend class Collider;
+	friend class PolygonCollider;
 	friend class Scene;
 };
 
