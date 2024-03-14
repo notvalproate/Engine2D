@@ -141,8 +141,8 @@ protected:
 	virtual void RemoveFixtureFromMap() const;
 	virtual void AddFixtureToMap();
 
-	void AttachRigidBody(RigidBody* rigidBody);
-	void DeatachRigidBody();
+	virtual void AttachRigidBody(RigidBody* rigidBody);
+	virtual void DeatachRigidBody();
 
 	void CreateColliderOnRigidBody(const b2Shape* colShape);
 	void CreateStaticCollider(const b2Shape* colShape);
@@ -203,6 +203,8 @@ private:
 	bool ContainsConcavity(const std::vector<Vector2D>& points) const;
 	void ReducePointsToPolygons();
 
+	void AttachRigidBody(RigidBody* rigidBody) override;
+	void DeatachRigidBody() override;
 	void RemoveFixtureFromMap() const override;
 	void AddFixtureToMap() override;
 

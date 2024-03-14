@@ -266,6 +266,10 @@ class Controller : public Behaviour {
 			Destroy(rb);
 		}
 		
+		if (Input.GetKeyDown(SDL_SCANCODE_O)) {
+			rb = gameObject->AddComponent<RigidBody>();
+		}
+		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
 			std::vector<Vector2D> points = {Vector2D(0, 0), Vector2D(0, 1), Vector2D(1, 0)};
 			std::vector<Vector2D> points2 = { 

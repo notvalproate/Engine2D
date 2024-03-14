@@ -221,3 +221,67 @@ void PolygonCollider::AddFixtureToMap() {
 
 	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
 }
+
+void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {
+	if (attachedRigidBody) {
+		return;
+	}
+
+	m_Material.reset();
+	RemoveFixtureFromMap();
+
+	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
+	m_StaticBody.reset();
+	m_Fixture = nullptr;
+	m_FixtureVector.clear();
+
+	attachedRigidBody = rigidBody;
+
+	for (std::size_t i = 0; i < m_ReducedPolygons.size(); i++) {
+		b2PolygonShape polygonShape;
+		polygonShape.Set(&m_ReducedPolygons[i][0], m_ReducedPolygons[i].size());
+
+		b2FixtureDef fixture = GetFixtureDef(&polygonShape);
+
+		if (i == 0) {
+			m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
+			continue;
+		}
+
+		m_FixtureVector.push_back(attachedRigidBody->m_Body->CreateFixture(&fixture));
+	}
+
+	attachedRigidBody->SetMass(attachedRigidBody->m_Mass);
+
+	AddFixtureToMap();
+}
+
+void PolygonCollider::DeatachRigidBody() {
+	RemoveFixtureFromMap();
+
+	attachedRigidBody = nullptr;
+	m_Fixture = nullptr;
+	m_FixtureVector.clear();
+	m_Material.emplace();
+
+	b2BodyDef body = GetStaticBodyDef();
+	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
+
+	for (std::size_t i = 0; i < m_ReducedPolygons.size(); i++) {
+		b2PolygonShape polygonShape;
+		polygonShape.Set(&m_ReducedPolygons[i][0], m_ReducedPolygons[i].size());
+
+		b2FixtureDef fixture = GetFixtureDef(&polygonShape);
+
+		if (i == 0) {
+			m_Fixture = (*m_StaticBody)->CreateFixture(&fixture);
+			continue;
+		}
+
+		m_FixtureVector.push_back((*m_StaticBody)->CreateFixture(&fixture));
+	}
+
+	m_CurrentPosition = transform->position;
+
+	AddFixtureToMap();
+}
