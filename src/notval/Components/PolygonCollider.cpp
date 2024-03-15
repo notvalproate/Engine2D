@@ -34,6 +34,7 @@ void PolygonCollider::SetPoints(const std::vector<Vector2D>& points) {
 
 	m_Points = points;
 	ReducePointsToPolygons();
+	ResetShape();
 }
 
 void PolygonCollider::SetOffset(const Vector2D& offset) {
@@ -156,7 +157,35 @@ void PolygonCollider::ReducePointsToPolygons() {
 
 		prevEnd = endIndex;
 	}
+}
 
+void PolygonCollider::RemoveFixtureFromMap() const {
+	auto& sceneColliderMap = gameObject->scene->m_FixtureColliderMap;
+
+	auto it = sceneColliderMap.find(m_Fixture);
+
+	if (it != sceneColliderMap.end()) {
+		sceneColliderMap.erase(it);
+	}
+
+	for (auto& fixture : m_FixtureVector) {
+		auto it = sceneColliderMap.find(fixture);
+
+		if (it != sceneColliderMap.end()) {
+			sceneColliderMap.erase(fixture);
+		}
+	}
+}
+
+void PolygonCollider::AddFixtureToMap() {
+	for (auto& fixture : m_FixtureVector) {
+		gameObject->scene->m_FixtureColliderMap[fixture] = this;
+	}
+
+	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
+}
+
+void PolygonCollider::ResetShape() {
 	RemoveFixtureFromMap();
 
 	if (attachedRigidBody) {
@@ -186,32 +215,6 @@ void PolygonCollider::ReducePointsToPolygons() {
 	}
 
 	AddFixtureToMap();
-}
-
-void PolygonCollider::RemoveFixtureFromMap() const {
-	auto& sceneColliderMap = gameObject->scene->m_FixtureColliderMap;
-
-	auto it = sceneColliderMap.find(m_Fixture);
-
-	if (it != sceneColliderMap.end()) {
-		sceneColliderMap.erase(it);
-	}
-
-	for (auto& fixture : m_FixtureVector) {
-		auto it = sceneColliderMap.find(fixture);
-
-		if (it != sceneColliderMap.end()) {
-			sceneColliderMap.erase(fixture);
-		}
-	}
-}
-
-void PolygonCollider::AddFixtureToMap() {
-	for (auto& fixture : m_FixtureVector) {
-		gameObject->scene->m_FixtureColliderMap[fixture] = this;
-	}
-
-	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
 }
 
 void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {

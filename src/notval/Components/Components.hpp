@@ -136,7 +136,7 @@ protected:
 	void Update() override final;
 	void UpdateBounds();
 	void UpdateStaticPosition();
-	void ResetShape();
+	virtual void ResetShape();
 	void ResetDensity();
 	virtual void RemoveFixtureFromMap() const;
 	virtual void AddFixtureToMap();
@@ -208,6 +208,7 @@ private:
 	void DeatachRigidBody() override;
 	void RemoveFixtureFromMap() const override;
 	void AddFixtureToMap() override;
+	void ResetShape() override;
 
 	std::vector<Vector2D> m_Points;
 	std::vector<std::vector<b2Vec2>> m_ReducedPolygons;
