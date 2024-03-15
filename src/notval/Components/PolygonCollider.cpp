@@ -132,7 +132,7 @@ void PolygonCollider::CreateFixturesOnBody(b2Body* body) {
 		b2FixtureDef fixture = GetFixtureDef(&polygonShape);
 
 		if (i == 0) {
-			m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
+			m_Fixture = body->CreateFixture(&fixture);
 			continue;
 		}
 
