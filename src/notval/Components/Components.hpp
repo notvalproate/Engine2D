@@ -201,6 +201,7 @@ private:
 
 	b2Shape* GetShape(bool useOffset = false) const override;
 	bool ContainsConcavity(const std::vector<Vector2D>& points) const;
+	void CreateFixturesOnBody(b2Body* body);
 	void ReducePointsToPolygons();
 
 	void AttachRigidBody(RigidBody* rigidBody) override;

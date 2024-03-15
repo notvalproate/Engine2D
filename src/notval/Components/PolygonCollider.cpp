@@ -123,6 +123,22 @@ bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) con
 	return false;
 }
 
+void PolygonCollider::CreateFixturesOnBody(b2Body* body) {
+	for (std::size_t i = 0; i < m_ReducedPolygons.size(); i++) {
+		b2PolygonShape polygonShape;
+		polygonShape.Set(&m_ReducedPolygons[i][0], m_ReducedPolygons[i].size());
+
+		b2FixtureDef fixture = GetFixtureDef(&polygonShape);
+
+		if (i == 0) {
+			m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
+			continue;
+		}
+
+		m_FixtureVector.push_back(body->CreateFixture(&fixture));
+	}
+}
+
 void PolygonCollider::ReducePointsToPolygons() {
 	m_ReducedPolygons.clear();
 
@@ -153,19 +169,7 @@ void PolygonCollider::ReducePointsToPolygons() {
 		m_Fixture = nullptr;
 		m_FixtureVector.clear();
 
-		for (std::size_t i = 0; i < m_ReducedPolygons.size(); i++) {
-			b2PolygonShape polygonShape;
-			polygonShape.Set(&m_ReducedPolygons[i][0], m_ReducedPolygons[i].size());
-
-			b2FixtureDef fixture = GetFixtureDef(&polygonShape);
-
-			if (i == 0) {
-				m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
-				continue;
-			}
-
-			m_FixtureVector.push_back(attachedRigidBody->m_Body->CreateFixture(&fixture));
-		}
+		CreateFixturesOnBody(attachedRigidBody->m_Body);
 
 		attachedRigidBody->SetMass(attachedRigidBody->m_Mass);
 	}
@@ -178,19 +182,7 @@ void PolygonCollider::ReducePointsToPolygons() {
 		b2BodyDef body = GetStaticBodyDef();
 		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
 
-		for (std::size_t i = 0; i < m_ReducedPolygons.size(); i++) {
-			b2PolygonShape polygonShape;
-			polygonShape.Set(&m_ReducedPolygons[i][0], m_ReducedPolygons[i].size());
-			
-			b2FixtureDef fixture = GetFixtureDef(&polygonShape);
-
-			if (i == 0) {
-				m_Fixture = (*m_StaticBody)->CreateFixture(&fixture);
-				continue;
-			}
-
-			m_FixtureVector.push_back((*m_StaticBody)->CreateFixture(&fixture));
-		}
+		CreateFixturesOnBody(*m_StaticBody);
 	}
 
 	AddFixtureToMap();
@@ -237,19 +229,7 @@ void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {
 
 	attachedRigidBody = rigidBody;
 
-	for (std::size_t i = 0; i < m_ReducedPolygons.size(); i++) {
-		b2PolygonShape polygonShape;
-		polygonShape.Set(&m_ReducedPolygons[i][0], m_ReducedPolygons[i].size());
-
-		b2FixtureDef fixture = GetFixtureDef(&polygonShape);
-
-		if (i == 0) {
-			m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
-			continue;
-		}
-
-		m_FixtureVector.push_back(attachedRigidBody->m_Body->CreateFixture(&fixture));
-	}
+	CreateFixturesOnBody(attachedRigidBody->m_Body);
 
 	attachedRigidBody->SetMass(attachedRigidBody->m_Mass);
 
@@ -267,19 +247,7 @@ void PolygonCollider::DeatachRigidBody() {
 	b2BodyDef body = GetStaticBodyDef();
 	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
 
-	for (std::size_t i = 0; i < m_ReducedPolygons.size(); i++) {
-		b2PolygonShape polygonShape;
-		polygonShape.Set(&m_ReducedPolygons[i][0], m_ReducedPolygons[i].size());
-
-		b2FixtureDef fixture = GetFixtureDef(&polygonShape);
-
-		if (i == 0) {
-			m_Fixture = (*m_StaticBody)->CreateFixture(&fixture);
-			continue;
-		}
-
-		m_FixtureVector.push_back((*m_StaticBody)->CreateFixture(&fixture));
-	}
+	CreateFixturesOnBody(*m_StaticBody);
 
 	m_CurrentPosition = transform->position;
 
