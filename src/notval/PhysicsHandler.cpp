@@ -9,6 +9,9 @@ void PhysicsHandler::RenderColliders() const {
 
 	b2World* currentWorld = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
 
+	Color green(0, 255, 0);
+	Color red(255, 0, 0);
+
 	for (b2Body* bodyList = currentWorld->GetBodyList(); bodyList; bodyList = bodyList->GetNext()) {
 
 		for (b2Fixture* fixtureList = bodyList->GetFixtureList(); fixtureList; fixtureList = fixtureList->GetNext()) {
@@ -25,7 +28,7 @@ void PhysicsHandler::RenderColliders() const {
 						Vector2D point1(bodyList->GetWorldPoint(polygon->m_vertices[i]));
 						Vector2D point2(bodyList->GetWorldPoint(polygon->m_vertices[j]));
 
-						Object::RenderingPipeline.RenderLine(point1, point2, Color(0, 255, 0));
+						Object::RenderingPipeline.RenderLine(point1, point2, green);
 					}
 				}
 			}
@@ -36,15 +39,25 @@ void PhysicsHandler::RenderColliders() const {
 					Vector2D center(bodyList->GetWorldPoint(circle->m_p));
 					Vector2D right(bodyList->GetWorldPoint(b2Vec2(circle->m_p.x, circle->m_p.y + circle->m_radius)));
 
-					Object::RenderingPipeline.RenderCircle(center, circle->m_radius, Color(0, 255, 0));
+					Object::RenderingPipeline.RenderCircle(center, circle->m_radius, green);
 
-					Object::RenderingPipeline.RenderLine(center, right, Color(0, 255, 0));
+					Object::RenderingPipeline.RenderLine(center, right, green);
+				}
+			}
+			else if (shape->GetType() == b2Shape::Type::e_edge) {
+				b2EdgeShape* edge = dynamic_cast<b2EdgeShape*>(shape);
+
+				if (edge) {
+					Vector2D v1(edge->m_vertex1);
+					Vector2D v2(edge->m_vertex2);
+
+					Object::RenderingPipeline.RenderLine(v1, v2, green);
 				}
 			}
 		}
 
 		Vector2D centerOfMass(bodyList->GetWorldCenter());
-		Object::RenderingPipeline.RenderPoint(centerOfMass, 3, Color(255, 0, 0));
+		Object::RenderingPipeline.RenderPoint(centerOfMass, 3, red);
 	}
 }
 

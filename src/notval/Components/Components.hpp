@@ -221,6 +221,22 @@ private:
 	friend class RigidBody;
 };
 
+class EdgeCollider final : public Collider {
+public:
+	void SetEdge(const Vector2D& start, const Vector2D& end);
+
+private:
+	EdgeCollider(GameObject* gameObj);
+	std::unique_ptr<Component> Clone() const;
+
+	b2Shape* GetShape(bool useOffset = false) const override;
+
+	Vector2D m_Start, m_End;
+
+	friend class GameObject;
+	friend class RigidBody;
+};
+
 class CircleCollider final : public Collider {
 public:
 	void SetTransform(const double radius, const Vector2D& offset, const double rotation);

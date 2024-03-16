@@ -332,10 +332,10 @@ public:
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
-		//playerRenderer->SetPixelsPerUnit(32);
+		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		auto playerCollider = PlayerObject->AddComponent<EdgeCollider>();
 
 		PhysicsMaterial ice(0, 0);
 
