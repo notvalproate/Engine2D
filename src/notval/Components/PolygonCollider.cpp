@@ -10,9 +10,9 @@ PolygonCollider::PolygonCollider(GameObject* gameObj)
 }
 
 PolygonCollider::~PolygonCollider() {
-	if (attachedRigidBody) {
+	if (m_AttachedRigidBody) {
 		for (auto& fixture : m_FixtureVector) {
-			attachedRigidBody->m_Body->DestroyFixture(fixture);
+			m_AttachedRigidBody->m_Body->DestroyFixture(fixture);
 		}
 	}
 }
@@ -51,14 +51,14 @@ void PolygonCollider::SetDensity(const double density) {
 		m_Density = density;
 	}
 
-	if (attachedRigidBody->m_AutoMassEnabled) {
+	if (m_AttachedRigidBody->m_AutoMassEnabled) {
 		m_Fixture->SetDensity(m_Density);
 
 		for (auto& fixture : m_FixtureVector) {
 			fixture->SetDensity(m_Density);
 		}
 
-		attachedRigidBody->m_Body->ResetMassData();
+		m_AttachedRigidBody->m_Body->ResetMassData();
 	}
 }
 
@@ -73,19 +73,19 @@ b2Shape* PolygonCollider::GetShape(bool useOffset) const {
 void PolygonCollider::ResetShape() {
 	RemoveFixtureFromMap();
 
-	if (attachedRigidBody) {
-		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+	if (m_AttachedRigidBody) {
+		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 
 		for (auto& fixture : m_FixtureVector) {
-			attachedRigidBody->m_Body->DestroyFixture(fixture);
+			m_AttachedRigidBody->m_Body->DestroyFixture(fixture);
 		}
 
 		m_Fixture = nullptr;
 		m_FixtureVector.clear();
 
-		CreateFixturesOnBody(attachedRigidBody->m_Body);
+		CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
 
-		attachedRigidBody->SetMass(attachedRigidBody->m_Mass);
+		m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
 	}
 	else {
 		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
@@ -129,7 +129,7 @@ void PolygonCollider::AddFixtureToMap() {
 }
 
 void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {
-	if (attachedRigidBody) {
+	if (m_AttachedRigidBody) {
 		return;
 	}
 
@@ -141,11 +141,11 @@ void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {
 	m_Fixture = nullptr;
 	m_FixtureVector.clear();
 
-	attachedRigidBody = rigidBody;
+	m_AttachedRigidBody = rigidBody;
 
-	CreateFixturesOnBody(attachedRigidBody->m_Body);
+	CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
 
-	attachedRigidBody->SetMass(attachedRigidBody->m_Mass);
+	m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
 
 	AddFixtureToMap();
 }
@@ -153,7 +153,7 @@ void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {
 void PolygonCollider::DeatachRigidBody() {
 	RemoveFixtureFromMap();
 
-	attachedRigidBody = nullptr;
+	m_AttachedRigidBody = nullptr;
 	m_Fixture = nullptr;
 	m_FixtureVector.clear();
 	m_Material.emplace();

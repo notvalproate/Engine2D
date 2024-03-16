@@ -337,7 +337,7 @@ public:
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 
-		PhysicsMaterial ice(0, 0.4);
+		PhysicsMaterial ice(0, 0);
 
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		auto groundBody = groundObject->AddComponent<RigidBody>();

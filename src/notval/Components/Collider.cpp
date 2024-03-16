@@ -4,7 +4,7 @@
 // BOX COLLIDER DOESNT BOUNCE AT ALL
 Collider::Collider(GameObject* gameObj)
 	: Behaviour(gameObj),
-	attachedRigidBody(nullptr),
+	m_AttachedRigidBody(nullptr),
 	m_Fixture(nullptr),
 	m_Offset(0, 0),
 	m_Rotation(0),
@@ -19,8 +19,8 @@ Collider::Collider(GameObject* gameObj)
 Collider::~Collider() {
 	RemoveFixtureFromMap();
 
-	if (attachedRigidBody) {
-		auto& rbColliders = attachedRigidBody->m_AttachedColliders;
+	if (m_AttachedRigidBody) {
+		auto& rbColliders = m_AttachedRigidBody->m_AttachedColliders;
 
 		for (size_t i = 0; i < rbColliders.size(); i++) {
 			if (rbColliders[i] == this) {
@@ -29,7 +29,7 @@ Collider::~Collider() {
 			}
 		}
 
-		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 	}
 	else {
 		gameObject->scene->m_PhysicsWorld.get()->DestroyBody((*m_StaticBody));
@@ -44,9 +44,9 @@ void Collider::SetDensity(const double density) {
 		m_Density = density;
 	}
 
-	if (attachedRigidBody->m_AutoMassEnabled) {
+	if (m_AttachedRigidBody->m_AutoMassEnabled) {
 		m_Fixture->SetDensity(m_Density);
-		attachedRigidBody->m_Body->ResetMassData();
+		m_AttachedRigidBody->m_Body->ResetMassData();
 	}
 }
 
@@ -83,8 +83,8 @@ double Collider::GetFriction() const {
 		return (*m_Material).friction;
 	}
 
-	if (attachedRigidBody) {
-		return attachedRigidBody->m_Material.friction;
+	if (m_AttachedRigidBody) {
+		return m_AttachedRigidBody->m_Material.friction;
 	}
 
 	return 0;
@@ -95,8 +95,8 @@ double Collider::GetBounciness() const {
 		return (*m_Material).bounciness;
 	}
 
-	if (attachedRigidBody) {
-		return attachedRigidBody->m_Material.bounciness;
+	if (m_AttachedRigidBody) {
+		return m_AttachedRigidBody->m_Material.bounciness;
 	}
 
 	return 0;
@@ -105,11 +105,11 @@ double Collider::GetBounciness() const {
 void Collider::Awake() {
 	b2Shape* boxShape = GetShape(true);
 
-	attachedRigidBody = gameObject->GetComponentInParent<RigidBody>();
+	m_AttachedRigidBody = gameObject->GetComponentInParent<RigidBody>();
 
-	if (attachedRigidBody != nullptr) {
+	if (m_AttachedRigidBody != nullptr) {
 		CreateColliderOnRigidBody(boxShape);
-		attachedRigidBody->AttachCollider(this);
+		m_AttachedRigidBody->AttachCollider(this);
 	}
 	else {
 		m_Material.emplace();
@@ -124,7 +124,7 @@ void Collider::Awake() {
 }
 
 void Collider::Update() {
-	if (attachedRigidBody) {
+	if (m_AttachedRigidBody) {
 		UpdateBounds();
 		return;
 	}
@@ -153,8 +153,8 @@ void Collider::UpdateStaticPosition() {
 void Collider::ResetShape() {
 	RemoveFixtureFromMap();
 
-	if (attachedRigidBody) {
-		attachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+	if (m_AttachedRigidBody) {
+		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 
 		b2Shape* boxShape = GetShape(true);
 
@@ -194,7 +194,7 @@ void Collider::AddFixtureToMap() {
 }
 
 void Collider::AttachRigidBody(RigidBody* rigidBody) {
-	if (attachedRigidBody) {
+	if (m_AttachedRigidBody) {
 		return;
 	}
 
@@ -202,7 +202,7 @@ void Collider::AttachRigidBody(RigidBody* rigidBody) {
 	RemoveFixtureFromMap();
 	DestroyStaticCollider();
 
-	attachedRigidBody = rigidBody;
+	m_AttachedRigidBody = rigidBody;
 
 	b2Shape* shape = GetShape(true);
 
@@ -216,7 +216,7 @@ void Collider::AttachRigidBody(RigidBody* rigidBody) {
 void Collider::DeatachRigidBody() {
 	RemoveFixtureFromMap();
 
-	attachedRigidBody = nullptr;
+	m_AttachedRigidBody = nullptr;
 
 	b2Shape* shape = GetShape(false);
 
@@ -233,8 +233,8 @@ void Collider::DeatachRigidBody() {
 void Collider::CreateColliderOnRigidBody(const b2Shape* colShape) {
 	b2FixtureDef fixture = GetFixtureDef(colShape);
 
-	m_Fixture = attachedRigidBody->m_Body->CreateFixture(&fixture);
-	attachedRigidBody->SetMass(attachedRigidBody->m_Mass);
+	m_Fixture = m_AttachedRigidBody->m_Body->CreateFixture(&fixture);
+	m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
 }
 
 void Collider::CreateStaticCollider(const b2Shape* colShape) {
@@ -274,8 +274,8 @@ b2FixtureDef Collider::GetFixtureDef(const b2Shape* colShape) const {
 		fixture.restitution = (*m_Material).bounciness;
 	}
 	else {
-		fixture.friction = attachedRigidBody->m_Material.friction;
-		fixture.restitution = attachedRigidBody->m_Material.bounciness;
+		fixture.friction = m_AttachedRigidBody->m_Material.friction;
+		fixture.restitution = m_AttachedRigidBody->m_Material.bounciness;
 	}
 
 	return fixture;

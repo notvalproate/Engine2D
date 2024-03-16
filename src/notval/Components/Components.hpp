@@ -127,8 +127,8 @@ public:
 	std::optional<PhysicsMaterial> GetMaterial() const;
 	double GetFriction() const;
 	double GetBounciness() const;
+	RigidBody* GetAttachedRigidBody() const { return m_AttachedRigidBody; }
 
-	RigidBody* attachedRigidBody;
 protected:
 	Collider(GameObject* gameObj);
 
@@ -151,6 +151,8 @@ protected:
 	b2FixtureDef GetFixtureDef(const b2Shape* colShape) const;
 
 	virtual b2Shape* GetShape(bool useOffset = false) const = 0;
+
+	RigidBody* m_AttachedRigidBody;
 
 	b2Fixture* m_Fixture;
 	Vector2D m_Offset;
