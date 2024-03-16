@@ -307,6 +307,7 @@ public:
 	using Scene::Scene;
 
 	void SetupScene() override {
+		
 		auto Background = CreateGameObject("BG");
 
 		auto Layer1 = CreateGameObject("Layer 1");
@@ -315,7 +316,7 @@ public:
 		L1Renderer->SetSprite("assets/medieval/Background/layer_1.png");
 		L1Renderer->SetSortingLayer("Background");
 		L1Renderer->SetPixelsPerUnit(16);
-
+		
 		auto Layer2 = CreateGameObject("Layer 2");
 		Layer2->transform.SetParent(Background);
 		Layer2->transform.Translate(Vector2D(0, -2));
@@ -331,12 +332,12 @@ public:
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
-		playerRenderer->SetPixelsPerUnit(32);
+		//playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<PolygonCollider>();
+		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 
-		PhysicsMaterial ice(0, 0);
+		PhysicsMaterial ice(0, 0.4);
 
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		auto groundBody = groundObject->AddComponent<RigidBody>();
@@ -371,7 +372,9 @@ public:
 		g4render->SetSortingLayer("World");
 		auto g4collider = g4->AddComponent<BoxCollider>();
 		
+
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
+		
 	}
 };
 
@@ -380,7 +383,7 @@ public:
 	using Engine2D::Engine2D;
 
 	void SetupGame() override {
-		RenderingPipeline.SetRendererVsync(true); 
+		RenderingPipeline.SetRendererVsync(true);
 
 		RenderingPipeline.AddSortingLayer("Background");
 		RenderingPipeline.AddSortingLayer("Player");

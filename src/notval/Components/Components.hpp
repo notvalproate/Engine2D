@@ -200,15 +200,16 @@ private:
 	std::unique_ptr<Component> Clone() const;
 
 	b2Shape* GetShape(bool useOffset = false) const override;
+	void ResetShape() override;
+
+	void RemoveFixtureFromMap() const override;
+	void AddFixtureToMap() override;
+	void AttachRigidBody(RigidBody* rigidBody) override;
+	void DeatachRigidBody() override;
+
 	bool ContainsConcavity(const std::vector<Vector2D>& points) const;
 	void CreateFixturesOnBody(b2Body* body);
 	void ReducePointsToPolygons();
-
-	void AttachRigidBody(RigidBody* rigidBody) override;
-	void DeatachRigidBody() override;
-	void RemoveFixtureFromMap() const override;
-	void AddFixtureToMap() override;
-	void ResetShape() override;
 
 	std::vector<Vector2D> m_Points;
 	std::vector<std::vector<b2Vec2>> m_ReducedPolygons;
