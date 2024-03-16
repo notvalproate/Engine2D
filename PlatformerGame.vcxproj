@@ -86,6 +86,7 @@
     <ClCompile Include="src\notval\Behaviour.cpp" />
     <ClCompile Include="src\notval\Components\CircleCollider.cpp" />
     <ClCompile Include="src\notval\Components\Collider.cpp" />
+    <ClCompile Include="src\notval\Components\EdgeCollider.cpp" />
     <ClCompile Include="src\notval\Components\PolygonCollider.cpp" />
     <ClCompile Include="src\notval\Components\RigidBody.cpp" />
     <ClCompile Include="src\notval\CursorHandler.cpp" />
