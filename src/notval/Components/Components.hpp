@@ -78,6 +78,7 @@ public:
 	Vector2D totalForce;
 	double totalTorque;
 
+	// private this later
 	b2Body* m_Body;
 private:
 	RigidBody(GameObject* gameObj);
@@ -98,6 +99,7 @@ private:
 	friend class GameObject;
 	friend class Collider;
 	friend class PolygonCollider;
+	friend class EdgeCollider;
 	friend class Scene;
 };
 
