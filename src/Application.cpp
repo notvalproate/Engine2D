@@ -243,6 +243,14 @@ class Controller : public Behaviour {
 		rb = gameObject->GetComponent<RigidBody>();
 		test = gameObject->GetComponent<PolygonCollider>();
 		boo = true;
+
+		b2MassData massdata;
+
+		massdata.mass = 1;
+		massdata.center = b2Vec2(rb->GetCentreOfMass().x, rb->GetCentreOfMass().y);
+		massdata.I = 1;
+
+		rb->m_Body->SetMassData(&massdata);
 	}
 
 	void Update() {
@@ -337,7 +345,7 @@ public:
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		auto playerCollider = PlayerObject->AddComponent<EdgeCollider>();
 
-		PhysicsMaterial ice(0, 0);
+		PhysicsMaterial ice(0, 0.4);
 
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		auto groundBody = groundObject->AddComponent<RigidBody>();

@@ -78,6 +78,7 @@ public:
 	Vector2D totalForce;
 	double totalTorque;
 
+	b2Body* m_Body;
 private:
 	RigidBody(GameObject* gameObj);
 
@@ -88,7 +89,6 @@ private:
 	void AddAngularDrag();
 	void ApplyTotalForces();
 
-	b2Body* m_Body;
 	double m_Mass;
 	bool m_AutoMassEnabled;
 	PhysicsMaterial m_Material;
@@ -132,7 +132,7 @@ public:
 protected:
 	Collider(GameObject* gameObj);
 
-	void Awake() override final;
+	void Awake() override;
 	void Update() override final;
 	void UpdateBounds();
 	void UpdateStaticPosition();
@@ -223,15 +223,28 @@ private:
 
 class EdgeCollider final : public Collider {
 public:
+	~EdgeCollider() override;
+
 	void SetEdge(const Vector2D& start, const Vector2D& end);
 
 private:
 	EdgeCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
+	void Awake() override;
+
 	b2Shape* GetShape(bool useOffset = false) const override;
+	void ResetShape() override;
+
+	void RemoveFixtureFromMap() const override;
+	void AddFixtureToMap() override;
+	void AttachRigidBody(RigidBody* rigidBody) override;
+	void DeatachRigidBody() override;
+
+	void CreateFixturesOnBody(b2Body* body);
 
 	Vector2D m_Start, m_End;
+	b2Fixture* m_OppositeDirection;
 
 	friend class GameObject;
 	friend class RigidBody;

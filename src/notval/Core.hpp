@@ -846,6 +846,7 @@ private:
     friend class RigidBody;
     friend class Collider;
     friend class PolygonCollider;
+    friend class EdgeCollider;
     friend class Camera;
 };
 

@@ -48,10 +48,22 @@ void PhysicsHandler::RenderColliders() const {
 				b2EdgeShape* edge = dynamic_cast<b2EdgeShape*>(shape);
 
 				if (edge) {
-					Vector2D v1(edge->m_vertex1);
-					Vector2D v2(edge->m_vertex2);
+					Vector2D v1(bodyList->GetWorldPoint(edge->m_vertex1));
+					Vector2D v2(bodyList->GetWorldPoint(edge->m_vertex2));
 
 					Object::RenderingPipeline.RenderLine(v1, v2, green);
+				}
+			}
+			else if (shape->GetType() == b2Shape::Type::e_chain) {
+				b2ChainShape* chain = dynamic_cast<b2ChainShape*>(shape);
+
+				if (chain) {
+					for (int i = 0; i < chain->m_count - 1; i++) {
+						Vector2D v1(bodyList->GetWorldPoint(chain->m_vertices[i]));
+						Vector2D v2(bodyList->GetWorldPoint(chain->m_vertices[i + 1]));
+
+						Object::RenderingPipeline.RenderLine(v1, v2, green);
+					}
 				}
 			}
 		}
