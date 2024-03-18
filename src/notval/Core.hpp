@@ -41,6 +41,9 @@ class SpriteRenderer;
 class RigidBody;
 class Collider;
 class BoxCollider;
+class PolygonCollider;
+class EdgeCollider;
+class CircleCollider;
 
 
 class Object {
