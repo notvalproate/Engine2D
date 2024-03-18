@@ -1,6 +1,10 @@
 #include "Components.hpp"
 
-EdgeCollider::EdgeCollider(GameObject* gameObj) : Collider(gameObj), m_Start(Vector2D(-0.5, 0)), m_End(Vector2D(0.5, 0)), m_OppositeDirection(nullptr) {
+EdgeCollider::EdgeCollider(GameObject* gameObj) 
+	: Collider(gameObj), 
+	m_Points( { Vector2D(-0.5, 0), Vector2D(0.5, 0) } ), 
+	m_OppositeDirection(nullptr) 
+{
 	
 }
 
@@ -14,9 +18,9 @@ std::unique_ptr<Component> EdgeCollider::Clone() const {
 	return std::make_unique<EdgeCollider>(*this);
 }
 
-void EdgeCollider::SetEdge(const Vector2D& start, const Vector2D& end) {
-	m_Start = start;
-	m_End = end;
+void EdgeCollider::SetPoints(const std::vector<Vector2D>& points, const Vector2D& offset) {
+	m_Offset = offset;
+	m_Points = points;
 
 	ResetShape();
 }
@@ -29,9 +33,9 @@ b2Shape* EdgeCollider::GetShape(bool useOffset) const {
 		offset.Set(m_Offset.x, m_Offset.y);
 	}
 
-	b2Vec2 verts[3] = { b2Vec2(m_Start.x, m_Start.y), b2Vec2(m_End.x, m_End.y), b2Vec2(m_End.x + 0.5, m_End.y - 0.5) };
+	b2Vec2 verts[2] = { b2Vec2(0, 0), b2Vec2(1, 1) };
 
-	chainShape->CreateChain(verts, 3, b2Vec2(-1.0f, 0.0f), b2Vec2(1.0f, 0.0f));
+	chainShape->CreateChain(verts, 2, b2Vec2(-1.0f, 0.0f), b2Vec2(1.0f, 0.0f));
 
 	return chainShape;
 }
@@ -42,6 +46,7 @@ void EdgeCollider::Awake() {
 	if (m_AttachedRigidBody != nullptr) {
 		CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
 		m_AttachedRigidBody->AttachCollider(this);
+		UpdateMassData();
 	}
 	else {
 		b2BodyDef body = GetStaticBodyDef();
@@ -67,6 +72,7 @@ void EdgeCollider::ResetShape() {
 		CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
 
 		m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
+		UpdateMassData();
 	}
 	else {
 		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
@@ -123,6 +129,7 @@ void EdgeCollider::AttachRigidBody(RigidBody* rigidBody) {
 	CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
 
 	m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
+	UpdateMassData();
 
 	AddFixtureToMap();
 }
@@ -146,22 +153,37 @@ void EdgeCollider::DeatachRigidBody() {
 }
 
 void EdgeCollider::CreateFixturesOnBody(b2Body* body) {
-	b2ChainShape chainShape;
+	std::vector<b2Vec2> forwardPoints;
+	forwardPoints.reserve(m_Points.size());
 
-	b2Vec2 verts[3] = { b2Vec2(m_Start.x, m_Start.y), b2Vec2(m_End.x, m_End.y), b2Vec2(m_End.x + 0.5, m_End.y - 0.5) };
-	b2Vec2 vertsrev[3] = { b2Vec2(m_End.x + 0.5, m_End.y - 0.5), b2Vec2(m_End.x, m_End.y), b2Vec2(m_Start.x, m_Start.y) };
+	for (const auto& point : m_Points) {
+		forwardPoints.push_back(b2Vec2(point.x, point.y));
+	}
 
-	chainShape.CreateChain(verts, 3, b2Vec2(m_Start.x, m_Start.y), b2Vec2(m_End.x + 0.5, m_End.y - 0.5));
+	std::vector<b2Vec2> reversePoints(forwardPoints);
+	std::reverse(reversePoints.begin(), reversePoints.end());
 
-	b2FixtureDef fixture = GetFixtureDef(&chainShape);
+	b2ChainShape forwardChain;
+	forwardChain.CreateChain(&forwardPoints[0], forwardPoints.size(), forwardPoints.front(), forwardPoints.back());
+	b2FixtureDef forwardFixture = GetFixtureDef(&forwardChain);
+	m_Fixture = body->CreateFixture(&forwardFixture);
 
-	m_Fixture = body->CreateFixture(&fixture);
+	b2ChainShape reverseChain;
+	reverseChain.CreateChain(&reversePoints[0], reversePoints.size(), reversePoints.front(), reversePoints.back());
+	b2FixtureDef reverseFixture = GetFixtureDef(&reverseChain);
+	m_OppositeDirection = body->CreateFixture(&reverseFixture);
+}
 
-	b2ChainShape chainShape2;
+void EdgeCollider::UpdateMassData() const {
+	if (!m_AttachedRigidBody) {
+		return;
+	}
 
-	chainShape2.CreateChain(vertsrev, 3, b2Vec2(m_End.x + 0.5, m_End.y - 0.5), b2Vec2(m_Start.x, m_Start.y));
+	b2MassData massdata;
 
-	b2FixtureDef fixtureRev = GetFixtureDef(&chainShape2);
+	massdata.mass = 1;
+	massdata.center = b2Vec2(0, 0);
+	massdata.I = 1;
 
-	m_OppositeDirection = body->CreateFixture(&fixtureRev);
+	m_AttachedRigidBody->m_Body->SetMassData(&massdata);
 }

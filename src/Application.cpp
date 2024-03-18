@@ -242,15 +242,8 @@ class Controller : public Behaviour {
 
 		rb = gameObject->GetComponent<RigidBody>();
 		test = gameObject->GetComponent<PolygonCollider>();
+		test2 = gameObject->GetComponent<EdgeCollider>();
 		boo = true;
-
-		b2MassData massdata;
-
-		massdata.mass = 1;
-		massdata.center = b2Vec2(rb->GetCentreOfMass().x, rb->GetCentreOfMass().y);
-		massdata.I = 1;
-
-		rb->m_Body->SetMassData(&massdata);
 	}
 
 	void Update() {
@@ -299,13 +292,15 @@ class Controller : public Behaviour {
 			}
 
 			boo = !boo;
-			test->SetPoints(ref);
+			//test->SetPoints(ref);
+			test2->SetPoints(ref, Vector2D::zero);
 		}
 	}
 	
 	Camera* mainCamera;
 	RigidBody* rb;
 	PolygonCollider* test;
+	EdgeCollider* test2;
 	double radius;
 	bool boo;
 };
@@ -382,7 +377,6 @@ public:
 		
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
-		
 	}
 };
 
