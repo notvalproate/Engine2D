@@ -3,14 +3,14 @@
 EdgeCollider::EdgeCollider(GameObject* gameObj) 
 	: Collider(gameObj), 
 	m_Points( { Vector2D(-0.5, 0), Vector2D(0.5, 0) } ), 
-	m_OppositeDirection(nullptr) 
+	m_ReverseFixture(nullptr) 
 {
 	
 }
 
 EdgeCollider::~EdgeCollider() {
 	if (m_AttachedRigidBody) {
-		m_AttachedRigidBody->m_Body->DestroyFixture(m_OppositeDirection);
+		m_AttachedRigidBody->m_Body->DestroyFixture(m_ReverseFixture);
 	}
 }
 
@@ -64,10 +64,10 @@ void EdgeCollider::ResetShape() {
 
 	if (m_AttachedRigidBody) {
 		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
-		m_AttachedRigidBody->m_Body->DestroyFixture(m_OppositeDirection);
+		m_AttachedRigidBody->m_Body->DestroyFixture(m_ReverseFixture);
 
 		m_Fixture = nullptr;
-		m_OppositeDirection = nullptr;
+		m_ReverseFixture = nullptr;
 
 		CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
 
@@ -78,7 +78,7 @@ void EdgeCollider::ResetShape() {
 		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 		m_StaticBody.reset();
 		m_Fixture = nullptr;
-		m_OppositeDirection = nullptr;
+		m_ReverseFixture = nullptr;
 
 		b2BodyDef body = GetStaticBodyDef();
 		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
@@ -98,7 +98,7 @@ void EdgeCollider::RemoveFixtureFromMap() const {
 		sceneColliderMap.erase(it);
 	}
 	
-	it = sceneColliderMap.find(m_OppositeDirection);
+	it = sceneColliderMap.find(m_ReverseFixture);
 
 	if (it != sceneColliderMap.end()) {
 		sceneColliderMap.erase(it);
@@ -106,7 +106,7 @@ void EdgeCollider::RemoveFixtureFromMap() const {
 }
 
 void EdgeCollider::AddFixtureToMap() {
-	gameObject->scene->m_FixtureColliderMap[m_OppositeDirection] = this;
+	gameObject->scene->m_FixtureColliderMap[m_ReverseFixture] = this;
 	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
 }
 
@@ -122,7 +122,7 @@ void EdgeCollider::AttachRigidBody(RigidBody* rigidBody) {
 	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 	m_StaticBody.reset();
 	m_Fixture = nullptr;
-	m_OppositeDirection = nullptr;
+	m_ReverseFixture = nullptr;
 
 	m_AttachedRigidBody = rigidBody;
 
@@ -139,7 +139,7 @@ void EdgeCollider::DeatachRigidBody() {
 
 	m_AttachedRigidBody = nullptr;
 	m_Fixture = nullptr;
-	m_OppositeDirection = nullptr;
+	m_ReverseFixture = nullptr;
 	m_Material.emplace();
 
 	b2BodyDef body = GetStaticBodyDef();
@@ -171,7 +171,7 @@ void EdgeCollider::CreateFixturesOnBody(b2Body* body) {
 	b2ChainShape reverseChain;
 	reverseChain.CreateChain(&reversePoints[0], reversePoints.size(), reversePoints.front(), reversePoints.back());
 	b2FixtureDef reverseFixture = GetFixtureDef(&reverseChain);
-	m_OppositeDirection = body->CreateFixture(&reverseFixture);
+	m_ReverseFixture = body->CreateFixture(&reverseFixture);
 }
 
 void EdgeCollider::UpdateMassData() const {
