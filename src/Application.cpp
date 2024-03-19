@@ -273,9 +273,9 @@ class Controller : public Behaviour {
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
 			std::vector<Vector2D> points = {Vector2D(0, 0), Vector2D(0, 1), Vector2D(1, 0)};
-			std::vector<Vector2D> points2 = { 
-				Vector2D(-1, -0.6), 
-				Vector2D(-0.5, 0), 
+			std::vector<Vector2D> points2 = {
+				Vector2D(-1, -0.6),
+				Vector2D(-0.5, 0),
 				Vector2D(0, 0.5),
 				Vector2D(1, 1),
 				Vector2D(1.5, 0.8),
@@ -327,18 +327,18 @@ public:
 		L2Renderer->SetSprite("assets/medieval/Background/layer_2.png");
 		L2Renderer->SetSortingLayer("Background");
 		L2Renderer->SetPixelsPerUnit(16);
-
+		
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<CameraFollower>();
-		PlayerObject->AddComponent<Controller>();
-		//PlayerObject->AddComponent<PlayerController>();
+		//PlayerObject->AddComponent<Controller>();
+		PlayerObject->AddComponent<PlayerController>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<EdgeCollider>();
+		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 
 		PhysicsMaterial ice(0, 0.4);
 
