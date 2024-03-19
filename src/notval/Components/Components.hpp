@@ -246,7 +246,7 @@ private:
 	void UpdateMassData() const;
 
 	std::vector<Vector2D> m_Points;
-	b2Fixture* m_OppositeDirection;
+	b2Fixture* m_ReverseFixture;
 
 	friend class GameObject;
 	friend class RigidBody;
