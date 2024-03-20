@@ -26,6 +26,8 @@ RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angul
 
 		m_SensorFixture = m_Body->CreateFixture(&boxFixture);
 	}
+
+	SetMass(1);
 }
 
 RigidBody::~RigidBody() {

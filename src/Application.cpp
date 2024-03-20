@@ -330,22 +330,21 @@ public:
 		
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<CameraFollower>();
-		//PlayerObject->AddComponent<Controller>();
-		PlayerObject->AddComponent<PlayerController>();
+		PlayerObject->AddComponent<Controller>();
+		//PlayerObject->AddComponent<PlayerController>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		//auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		//playerCollider->SetTransform(playerCollider->GetSize(), Vector2D(0, 3), 0);
+		auto playerCollider2 = PlayerObject->AddComponent<EdgeCollider>();
 
 		PhysicsMaterial ice(0, 0.4);
 
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
-		auto groundBody = groundObject->AddComponent<RigidBody>();
-		groundBody->SetBodyType(RigidBodyType::Static);
-		groundBody->SetMaterial(ice);
 		
 		auto g1 = CreateGameObject("Ground 1", groundObject, Vector2D(-0.5, 0), 0); 
 		auto g1render = g1->AddComponent<SpriteRenderer>();
@@ -353,6 +352,7 @@ public:
 		g1render->SetPixelsPerUnit(32);
 		g1render->SetSortingLayer("World");
 		auto g1collider = g1->AddComponent<BoxCollider>();
+		g1collider->SetMaterial(ice);
 
 		auto g2 = CreateGameObject("Ground 2", groundObject, Vector2D(0.5, 0), 0);
 		auto g2render = g2->AddComponent<SpriteRenderer>();
@@ -360,6 +360,7 @@ public:
 		g2render->SetPixelsPerUnit(32);
 		g2render->SetSortingLayer("World");
 		auto g2collider = g2->AddComponent<BoxCollider>();
+		g2collider->SetMaterial(ice);
 
 		auto g3 = CreateGameObject("Ground 3", groundObject, Vector2D(1.5, 0), 0);
 		auto g3render = g3->AddComponent<SpriteRenderer>();
@@ -367,6 +368,7 @@ public:
 		g3render->SetPixelsPerUnit(32);
 		g3render->SetSortingLayer("World");
 		auto g3collider = g3->AddComponent<BoxCollider>();
+		g3collider->SetMaterial(ice);
 
 		auto g4 = CreateGameObject("Ground 4", groundObject, Vector2D(-1.5, 0), 0);
 		auto g4render = g4->AddComponent<SpriteRenderer>();
@@ -374,6 +376,7 @@ public:
 		 g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
 		auto g4collider = g4->AddComponent<BoxCollider>();
+		g4collider->SetMaterial(ice);
 		
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();

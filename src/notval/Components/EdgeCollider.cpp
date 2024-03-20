@@ -181,9 +181,13 @@ void EdgeCollider::UpdateMassData() const {
 
 	b2MassData massdata;
 
-	massdata.mass = 1;
-	massdata.center = b2Vec2(0, 0);
-	massdata.I = 1;
+	massdata.mass = m_AttachedRigidBody->GetMass();
+	massdata.center = m_AttachedRigidBody->m_Body->GetLocalCenter();
+	massdata.I = m_AttachedRigidBody->m_Body->GetInertia();
+
+	if (massdata.I == 0) {
+		massdata.I = 1;
+	}
 
 	m_AttachedRigidBody->m_Body->SetMassData(&massdata);
 }
