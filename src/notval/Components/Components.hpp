@@ -195,7 +195,8 @@ public:
 	~PolygonCollider() override;
 
 	void SetPoints(const std::vector<Vector2D>& points, const Vector2D& offset);
-	std::vector<Vector2D> GetPoints() const { return std::vector<Vector2D>(); }
+	std::vector<Vector2D> GetPoints() const { return m_Points; }
+	std::size_t GetPathCount() const { return m_Paths.size(); }
 
 	void SetDensity(const double density) override;
 private:
@@ -212,10 +213,10 @@ private:
 
 	bool ContainsConcavity(const std::vector<Vector2D>& points) const;
 	void CreateFixturesOnBody(b2Body* body);
-	void ReducePointsToPolygons();
+	void ReducePointsToPaths();
 
 	std::vector<Vector2D> m_Points;
-	std::vector<std::vector<b2Vec2>> m_ReducedPolygons;
+	std::vector<std::vector<b2Vec2>> m_Paths;
 	std::vector<b2Fixture*> m_FixtureVector;
 
 	friend class GameObject;
