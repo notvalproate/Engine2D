@@ -228,6 +228,9 @@ public:
 	~EdgeCollider() override;
 
 	void SetPoints(const std::vector<Vector2D>& points, const Vector2D& offset);
+	void Reset();
+	std::vector<Vector2D> GetPoints() const { return m_Points; }
+
 private:
 	EdgeCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;

@@ -25,6 +25,10 @@ void EdgeCollider::SetPoints(const std::vector<Vector2D>& points, const Vector2D
 	ResetShape();
 }
 
+void EdgeCollider::Reset() {
+	SetPoints({ Vector2D(-0.5, 0), Vector2D(0, 0.5) }, Vector2D::zero);
+}
+
 b2Shape* EdgeCollider::GetShape(bool useOffset) const {
 	b2ChainShape* chainShape = new b2ChainShape();
 	b2Vec2 offset(0, 0);
