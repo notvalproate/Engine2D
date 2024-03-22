@@ -21,7 +21,7 @@ std::unique_ptr<Component> PolygonCollider::Clone() const {
 	return std::make_unique<PolygonCollider>(*this);
 }
 
-void PolygonCollider::SetPoints(const std::vector<Vector2D>& points) {
+void PolygonCollider::SetPoints(const std::vector<Vector2D>& points, const Vector2D& offset) {
 	if (points.size() < 3) {
 		std::cout << "Polygon provided does not have enough points! (less than 3)" << std::endl;
 		return;
@@ -33,6 +33,7 @@ void PolygonCollider::SetPoints(const std::vector<Vector2D>& points) {
 	}
 
 	m_Points = points;
+	m_Offset = offset;
 	ReducePointsToPolygons();
 	ResetShape();
 }
