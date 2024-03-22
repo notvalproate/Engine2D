@@ -230,6 +230,8 @@ public:
 	void SetPoints(const std::vector<Vector2D>& points, const Vector2D& offset);
 	void Reset();
 	std::vector<Vector2D> GetPoints() const { return m_Points; }
+	std::size_t GetPointCount() const { return m_Points.size(); }
+	std::size_t GetEdgeCount() const { return m_Points.size() - 1; }
 
 private:
 	EdgeCollider(GameObject* gameObj);
