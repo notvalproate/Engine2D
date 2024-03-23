@@ -3,7 +3,7 @@
 PolygonCollider::PolygonCollider(GameObject* gameObj) 
 	: Collider(gameObj), 
 	m_Points({Vector2D(-0.5, -0.5), Vector2D(-0.5, 0.5), Vector2D(0.5, 0.5), Vector2D(0.5, -0.5)}),
-	m_ReducedPolygons({ {b2Vec2(-0.5, -0.5), b2Vec2(-0.5, 0.5), b2Vec2(0.5, 0.5), b2Vec2(0.5, -0.5)} }),
+	m_Paths({ {b2Vec2(-0.5, -0.5), b2Vec2(-0.5, 0.5), b2Vec2(0.5, 0.5), b2Vec2(0.5, -0.5)} }),
 	m_FixtureVector({})
 {
 	
@@ -21,6 +21,26 @@ std::unique_ptr<Component> PolygonCollider::Clone() const {
 	return std::make_unique<PolygonCollider>(*this);
 }
 
+void PolygonCollider::CreatePrimitive(const std::size_t sides, const Vector2D& scale, const Vector2D& offset) {
+	if (sides <= 2) {
+		std::cout << "Polygon primitive must have more than 2 sides" << std::endl;
+	}
+
+	m_Points.clear();
+
+	float angle = 2 * M_PI / sides;
+
+	for (std::size_t i = 0; i < sides; i++) {
+		float x = cos(i * angle);
+		float y = sin(i * angle);
+		m_Points.push_back( Vector2D(y * scale.x, x * scale.y) );
+	}
+
+	m_Offset = offset;
+	ReducePointsToPaths();
+	ResetShape();
+}
+
 void PolygonCollider::SetPoints(const std::vector<Vector2D>& points, const Vector2D& offset) {
 	if (points.size() < 3) {
 		std::cout << "Polygon provided does not have enough points! (less than 3)" << std::endl;
@@ -34,13 +54,7 @@ void PolygonCollider::SetPoints(const std::vector<Vector2D>& points, const Vecto
 
 	m_Points = points;
 	m_Offset = offset;
-	ReducePointsToPolygons();
-	ResetShape();
-}
-
-void PolygonCollider::SetOffset(const Vector2D& offset) {
-	m_Offset = offset;
-
+	ReducePointsToPaths();
 	ResetShape();
 }
 
@@ -66,7 +80,7 @@ void PolygonCollider::SetDensity(const double density) {
 b2Shape* PolygonCollider::GetShape(bool useOffset) const {
 	b2PolygonShape* boxShape = new b2PolygonShape();
 
-	boxShape->Set(&m_ReducedPolygons[0][0], m_ReducedPolygons[0].size());
+	boxShape->Set(&m_Paths[0][0], m_Paths[0].size());
 
 	return boxShape;
 }
@@ -224,9 +238,9 @@ bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) con
 }
 
 void PolygonCollider::CreateFixturesOnBody(b2Body* body) {
-	for (std::size_t i = 0; i < m_ReducedPolygons.size(); i++) {
+	for (std::size_t i = 0; i < m_Paths.size(); i++) {
 		b2PolygonShape polygonShape;
-		polygonShape.Set(&m_ReducedPolygons[i][0], m_ReducedPolygons[i].size());
+		polygonShape.Set(&m_Paths[i][0], m_Paths[i].size());
 
 		b2FixtureDef fixture = GetFixtureDef(&polygonShape);
 
@@ -239,19 +253,19 @@ void PolygonCollider::CreateFixturesOnBody(b2Body* body) {
 	}
 }
 
-void PolygonCollider::ReducePointsToPolygons() {
-	m_ReducedPolygons.clear();
+void PolygonCollider::ReducePointsToPaths() {
+	m_Paths.clear();
 
 	for (std::size_t prevEnd = 1; prevEnd < m_Points.size() - 1; ) {
 		std::size_t endIndex = std::min(prevEnd + (b2_maxPolygonVertices - 2), m_Points.size() - 1);
 
-		m_ReducedPolygons.push_back({
+		m_Paths.push_back({
 			b2Vec2(m_Points[0].x, m_Points[0].y),
 			b2Vec2(m_Points[prevEnd].x, m_Points[prevEnd].y)
 			});
 
 		for (std::size_t i = prevEnd + 1; i <= endIndex; i++) {
-			m_ReducedPolygons.back().push_back(b2Vec2(m_Points[i].x, m_Points[i].y));
+			m_Paths.back().push_back(b2Vec2(m_Points[i].x, m_Points[i].y));
 		}
 
 		prevEnd = endIndex;

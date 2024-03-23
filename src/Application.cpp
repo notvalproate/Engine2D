@@ -338,8 +338,8 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider2 = PlayerObject->AddComponent<EdgeCollider>();
-		auto playerCollider3 = PlayerObject->AddComponent<EdgeCollider>();
+		auto playerCollider = PlayerObject->AddComponent<PolygonCollider>();
+		playerCollider->CreatePrimitive(5, Vector2D(3, 1), Vector2D::zero);
 
 		PhysicsMaterial ice(0, 0.4);
 
