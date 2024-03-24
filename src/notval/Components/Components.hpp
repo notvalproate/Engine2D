@@ -258,6 +258,41 @@ private:
 	friend class RigidBody;
 };
 
+enum class CapsuleDirection {
+	Vertical = 0,
+	Horizontal = 1
+};
+
+class CapsuleCollider final : public Collider {
+public:
+	~CapsuleCollider() override;
+
+	void SetTransform(const Vector2D& size, const CapsuleDirection direction, const Vector2D& offset);
+
+	void SetDensity(const double density) override;
+private:
+	CapsuleCollider(GameObject* gameObj);
+	std::unique_ptr<Component> Clone() const;
+
+	b2Shape* GetShape(bool useOffset = false) const override;
+	void ResetShape() override;
+
+	void RemoveFixtureFromMap() const override;
+	void AddFixtureToMap() override;
+	void AttachRigidBody(RigidBody* rigidBody) override;
+	void DeatachRigidBody() override;
+
+	bool ContainsConcavity(const std::vector<Vector2D>& points) const;
+	void CreateFixturesOnBody(b2Body* body);
+	void ReducePointsToPaths();
+
+	Vector2D m_Size;
+	CapsuleDirection m_Direction;
+
+	friend class GameObject;
+	friend class RigidBody;
+};
+
 class CircleCollider final : public Collider {
 public:
 	void SetTransform(const double radius, const Vector2D& offset, const double rotation);
