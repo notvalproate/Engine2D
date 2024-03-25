@@ -100,6 +100,7 @@ private:
 	friend class Collider;
 	friend class PolygonCollider;
 	friend class EdgeCollider;
+	friend class CapsuleCollider;
 	friend class Scene;
 };
 
@@ -288,6 +289,8 @@ private:
 
 	Vector2D m_Size;
 	CapsuleDirection m_Direction;
+	b2Fixture* m_UpperSemi;
+	b2Fixture* m_LowerSemi;
 
 	friend class GameObject;
 	friend class RigidBody;
