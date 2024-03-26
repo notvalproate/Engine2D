@@ -850,6 +850,7 @@ private:
     friend class Collider;
     friend class PolygonCollider;
     friend class EdgeCollider;
+    friend class CapsuleCollider;
     friend class Camera;
 };
 

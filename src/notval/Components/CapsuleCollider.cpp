@@ -31,10 +31,8 @@ void CapsuleCollider::SetDensity(const double density) {
 
 	if (m_AttachedRigidBody->m_AutoMassEnabled) {
 		m_Fixture->SetDensity(m_Density);
-
-		for (auto& fixture : m_FixtureVector) {
-			fixture->SetDensity(m_Density);
-		}
+		m_UpperSemi->SetDensity(m_Density);
+		m_LowerSemi->SetDensity(m_Density);
 
 		m_AttachedRigidBody->m_Body->ResetMassData();
 	}
@@ -53,12 +51,9 @@ void CapsuleCollider::ResetShape() {
 	if (m_AttachedRigidBody) {
 		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 
-		for (auto& fixture : m_FixtureVector) {
-			m_AttachedRigidBody->m_Body->DestroyFixture(fixture);
-		}
-
 		m_Fixture = nullptr;
-		m_FixtureVector.clear();
+		m_UpperSemi = nullptr;
+		m_LowerSemi = nullptr;
 
 		CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
 
@@ -68,7 +63,8 @@ void CapsuleCollider::ResetShape() {
 		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 		m_StaticBody.reset();
 		m_Fixture = nullptr;
-		m_FixtureVector.clear();
+		m_UpperSemi = nullptr;
+		m_LowerSemi = nullptr;
 
 		b2BodyDef body = GetStaticBodyDef();
 		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
@@ -87,22 +83,24 @@ void CapsuleCollider::RemoveFixtureFromMap() const {
 	if (it != sceneColliderMap.end()) {
 		sceneColliderMap.erase(it);
 	}
+	
+	it = sceneColliderMap.find(m_UpperSemi);
 
-	for (auto& fixture : m_FixtureVector) {
-		auto it = sceneColliderMap.find(fixture);
+	if (it != sceneColliderMap.end()) {
+		sceneColliderMap.erase(it);
+	}
+	
+	it = sceneColliderMap.find(m_LowerSemi);
 
-		if (it != sceneColliderMap.end()) {
-			sceneColliderMap.erase(fixture);
-		}
+	if (it != sceneColliderMap.end()) {
+		sceneColliderMap.erase(it);
 	}
 }
 
 void CapsuleCollider::AddFixtureToMap() {
-	for (auto& fixture : m_FixtureVector) {
-		gameObject->scene->m_FixtureColliderMap[fixture] = this;
-	}
-
 	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
+	gameObject->scene->m_FixtureColliderMap[m_UpperSemi] = this;
+	gameObject->scene->m_FixtureColliderMap[m_LowerSemi] = this;
 }
 
 void CapsuleCollider::AttachRigidBody(RigidBody* rigidBody) {
@@ -116,7 +114,8 @@ void CapsuleCollider::AttachRigidBody(RigidBody* rigidBody) {
 	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 	m_StaticBody.reset();
 	m_Fixture = nullptr;
-	m_FixtureVector.clear();
+	m_UpperSemi = nullptr;
+	m_LowerSemi = nullptr;
 
 	m_AttachedRigidBody = rigidBody;
 
@@ -132,7 +131,8 @@ void CapsuleCollider::DeatachRigidBody() {
 
 	m_AttachedRigidBody = nullptr;
 	m_Fixture = nullptr;
-	m_FixtureVector.clear();
+	m_UpperSemi = nullptr;
+	m_LowerSemi = nullptr;
 	m_Material.emplace();
 
 	b2BodyDef body = GetStaticBodyDef();
@@ -146,17 +146,9 @@ void CapsuleCollider::DeatachRigidBody() {
 }
 
 void CapsuleCollider::CreateFixturesOnBody(b2Body* body) {
-	for (std::size_t i = 0; i < m_Paths.size(); i++) {
-		b2PolygonShape polygonShape;
-		polygonShape.Set(&m_Paths[i][0], m_Paths[i].size());
+	b2PolygonShape polygonShape;
 
-		b2FixtureDef fixture = GetFixtureDef(&polygonShape);
+	b2FixtureDef fixture = GetFixtureDef(&polygonShape);
 
-		if (i == 0) {
-			m_Fixture = body->CreateFixture(&fixture);
-			continue;
-		}
-
-		m_FixtureVector.push_back(body->CreateFixture(&fixture));
-	}
+	m_Fixture = body->CreateFixture(&fixture);
 }
