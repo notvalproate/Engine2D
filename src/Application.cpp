@@ -338,10 +338,9 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<PolygonCollider>();
-		playerCollider->CreatePrimitive(5, Vector2D(3, 1), Vector2D::zero);
+		auto playerCollider = PlayerObject->AddComponent<CapsuleCollider>();
 
-		PhysicsMaterial ice(0, 0.4);
+		PhysicsMaterial ice(0, 0);
 
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		

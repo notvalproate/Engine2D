@@ -275,6 +275,8 @@ private:
 	CapsuleCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
+	void Awake() override;
+
 	b2Shape* GetShape(bool useOffset = false) const override;
 	void ResetShape() override;
 
