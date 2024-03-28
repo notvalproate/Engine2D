@@ -198,6 +198,7 @@ void CapsuleCollider::CreateFixturesOnBody(b2Body* body) {
 	circleTop.m_p = offset;
 
 	b2FixtureDef fixtureTop = GetFixtureDef(&circleTop);
+	fixtureTop.density /= 2.0f;
 
 	m_UpperSemi = body->CreateFixture(&fixtureTop);
 
@@ -209,6 +210,7 @@ void CapsuleCollider::CreateFixturesOnBody(b2Body* body) {
 	circleBottom.m_p = -offset;
 
 	b2FixtureDef fixtureBottom = GetFixtureDef(&circleBottom);
+	fixtureBottom.density /= 2.0f;
 
 	m_LowerSemi = body->CreateFixture(&fixtureBottom);
 }
