@@ -180,7 +180,12 @@ void CapsuleCollider::CreateFixturesOnBody(b2Body* body) {
 
 	b2PolygonShape polygonShape;
 	
-	polygonShape.SetAsBox(m_Size.x / 2.0, m_Size.y / 2.0);
+	polygonShape.SetAsBox(
+		m_Size.x / 2.0, 
+		m_Size.y / 2.0, 
+		b2Vec2(m_Offset.x, m_Offset.y),
+		-m_Rotation * M_PI / 180.0
+	);
 
 	b2FixtureDef fixture = GetFixtureDef(&polygonShape);
 
@@ -201,7 +206,7 @@ void CapsuleCollider::CreateFixturesOnBody(b2Body* body) {
 	b2CircleShape circleTop;
 
 	circleTop.m_radius = radius;
-	circleTop.m_p = offset;
+	circleTop.m_p = offset + b2Vec2(m_Offset.x, m_Offset.y);
 
 	b2FixtureDef fixtureTop = GetFixtureDef(&circleTop);
 	fixtureTop.density /= 2.0f;
@@ -213,7 +218,7 @@ void CapsuleCollider::CreateFixturesOnBody(b2Body* body) {
 	b2CircleShape circleBottom;
 
 	circleBottom.m_radius = radius;
-	circleBottom.m_p = -offset;
+	circleBottom.m_p = -offset + b2Vec2(m_Offset.x, m_Offset.y);
 
 	b2FixtureDef fixtureBottom = GetFixtureDef(&circleBottom);
 	fixtureBottom.density /= 2.0f;

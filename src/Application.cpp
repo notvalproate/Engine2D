@@ -295,7 +295,7 @@ class Controller : public Behaviour {
 			boo = !boo;
 			//test->SetPoints(ref);
 			//test2->SetPoints(ref, Vector2D::zero);
-			test3->SetTransform(Vector2D::one * 2, CapsuleDirection::Horizontal, Vector2D::zero);
+			test3->SetTransform(test3->GetSize(), test3->GetDirection(), Vector2D::one);
 		}
 	}
 	

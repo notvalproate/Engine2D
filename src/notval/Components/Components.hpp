@@ -271,6 +271,9 @@ public:
 	void SetTransform(const Vector2D& size, const CapsuleDirection direction, const Vector2D& offset);
 
 	void SetDensity(const double density) override;
+
+	Vector2D GetSize() const { return m_Size; }
+	CapsuleDirection GetDirection() const { return m_Direction; }
 private:
 	CapsuleCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
