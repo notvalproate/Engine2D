@@ -22,6 +22,10 @@ std::unique_ptr<Component> CapsuleCollider::Clone() const {
 }
 
 void CapsuleCollider::SetTransform(const Vector2D& size, const CapsuleDirection direction, const Vector2D& offset) {
+	m_Size = size;
+	m_Direction = direction;
+	m_Offset = offset;
+
 	ResetShape();
 }
 
@@ -35,8 +39,8 @@ void CapsuleCollider::SetDensity(const double density) {
 
 	if (m_AttachedRigidBody->m_AutoMassEnabled) {
 		m_Fixture->SetDensity(m_Density);
-		m_UpperSemi->SetDensity(m_Density);
-		m_LowerSemi->SetDensity(m_Density);
+		m_UpperSemi->SetDensity(m_Density / 2.0f);
+		m_LowerSemi->SetDensity(m_Density / 2.0f);
 
 		m_AttachedRigidBody->m_Body->ResetMassData();
 	}
@@ -73,6 +77,8 @@ void CapsuleCollider::ResetShape() {
 
 	if (m_AttachedRigidBody) {
 		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+		m_AttachedRigidBody->m_Body->DestroyFixture(m_UpperSemi);
+		m_AttachedRigidBody->m_Body->DestroyFixture(m_LowerSemi);
 
 		m_Fixture = nullptr;
 		m_UpperSemi = nullptr;

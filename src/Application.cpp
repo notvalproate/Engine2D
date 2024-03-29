@@ -243,6 +243,7 @@ class Controller : public Behaviour {
 		rb = gameObject->GetComponent<RigidBody>();
 		test = gameObject->GetComponent<PolygonCollider>();
 		test2 = gameObject->GetComponent<EdgeCollider>();
+		test3 = gameObject->GetComponent<CapsuleCollider>();
 		boo = true;
 	}
 
@@ -293,7 +294,8 @@ class Controller : public Behaviour {
 
 			boo = !boo;
 			//test->SetPoints(ref);
-			test2->SetPoints(ref, Vector2D::zero);
+			//test2->SetPoints(ref, Vector2D::zero);
+			test3->SetTransform(Vector2D::one * 2, CapsuleDirection::Horizontal, Vector2D::zero);
 		}
 	}
 	
@@ -301,6 +303,7 @@ class Controller : public Behaviour {
 	RigidBody* rb;
 	PolygonCollider* test;
 	EdgeCollider* test2;
+	CapsuleCollider* test3;
 	double radius;
 	bool boo;
 };
