@@ -288,9 +288,7 @@ private:
 	void AttachRigidBody(RigidBody* rigidBody) override;
 	void DeatachRigidBody() override;
 
-	bool ContainsConcavity(const std::vector<Vector2D>& points) const;
 	void CreateFixturesOnBody(b2Body* body);
-	void ReducePointsToPaths();
 
 	Vector2D m_Size;
 	CapsuleDirection m_Direction;
