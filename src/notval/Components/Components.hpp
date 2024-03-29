@@ -113,7 +113,6 @@ public:
 	Vector2D size;
 };
 
-// All colliders must inherit from this class.
 class Collider : public Behaviour {
 public:
 	virtual ~Collider();
@@ -190,6 +189,8 @@ private:
 	friend class GameObject;
 	friend class RigidBody;
 };
+
+// USE OFFSET IN POLYGON AND EDGE COLLIDER
 
 class PolygonCollider final : public Collider {
 public:
