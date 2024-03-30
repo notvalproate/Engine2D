@@ -260,12 +260,12 @@ void PolygonCollider::ReducePointsToPaths() {
 		std::size_t endIndex = std::min(prevEnd + (b2_maxPolygonVertices - 2), m_Points.size() - 1);
 
 		m_Paths.push_back({
-			b2Vec2(m_Points[0].x, m_Points[0].y),
-			b2Vec2(m_Points[prevEnd].x, m_Points[prevEnd].y)
+			b2Vec2(m_Points[0].x + m_Offset.x, m_Points[0].y + m_Offset.y),
+			b2Vec2(m_Points[prevEnd].x + m_Offset.x, m_Points[prevEnd].y + m_Offset.y)
 			});
 
 		for (std::size_t i = prevEnd + 1; i <= endIndex; i++) {
-			m_Paths.back().push_back(b2Vec2(m_Points[i].x, m_Points[i].y));
+			m_Paths.back().push_back(b2Vec2(m_Points[i].x + m_Offset.x, m_Points[i].y + m_Offset.y));
 		}
 
 		prevEnd = endIndex;
