@@ -161,7 +161,7 @@ void EdgeCollider::CreateFixturesOnBody(b2Body* body) {
 	forwardPoints.reserve(m_Points.size());
 
 	for (const auto& point : m_Points) {
-		forwardPoints.push_back(b2Vec2(point.x, point.y));
+		forwardPoints.push_back(b2Vec2(point.x + m_Offset.x, point.y + m_Offset.y));
 	}
 
 	std::vector<b2Vec2> reversePoints(forwardPoints);

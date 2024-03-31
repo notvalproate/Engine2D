@@ -294,8 +294,8 @@ class Controller : public Behaviour {
 
 			boo = !boo;
 			//test->SetPoints(ref, Vector2D::one);
-			//test2->SetPoints(ref, Vector2D::zero);
-			test3->SetTransform(test3->GetSize(), CapsuleDirection::Horizontal, Vector2D::one);
+			test2->SetPoints(ref, Vector2D::one);
+			//test3->SetTransform(test3->GetSize(), CapsuleDirection::Horizontal, Vector2D::one);
 		}
 	}
 	
@@ -341,8 +341,7 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<PolygonCollider>();
-		playerCollider->CreatePrimitive(5, Vector2D::one, Vector2D::one);
+		auto playerCollider = PlayerObject->AddComponent<EdgeCollider>();
 
 		PhysicsMaterial ice(0, 0);
 
