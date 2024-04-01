@@ -785,6 +785,10 @@ struct Color {
         a(std::clamp(a, 0.0f, 1.0f))
     { }
 
+    inline constexpr std::string ToString() const {
+        return "(" + std::to_string(r) + "," + std::to_string(g) + "," + std::to_string(b) + "," + std::to_string(a) + ")";
+    }
+
     inline Color GetGamma() const {
         return Color(
             std::powf(r, 1.0f / gamma),
