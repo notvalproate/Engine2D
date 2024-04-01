@@ -834,6 +834,11 @@ struct Color {
         }
     }
 
+    friend inline std::ostream& operator<<(std::ostream& os, const Color& color) {
+        os << color.ToString();
+        return os;
+    }
+
     static const Color white;
     static const Color gray;
     static const Color black;
