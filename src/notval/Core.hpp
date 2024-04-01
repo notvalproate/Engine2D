@@ -768,10 +768,21 @@ struct SortingLayer {
 
 struct Color {
     explicit inline Color() = default;
-    explicit inline Color(const uint8_t r, const uint8_t g, const uint8_t b) : r(r), g(g), b(b), a(255) { }
-    explicit inline Color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a) : r(r), g(g), b(b), a(a) { }
+    explicit inline Color(const float r, const float g, const float b) : r(r), g(g), b(b), a(1.0f) { }
+    explicit inline Color(const float r, const float g, const float b, const float a) : r(r), g(g), b(b), a(a) { }
 
-    uint8_t r{}, g{}, b{}, a{};
+    inline constexpr Color GetGamma() const {
+        return Color(
+            std::powf(r, 1.0f / gamma),
+            std::powf(g, 1.0f / gamma),
+            std::powf(b, 1.0f / gamma),
+            a
+        );
+    }
+
+    float r{}, g{}, b{}, a{};
+
+    static constexpr float gamma = 2.2f;
 
     static const Color white;
     static const Color gray;
