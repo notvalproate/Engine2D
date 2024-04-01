@@ -274,12 +274,9 @@ class Controller : public Behaviour {
 		}
 	}
 
-	// FIX SOME ISSUES WITH DESTRUCTION OF COLLIDER BEFORE FIXTURE OR SOMETHING
-
 	void OnCollisionEnter(const Collision& collision) override {
 		if (collision.gameObject->CompareTag("Spiky")) {
-			std::cout << "Die" << std::endl;
- 			//Destroy(gameObject);
+ 			Destroy(gameObject);
 		}
 	}
 	
@@ -318,7 +315,7 @@ public:
 		L2Renderer->SetPixelsPerUnit(16);
 		
 		auto PlayerObject = CreateGameObject("Player");
-		//PlayerObject->AddComponent<CameraFollower>();
+		PlayerObject->AddComponent<CameraFollower>();
 		PlayerObject->AddComponent<Controller>();
 		//PlayerObject->AddComponent<PlayerController>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
