@@ -1033,6 +1033,9 @@ private:
     class ContactListener : public b2ContactListener {
         void BeginContact(b2Contact* contact) override;
         void EndContact(b2Contact* contact) override;
+
+    private:
+        Collision GetCollision(Collider* collider, Collider* otherCollider) const;
     };
 
     class RayCastCallback : public b2RayCastCallback {
