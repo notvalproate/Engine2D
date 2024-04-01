@@ -280,10 +280,6 @@ class Controller : public Behaviour {
 		}
 	}
 	
-	void OnCollisionExit(const Collision& collision) override {
-		std::cout << "Undied" << std::endl;
-	}
-	
 	Camera* mainCamera;
 	RigidBody* rb;
 	BoxCollider* test;

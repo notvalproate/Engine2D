@@ -772,6 +772,19 @@ struct Color {
     explicit inline Color(const uint8_t r, const uint8_t g, const uint8_t b, const uint8_t a) : r(r), g(g), b(b), a(a) { }
 
     uint8_t r{}, g{}, b{}, a{};
+
+    static const Color white;
+    static const Color gray;
+    static const Color black;
+    static const Color clear;
+
+    static const Color red;
+    static const Color green;
+    static const Color blue;
+
+    static const Color cyan;
+    static const Color magenta;
+    static const Color yellow;
 };
 
 class RenderingHandler {

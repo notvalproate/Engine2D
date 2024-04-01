@@ -9,9 +9,6 @@ void PhysicsHandler::RenderColliders() const {
 
 	b2World* currentWorld = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
 
-	Color green(0, 255, 0);
-	Color red(255, 0, 0);
-
 	for (b2Body* bodyList = currentWorld->GetBodyList(); bodyList; bodyList = bodyList->GetNext()) {
 
 		for (b2Fixture* fixtureList = bodyList->GetFixtureList(); fixtureList; fixtureList = fixtureList->GetNext()) {
@@ -28,7 +25,7 @@ void PhysicsHandler::RenderColliders() const {
 						Vector2D point1(bodyList->GetWorldPoint(polygon->m_vertices[i]));
 						Vector2D point2(bodyList->GetWorldPoint(polygon->m_vertices[j]));
 
-						Object::RenderingPipeline.RenderLine(point1, point2, green);
+						Object::RenderingPipeline.RenderLine(point1, point2, Color::yellow);
 					}
 				}
 			}
@@ -39,9 +36,9 @@ void PhysicsHandler::RenderColliders() const {
 					Vector2D center(bodyList->GetWorldPoint(circle->m_p));
 					Vector2D right(bodyList->GetWorldPoint(b2Vec2(circle->m_p.x, circle->m_p.y + circle->m_radius)));
 
-					Object::RenderingPipeline.RenderCircle(center, circle->m_radius, green);
+					Object::RenderingPipeline.RenderCircle(center, circle->m_radius, Color::green);
 
-					Object::RenderingPipeline.RenderLine(center, right, green);
+					Object::RenderingPipeline.RenderLine(center, right, Color::green);
 				}
 			}
 			else if (shape->GetType() == b2Shape::Type::e_edge) {
@@ -51,7 +48,7 @@ void PhysicsHandler::RenderColliders() const {
 					Vector2D v1(bodyList->GetWorldPoint(edge->m_vertex1));
 					Vector2D v2(bodyList->GetWorldPoint(edge->m_vertex2));
 
-					Object::RenderingPipeline.RenderLine(v1, v2, green);
+					Object::RenderingPipeline.RenderLine(v1, v2, Color::green);
 				}
 			}
 			else if (shape->GetType() == b2Shape::Type::e_chain) {
@@ -62,14 +59,14 @@ void PhysicsHandler::RenderColliders() const {
 						Vector2D v1(bodyList->GetWorldPoint(chain->m_vertices[i]));
 						Vector2D v2(bodyList->GetWorldPoint(chain->m_vertices[i + 1]));
 
-						Object::RenderingPipeline.RenderLine(v1, v2, green);
+						Object::RenderingPipeline.RenderLine(v1, v2, Color::green);
 					}
 				}
 			}
 		}
 
 		Vector2D centerOfMass(bodyList->GetWorldCenter());
-		Object::RenderingPipeline.RenderPoint(centerOfMass, 3, red);
+		Object::RenderingPipeline.RenderPoint(centerOfMass, 3, Color::red);
 	}
 }
 
