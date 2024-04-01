@@ -767,9 +767,9 @@ struct SortingLayer {
 };
 
 struct Color {
-    explicit inline Color() = default;
+    explicit constexpr inline Color() = default;
 
-    explicit inline Color(const float r, const float g, const float b) 
+    explicit constexpr inline Color(const float r, const float g, const float b)
         : 
         r(std::clamp(r, 0.0f, 1.0f)),
         g(std::clamp(g, 0.0f, 1.0f)),
@@ -777,7 +777,7 @@ struct Color {
         a(1.0f) 
     { }
 
-    explicit inline Color(const float r, const float g, const float b, const float a) 
+    explicit constexpr inline Color(const float r, const float g, const float b, const float a) 
         : 
         r(std::clamp(r, 0.0f, 1.0f)),
         g(std::clamp(g, 0.0f, 1.0f)),
@@ -819,21 +819,57 @@ struct Color {
 
     static constexpr float gamma = 2.2f;
 
-    static inline constexpr Color operator+(const Color& a, const Color& b) {
+    inline constexpr Color operator+(const Color& other) {
         return Color(
-            a.r + b.r,
-            a.g + b.g,
-            a.b + b.b,
-            a.a + b.a
+            r + other.r,
+            g + other.g,
+            b + other.b,
+            a + other.a
         );
     }
     
-    static inline constexpr Color operator-(const Color& a, const Color& b) {
+    inline constexpr Color operator-(const Color& other) {
         return Color(
-            a.r - b.r,
-            a.g - b.g,
-            a.b - b.b,
-            a.a - b.a
+            r - other.r,
+            g - other.g,
+            b - other.b,
+            a - other.a
+        );
+    }
+    
+    inline constexpr Color operator*(const Color& other) {
+        return Color(
+            r * other.r,
+            g * other.g,
+            b * other.b,
+            a * other.a
+        );
+    }
+    
+    inline constexpr Color operator*(const float value) {
+        return Color(
+            r * value,
+            g * value,
+            b * value,
+            a * value
+        );
+    }
+    
+    friend inline constexpr Color operator*(const float b, const Color& a) {
+        return Color(
+            a.r * b,
+            a.g * b,
+            a.b * b, 
+            a.a * b
+        );
+    }
+
+    inline constexpr Color operator/(const float value) {
+        return Color(
+            r / value,
+            g / value,
+            b / value,
+            a / value
         );
     }
 
