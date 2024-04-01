@@ -815,6 +815,21 @@ struct Color {
 
     static constexpr float gamma = 2.2f;
 
+    inline constexpr float operator[](const short index) const {
+        switch (index) {
+        case 0:
+            return r;
+        case 1:
+            return g;
+        case 2:
+            return b;
+        case 3:
+            return a;
+        default:
+            return 0.0f;
+        }
+    }
+
     static const Color white;
     static const Color gray;
     static const Color black;
