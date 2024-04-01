@@ -794,8 +794,21 @@ struct Color {
         );
     }
 
+    inline Color GetLinear() const {
+        return Color(
+            std::powf(r, gamma),
+            std::powf(g, gamma),
+            std::powf(b, gamma),
+            a
+        );
+    }
+
     inline constexpr float GetGrayscale() const {
         return (0.299f * r) + (0.587 * g) + (0.114 * b);
+    }
+
+    inline constexpr float GetMaxColorComponent() const {
+        return std::max({r, g, b});
     }
 
     float r{}, g{}, b{}, a{};
