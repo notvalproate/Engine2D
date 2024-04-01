@@ -794,6 +794,10 @@ struct Color {
         );
     }
 
+    inline constexpr float GetGrayscale() const {
+        return (0.299f * r) + (0.587 * g) + (0.114 * b);
+    }
+
     float r{}, g{}, b{}, a{};
 
     static constexpr float gamma = 2.2f;
