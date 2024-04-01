@@ -125,6 +125,10 @@ void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
+	if (colliderA->gameObject->m_Destroyed || colliderB->gameObject->m_Destroyed) {
+		return;
+	}
+
 	Collision collisionA = GetCollision(colliderB, colliderA);
 	Collision collisionB = GetCollision(colliderA, colliderB);
 

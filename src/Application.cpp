@@ -279,15 +279,12 @@ class Controller : public Behaviour {
 	void OnCollisionEnter(const Collision& collision) override {
 		if (collision.gameObject->CompareTag("Spiky")) {
 			std::cout << "Die" << std::endl;
- 			Destroy(gameObject);
+ 			//Destroy(gameObject);
 		}
 	}
 	
 	void OnCollisionExit(const Collision& collision) override {
-		if (collision.gameObject->CompareTag("Spiky")) {
-			std::cout << "Undied" << std::endl;
- 			//Destroy(gameObject);
-		}
+		std::cout << "Undied" << std::endl;
 	}
 	
 	Camera* mainCamera;

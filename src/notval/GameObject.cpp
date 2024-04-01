@@ -3,15 +3,19 @@
 #include <ranges>
 
 GameObject::GameObject(Scene* scene, const uint32_t id) 
-    : name({}), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false) { }
+    : name({}), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false), m_Destroyed(false) { }
 
 GameObject::GameObject(const std::string_view goName, Scene* scene, const uint32_t id)
-    : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false) { }
+    : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false), m_Destroyed(false) { }
 
 GameObject::GameObject(const std::string_view goName, Transform* parent, bool instantiateInWorldSpace, Scene* scene, const uint32_t id)
-    : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false)
+    : name(goName), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false), m_Destroyed(false)
 { 
     transform.SetParent(parent, instantiateInWorldSpace);
+}
+
+GameObject::~GameObject() {
+    m_Destroyed = true;
 }
 
 bool GameObject::CompareTag(const std::string_view otherTag) const {

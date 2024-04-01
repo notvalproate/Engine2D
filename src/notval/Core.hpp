@@ -492,6 +492,8 @@ private:
 
 class GameObject final : public Object {
 public:
+    ~GameObject();
+
     bool CompareTag(const std::string_view otherTag) const;
 
     template<typename T>
@@ -713,6 +715,7 @@ private:
     }
 
     bool m_Started;
+    bool m_Destroyed;
 
     std::vector<std::unique_ptr<Component>> m_ComponentsStagedForAdding{};
     std::vector<std::unique_ptr<Behaviour>> m_BehavioursStagedForAdding{};
