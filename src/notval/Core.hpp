@@ -768,10 +768,24 @@ struct SortingLayer {
 
 struct Color {
     explicit inline Color() = default;
-    explicit inline Color(const float r, const float g, const float b) : r(r), g(g), b(b), a(1.0f) { }
-    explicit inline Color(const float r, const float g, const float b, const float a) : r(r), g(g), b(b), a(a) { }
 
-    inline constexpr Color GetGamma() const {
+    explicit inline Color(const float r, const float g, const float b) 
+        : 
+        r(std::clamp(r, 0.0f, 1.0f)),
+        g(std::clamp(g, 0.0f, 1.0f)),
+        b(std::clamp(b, 0.0f, 1.0f)),
+        a(1.0f) 
+    { }
+
+    explicit inline Color(const float r, const float g, const float b, const float a) 
+        : 
+        r(std::clamp(r, 0.0f, 1.0f)),
+        g(std::clamp(g, 0.0f, 1.0f)),
+        b(std::clamp(b, 0.0f, 1.0f)),
+        a(std::clamp(a, 0.0f, 1.0f))
+    { }
+
+    inline Color GetGamma() const {
         return Color(
             std::powf(r, 1.0f / gamma),
             std::powf(g, 1.0f / gamma),
@@ -815,6 +829,11 @@ private:
     void PresentRenderer();
     void DestroyRenderer();
 
+    struct RenderableColor {
+        uint8_t r, g, b, a;
+    };
+
+    RenderableColor GetRenderableColor(const Color& color) const;
     SDL_FRect GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform, const Camera* currentCamera) const;
     void GetFlipAndRotation(const Transform* transform, double& rotation, SDL_RendererFlip& flipFlag) const;
     const std::vector<std::string>& GetAvailableSortingLayers() const;
@@ -823,6 +842,7 @@ private:
     SDL_Renderer* m_Renderer;
     std::vector<std::string> m_AvailableSortingLayers;
     mutable std::vector<SDL_Point> m_CirclePointsReserve;
+
 
     friend class Object;
     friend class GameObject;

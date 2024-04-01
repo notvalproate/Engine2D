@@ -25,7 +25,7 @@ void PhysicsHandler::RenderColliders() const {
 						Vector2D point1(bodyList->GetWorldPoint(polygon->m_vertices[i]));
 						Vector2D point2(bodyList->GetWorldPoint(polygon->m_vertices[j]));
 
-						Object::RenderingPipeline.RenderLine(point1, point2, Color::yellow);
+						Object::RenderingPipeline.RenderLine(point1, point2, Color::green);
 					}
 				}
 			}

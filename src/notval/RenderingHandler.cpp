@@ -42,7 +42,9 @@ void RenderingHandler::RenderPoint(const Vector2D& point, const uint8_t width, c
 	int initialY = screenPosition.y - (width / 2);
 	int maxY = screenPosition.y + ((width - 1) / 2);
 
-	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+	RenderableColor rColor = GetRenderableColor(color);
+
+	SDL_SetRenderDrawColor(m_Renderer, rColor.r, rColor.g, rColor.b, rColor.a);
 	for (int x = initialX; x <= maxX; x++) {
 		for (int y = initialY; y <= maxY; y++) {
 			SDL_RenderDrawPoint(m_Renderer, x, y);
@@ -63,7 +65,9 @@ void RenderingHandler::RenderLine(const Vector2D& src, const Vector2D& dest, con
 	Vector2D srcScreenPosition = currentCamera->WorldToScreenPoint(src);
 	Vector2D destScreenPosition = currentCamera->WorldToScreenPoint(dest);
 
-	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+	RenderableColor rColor = GetRenderableColor(color);
+
+	SDL_SetRenderDrawColor(m_Renderer, rColor.r, rColor.g, rColor.b, rColor.a);
 	SDL_RenderDrawLine(m_Renderer, srcScreenPosition.x, srcScreenPosition.y, destScreenPosition.x, destScreenPosition.y);
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }
@@ -87,7 +91,9 @@ void RenderingHandler::RenderRect(const Vector2D& position, const Vector2D& dime
 		newDimensions.y,
 	};
 
-	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+	RenderableColor rColor = GetRenderableColor(color);
+
+	SDL_SetRenderDrawColor(m_Renderer, rColor.r, rColor.g, rColor.b, rColor.a);
 	SDL_RenderDrawRect(m_Renderer, &rect);
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }
@@ -103,7 +109,9 @@ void RenderingHandler::RenderCircle(const Vector2D& center, const double radius,
 		return;
 	}
 
-	SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+	RenderableColor rColor = GetRenderableColor(color);
+
+	SDL_SetRenderDrawColor(m_Renderer, rColor.r, rColor.g, rColor.b, rColor.a);
 
 	// Circle Rendering Algorithm using Midpoint Circle Algorithm
 	// Scotty Stephens & JanSordid: https://stackoverflow.com/a/48291620 & https://stackoverflow.com/a/74745126
@@ -170,6 +178,15 @@ void RenderingHandler::RenderSprite(SDL_Texture* texture, const Vector2D& dimens
 	GetFlipAndRotation(transform, angle, flipFlag);
 	
 	SDL_RenderCopyExF(m_Renderer, texture, NULL, &destRect, angle, NULL, flipFlag);
+}
+
+RenderingHandler::RenderableColor RenderingHandler::GetRenderableColor(const Color& color) const {
+	return RenderingHandler::RenderableColor{
+		static_cast<uint8_t>(color.r * 255),
+		static_cast<uint8_t>(color.g * 255),
+		static_cast<uint8_t>(color.b * 255),
+		static_cast<uint8_t>(color.a * 255),
+	};
 }
 
 SDL_FRect RenderingHandler::GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform, const Camera* currentCamera) const {
