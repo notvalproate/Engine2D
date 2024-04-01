@@ -114,8 +114,8 @@ void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
-	Collision collisionA = GetCollision(colliderA, colliderB);
-	Collision collisionB = GetCollision(colliderB, colliderA);
+	Collision collisionA = GetCollision(colliderB, colliderA);
+	Collision collisionB = GetCollision(colliderA, colliderB);
 
 	colliderA->gameObject->OnCollisionEnter(collisionA);
 	colliderB->gameObject->OnCollisionEnter(collisionB);
@@ -125,11 +125,11 @@ void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
-	Collision collisionA = GetCollision(colliderA, colliderB);
-	Collision collisionB = GetCollision(colliderB, colliderA);
+	Collision collisionA = GetCollision(colliderB, colliderA);
+	Collision collisionB = GetCollision(colliderA, colliderB);
 
-	colliderA->gameObject->OnCollisionEnter(collisionA);
-	colliderB->gameObject->OnCollisionEnter(collisionB);
+	colliderA->gameObject->OnCollisionExit(collisionA);
+	colliderB->gameObject->OnCollisionExit(collisionB);
 }
 
 Collision PhysicsHandler::ContactListener::GetCollision(Collider* collider, Collider* otherCollider) const {
@@ -145,6 +145,8 @@ Collision PhysicsHandler::ContactListener::GetCollision(Collider* collider, Coll
 
 	collision.relativeVelocity = Vector2D::zero;
 	collision.contactCount = 1;
+
+	return collision;
 }
 
 float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) {

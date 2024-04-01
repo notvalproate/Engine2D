@@ -14,6 +14,10 @@ GameObject::GameObject(const std::string_view goName, Transform* parent, bool in
     transform.SetParent(parent, instantiateInWorldSpace);
 }
 
+bool GameObject::CompareTag(const std::string_view otherTag) const {
+    return tag == otherTag;
+}
+
 void GameObject::Start() {
     m_Started = true;
 

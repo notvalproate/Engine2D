@@ -274,9 +274,19 @@ class Controller : public Behaviour {
 		}
 	}
 
+	// FIX SOME ISSUES WITH DESTRUCTION OF COLLIDER BEFORE FIXTURE OR SOMETHING
+
 	void OnCollisionEnter(const Collision& collision) override {
-		if (*collision.otherCollider->name == "Ground 3") {
-			Destroy(gameObject);
+		if (collision.gameObject->CompareTag("Spiky")) {
+			std::cout << "Die" << std::endl;
+ 			Destroy(gameObject);
+		}
+	}
+	
+	void OnCollisionExit(const Collision& collision) override {
+		if (collision.gameObject->CompareTag("Spiky")) {
+			std::cout << "Undied" << std::endl;
+ 			//Destroy(gameObject);
 		}
 	}
 	
@@ -311,7 +321,7 @@ public:
 		L2Renderer->SetPixelsPerUnit(16);
 		
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->AddComponent<CameraFollower>();
+		//PlayerObject->AddComponent<CameraFollower>();
 		PlayerObject->AddComponent<Controller>();
 		//PlayerObject->AddComponent<PlayerController>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
@@ -351,6 +361,7 @@ public:
 		g3collider->SetMaterial(ice);
 
 		auto g4 = CreateGameObject("Ground 4", groundObject, Vector2D(-1.5, 0), 0);
+		g4->tag = "Spiky";
 		auto g4render = g4->AddComponent<SpriteRenderer>();
 		g4render->SetSprite("assets/medieval/Tiles/floor_tile_1.png");
 		 g4render->SetPixelsPerUnit(32);

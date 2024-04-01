@@ -492,6 +492,8 @@ private:
 
 class GameObject final : public Object {
 public:
+    bool CompareTag(const std::string_view otherTag) const;
+
     template<typename T>
     inline constexpr T* AddComponent() {
         AssertComponentIsDerived<T>();
