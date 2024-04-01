@@ -40,6 +40,7 @@ class Camera;
 class SpriteRenderer;
 class RigidBody;
 class Collider;
+struct Collision;
 class BoxCollider;
 class PolygonCollider;
 class EdgeCollider;
@@ -424,6 +425,8 @@ protected:
 private:
     std::unique_ptr<Component> Clone() const override;
 
+    virtual void OnCollisionEnter(const Collision& collision) {};
+    virtual void OnCollisionExit(const Collision& collision) {};
     virtual void LateUpdate() {};
     virtual void OnDestroy() {};
 
@@ -670,6 +673,9 @@ private:
     void Update();
     void Render() const;
 
+    void OnCollisionEnter(const Collision& collision);
+    void OnCollisionExit(const Collision& collision);
+
     void HandleDestructions();
 
     std::size_t GetComponentIndex(Component* component);
@@ -716,6 +722,7 @@ private:
     friend class Object;
     friend class Scene;
     friend class RenderingHandler;
+    friend class PhysicsHandler;
 };
 
 
@@ -1023,7 +1030,10 @@ private:
 
     void RenderColliders() const;
 
-    bool m_RenderSceneColliders;
+    class ContactListener : public b2ContactListener {
+        void BeginContact(b2Contact* contact) override;
+        void EndContact(b2Contact* contact) override;
+    };
 
     class RayCastCallback : public b2RayCastCallback {
     public:
@@ -1036,6 +1046,9 @@ private:
         RayCastHit m_Result;
         b2Fixture* m_FixtureHit;
     };
+
+    bool m_RenderSceneColliders;
+    ContactListener m_ContactListener;
 
     friend class Object;
     friend class Scene;

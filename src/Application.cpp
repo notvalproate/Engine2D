@@ -273,6 +273,12 @@ class Controller : public Behaviour {
 			
 		}
 	}
+
+	void OnCollisionEnter(const Collision& collision) override {
+		if (*collision.otherCollider->name == "Ground 3") {
+			Destroy(gameObject);
+		}
+	}
 	
 	Camera* mainCamera;
 	RigidBody* rb;

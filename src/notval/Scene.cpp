@@ -8,6 +8,7 @@ Scene::Scene(const std::string_view name, const std::vector<std::string>& avaiab
     }
 
     m_PhysicsWorld = std::make_unique<b2World>(b2Vec2(0, -9.81));
+    m_PhysicsWorld.get()->SetContactListener(&Physics.m_ContactListener);
 }
 
 void Scene::Start() {

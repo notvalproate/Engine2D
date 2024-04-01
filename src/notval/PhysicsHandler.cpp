@@ -108,6 +108,50 @@ RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direc
 	}
 }
 
+#include "Components/Components.hpp"
+
+void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
+	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
+	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
+
+	Collision collisionA;
+	collisionA.collider = colliderA;
+	collisionA.otherCollider = colliderB;
+
+	collisionA.rigidBody = colliderA->GetAttachedRigidBody();
+	collisionA.otherRigidBody = colliderB->GetAttachedRigidBody();
+
+	collisionA.transform = colliderA->transform;
+	collisionA.gameObject = colliderA->gameObject;
+
+	collisionA.relativeVelocity = Vector2D::zero;
+	collisionA.contactCount = 1;
+	
+	Collision collisionB;
+	collisionB.collider = colliderB;
+	collisionB.otherCollider = colliderA;
+
+	collisionB.rigidBody = colliderB->GetAttachedRigidBody();
+	collisionB.otherRigidBody = colliderA->GetAttachedRigidBody();
+
+	collisionB.transform = colliderB->transform;
+	collisionB.gameObject = colliderB->gameObject;
+
+	collisionB.relativeVelocity = Vector2D::zero;
+	collisionB.contactCount = 1;
+
+
+	colliderA->gameObject->OnCollisionEnter(collisionA);
+	colliderB->gameObject->OnCollisionEnter(collisionB);
+}
+
+void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
+	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
+	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
+
+	std::cout << *colliderA->name << " end " << *colliderB->name << std::endl;
+}
+
 float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) {
 	m_Result.hit = true;
 	m_Result.point = point;

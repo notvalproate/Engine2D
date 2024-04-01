@@ -52,6 +52,18 @@ void GameObject::Render() const {
     }
 }
 
+void GameObject::OnCollisionEnter(const Collision& collision) {
+    for (auto& behaviour : m_Behaviours) {
+        behaviour->OnCollisionEnter(collision);
+    }
+}
+
+void GameObject::OnCollisionExit(const Collision& collision) {
+    for (auto& behaviour : m_Behaviours) {
+        behaviour->OnCollisionExit(collision);
+    }
+}
+
 void GameObject::HandleDestructions() {
     if (m_ComponentsStagedForDestruction.size()) {
         for (auto& component : m_ComponentsStagedForDestruction) {

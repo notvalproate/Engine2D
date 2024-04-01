@@ -189,8 +189,6 @@ private:
 	friend class RigidBody;
 };
 
-// USE OFFSET IN POLYGON AND EDGE COLLIDER
-
 class PolygonCollider final : public Collider {
 public:
 	~PolygonCollider() override;
