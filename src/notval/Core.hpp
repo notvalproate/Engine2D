@@ -819,6 +819,24 @@ struct Color {
 
     static constexpr float gamma = 2.2f;
 
+    static inline constexpr Color operator+(const Color& a, const Color& b) {
+        return Color(
+            a.r + b.r,
+            a.g + b.g,
+            a.b + b.b,
+            a.a + b.a
+        );
+    }
+    
+    static inline constexpr Color operator-(const Color& a, const Color& b) {
+        return Color(
+            a.r - b.r,
+            a.g - b.g,
+            a.b - b.b,
+            a.a - b.a
+        );
+    }
+
     inline constexpr float operator[](const short index) const {
         switch (index) {
         case 0:
