@@ -43,6 +43,7 @@ class Collider;
 class BoxCollider;
 class PolygonCollider;
 class EdgeCollider;
+class CapsuleCollider;
 class CircleCollider;
 
 
@@ -829,7 +830,6 @@ private:
     void DestroyCamera(Camera* cam);
 
     std::unique_ptr<b2World> m_PhysicsWorld;
-    std::unordered_map<b2Fixture*, Collider*> m_FixtureColliderMap{};
 
     std::vector<std::unique_ptr<GameObject>> m_SceneGameObjects{};
     std::vector<GameObject*> m_StagedForDestruction{};
@@ -1031,13 +1031,13 @@ private:
     class RayCastCallback : public b2RayCastCallback {
     public:
         float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override;
-        inline bool DidHit() const { return m_result.hit; }
-        inline RayCastHit& GetResult() { return m_result; }
-        inline b2Fixture* GetFixture() { return fixtureHit; }
+        inline bool DidHit() const { return m_Result.hit; }
+        inline RayCastHit& GetResult() { return m_Result; }
+        inline b2Fixture* GetFixture() { return m_FixtureHit; }
 
     private:
-        RayCastHit m_result;
-        b2Fixture* fixtureHit;
+        RayCastHit m_Result;
+        b2Fixture* m_FixtureHit;
     };
 
     friend class Object;

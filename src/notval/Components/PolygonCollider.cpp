@@ -86,8 +86,6 @@ b2Shape* PolygonCollider::GetShape(bool useOffset) const {
 }
 
 void PolygonCollider::ResetShape() {
-	RemoveFixtureFromMap();
-
 	if (m_AttachedRigidBody) {
 		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 
@@ -113,34 +111,6 @@ void PolygonCollider::ResetShape() {
 
 		CreateFixturesOnBody(*m_StaticBody);
 	}
-
-	AddFixtureToMap();
-}
-
-void PolygonCollider::RemoveFixtureFromMap() const {
-	auto& sceneColliderMap = gameObject->scene->m_FixtureColliderMap;
-
-	auto it = sceneColliderMap.find(m_Fixture);
-
-	if (it != sceneColliderMap.end()) {
-		sceneColliderMap.erase(it);
-	}
-
-	for (auto& fixture : m_FixtureVector) {
-		auto it = sceneColliderMap.find(fixture);
-
-		if (it != sceneColliderMap.end()) {
-			sceneColliderMap.erase(fixture);
-		}
-	}
-}
-
-void PolygonCollider::AddFixtureToMap() {
-	for (auto& fixture : m_FixtureVector) {
-		gameObject->scene->m_FixtureColliderMap[fixture] = this;
-	}
-
-	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
 }
 
 void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {
@@ -149,7 +119,6 @@ void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {
 	}
 
 	m_Material.reset();
-	RemoveFixtureFromMap();
 
 	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 	m_StaticBody.reset();
@@ -161,13 +130,9 @@ void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {
 	CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
 
 	m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
-
-	AddFixtureToMap();
 }
 
 void PolygonCollider::DeatachRigidBody() {
-	RemoveFixtureFromMap();
-
 	m_AttachedRigidBody = nullptr;
 	m_Fixture = nullptr;
 	m_FixtureVector.clear();
@@ -179,8 +144,6 @@ void PolygonCollider::DeatachRigidBody() {
 	CreateFixturesOnBody(*m_StaticBody);
 
 	m_CurrentPosition = transform->position;
-
-	AddFixtureToMap();
 }
 
 // O(n) solution to find out if the list of points contain a concavity. Algorithm terminates as soon as concavity is detected.

@@ -17,8 +17,6 @@ Collider::Collider(GameObject* gameObj)
 }
 
 Collider::~Collider() {
-	RemoveFixtureFromMap();
-
 	if (m_AttachedRigidBody) {
 		auto& rbColliders = m_AttachedRigidBody->m_AttachedColliders;
 
@@ -119,8 +117,6 @@ void Collider::Awake() {
 	delete boxShape;
 
 	UpdateBounds();
-
-	AddFixtureToMap();
 }
 
 void Collider::Update() {
@@ -151,8 +147,6 @@ void Collider::UpdateStaticPosition() {
 }
 
 void Collider::ResetShape() {
-	RemoveFixtureFromMap();
-
 	if (m_AttachedRigidBody) {
 		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 
@@ -171,26 +165,10 @@ void Collider::ResetShape() {
 
 		delete boxShape;
 	}
-
-	AddFixtureToMap();
 }
 
 void Collider::ResetDensity() {
 	m_Fixture->SetDensity(m_Density);
-}
-
-void Collider::RemoveFixtureFromMap() const {
-	auto& sceneColliderMap = gameObject->scene->m_FixtureColliderMap;
-
-	auto it = sceneColliderMap.find(m_Fixture);
-
-	if (it != sceneColliderMap.end()) {
-		sceneColliderMap.erase(it);
-	}
-}
-
-void Collider::AddFixtureToMap() {
-	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
 }
 
 void Collider::AttachRigidBody(RigidBody* rigidBody) {
@@ -199,7 +177,6 @@ void Collider::AttachRigidBody(RigidBody* rigidBody) {
 	}
 
 	m_Material.reset();
-	RemoveFixtureFromMap();
 	DestroyStaticCollider();
 
 	m_AttachedRigidBody = rigidBody;
@@ -209,13 +186,9 @@ void Collider::AttachRigidBody(RigidBody* rigidBody) {
 	CreateColliderOnRigidBody(shape);
 
 	delete shape;
-
-	AddFixtureToMap();
 }
 
 void Collider::DeatachRigidBody() {
-	RemoveFixtureFromMap();
-
 	m_AttachedRigidBody = nullptr;
 
 	b2Shape* shape = GetShape(false);
@@ -226,8 +199,6 @@ void Collider::DeatachRigidBody() {
 	delete shape;
 
 	m_CurrentPosition = transform->position;
-
-	AddFixtureToMap();
 }
 
 void Collider::CreateColliderOnRigidBody(const b2Shape* colShape) {

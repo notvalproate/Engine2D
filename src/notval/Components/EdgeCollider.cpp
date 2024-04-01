@@ -60,12 +60,9 @@ void EdgeCollider::Awake() {
 	}
 
 	UpdateBounds();
-	AddFixtureToMap();
 }
 
 void EdgeCollider::ResetShape() {
-	RemoveFixtureFromMap();
-
 	if (m_AttachedRigidBody) {
 		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 		m_AttachedRigidBody->m_Body->DestroyFixture(m_ReverseFixture);
@@ -89,29 +86,6 @@ void EdgeCollider::ResetShape() {
 
 		CreateFixturesOnBody(*m_StaticBody);
 	}
-
-	AddFixtureToMap();
-}
-
-void EdgeCollider::RemoveFixtureFromMap() const {
-	auto& sceneColliderMap = gameObject->scene->m_FixtureColliderMap;
-
-	auto it = sceneColliderMap.find(m_Fixture);
-
-	if (it != sceneColliderMap.end()) {
-		sceneColliderMap.erase(it);
-	}
-	
-	it = sceneColliderMap.find(m_ReverseFixture);
-
-	if (it != sceneColliderMap.end()) {
-		sceneColliderMap.erase(it);
-	}
-}
-
-void EdgeCollider::AddFixtureToMap() {
-	gameObject->scene->m_FixtureColliderMap[m_ReverseFixture] = this;
-	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
 }
 
 void EdgeCollider::AttachRigidBody(RigidBody* rigidBody) {
@@ -120,8 +94,6 @@ void EdgeCollider::AttachRigidBody(RigidBody* rigidBody) {
 	}
 
 	m_Material.reset();
-
-	RemoveFixtureFromMap();
 
 	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 	m_StaticBody.reset();
@@ -134,13 +106,9 @@ void EdgeCollider::AttachRigidBody(RigidBody* rigidBody) {
 
 	m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
 	UpdateMassData();
-
-	AddFixtureToMap();
 }
 
 void EdgeCollider::DeatachRigidBody() {
-	RemoveFixtureFromMap();
-
 	m_AttachedRigidBody = nullptr;
 	m_Fixture = nullptr;
 	m_ReverseFixture = nullptr;
@@ -152,8 +120,6 @@ void EdgeCollider::DeatachRigidBody() {
 	CreateFixturesOnBody(*m_StaticBody);
 
 	m_CurrentPosition = transform->position;
-
-	AddFixtureToMap();
 }
 
 void EdgeCollider::CreateFixturesOnBody(b2Body* body) {

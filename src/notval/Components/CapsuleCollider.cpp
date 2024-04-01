@@ -61,7 +61,6 @@ void CapsuleCollider::Awake() {
 	}
 
 	UpdateBounds();
-	AddFixtureToMap();
 }
 
 b2Shape* CapsuleCollider::GetShape(bool useOffset) const {
@@ -73,8 +72,6 @@ b2Shape* CapsuleCollider::GetShape(bool useOffset) const {
 }
 
 void CapsuleCollider::ResetShape() {
-	RemoveFixtureFromMap();
-
 	if (m_AttachedRigidBody) {
 		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
 		m_AttachedRigidBody->m_Body->DestroyFixture(m_UpperSemi);
@@ -100,36 +97,6 @@ void CapsuleCollider::ResetShape() {
 
 		CreateFixturesOnBody(*m_StaticBody);
 	}
-
-	AddFixtureToMap();
-}
-
-void CapsuleCollider::RemoveFixtureFromMap() const {
-	auto& sceneColliderMap = gameObject->scene->m_FixtureColliderMap;
-
-	auto it = sceneColliderMap.find(m_Fixture);
-
-	if (it != sceneColliderMap.end()) {
-		sceneColliderMap.erase(it);
-	}
-	
-	it = sceneColliderMap.find(m_UpperSemi);
-
-	if (it != sceneColliderMap.end()) {
-		sceneColliderMap.erase(it);
-	}
-	
-	it = sceneColliderMap.find(m_LowerSemi);
-
-	if (it != sceneColliderMap.end()) {
-		sceneColliderMap.erase(it);
-	}
-}
-
-void CapsuleCollider::AddFixtureToMap() {
-	gameObject->scene->m_FixtureColliderMap[m_Fixture] = this;
-	gameObject->scene->m_FixtureColliderMap[m_UpperSemi] = this;
-	gameObject->scene->m_FixtureColliderMap[m_LowerSemi] = this;
 }
 
 void CapsuleCollider::AttachRigidBody(RigidBody* rigidBody) {
@@ -138,7 +105,6 @@ void CapsuleCollider::AttachRigidBody(RigidBody* rigidBody) {
 	}
 
 	m_Material.reset();
-	RemoveFixtureFromMap();
 
 	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 	m_StaticBody.reset();
@@ -151,13 +117,9 @@ void CapsuleCollider::AttachRigidBody(RigidBody* rigidBody) {
 	CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
 
 	m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
-
-	AddFixtureToMap();
 }
 
 void CapsuleCollider::DeatachRigidBody() {
-	RemoveFixtureFromMap();
-
 	m_AttachedRigidBody = nullptr;
 	m_Fixture = nullptr;
 	m_UpperSemi = nullptr;
@@ -170,8 +132,6 @@ void CapsuleCollider::DeatachRigidBody() {
 	CreateFixturesOnBody(*m_StaticBody);
 
 	m_CurrentPosition = transform->position;
-
-	AddFixtureToMap();
 }
 
 void CapsuleCollider::CreateFixturesOnBody(b2Body* body) {

@@ -131,7 +131,6 @@ public:
 	double GetBounciness() const;
 	RigidBody* GetAttachedRigidBody() const { return m_AttachedRigidBody; }
 
-	b2Fixture* m_Fixture;
 protected:
 	Collider(GameObject* gameObj);
 
@@ -141,8 +140,6 @@ protected:
 	void UpdateStaticPosition();
 	virtual void ResetShape();
 	void ResetDensity();
-	virtual void RemoveFixtureFromMap() const;
-	virtual void AddFixtureToMap();
 
 	virtual void AttachRigidBody(RigidBody* rigidBody);
 	virtual void DeatachRigidBody();
@@ -157,6 +154,7 @@ protected:
 
 	RigidBody* m_AttachedRigidBody;
 
+	b2Fixture* m_Fixture;
 	Vector2D m_Offset;
 	double m_Rotation;
 
@@ -209,8 +207,6 @@ private:
 	b2Shape* GetShape(bool useOffset = false) const override;
 	void ResetShape() override;
 
-	void RemoveFixtureFromMap() const override;
-	void AddFixtureToMap() override;
 	void AttachRigidBody(RigidBody* rigidBody) override;
 	void DeatachRigidBody() override;
 
@@ -245,8 +241,6 @@ private:
 	b2Shape* GetShape(bool useOffset = false) const override;
 	void ResetShape() override;
 
-	void RemoveFixtureFromMap() const override;
-	void AddFixtureToMap() override;
 	void AttachRigidBody(RigidBody* rigidBody) override;
 	void DeatachRigidBody() override;
 
@@ -284,8 +278,6 @@ private:
 	b2Shape* GetShape(bool useOffset = false) const override;
 	void ResetShape() override;
 
-	void RemoveFixtureFromMap() const override;
-	void AddFixtureToMap() override;
 	void AttachRigidBody(RigidBody* rigidBody) override;
 	void DeatachRigidBody() override;
 

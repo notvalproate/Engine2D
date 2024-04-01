@@ -91,20 +91,15 @@ RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direc
 	b2Vec2 endB2 = originB2 + (distance * directionB2);
 
 	b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
-	auto& sceneColliderMap = Object::SceneManager.GetCurrentScene()->m_FixtureColliderMap;
 
 	RayCastCallback callback;
 
 	world->RayCast(&callback, originB2, endB2);
 
 	if (callback.DidHit()) {
-		RayCastHit& result = callback.GetResult(); 
+		RayCastHit& result = callback.GetResult();
 		result.distance = distance * result.fraction;
-		auto it = sceneColliderMap.find(callback.GetFixture());
-
-		if (it != sceneColliderMap.end()) {
-			result.collider = it->second;
-		}
+		result.collider = reinterpret_cast<Collider*>(callback.GetFixture()->GetUserData().pointer);
 
 		return result;
 	}
@@ -114,12 +109,12 @@ RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direc
 }
 
 float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) {
-	m_result.hit = true;
-	m_result.point = point;
-	m_result.normal = normal;
-	m_result.fraction = fraction;
+	m_Result.hit = true;
+	m_Result.point = point;
+	m_Result.normal = normal;
+	m_Result.fraction = fraction;
 
-	fixtureHit = fixture;
+	m_FixtureHit = fixture;
 
 	return fraction;
 }
