@@ -341,7 +341,7 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<EdgeCollider>();
+		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
 
 		PhysicsMaterial ice(0, 0);
 

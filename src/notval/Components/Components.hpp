@@ -316,3 +316,19 @@ private:
 	friend class GameObject;
 	friend class RigidBody;
 };
+
+struct Collision {
+	Collider* collider;
+	Collider* otherCollider;
+
+	RigidBody* rigidBody;
+	RigidBody* otherRigidBody;
+
+	Transform* transform;
+
+	GameObject* gameObject;
+
+	Vector2D relativeVelocity;
+	std::size_t contactCount;
+	//std::vector<ContactPoint> contacts;
+};
