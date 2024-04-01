@@ -16,7 +16,6 @@ public:
 };
 */
 
-
 #include "notval/Engine2D.hpp"
 
 class FullscreenToggler : public Behaviour {

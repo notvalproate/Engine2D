@@ -848,9 +848,6 @@ private:
     friend class SpriteRenderer;
     friend class RigidBody;
     friend class Collider;
-    friend class PolygonCollider;
-    friend class EdgeCollider;
-    friend class CapsuleCollider;
     friend class Camera;
 };
 

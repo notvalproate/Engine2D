@@ -54,9 +54,7 @@ void CapsuleCollider::Awake() {
 		m_AttachedRigidBody->AttachCollider(this);
 	}
 	else {
-		b2BodyDef body = GetStaticBodyDef();
-		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
-
+		CreateStaticBody();
 		CreateFixturesOnBody(*m_StaticBody);
 	}
 
@@ -86,15 +84,11 @@ void CapsuleCollider::ResetShape() {
 		m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
 	}
 	else {
-		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
-		m_StaticBody.reset();
-		m_Fixture = nullptr;
+		DestroyStaticCollider();
 		m_UpperSemi = nullptr;
 		m_LowerSemi = nullptr;
 
-		b2BodyDef body = GetStaticBodyDef();
-		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
-
+		CreateStaticBody();
 		CreateFixturesOnBody(*m_StaticBody);
 	}
 }
@@ -106,9 +100,7 @@ void CapsuleCollider::AttachRigidBody(RigidBody* rigidBody) {
 
 	m_Material.reset();
 
-	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
-	m_StaticBody.reset();
-	m_Fixture = nullptr;
+	DestroyStaticCollider();
 	m_UpperSemi = nullptr;
 	m_LowerSemi = nullptr;
 
@@ -126,9 +118,7 @@ void CapsuleCollider::DeatachRigidBody() {
 	m_LowerSemi = nullptr;
 	m_Material.emplace();
 
-	b2BodyDef body = GetStaticBodyDef();
-	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
-
+	CreateStaticBody();
 	CreateFixturesOnBody(*m_StaticBody);
 
 	m_CurrentPosition = transform->position;

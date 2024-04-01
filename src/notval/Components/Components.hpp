@@ -145,6 +145,7 @@ protected:
 	virtual void DeatachRigidBody();
 
 	void CreateColliderOnRigidBody(const b2Shape* colShape);
+	void CreateStaticBody();
 	void CreateStaticCollider(const b2Shape* colShape);
 	void DestroyStaticCollider();
 	b2BodyDef GetStaticBodyDef() const;

@@ -53,9 +53,7 @@ void EdgeCollider::Awake() {
 		UpdateMassData();
 	}
 	else {
-		b2BodyDef body = GetStaticBodyDef();
-		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
-
+		CreateStaticBody();
 		CreateFixturesOnBody(*m_StaticBody);
 	}
 
@@ -76,14 +74,10 @@ void EdgeCollider::ResetShape() {
 		UpdateMassData();
 	}
 	else {
-		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
-		m_StaticBody.reset();
-		m_Fixture = nullptr;
+		DestroyStaticCollider();
 		m_ReverseFixture = nullptr;
 
-		b2BodyDef body = GetStaticBodyDef();
-		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
-
+		CreateStaticBody();
 		CreateFixturesOnBody(*m_StaticBody);
 	}
 }
@@ -95,9 +89,7 @@ void EdgeCollider::AttachRigidBody(RigidBody* rigidBody) {
 
 	m_Material.reset();
 
-	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
-	m_StaticBody.reset();
-	m_Fixture = nullptr;
+	DestroyStaticCollider();
 	m_ReverseFixture = nullptr;
 
 	m_AttachedRigidBody = rigidBody;
@@ -114,9 +106,7 @@ void EdgeCollider::DeatachRigidBody() {
 	m_ReverseFixture = nullptr;
 	m_Material.emplace();
 
-	b2BodyDef body = GetStaticBodyDef();
-	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
-
+	CreateStaticBody();
 	CreateFixturesOnBody(*m_StaticBody);
 
 	m_CurrentPosition = transform->position;

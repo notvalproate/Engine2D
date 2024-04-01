@@ -101,14 +101,10 @@ void PolygonCollider::ResetShape() {
 		m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
 	}
 	else {
-		gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
-		m_StaticBody.reset();
-		m_Fixture = nullptr;
+		DestroyStaticCollider();
 		m_FixtureVector.clear();
 
-		b2BodyDef body = GetStaticBodyDef();
-		m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
-
+		CreateStaticBody();
 		CreateFixturesOnBody(*m_StaticBody);
 	}
 }
@@ -120,9 +116,7 @@ void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {
 
 	m_Material.reset();
 
-	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
-	m_StaticBody.reset();
-	m_Fixture = nullptr;
+	DestroyStaticCollider();
 	m_FixtureVector.clear();
 
 	m_AttachedRigidBody = rigidBody;
@@ -138,9 +132,7 @@ void PolygonCollider::DeatachRigidBody() {
 	m_FixtureVector.clear();
 	m_Material.emplace();
 
-	b2BodyDef body = GetStaticBodyDef();
-	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
-
+	CreateStaticBody();
 	CreateFixturesOnBody(*m_StaticBody);
 
 	m_CurrentPosition = transform->position;

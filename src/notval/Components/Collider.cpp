@@ -208,11 +208,15 @@ void Collider::CreateColliderOnRigidBody(const b2Shape* colShape) {
 	m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
 }
 
-void Collider::CreateStaticCollider(const b2Shape* colShape) {
+void Collider::CreateStaticBody() {
 	b2BodyDef body = GetStaticBodyDef();
-	b2FixtureDef fixture = GetFixtureDef(colShape);
-
 	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
+}
+
+void Collider::CreateStaticCollider(const b2Shape* colShape) {
+	CreateStaticBody();
+
+	b2FixtureDef fixture = GetFixtureDef(colShape);
 	m_Fixture = (*m_StaticBody)->CreateFixture(&fixture);
 }
 
