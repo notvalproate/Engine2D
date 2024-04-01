@@ -265,6 +265,7 @@ b2BodyDef Collider::GetStaticBodyDef() const {
 
 b2FixtureDef Collider::GetFixtureDef(const b2Shape* colShape) const {
 	b2FixtureDef fixture;
+	fixture.userData.pointer = reinterpret_cast<uintptr_t>(this);
 	fixture.shape = colShape;
 	fixture.density = m_Density;
 	fixture.restitutionThreshold = Physics.bouncinessThreshold;

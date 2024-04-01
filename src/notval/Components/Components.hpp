@@ -131,6 +131,7 @@ public:
 	double GetBounciness() const;
 	RigidBody* GetAttachedRigidBody() const { return m_AttachedRigidBody; }
 
+	b2Fixture* m_Fixture;
 protected:
 	Collider(GameObject* gameObj);
 
@@ -156,7 +157,6 @@ protected:
 
 	RigidBody* m_AttachedRigidBody;
 
-	b2Fixture* m_Fixture;
 	Vector2D m_Offset;
 	double m_Rotation;
 

@@ -241,9 +241,7 @@ class Controller : public Behaviour {
 		Physics.SetGravity(Vector2D::zero);
 
 		rb = gameObject->GetComponent<RigidBody>();
-		test = gameObject->GetComponent<PolygonCollider>();
-		test2 = gameObject->GetComponent<EdgeCollider>();
-		test3 = gameObject->GetComponent<CapsuleCollider>();
+		test = gameObject->GetComponent<BoxCollider>();
 		boo = true;
 	}
 
@@ -273,37 +271,13 @@ class Controller : public Behaviour {
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
-			std::vector<Vector2D> points = {Vector2D(0, 0), Vector2D(0, 1), Vector2D(1, 0)};
-			std::vector<Vector2D> points2 = {
-				Vector2D(-1, -0.6),
-				Vector2D(-0.5, 0),
-				Vector2D(0, 0.5),
-				Vector2D(1, 1),
-				Vector2D(1.5, 0.8),
-				Vector2D(2, 0),
-				Vector2D(1.7, -0.8),
-				Vector2D(1, -1),
-				Vector2D(0, -1)
-			};
-
-			auto& ref = points;
-
-			if (boo) {
-				ref = points2;
-			}
-
-			boo = !boo;
-			//test->SetPoints(ref, Vector2D::one);
-			test2->SetPoints(ref, Vector2D::one);
-			//test3->SetTransform(test3->GetSize(), CapsuleDirection::Horizontal, Vector2D::one);
+			
 		}
 	}
 	
 	Camera* mainCamera;
 	RigidBody* rb;
-	PolygonCollider* test;
-	EdgeCollider* test2;
-	CapsuleCollider* test3;
+	BoxCollider* test;
 	double radius;
 	bool boo;
 };
