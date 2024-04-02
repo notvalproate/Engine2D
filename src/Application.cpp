@@ -270,7 +270,7 @@ class Controller : public Behaviour {
 		}
 	}
 
-	void OnCollisionEnter(const Collision& collision) override {
+	void OnCollisionStay(const Collision& collision) override {
 		if (collision.gameObject->CompareTag("Spiky")) {
  			Destroy(gameObject);
 		}

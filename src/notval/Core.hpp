@@ -427,6 +427,7 @@ private:
     std::unique_ptr<Component> Clone() const override;
 
     virtual void OnCollisionEnter(const Collision& collision) {};
+    virtual void OnCollisionStay(const Collision& collision) {};
     virtual void OnCollisionExit(const Collision& collision) {};
     virtual void LateUpdate() {};
     virtual void OnDestroy() {};
@@ -679,6 +680,7 @@ private:
     void Render() const;
 
     void OnCollisionEnter(const Collision& collision);
+    void OnCollisionStay(const Collision& collision);
     void OnCollisionExit(const Collision& collision);
 
     void HandleDestructions();

@@ -66,6 +66,12 @@ void GameObject::OnCollisionEnter(const Collision& collision) {
     }
 }
 
+void GameObject::OnCollisionStay(const Collision& collision) {
+    for (auto& behaviour : m_Behaviours) {
+        behaviour->OnCollisionStay(collision);
+    }
+}
+
 void GameObject::OnCollisionExit(const Collision& collision) {
     for (auto& behaviour : m_Behaviours) {
         behaviour->OnCollisionExit(collision);
