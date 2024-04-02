@@ -292,6 +292,9 @@ public:
 	using Scene::Scene;
 
 	void SetupScene() override {
+		Color test = Color::HSVtoRGB(86, 1.0f, 0.28f);
+		std::cout << test << std::endl;
+
 		auto Background = CreateGameObject("BG");
 
 		auto Layer1 = CreateGameObject("Layer 1");
