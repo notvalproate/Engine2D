@@ -815,6 +815,14 @@ struct Color {
         return std::max({r, g, b});
     }
 
+    static inline constexpr void RGBtoHSV(const Color& color, float& h, float& s, float& v) {
+
+    }
+    
+    static inline constexpr Color HSVtoRGB(const float h, const float s, const float v) {
+
+    }
+
     float r{}, g{}, b{}, a{};
 
     static constexpr float gamma = 2.2f;
