@@ -840,7 +840,7 @@ public:
             h = std::fmodf(60 * ((color.g - color.b) / delta) + 360.0f, 360.0f);
         } 
         else if (max == color.g) {
-            h = std::fmodf(60 * ((color.g - color.r) / delta) + 120.0f, 360.0f);
+            h = std::fmodf(60 * ((color.b - color.r) / delta) + 120.0f, 360.0f);
         }
         else {
             h = std::fmodf(60 * ((color.r - color.g) / delta) + 240.0f, 360.0f);
@@ -882,6 +882,15 @@ public:
         float m = v - c;
 
         return Color(r + m, g + m, b + m);
+    }
+
+    static inline constexpr Color Lerp(const Color& c1, const Color& c2, double t) {
+        t = std::clamp(t, 0.0, 1.0);
+        return Color(c1.r + (c2.r - c1.r) * t, c1.g + (c2.g - c1.g) * t, c1.b + (c2.b - c1.b) * t);
+    }
+
+    static inline constexpr Color LerpUnclamped(const Color& c1, const Color& c2, double t) {
+        return Color(c1.r + (c2.r - c1.r) * t, c1.g + (c2.g - c1.g) * t, c1.b + (c2.b - c1.b) * t);
     }
 
     float r{}, g{}, b{}, a{};
