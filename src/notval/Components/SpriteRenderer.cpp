@@ -9,6 +9,8 @@ SpriteRenderer::SpriteRenderer(GameObject* gameObj)
 
 SpriteRenderer::~SpriteRenderer() {
 	SDL_DestroyTexture(m_Sprite);
+
+	gameObject->scene->RemoveObjectFromSortingLayers(gameObject, m_SortingLayer);
 }
 
 std::unique_ptr<Component> SpriteRenderer::Clone() const {

@@ -22,7 +22,7 @@ class FullscreenToggler : public Behaviour {
 public:
 	using Behaviour::Behaviour;
 
-	std::unique_ptr<Component> Clone() const override {
+	[[nodiscard]]std::unique_ptr<Component> Clone() const override {
 		return std::make_unique<FullscreenToggler>(*this);
 	}
 
@@ -267,10 +267,6 @@ class Controller : public Behaviour {
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_O)) {
 			rb = gameObject->AddComponent<RigidBody>();
-		}
-		
-		if (Input.GetKeyDown(SDL_SCANCODE_J)) {
-			
 		}
 	}
 

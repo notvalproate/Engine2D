@@ -33,7 +33,6 @@ void Scene::Update() {
 }
 
 void Scene::Render() const {
-    // DESTROYED GAME OBJECTS ARENT REMOVED FROM SORTING LAYER
     for (const auto& layer : m_SortingLayers) {
         for (const auto& gO : layer.m_GameObjectsInLayer) {
             gO->Render();
@@ -142,6 +141,10 @@ void Scene::AddObjectToSortingLayers(GameObject* gameObject) {
 }
 
 void Scene::RemoveObjectFromSortingLayers(GameObject* gameObject, const std::string_view layerName) {
+    if (!m_SortingLayers.size()) {
+        return;
+    }
+
     auto it = std::find_if(
         m_SortingLayers.begin(),
         m_SortingLayers.end(),
