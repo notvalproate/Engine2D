@@ -240,6 +240,8 @@ class Controller : public Behaviour {
 		Physics.SetGravity(Vector2D::zero);
 
 		rb = gameObject->GetComponent<RigidBody>();
+		rb->FreezeRotation(true);
+		rb->drag = 1;
 		test = gameObject->GetComponent<BoxCollider>();
 		boo = true;
 	}
@@ -270,10 +272,8 @@ class Controller : public Behaviour {
 		}
 	}
 
-	void OnCollisionStay(const Collision& collision) override {
-		if (collision.gameObject->CompareTag("Spiky")) {
- 			Destroy(gameObject);
-		}
+	void OnCollisionEnter(const Collision& collision) override {
+		std::cout << "Entered Collision" << std::endl;
 	}
 	
 	Camera* mainCamera;
@@ -315,7 +315,7 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		auto playerCollider = PlayerObject->AddComponent<CapsuleCollider>();
 
 		PhysicsMaterial ice(0, 0);
 

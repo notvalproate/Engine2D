@@ -727,6 +727,8 @@ private:
     std::vector<Component*> m_ComponentsStagedForDestruction{};
     std::vector<Behaviour*> m_BehavioursStagedForDestruction{};
 
+    std::vector<Collision> m_CurrentCollisions{};
+
     friend class Object;
     friend class Scene;
     friend class RenderingHandler;

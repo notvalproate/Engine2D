@@ -7,16 +7,6 @@ void PhysicsHandler::RenderColliders() const {
 		return;
 	}
 
-	static Color yoo(1.0f, 0.0f, 0.0f);
-	static float h = 0.0f, s = 1.0f, v = 1.0f;
-
-	h += 20.0f * Object::Time.GetDeltaTime();
-	if (h >= 360.0f) {
-		h -= 360.0f;
-	}
-
-	yoo = Color::HSVtoRGB(h, s, v);
-
 	b2World* currentWorld = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
 
 	for (b2Body* bodyList = currentWorld->GetBodyList(); bodyList; bodyList = bodyList->GetNext()) {
@@ -35,7 +25,7 @@ void PhysicsHandler::RenderColliders() const {
 						Vector2D point1(bodyList->GetWorldPoint(polygon->m_vertices[i]));
 						Vector2D point2(bodyList->GetWorldPoint(polygon->m_vertices[j]));
 
-						Object::RenderingPipeline.RenderLine(point1, point2, yoo);
+						Object::RenderingPipeline.RenderLine(point1, point2, Color::green);
 					}
 				}
 			}
