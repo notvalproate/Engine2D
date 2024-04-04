@@ -144,9 +144,6 @@ Collision PhysicsHandler::ContactListener::GetCollision(Collider* collider, Coll
 	collision.transform = collider->transform;
 	collision.gameObject = collider->gameObject;
 
-	collision.relativeVelocity = Vector2D::zero;
-	collision.contactCount = 1;
-
 	return collision;
 }
 

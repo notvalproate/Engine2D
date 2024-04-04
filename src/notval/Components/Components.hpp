@@ -113,6 +113,18 @@ public:
 	Vector2D size;
 };
 
+struct Collision {
+	Collider* collider;
+	Collider* otherCollider;
+
+	RigidBody* rigidBody;
+	RigidBody* otherRigidBody;
+
+	Transform* transform;
+
+	GameObject* gameObject;
+};
+
 class Collider : public Behaviour {
 public:
 	virtual ~Collider();
@@ -166,6 +178,8 @@ protected:
 
 	Vector2D m_CurrentPosition;
 	std::optional<b2Body*> m_StaticBody;
+
+	std::vector<Collision> m_CurrentCollisions{};
 
 	friend class GameObject;
 	friend class RigidBody;
@@ -306,20 +320,4 @@ private:
 
 	friend class GameObject;
 	friend class RigidBody;
-};
-
-struct Collision {
-	Collider* collider;
-	Collider* otherCollider;
-
-	RigidBody* rigidBody;
-	RigidBody* otherRigidBody;
-
-	Transform* transform;
-
-	GameObject* gameObject;
-
-	Vector2D relativeVelocity;
-	std::size_t contactCount;
-	//std::vector<ContactPoint> contacts;
 };

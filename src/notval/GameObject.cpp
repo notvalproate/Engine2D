@@ -61,8 +61,6 @@ void GameObject::Render() const {
 }
 
 void GameObject::OnCollisionEnter(const Collision& collision) {
-    m_CurrentCollisions.push_back(collision);
-
     for (auto& behaviour : m_Behaviours) {
         behaviour->OnCollisionEnter(collision);
     }
