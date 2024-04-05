@@ -731,6 +731,7 @@ private:
     friend class Scene;
     friend class RenderingHandler;
     friend class PhysicsHandler;
+    friend class Collider;
 };
 
 
