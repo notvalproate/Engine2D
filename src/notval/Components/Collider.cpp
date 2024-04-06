@@ -256,3 +256,13 @@ b2FixtureDef Collider::GetFixtureDef(const b2Shape* colShape) const {
 
 	return fixture;
 }
+
+bool Collider::IsCollidingWith(Collider* collider) const {
+	for (const auto& collision : m_CurrentCollisions) {
+		if (collision.collider == collider) {
+			return true;
+		}
+	}
+
+	return false;
+}

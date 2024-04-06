@@ -165,6 +165,8 @@ protected:
 
 	virtual b2Shape* GetShape(bool useOffset = false) const = 0;
 
+	bool IsCollidingWith(Collider* collider) const;
+
 	RigidBody* m_AttachedRigidBody;
 
 	b2Fixture* m_Fixture;
@@ -183,6 +185,7 @@ protected:
 
 	friend class GameObject;
 	friend class RigidBody;
+	friend class PhysicsHandler;
 };
 
 // ADD ABILITY TO DISABLE BOXCOLLIDER

@@ -114,6 +114,13 @@ void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
 	Collision collisionA = GetCollision(colliderB, colliderA);
 	Collision collisionB = GetCollision(colliderA, colliderB);
 
+	if (colliderA->IsCollidingWith(colliderB)) {
+		return;
+	}
+
+	colliderA->m_CurrentCollisions.push_back(collisionA);
+	colliderA->m_CurrentCollisions.push_back(collisionB);
+
 	colliderA->gameObject->OnCollisionEnter(collisionA);
 	colliderB->gameObject->OnCollisionEnter(collisionB);
 }
