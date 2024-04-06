@@ -120,6 +120,10 @@ void Collider::Awake() {
 }
 
 void Collider::Update() {
+	for (const auto& collision : m_CurrentCollisions) {
+		gameObject->OnCollisionStay(collision);
+	}
+
 	if (m_AttachedRigidBody) {
 		UpdateBounds();
 		return;
