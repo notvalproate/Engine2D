@@ -272,10 +272,10 @@ bool Collider::IsCollidingWith(Collider* collider) const {
 }
 
 void Collider::RemoveCollisionWith(Collider* collider) {
-	auto it = std::find(m_CurrentCollisions.begin(), m_CurrentCollisions.end(),
-		[&](const Collision& collision) { return collision.collider == collider; });
-
-	if (it != m_CurrentCollisions.end()) {
-		m_CurrentCollisions.erase(it);
+	for (std::size_t i = 0; i < m_CurrentCollisions.size(); i++) {
+		if (m_CurrentCollisions[i].collider == collider) {
+			m_CurrentCollisions.erase(m_CurrentCollisions.begin() + i);
+			break;
+		}
 	}
 }

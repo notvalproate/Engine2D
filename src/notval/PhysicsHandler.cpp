@@ -119,7 +119,7 @@ void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
 	}
 
 	colliderA->m_CurrentCollisions.push_back(collisionA);
-	colliderA->m_CurrentCollisions.push_back(collisionB);
+	colliderB->m_CurrentCollisions.push_back(collisionB);
 
 	colliderA->gameObject->OnCollisionEnter(collisionA);
 	colliderB->gameObject->OnCollisionEnter(collisionB);
@@ -128,6 +128,9 @@ void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
 void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
+
+	colliderA->RemoveCollisionWith(colliderB);
+	colliderB->RemoveCollisionWith(colliderA);
 
 	if (colliderA->gameObject->m_Destroyed || colliderB->gameObject->m_Destroyed) {
 		return;
@@ -141,7 +144,7 @@ void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
 }
 
 Collision PhysicsHandler::ContactListener::GetCollision(Collider* collider, Collider* otherCollider) const {
-	Collision collision;
+	Collision collision{};
 	collision.collider = collider;
 	collision.otherCollider = otherCollider;
 

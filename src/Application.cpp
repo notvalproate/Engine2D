@@ -273,7 +273,7 @@ class Controller : public Behaviour {
 	}
 
 	void OnCollisionEnter(const Collision& collision) override {
-		std::cout << "Entered Collision" << std::endl;
+		std::cout << "Entered Collision with " << collision.collider->gameObject->name << std::endl;
 	}
 	
 	Camera* mainCamera;
