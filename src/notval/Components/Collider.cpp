@@ -270,3 +270,12 @@ bool Collider::IsCollidingWith(Collider* collider) const {
 
 	return false;
 }
+
+void Collider::RemoveCollisionWith(Collider* collider) {
+	auto it = std::find(m_CurrentCollisions.begin(), m_CurrentCollisions.end(),
+		[&](const Collision& collision) { return collision.collider == collider; });
+
+	if (it != m_CurrentCollisions.end()) {
+		m_CurrentCollisions.erase(it);
+	}
+}

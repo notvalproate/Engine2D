@@ -166,6 +166,7 @@ protected:
 	virtual b2Shape* GetShape(bool useOffset = false) const = 0;
 
 	bool IsCollidingWith(Collider* collider) const;
+	void RemoveCollisionWith(Collider* collider);
 
 	RigidBody* m_AttachedRigidBody;
 
