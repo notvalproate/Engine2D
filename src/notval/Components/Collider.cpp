@@ -68,6 +68,12 @@ void Collider::SetBounciness(const double bounciness) {
 	}
 }
 
+void Collider::SetAsTrigger(const bool sensor) {
+	m_IsTrigger = sensor;
+
+	ResetShape();
+}
+
 double Collider::GetDensity() const {
 	return m_Density;
 }
@@ -248,6 +254,7 @@ b2FixtureDef Collider::GetFixtureDef(const b2Shape* colShape) const {
 	fixture.shape = colShape;
 	fixture.density = m_Density;
 	fixture.restitutionThreshold = Physics.bouncinessThreshold;
+	fixture.isSensor = m_IsTrigger;
 
 	if (m_Material.has_value()) {
 		fixture.friction = (*m_Material).friction;

@@ -133,6 +133,7 @@ public:
 	void SetMaterial(const PhysicsMaterial& material);
 	void SetFriction(const double friction);
 	void SetBounciness(const double bounciness);
+	void SetAsTrigger(const bool sensor);
 
 	Vector2D GetCenter() const { return transform->position + m_Offset; }
 	Vector2D GetOffset() const { return m_Offset; }
@@ -183,6 +184,7 @@ protected:
 	std::optional<b2Body*> m_StaticBody;
 
 	std::vector<Collision> m_CurrentCollisions{};
+	bool m_IsTrigger;
 
 	friend class GameObject;
 	friend class RigidBody;

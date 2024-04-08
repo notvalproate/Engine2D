@@ -273,7 +273,7 @@ class Controller : public Behaviour {
 	}
 
 	void OnCollisionEnter(const Collision& collision) override {
-		std::cout << "Entered Collision with " << collision.collider->gameObject->name << std::endl;
+		std::cout << "Entering Collision with " << collision.collider->gameObject->name << std::endl;
 	}
 	
 	Camera* mainCamera;
@@ -353,6 +353,7 @@ public:
 		g4render->SetSortingLayer("World");
 		auto g4collider = g4->AddComponent<BoxCollider>();
 		g4collider->SetMaterial(ice);
+		g4collider->SetAsTrigger(true);
 		
 
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
