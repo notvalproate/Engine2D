@@ -168,6 +168,9 @@ protected:
 
 	bool IsCollidingWith(Collider* collider) const;
 	void RemoveCollisionWith(Collider* collider);
+	
+	bool IsTriggeringWith(Collider* collider) const;
+	void RemoveTriggerWith(Collider* collider);
 
 	RigidBody* m_AttachedRigidBody;
 
@@ -184,6 +187,7 @@ protected:
 	std::optional<b2Body*> m_StaticBody;
 
 	std::vector<Collision> m_CurrentCollisions{};
+	std::vector<Collision> m_CurrentTriggers{};
 	bool m_IsTrigger;
 
 	friend class GameObject;

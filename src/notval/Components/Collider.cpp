@@ -286,3 +286,22 @@ void Collider::RemoveCollisionWith(Collider* collider) {
 		}
 	}
 }
+
+bool Collider::IsTriggeringWith(Collider* collider) const {
+	for (const auto& collision : m_CurrentTriggers) {
+		if (collision.collider == collider) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void Collider::RemoveTriggerWith(Collider* collider) {
+	for (std::size_t i = 0; i < m_CurrentTriggers.size(); i++) {
+		if (m_CurrentTriggers[i].collider == collider) {
+			m_CurrentTriggers.erase(m_CurrentTriggers.begin() + i);
+			break;
+		}
+	}
+}
