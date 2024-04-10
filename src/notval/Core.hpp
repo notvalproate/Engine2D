@@ -429,6 +429,11 @@ private:
     virtual void OnCollisionEnter(const Collision& collision) {};
     virtual void OnCollisionStay(const Collision& collision) {};
     virtual void OnCollisionExit(const Collision& collision) {};
+
+    virtual void OnTriggerEnter(const Collision& collision) {};
+    virtual void OnTriggerStay(const Collision& collision) {};
+    virtual void OnTriggerExit(const Collision& collision) {};
+
     virtual void LateUpdate() {};
     virtual void OnDestroy() {};
 
@@ -682,6 +687,10 @@ private:
     void OnCollisionEnter(const Collision& collision);
     void OnCollisionStay(const Collision& collision);
     void OnCollisionExit(const Collision& collision);
+
+    void OnTriggerEnter(const Collision& collision);
+    void OnTriggerStay(const Collision& collision);
+    void OnTriggerExit(const Collision& collision);
 
     void HandleDestructions();
 

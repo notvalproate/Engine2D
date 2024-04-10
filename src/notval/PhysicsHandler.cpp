@@ -114,7 +114,17 @@ void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
 	Collision collisionA = GetCollision(colliderB, colliderA);
 	Collision collisionB = GetCollision(colliderA, colliderB);
 
-	if (colliderA->IsCollidingWith(colliderB)) {
+	if (colliderA->IsCollidingWith(colliderB) || colliderA->IsTriggeringWith(colliderB)) {
+		return;
+	}
+
+	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+		colliderA->m_CurrentTriggers.push_back(collisionA);
+		colliderB->m_CurrentTriggers.push_back(collisionB);
+
+		colliderA->gameObject->OnTriggerEnter(collisionA);
+		colliderB->gameObject->OnTriggerEnter(collisionB);
+
 		return;
 	}
 
@@ -129,8 +139,14 @@ void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
-	colliderA->RemoveCollisionWith(colliderB);
-	colliderB->RemoveCollisionWith(colliderA);
+	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+		colliderA->RemoveTriggerWith(colliderB);
+		colliderB->RemoveTriggerWith(colliderA);
+	}
+	else {
+		colliderA->RemoveCollisionWith(colliderB);
+		colliderB->RemoveCollisionWith(colliderA);
+	}
 
 	if (colliderA->gameObject->m_Destroyed || colliderB->gameObject->m_Destroyed) {
 		return;
@@ -138,6 +154,13 @@ void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
 
 	Collision collisionA = GetCollision(colliderB, colliderA);
 	Collision collisionB = GetCollision(colliderA, colliderB);
+
+	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+		colliderA->gameObject->OnTriggerExit(collisionA); 
+		colliderB->gameObject->OnTriggerExit(collisionB);
+
+		return;
+	}
 
 	colliderA->gameObject->OnCollisionExit(collisionA);
 	colliderB->gameObject->OnCollisionExit(collisionB);
