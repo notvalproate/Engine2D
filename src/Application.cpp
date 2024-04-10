@@ -275,6 +275,14 @@ class Controller : public Behaviour {
 	void OnCollisionEnter(const Collision& collision) override {
 		std::cout << "Entering Collision with " << collision.collider->gameObject->name << std::endl;
 	}
+
+	void OnTriggerEnter(const Collision& collision) override {
+		std::cout << "Triggering with " << collision.collider->gameObject->name << std::endl;
+	}
+
+	void OnTriggerExit(const Collision& collision) override {
+		std::cout << "Exiting trigger with " << collision.collider->gameObject->name << std::endl;
+	}
 	
 	Camera* mainCamera;
 	RigidBody* rb;

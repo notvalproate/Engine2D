@@ -78,6 +78,24 @@ void GameObject::OnCollisionExit(const Collision& collision) {
     }
 }
 
+void GameObject::OnTriggerEnter(const Collision& collision) {
+    for (auto& behaviour : m_Behaviours) {
+        behaviour->OnTriggerEnter(collision);
+    }
+}
+
+void GameObject::OnTriggerStay(const Collision& collision) {
+    for (auto& behaviour : m_Behaviours) {
+        behaviour->OnTriggerStay(collision);
+    }
+}
+
+void GameObject::OnTriggerExit(const Collision& collision) {
+    for (auto& behaviour : m_Behaviours) {
+        behaviour->OnTriggerExit(collision);
+    }
+}
+
 void GameObject::HandleDestructions() {
     if (m_ComponentsStagedForDestruction.size()) {
         for (auto& component : m_ComponentsStagedForDestruction) {

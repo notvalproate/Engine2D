@@ -129,6 +129,10 @@ void Collider::Update() {
 	for (const auto& collision : m_CurrentCollisions) {
 		gameObject->OnCollisionStay(collision);
 	}
+	
+	for (const auto& collision : m_CurrentTriggers) {
+		gameObject->OnTriggerStay(collision);
+	}
 
 	if (m_AttachedRigidBody) {
 		UpdateBounds();
