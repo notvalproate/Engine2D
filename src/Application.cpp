@@ -22,7 +22,7 @@ class FullscreenToggler : public Behaviour {
 public:
 	using Behaviour::Behaviour;
 
-	[[nodiscard]]std::unique_ptr<Component> Clone() const override {
+	std::unique_ptr<Component> Clone() const override {
 		return std::make_unique<FullscreenToggler>(*this);
 	}
 
@@ -268,9 +268,14 @@ class Controller : public Behaviour {
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_O)) {
-			rb = gameObject->AddComponent<RigidBody>();
+			//rb = gameObject->AddComponent<RigidBody>();
+
+			SceneManager.LoadScene("Test Scene 2");
 		}
 	}
+
+	// FIX STAY SINCE EXIT IS CALLED WHEN ANY OF THE SUB-FIXTURES ON A SINGLE COLLIDER CALLS EXIT WHEN IT LEAVES CONTACT, EVEN
+	// THOUGH THE COLLIDER AS A WHOLE HAS NOT LEFT CONTACT
 
 	void OnCollisionEnter(const Collision& collision) override {
 		std::cout << "Entering Collision with " << collision.collider->gameObject->name << std::endl;
@@ -323,9 +328,11 @@ public:
 		playerRenderer->SetPixelsPerUnit(32);
 
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		auto playerCollider = PlayerObject->AddComponent<CapsuleCollider>();
+		//auto playerCollider = PlayerObject->AddComponent<CapsuleCollider>();
+		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		playerCollider->SetTransform(Vector2D(1, 2), Vector2D(0, 0), 0);
 
-		PhysicsMaterial ice(0, 0);
+		PhysicsMaterial ice(1, 0.3);
 
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		
@@ -357,13 +364,12 @@ public:
 		g4->tag = "Spiky";
 		auto g4render = g4->AddComponent<SpriteRenderer>();
 		g4render->SetSprite("assets/medieval/Tiles/floor_tile_1.png");
-		 g4render->SetPixelsPerUnit(32);
+		g4render->SetPixelsPerUnit(32);
 		g4render->SetSortingLayer("World");
 		auto g4collider = g4->AddComponent<BoxCollider>();
 		g4collider->SetMaterial(ice);
 		g4collider->SetAsTrigger(true);
 		
-
 		CreateGameObject("Fullscreen Toggle")->AddComponent<FullscreenToggler>();
 	}
 };
@@ -382,8 +388,19 @@ public:
 		Physics.SetRenderColliders(true);
 
 		SceneManager.AddScene<TestScene>("Test Scene");
+		SceneManager.AddScene<TestScene>("Test Scene 2");
 		SceneManager.LoadScene("Test Scene");
 	}
+};
+
+class KanvaGame : public Engine2D {
+public:
+	using Engine2D::Engine2D;
+
+	void SetupGame() override {
+		// Physics.SetGravity(Vector2D(0, 0));  issue
+		Physics.SetRenderColliders(true);
+	};
 };
 
 int main(int argc, char *argv[]) {

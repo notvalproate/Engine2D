@@ -69,10 +69,10 @@
     <ClCompile Include="src\notval\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\notval\TestVector2D.cpp">
+    <ClCompile Include="src\notval\Vector2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\notval\TestEngine2D.cpp">
+    <ClCompile Include="src\notval\Engine2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\notval\InputHandler.cpp">

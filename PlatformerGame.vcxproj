@@ -105,11 +105,11 @@
     <ClCompile Include="src\notval\Scene.cpp" />
     <ClCompile Include="src\notval\SceneHandler.cpp" />
     <ClCompile Include="src\notval\ScreenHandler.cpp" />
-    <ClCompile Include="src\notval\TestEngine2D.cpp" />
+    <ClCompile Include="src\notval\Engine2D.cpp" />
     <ClCompile Include="src\notval\TextureHandler.cpp" />
     <ClCompile Include="src\notval\TimeHandler.cpp" />
     <ClCompile Include="src\notval\Transform.cpp" />
-    <ClCompile Include="src\notval\TestVector2D.cpp" />
+    <ClCompile Include="src\notval\Vector2D.cpp" />
     <ClCompile Include="src\Engine2D.cpp" />
     <ClCompile Include="src\math\Rectangle.cpp" />
     <ClCompile Include="src\math\Vector2d.cpp" />
