@@ -54,7 +54,9 @@ endif()
 
 # Build examples
 
-if (${BUILD_EXAMPLES})
+option(BUILD_EXAMPLES "Build example projects" OFF)
+
+if (BUILD_EXAMPLES)
   MESSAGE(STATUS "Building examples is enabled")
   add_subdirectory(examples)
 endif()
