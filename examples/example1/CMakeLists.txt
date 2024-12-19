@@ -17,10 +17,5 @@ add_to_cppcheck(example1 example1.cpp)
 add_custom_command(
     TARGET example1 POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_CURRENT_SOURCE_DIR}/assets $<TARGET_FILE_DIR:example1>/assets
-)
-
-add_custom_command(TARGET example1 POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:example1> $<TARGET_FILE_DIR:example1>
-    COMMAND_EXPAND_LISTS
+        ${CMAKE_CURRENT_SOURCE_DIR}/assets ${CMAKE_BINARY_DIR}/bin/assets
 )
