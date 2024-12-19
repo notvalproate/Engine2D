@@ -1263,28 +1263,28 @@ private:
 
     void RenderColliders() const;
 
-    class ContactListener : public b2ContactListener {
-        void BeginContact(b2Contact* contact) override;
-        void EndContact(b2Contact* contact) override;
+    // class ContactListener : public b2ContactListener {
+    //     void BeginContact(b2Contact* contact) override;
+    //     void EndContact(b2Contact* contact) override;
 
-    private:
-        Collision GetCollision(Collider* collider, Collider* otherCollider) const;
-    };
+    // private:
+    //     Collision GetCollision(Collider* collider, Collider* otherCollider) const;
+    // };
 
-    class RayCastCallback : public b2RayCastCallback {
-    public:
-        float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override;
-        inline bool DidHit() const { return m_Result.hit; }
-        inline RayCastHit& GetResult() { return m_Result; }
-        inline b2Fixture* GetFixture() { return m_FixtureHit; }
+    // class RayCastCallback : public b2RayCastCallback {
+    // public:
+    //     float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) override;
+    //     inline bool DidHit() const { return m_Result.hit; }
+    //     inline RayCastHit& GetResult() { return m_Result; }
+    //     inline b2Fixture* GetFixture() { return m_FixtureHit; }
 
-    private:
-        RayCastHit m_Result;
-        b2Fixture* m_FixtureHit;
-    };
+    // private:
+    //     RayCastHit m_Result;
+    //     b2Fixture* m_FixtureHit;
+    // };
 
     bool m_RenderSceneColliders;
-    ContactListener m_ContactListener;
+    // ContactListener m_ContactListener;
 
     friend class Object;
     friend class Scene;

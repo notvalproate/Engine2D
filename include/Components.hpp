@@ -189,7 +189,7 @@ protected:
 
 	std::vector<Collision> m_CurrentCollisions{};
 	std::vector<Collision> m_CurrentTriggers{};
-	bool m_IsTrigger;
+	bool m_IsTrigger{};
 
 	friend class GameObject;
 	friend class RigidBody;

@@ -22,6 +22,8 @@ void SpriteRenderer::SetSprite(const char* spritePath) {
 		SDL_DestroyTexture(m_Sprite);
 	}
 
+	// if path is invalid or texture is not found, load default texture or something
+	// handle this or atleast notify the user somehow about invalid asset path
 	m_Sprite = TextureManager.LoadTexture(spritePath);
 	SDL_Point size = TextureManager.GetTextureSize(m_Sprite);
 

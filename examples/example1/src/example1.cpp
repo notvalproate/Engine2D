@@ -315,19 +315,24 @@ public:
 		L2Renderer->SetSprite("assets/medieval/Background/layer_2.png");
 		L2Renderer->SetSortingLayer("Background");
 		L2Renderer->SetPixelsPerUnit(16);
-		
+
+		auto testObj = CreateGameObject("Test OBJ1", Vector2D(0, 4), 40);
+		auto col = testObj->AddComponent<BoxCollider>();
+		testObj->AddComponent<RigidBody>();
+		col->SetTransform(Vector2D(1, 2), Vector2D(0, 0), 0);
+
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<CameraFollower>();
 		PlayerObject->AddComponent<Controller>();
-		//PlayerObject->AddComponent<PlayerController>();
+		// PlayerObject->AddComponent<PlayerController>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
-		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		//auto playerCollider = PlayerObject->AddComponent<CapsuleCollider>();
+		// auto playerCollider = PlayerObject->AddComponent<CapsuleCollider>();
 		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		playerCollider->SetTransform(Vector2D(1, 2), Vector2D(0, 0), 0);
 
 		PhysicsMaterial ice(1, 0.3);
@@ -379,14 +384,14 @@ public:
 	void SetupGame() override {
 		RenderingPipeline.SetRendererVsync(true);
 
-		RenderingPipeline.AddSortingLayer("Background");
-		RenderingPipeline.AddSortingLayer("Player");
-		RenderingPipeline.AddSortingLayer("World");
+		// RenderingPipeline.AddSortingLayer("Background");
+		// RenderingPipeline.AddSortingLayer("Player");
+		// RenderingPipeline.AddSortingLayer("World");
 
 		Physics.SetRenderColliders(true);
 
 		SceneManager.AddScene<TestScene>("Test Scene");
-		SceneManager.AddScene<TestScene>("Test Scene 2");
+		// SceneManager.AddScene<TestScene>("Test Scene 2");
 		SceneManager.LoadScene("Test Scene");
 	}
 };

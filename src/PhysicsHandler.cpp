@@ -82,111 +82,111 @@ Vector2D PhysicsHandler::GetGravity() const {
 	return Vector2D(Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get()->GetGravity());
 }
 
-RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direction, float distance) const {
-	b2Vec2 originB2 = b2Vec2(origin.x, origin.y);
-	b2Vec2 directionB2 = b2Vec2(direction.x, direction.y);
-	b2Vec2 endB2 = originB2 + (distance * directionB2);
+// RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direction, float distance) const {
+// 	b2Vec2 originB2 = b2Vec2(origin.x, origin.y);
+// 	b2Vec2 directionB2 = b2Vec2(direction.x, direction.y);
+// 	b2Vec2 endB2 = originB2 + (distance * directionB2);
 
-	b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
+// 	b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
 
-	RayCastCallback callback;
+// 	RayCastCallback callback;
 
-	world->RayCast(&callback, originB2, endB2);
+// 	world->RayCast(&callback, originB2, endB2);
 
-	if (callback.DidHit()) {
-		RayCastHit& result = callback.GetResult();
-		result.distance = distance * result.fraction;
-		result.collider = reinterpret_cast<Collider*>(callback.GetFixture()->GetUserData().pointer);
+// 	if (callback.DidHit()) {
+// 		RayCastHit& result = callback.GetResult();
+// 		result.distance = distance * result.fraction;
+// 		result.collider = reinterpret_cast<Collider*>(callback.GetFixture()->GetUserData().pointer);
 
-		return result;
-	}
-	else {
-		return RayCastHit();
-	}
-}
+// 		return result;
+// 	}
+// 	else {
+// 		return RayCastHit();
+// 	}
+// }
 
 #include "Components.hpp"
 
-void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
-	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
-	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
+// void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
+// 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
+// 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
-	Collision collisionA = GetCollision(colliderB, colliderA);
-	Collision collisionB = GetCollision(colliderA, colliderB);
+// 	Collision collisionA = GetCollision(colliderB, colliderA);
+// 	Collision collisionB = GetCollision(colliderA, colliderB);
 
-	if (colliderA->IsCollidingWith(colliderB) || colliderA->IsTriggeringWith(colliderB)) {
-		return;
-	}
+// 	if (colliderA->IsCollidingWith(colliderB) || colliderA->IsTriggeringWith(colliderB)) {
+// 		return;
+// 	}
 
-	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
-		colliderA->m_CurrentTriggers.push_back(collisionA);
-		colliderB->m_CurrentTriggers.push_back(collisionB);
+// 	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+// 		colliderA->m_CurrentTriggers.push_back(collisionA);
+// 		colliderB->m_CurrentTriggers.push_back(collisionB);
 
-		colliderA->gameObject->OnTriggerEnter(collisionA);
-		colliderB->gameObject->OnTriggerEnter(collisionB);
+// 		colliderA->gameObject->OnTriggerEnter(collisionA);
+// 		colliderB->gameObject->OnTriggerEnter(collisionB);
 
-		return;
-	}
+// 		return;
+// 	}
 
-	colliderA->m_CurrentCollisions.push_back(collisionA);
-	colliderB->m_CurrentCollisions.push_back(collisionB);
+// 	colliderA->m_CurrentCollisions.push_back(collisionA);
+// 	colliderB->m_CurrentCollisions.push_back(collisionB);
 
-	colliderA->gameObject->OnCollisionEnter(collisionA);
-	colliderB->gameObject->OnCollisionEnter(collisionB);
-}
+// 	colliderA->gameObject->OnCollisionEnter(collisionA);
+// 	colliderB->gameObject->OnCollisionEnter(collisionB);
+// }
 
-void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
-	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
-	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
+// void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
+// 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
+// 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
-	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
-		colliderA->RemoveTriggerWith(colliderB);
-		colliderB->RemoveTriggerWith(colliderA);
-	}
-	else {
-		colliderA->RemoveCollisionWith(colliderB);
-		colliderB->RemoveCollisionWith(colliderA);
-	}
+// 	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+// 		colliderA->RemoveTriggerWith(colliderB);
+// 		colliderB->RemoveTriggerWith(colliderA);
+// 	}
+// 	else {
+// 		colliderA->RemoveCollisionWith(colliderB);
+// 		colliderB->RemoveCollisionWith(colliderA);
+// 	}
 
-	if (colliderA->gameObject->m_Destroyed || colliderB->gameObject->m_Destroyed) {
-		return;
-	}
+// 	if (colliderA->gameObject->m_Destroyed || colliderB->gameObject->m_Destroyed) {
+// 		return;
+// 	}
 
-	Collision collisionA = GetCollision(colliderB, colliderA);
-	Collision collisionB = GetCollision(colliderA, colliderB);
+// 	Collision collisionA = GetCollision(colliderB, colliderA);
+// 	Collision collisionB = GetCollision(colliderA, colliderB);
 
-	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
-		colliderA->gameObject->OnTriggerExit(collisionA); 
-		colliderB->gameObject->OnTriggerExit(collisionB);
+// 	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+// 		colliderA->gameObject->OnTriggerExit(collisionA); 
+// 		colliderB->gameObject->OnTriggerExit(collisionB);
 
-		return;
-	}
+// 		return;
+// 	}
 
-	colliderA->gameObject->OnCollisionExit(collisionA);
-	colliderB->gameObject->OnCollisionExit(collisionB);
-}
+// 	colliderA->gameObject->OnCollisionExit(collisionA);
+// 	colliderB->gameObject->OnCollisionExit(collisionB);
+// }
 
-Collision PhysicsHandler::ContactListener::GetCollision(Collider* collider, Collider* otherCollider) const {
-	Collision collision{};
-	collision.collider = collider;
-	collision.otherCollider = otherCollider;
+// Collision PhysicsHandler::ContactListener::GetCollision(Collider* collider, Collider* otherCollider) const {
+// 	Collision collision{};
+// 	collision.collider = collider;
+// 	collision.otherCollider = otherCollider;
 
-	collision.rigidBody = collider->GetAttachedRigidBody();
-	collision.otherRigidBody = otherCollider->GetAttachedRigidBody();
+// 	collision.rigidBody = collider->GetAttachedRigidBody();
+// 	collision.otherRigidBody = otherCollider->GetAttachedRigidBody();
 
-	collision.transform = collider->transform;
-	collision.gameObject = collider->gameObject;
+// 	collision.transform = collider->transform;
+// 	collision.gameObject = collider->gameObject;
 
-	return collision;
-}
+// 	return collision;
+// }
 
-float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) {
-	m_Result.hit = true;
-	m_Result.point = point;
-	m_Result.normal = normal;
-	m_Result.fraction = fraction;
+// float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) {
+// 	m_Result.hit = true;
+// 	m_Result.point = point;
+// 	m_Result.normal = normal;
+// 	m_Result.fraction = fraction;
 
-	m_FixtureHit = fixture;
+// 	m_FixtureHit = fixture;
 
-	return fraction;
-}
+// 	return fraction;
+// }

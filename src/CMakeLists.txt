@@ -45,11 +45,6 @@ target_compile_options(Engine2D
         ${CXX_COMPILER_FLAGS}
 )
 
-# add_custom_command(TARGET notval::Engine2D POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:Engine2D> $<TARGET_FILE_DIR:Engine2D>
-#     COMMAND_EXPAND_LISTS
-# )
-
 install(TARGETS Engine2D 
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib
