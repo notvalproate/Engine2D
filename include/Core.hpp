@@ -804,18 +804,18 @@ public:
 
     inline Color GetGamma() const {
         return Color(
-            std::powf(r, 1.0f / gamma),
-            std::powf(g, 1.0f / gamma),
-            std::powf(b, 1.0f / gamma),
+            std::pow(r, 1.0f / gamma),
+            std::pow(g, 1.0f / gamma),
+            std::pow(b, 1.0f / gamma),
             a
         );
     }
 
     inline Color GetLinear() const {
         return Color(
-            std::powf(r, gamma),
-            std::powf(g, gamma),
-            std::powf(b, gamma),
+            std::pow(r, gamma),
+            std::pow(g, gamma),
+            std::pow(b, gamma),
             a
         );
     }
@@ -848,13 +848,13 @@ public:
         }
 
         if (max == color.r) {
-            h = std::fmodf(60 * ((color.g - color.b) / delta) + 360.0f, 360.0f);
+            h = std::fmod(60 * ((color.g - color.b) / delta) + 360.0f, 360.0f);
         } 
         else if (max == color.g) {
-            h = std::fmodf(60 * ((color.b - color.r) / delta) + 120.0f, 360.0f);
+            h = std::fmod(60 * ((color.b - color.r) / delta) + 120.0f, 360.0f);
         }
         else {
-            h = std::fmodf(60 * ((color.r - color.g) / delta) + 240.0f, 360.0f);
+            h = std::fmod(60 * ((color.r - color.g) / delta) + 240.0f, 360.0f);
         }
     }
     
@@ -862,7 +862,7 @@ public:
         float r{}, g{}, b{};
 
         float c = s * v;
-        float x = c * (1 - std::fabsf(std::fmodf(h / 60.0f, 2) - 1));
+        float x = c * (1 - std::fabs(std::fmod(h / 60.0f, 2) - 1));
 
         int hPrime = ((int)h / 60) % 6;
 
