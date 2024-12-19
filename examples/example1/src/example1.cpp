@@ -323,8 +323,8 @@ public:
 
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<CameraFollower>();
-		PlayerObject->AddComponent<Controller>();
-		// PlayerObject->AddComponent<PlayerController>();
+		// PlayerObject->AddComponent<Controller>();
+		PlayerObject->AddComponent<PlayerController>();
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
 		playerRenderer->SetSortingLayer("Player");
@@ -335,7 +335,7 @@ public:
 		auto playerBody = PlayerObject->AddComponent<RigidBody>();
 		playerCollider->SetTransform(Vector2D(1, 2), Vector2D(0, 0), 0);
 
-		PhysicsMaterial ice(1, 0.3);
+		PhysicsMaterial ice(0, 0.3);
 
 		auto groundObject = CreateGameObject("Ground", Vector2D(0, -5.5), 0);
 		

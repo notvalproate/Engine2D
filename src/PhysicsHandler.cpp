@@ -82,28 +82,39 @@ Vector2D PhysicsHandler::GetGravity() const {
 	return Vector2D(Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get()->GetGravity());
 }
 
-// RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direction, float distance) const {
-// 	b2Vec2 originB2 = b2Vec2(origin.x, origin.y);
-// 	b2Vec2 directionB2 = b2Vec2(direction.x, direction.y);
-// 	b2Vec2 endB2 = originB2 + (distance * directionB2);
+RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direction, float distance) const {
+	b2Vec2 originB2 = b2Vec2(origin.x, origin.y);
+	b2Vec2 directionB2 = b2Vec2(direction.x, direction.y);
+	b2Vec2 endB2 = originB2 + (distance * directionB2);
 
-// 	b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
+	b2World* world = Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get();
 
-// 	RayCastCallback callback;
+	RayCastCallback callback;
 
-// 	world->RayCast(&callback, originB2, endB2);
+	world->RayCast(&callback, originB2, endB2);
 
-// 	if (callback.DidHit()) {
-// 		RayCastHit& result = callback.GetResult();
-// 		result.distance = distance * result.fraction;
-// 		result.collider = reinterpret_cast<Collider*>(callback.GetFixture()->GetUserData().pointer);
+	if (callback.DidHit()) {
+		RayCastHit& result = callback.GetResult();
+		result.distance = distance * result.fraction;
+		result.collider = reinterpret_cast<Collider*>(callback.GetFixture()->GetUserData().pointer);
 
-// 		return result;
-// 	}
-// 	else {
-// 		return RayCastHit();
-// 	}
-// }
+		return result;
+	}
+	else {
+		return RayCastHit();
+	}
+}
+
+float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) {
+	m_Result.hit = true;
+	m_Result.point = point;
+	m_Result.normal = normal;
+	m_Result.fraction = fraction;
+
+	m_FixtureHit = fixture;
+
+	return fraction;
+}
 
 #include "Components.hpp"
 
@@ -178,15 +189,4 @@ Vector2D PhysicsHandler::GetGravity() const {
 // 	collision.gameObject = collider->gameObject;
 
 // 	return collision;
-// }
-
-// float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal, float fraction) {
-// 	m_Result.hit = true;
-// 	m_Result.point = point;
-// 	m_Result.normal = normal;
-// 	m_Result.fraction = fraction;
-
-// 	m_FixtureHit = fixture;
-
-// 	return fraction;
 // }
