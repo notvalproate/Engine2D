@@ -4,7 +4,7 @@
 Engine2D::Engine2D() : m_IsRunning(true) { }
 
 void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth, int windowHeight) {
-	if (SDL_Init(SDL_INIT_EVERYTHING)) {
+	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		std::cout << "Error: Couldn't Initialize Subsystems..." << std::endl;
 		m_IsRunning = false;
 		return;
