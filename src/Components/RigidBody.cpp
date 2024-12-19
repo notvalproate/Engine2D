@@ -71,7 +71,6 @@ void RigidBody::SetMass(const float mass) {
 
 	for (b2Fixture* fixture = m_Body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
 		b2MassData massData;
-		m_Body->GetMassData(&massData);
 		fixture->GetMassData(&massData);
 		totalArea += massData.mass / fixture->GetDensity();
 	}

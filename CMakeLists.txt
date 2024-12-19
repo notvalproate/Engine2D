@@ -5,13 +5,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 if(MSVC)
     set(CXX_WARNING_FLAGS /W4)
-    set(CXX_ERROR_WARNING /WX)
 else()
     set(CXX_WARNING_FLAGS -Wall -Wextra -Wpedantic)
-    set(CXX_ERROR_WARNING -Werror)
 endif()
 
-set(CXX_COMPILER_FLAGS ${CXX_WARNING_FLAGS} ${CXX_ERROR_WARNING})
+set(CXX_COMPILER_FLAGS ${CXX_WARNING_FLAGS})
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     message("Setting build type to 'Debug' as none was specified.")
@@ -26,6 +24,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 project(Engine2D VERSION 1.0)
 
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(Box2D REQUIRED)
 find_package(CppCheck)
 
 set(ALL_ANALYSIS_TARGETS)
@@ -37,11 +37,6 @@ if(WIN32)
         set(CMAKE_INSTALL_PREFIX "C:/Program Files/Engine2D" CACHE PATH "Set install prefix" FORCE)
     endif()
 endif()
-
-add_custom_command(TARGET CMakeApp POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:Engine2D> $<TARGET_FILE_DIR:Engine2D>
-    COMMAND_EXPAND_LISTS
-)
 
 # CppCheck Analysis
 

@@ -105,7 +105,7 @@ RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direc
 	}
 }
 
-#include "Components/Components.hpp"
+#include "Components.hpp"
 
 void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);

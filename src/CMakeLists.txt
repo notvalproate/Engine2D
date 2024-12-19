@@ -1,10 +1,9 @@
-set(ENGINE2D_SOURCES
+set(SOURCES
     components/BoxCollider.cpp
     components/Camera.cpp
     components/CapsuleCollider.cpp
     components/CircleCollider.cpp
     components/Collider.cpp
-    components/Components.hpp
     components/EdgeCollider.cpp
     components/PolygonCollider.cpp
     components/RigidBody.cpp
@@ -31,12 +30,25 @@ set(ENGINE2D_SOURCES
 
 add_library(Engine2D SHARED ${SOURCES})
 add_library(notval::Engine2D ALIAS Engine2D)
+
+target_link_libraries(Engine2D
+    PUBLIC
+        SDL2::SDL2
+        SDL2::SDL2_image
+        Box2D::Box2D
+)
+
 target_include_directories(Engine2D PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 target_compile_options(Engine2D
     PRIVATE
         ${CXX_COMPILER_FLAGS}
 )
+
+# add_custom_command(TARGET notval::Engine2D POST_BUILD
+#     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:Engine2D> $<TARGET_FILE_DIR:Engine2D>
+#     COMMAND_EXPAND_LISTS
+# )
 
 install(TARGETS Engine2D 
     ARCHIVE DESTINATION lib
@@ -49,4 +61,4 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
 )
 
 include(cppcheck_analysis)
-add_to_cppcheck(CMakeApp ENGINE2D_SOURCES)
+add_to_cppcheck(Engine2D SOURCES)

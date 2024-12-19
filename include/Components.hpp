@@ -1,5 +1,6 @@
 #pragma once
-#include "../Core.hpp"
+#include "Core.hpp"
+#include <optional>
 
 class SpriteRenderer final : public Component {
 public:

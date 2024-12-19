@@ -13,7 +13,7 @@
 #include <unordered_map>
 
 #include <SDL.h>
-#include <box2d.h>
+#include <box2d/box2d.h>
 
 #include "MathModule.hpp"
 
@@ -286,7 +286,6 @@ public:
         float exp = 1.0 / (1.0 + x + 0.48 * x * x + 0.235 * x * x * x);
 
         Vector2D change = current - target;
-        Vector2D tempTarget = target + (change + currentVelocity * smoothTime) * deltaTime;
         Vector2D tempVelocity = (currentVelocity - change * omega) * deltaTime;
         Vector2D newVelocity = (currentVelocity - tempVelocity * omega) * exp;
 
