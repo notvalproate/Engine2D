@@ -425,18 +425,18 @@ protected:
 private:
     std::unique_ptr<Component> Clone() const override;
 
-    virtual void OnCollisionEnter(const Collision& collision) {};
-    virtual void OnCollisionStay(const Collision& collision) {};
-    virtual void OnCollisionExit(const Collision& collision) {};
+    virtual void OnCollisionEnter(const Collision&) {};
+    virtual void OnCollisionStay(const Collision&) {};
+    virtual void OnCollisionExit(const Collision&) {};
 
-    virtual void OnTriggerEnter(const Collision& collision) {};
-    virtual void OnTriggerStay(const Collision& collision) {};
-    virtual void OnTriggerExit(const Collision& collision) {};
+    virtual void OnTriggerEnter(const Collision&) {};
+    virtual void OnTriggerStay(const Collision&) {};
+    virtual void OnTriggerExit(const Collision&) {};
 
     virtual void LateUpdate() {};
     virtual void OnDestroy() {};
 
-    void Render() const override final { };
+    void Render() const override final {};
     void AttachGameObject(GameObject* newGameObject) override final;
 
     friend class Object;
@@ -1021,12 +1021,11 @@ private:
     SDL_FRect GetSpriteDestRect(const Vector2D& dimensions, const uint16_t pixelsPerUnit, const Transform* transform, const Camera* currentCamera) const;
     void GetFlipAndRotation(const Transform* transform, double& rotation, SDL_RendererFlip& flipFlag) const;
     const std::vector<std::string>& GetAvailableSortingLayers() const;
-    int RoundUpToMultipleOfEight(const int v) const;
+    unsigned RoundUpToMultipleOfEight(const unsigned v) const;
 
     SDL_Renderer* m_Renderer;
     std::vector<std::string> m_AvailableSortingLayers;
     mutable std::vector<SDL_Point> m_CirclePointsReserve;
-
 
     friend class Object;
     friend class GameObject;

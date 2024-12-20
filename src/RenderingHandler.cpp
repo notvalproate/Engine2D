@@ -33,8 +33,6 @@ void RenderingHandler::RenderPoint(const Vector2D& point, const uint8_t width, c
 		return;
 	}
 
-	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
-
 	Vector2D screenPosition = currentCamera->WorldToScreenPoint(point);
 
 	int initialX = screenPosition.x - (width / 2);
@@ -60,8 +58,6 @@ void RenderingHandler::RenderLine(const Vector2D& src, const Vector2D& dest, con
 		return;
 	}
 
-	double pixelsPerUnitOnScreen = currentCamera->GetPixelsPerUnit();
-
 	Vector2D srcScreenPosition = currentCamera->WorldToScreenPoint(src);
 	Vector2D destScreenPosition = currentCamera->WorldToScreenPoint(dest);
 
@@ -84,21 +80,21 @@ void RenderingHandler::RenderRect(const Vector2D& position, const Vector2D& dime
 	Vector2D screenPosition = currentCamera->WorldToScreenPoint(position);
 	Vector2D newDimensions = dimensions * pixelsPerUnitOnScreen;
 
-	SDL_Rect rect{
-		screenPosition.x - newDimensions.x / 2.0,
-		screenPosition.y - newDimensions.y / 2.0,
-		newDimensions.x,
-		newDimensions.y,
+	SDL_FRect rect{
+		static_cast<float>(screenPosition.x - newDimensions.x / 2.0),
+		static_cast<float>(screenPosition.y - newDimensions.y / 2.0),
+		static_cast<float>(newDimensions.x),
+		static_cast<float>(newDimensions.y),
 	};
 
 	RenderableColor rColor = GetRenderableColor(color);
 
 	SDL_SetRenderDrawColor(m_Renderer, rColor.r, rColor.g, rColor.b, rColor.a);
-	SDL_RenderDrawRect(m_Renderer, &rect);
+	SDL_RenderDrawRectF(m_Renderer, &rect);
 	SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 0);
 }
 
-int RenderingHandler::RoundUpToMultipleOfEight(const int v) const {
+unsigned RenderingHandler::RoundUpToMultipleOfEight(const unsigned v) const {
 	return (v + (8 - 1)) & -8;
 }
 
@@ -118,7 +114,7 @@ void RenderingHandler::RenderCircle(const Vector2D& center, const double radius,
 	Vector2D screenCenter = currentCamera->WorldToScreenPoint(center);
 	double screenRadius = radius * currentCamera->GetPixelsPerUnit() + 1;
 
-	const int vecSize = RoundUpToMultipleOfEight(screenRadius * 8 * 35 / 49);
+	const unsigned vecSize = RoundUpToMultipleOfEight(screenRadius * 8 * 35 / 49);
 
 	if (vecSize > m_CirclePointsReserve.size()) {
 		m_CirclePointsReserve.resize(vecSize);
@@ -199,10 +195,10 @@ SDL_FRect RenderingHandler::GetSpriteDestRect(const Vector2D& dimensions, const 
 	newDimensions.y = newDimensions.y * std::abs(transform->scale.y);
 
 	SDL_FRect destRect{
-		(2 * screenPosition.x - newDimensions.x) / 2.0,
-		(2 * screenPosition.y - newDimensions.y) / 2.0,
-		newDimensions.x,
-		newDimensions.y,
+		static_cast<float>((2 * screenPosition.x - newDimensions.x) / 2.0),
+		static_cast<float>((2 * screenPosition.y - newDimensions.y) / 2.0),
+		static_cast<float>(newDimensions.x),
+		static_cast<float>(newDimensions.y),
 	};
 
 	return destRect;

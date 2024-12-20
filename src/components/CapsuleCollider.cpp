@@ -61,7 +61,7 @@ void CapsuleCollider::Awake() {
 	UpdateBounds();
 }
 
-b2Shape* CapsuleCollider::GetShape(bool useOffset) const {
+b2Shape* CapsuleCollider::GetShape(bool) const {
 	b2PolygonShape* boxShape = new b2PolygonShape();
 
 	boxShape->SetAsBox(m_Size.x / 2.0, m_Size.y / 2.0);

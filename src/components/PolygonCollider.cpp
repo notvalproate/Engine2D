@@ -77,7 +77,7 @@ void PolygonCollider::SetDensity(const double density) {
 	}
 }
 
-b2Shape* PolygonCollider::GetShape(bool useOffset) const {
+b2Shape* PolygonCollider::GetShape(bool) const {
 	b2PolygonShape* boxShape = new b2PolygonShape();
 
 	boxShape->Set(&m_Paths[0][0], m_Paths[0].size());
@@ -186,7 +186,7 @@ bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) con
 
 		prevPrev++;
 		prev++;
-		curr = ++curr % points.size();
+		curr = (curr + 1) % points.size();
 	}
 
 	return false;

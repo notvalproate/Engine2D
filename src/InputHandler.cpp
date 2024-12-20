@@ -79,6 +79,8 @@ short InputHandler::GetAxisRaw(const std::string& axis) const {
 
 		return 0;
 	}
+
+	return 0;
 }
 
 void InputHandler::WaitForEvent() const {
