@@ -330,11 +330,10 @@ public:
 		playerRenderer->SetSortingLayer("Player");
 		playerRenderer->SetPixelsPerUnit(32);
 
+		PlayerObject->AddComponent<RigidBody>();
 		// auto playerCollider = PlayerObject->AddComponent<CapsuleCollider>();
-		auto playerCollider = PlayerObject->AddComponent<PolygonCollider>();
-		playerCollider->CreatePrimitive(5, Vector2D(1, 1), Vector2D(1, 1));
-		auto playerBody = PlayerObject->AddComponent<RigidBody>();
-		// playerCollider->SetTransform(Vector2D(1, 2), Vector2D(0, 0), 0);
+		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		playerCollider->SetTransform(Vector2D(1, 2), Vector2D(0, 0), 0);
 
 		PhysicsMaterial ice(0, 0.3);
 
@@ -407,7 +406,7 @@ public:
 	};
 };
 
-int main(int argc, char *argv[]) {
+int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
 	GameTest myGame;
 
 	myGame.InitGame("Engine2D", "assets/characters/idle/madeline.png", 1280, 720);

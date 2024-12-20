@@ -1,7 +1,7 @@
 #include "Core.hpp"
 #include <math.h>
 
-Transform::Transform(GameObject* gameObject) : gameObject(gameObject), m_Parent(nullptr), tag(&gameObject->tag), name(&gameObject->name) { };
+Transform::Transform(GameObject* gameObject) : gameObject(gameObject), tag(&gameObject->tag), name(&gameObject->name), m_Parent(nullptr) { };
 
 void Transform::Translate(const Vector2D& translation) {
     position.x += translation.x;
