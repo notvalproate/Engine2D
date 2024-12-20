@@ -118,75 +118,75 @@ float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b
 
 #include "Components.hpp"
 
-// void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
-// 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
-// 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
+void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
+	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
+	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
-// 	Collision collisionA = GetCollision(colliderB, colliderA);
-// 	Collision collisionB = GetCollision(colliderA, colliderB);
+	Collision collisionA = GetCollision(colliderB, colliderA);
+	Collision collisionB = GetCollision(colliderA, colliderB);
 
-// 	if (colliderA->IsCollidingWith(colliderB) || colliderA->IsTriggeringWith(colliderB)) {
-// 		return;
-// 	}
+	if (colliderA->IsCollidingWith(colliderB) || colliderA->IsTriggeringWith(colliderB)) {
+		return;
+	}
 
-// 	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
-// 		colliderA->m_CurrentTriggers.push_back(collisionA);
-// 		colliderB->m_CurrentTriggers.push_back(collisionB);
+	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+		colliderA->m_CurrentTriggers.push_back(collisionA);
+		colliderB->m_CurrentTriggers.push_back(collisionB);
 
-// 		colliderA->gameObject->OnTriggerEnter(collisionA);
-// 		colliderB->gameObject->OnTriggerEnter(collisionB);
+		colliderA->gameObject->OnTriggerEnter(collisionA);
+		colliderB->gameObject->OnTriggerEnter(collisionB);
 
-// 		return;
-// 	}
+		return;
+	}
 
-// 	colliderA->m_CurrentCollisions.push_back(collisionA);
-// 	colliderB->m_CurrentCollisions.push_back(collisionB);
+	colliderA->m_CurrentCollisions.push_back(collisionA);
+	colliderB->m_CurrentCollisions.push_back(collisionB);
 
-// 	colliderA->gameObject->OnCollisionEnter(collisionA);
-// 	colliderB->gameObject->OnCollisionEnter(collisionB);
-// }
+	colliderA->gameObject->OnCollisionEnter(collisionA);
+	colliderB->gameObject->OnCollisionEnter(collisionB);
+}
 
-// void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
-// 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
-// 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
+void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
+	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
+	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
-// 	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
-// 		colliderA->RemoveTriggerWith(colliderB);
-// 		colliderB->RemoveTriggerWith(colliderA);
-// 	}
-// 	else {
-// 		colliderA->RemoveCollisionWith(colliderB);
-// 		colliderB->RemoveCollisionWith(colliderA);
-// 	}
+	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+		colliderA->RemoveTriggerWith(colliderB);
+		colliderB->RemoveTriggerWith(colliderA);
+	}
+	else {
+		colliderA->RemoveCollisionWith(colliderB);
+		colliderB->RemoveCollisionWith(colliderA);
+	}
 
-// 	if (colliderA->gameObject->m_Destroyed || colliderB->gameObject->m_Destroyed) {
-// 		return;
-// 	}
+	if (colliderA->gameObject->m_Destroyed || colliderB->gameObject->m_Destroyed) {
+		return;
+	}
 
-// 	Collision collisionA = GetCollision(colliderB, colliderA);
-// 	Collision collisionB = GetCollision(colliderA, colliderB);
+	Collision collisionA = GetCollision(colliderB, colliderA);
+	Collision collisionB = GetCollision(colliderA, colliderB);
 
-// 	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
-// 		colliderA->gameObject->OnTriggerExit(collisionA); 
-// 		colliderB->gameObject->OnTriggerExit(collisionB);
+	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+		colliderA->gameObject->OnTriggerExit(collisionA); 
+		colliderB->gameObject->OnTriggerExit(collisionB);
 
-// 		return;
-// 	}
+		return;
+	}
 
-// 	colliderA->gameObject->OnCollisionExit(collisionA);
-// 	colliderB->gameObject->OnCollisionExit(collisionB);
-// }
+	colliderA->gameObject->OnCollisionExit(collisionA);
+	colliderB->gameObject->OnCollisionExit(collisionB);
+}
 
-// Collision PhysicsHandler::ContactListener::GetCollision(Collider* collider, Collider* otherCollider) const {
-// 	Collision collision{};
-// 	collision.collider = collider;
-// 	collision.otherCollider = otherCollider;
+Collision PhysicsHandler::ContactListener::GetCollision(Collider* collider, Collider* otherCollider) const {
+	Collision collision{};
+	collision.collider = collider;
+	collision.otherCollider = otherCollider;
 
-// 	collision.rigidBody = collider->GetAttachedRigidBody();
-// 	collision.otherRigidBody = otherCollider->GetAttachedRigidBody();
+	collision.rigidBody = collider->GetAttachedRigidBody();
+	collision.otherRigidBody = otherCollider->GetAttachedRigidBody();
 
-// 	collision.transform = collider->transform;
-// 	collision.gameObject = collider->gameObject;
+	collision.transform = collider->transform;
+	collision.gameObject = collider->gameObject;
 
-// 	return collision;
-// }
+	return collision;
+}

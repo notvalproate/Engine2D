@@ -279,6 +279,10 @@ class Controller : public Behaviour {
 		std::cout << "Entering Collision with " << collision.collider->gameObject->name << std::endl;
 	}
 
+	void OnCollisionExit(const Collision& collision) override {
+		std::cout << "Exiting Collision with " << collision.collider->gameObject->name << std::endl;
+	}
+
 	void OnTriggerEnter(const Collision& collision) override {
 		std::cout << "Triggering with " << collision.collider->gameObject->name << std::endl;
 	}
@@ -384,14 +388,14 @@ public:
 	void SetupGame() override {
 		RenderingPipeline.SetRendererVsync(true);
 
-		// RenderingPipeline.AddSortingLayer("Background");
-		// RenderingPipeline.AddSortingLayer("Player");
-		// RenderingPipeline.AddSortingLayer("World");
+		RenderingPipeline.AddSortingLayer("Background");
+		RenderingPipeline.AddSortingLayer("Player");
+		RenderingPipeline.AddSortingLayer("World");
 
 		Physics.SetRenderColliders(true);
 
 		SceneManager.AddScene<TestScene>("Test Scene");
-		// SceneManager.AddScene<TestScene>("Test Scene 2");
+		SceneManager.AddScene<TestScene>("Test Scene 2");
 		SceneManager.LoadScene("Test Scene");
 	}
 };

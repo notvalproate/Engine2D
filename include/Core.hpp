@@ -1262,13 +1262,13 @@ private:
 
     void RenderColliders() const;
 
-    // class ContactListener : public b2ContactListener {
-    //     void BeginContact(b2Contact* contact) override;
-    //     void EndContact(b2Contact* contact) override;
+    class ContactListener : public b2ContactListener {
+        void BeginContact(b2Contact* contact) override;
+        void EndContact(b2Contact* contact) override;
 
-    // private:
-    //     Collision GetCollision(Collider* collider, Collider* otherCollider) const;
-    // };
+    private:
+        Collision GetCollision(Collider* collider, Collider* otherCollider) const;
+    };
 
     class RayCastCallback : public b2RayCastCallback {
     public:
@@ -1283,7 +1283,7 @@ private:
     };
 
     bool m_RenderSceneColliders;
-    // ContactListener m_ContactListener;
+    ContactListener m_ContactListener;
 
     friend class Object;
     friend class Scene;
