@@ -30,7 +30,7 @@ void ScreenHandler::SetToDisplayResolution() {
 	SetResolution(m_Mode.w, m_Mode.h);
 }
 
-bool ScreenHandler::InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight) {
+bool ScreenHandler::InitScreen(const std::string& title, const std::filesystem::path iconpath, const int windowWidth, const int windowHeight) {
 	if (SDL_GetDisplayMode(0, 0, &m_Mode)) {
 		std::cout << "Error: Couldn't Get Display Mode...Framerate set to 60" << std::endl;
 	}
@@ -44,14 +44,19 @@ bool ScreenHandler::InitScreen(const char* title, const char* iconpath, const in
 	m_Height = windowHeight;
 	m_AspectRatio = static_cast<double>(m_Width) / static_cast<double>(m_Height);
 
-	if (!(m_Window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0))) {
+	if (!(m_Window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, 0))) {
 		std::cout << "Error: Couldn't Initialize Window..." << std::endl;
 		return false;
 	}
 
 	std::cout << "Stage: Initialized Window..." << std::endl;
 
-	SDL_Surface* TempSurface = IMG_Load(iconpath);
+	if (!std::filesystem::exists(iconpath)) {
+		std::cerr << "File path to icon provided is invalid! Path: " << iconpath << std::endl;
+		return false;
+	}
+
+	SDL_Surface* TempSurface = IMG_Load(iconpath.string().c_str());
 	SDL_SetWindowIcon(m_Window, TempSurface);
 	SDL_FreeSurface(TempSurface);
 	std::cout << "Stage: Initialized Window..." << std::endl;

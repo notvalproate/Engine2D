@@ -1,8 +1,13 @@
 #include "Core.hpp"
 #include "SDL_image.h"
 
-CustomCursor::CustomCursor(const char* cursorPath, const Vector2D& hotspot) : m_Cursor(nullptr) {
-	SDL_Surface* surface = IMG_Load(cursorPath);
+CustomCursor::CustomCursor(const std::filesystem::path& cursorPath, const Vector2D& hotspot) : m_Cursor(nullptr) {
+	if (!std::filesystem::exists(cursorPath)) {
+		std::cerr << "File path to cursor provided is invalid! Path: " << cursorPath << std::endl;
+		return;
+	}
+
+	SDL_Surface* surface = IMG_Load(cursorPath.string().c_str());
 	m_Cursor = SDL_CreateColorCursor(surface, hotspot.x, hotspot.y);
 	SDL_FreeSurface(surface);
 }

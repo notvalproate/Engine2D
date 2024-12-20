@@ -3,7 +3,7 @@
 
 Engine2D::Engine2D() : m_IsRunning(true) { }
 
-void Engine2D::InitGame(const char* title, const char* iconpath, int windowWidth, int windowHeight) {
+void Engine2D::InitGame(const char* title, const std::string& iconpath, int windowWidth, int windowHeight) {
 	if (SDL_Init(
 		SDL_INIT_VIDEO | 
 		SDL_INIT_EVENTS |

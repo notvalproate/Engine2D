@@ -17,13 +17,16 @@ std::unique_ptr<Component> SpriteRenderer::Clone() const {
 	return std::make_unique<SpriteRenderer>(*this);
 }
 
-void SpriteRenderer::SetSprite(const char* spritePath) {
+void SpriteRenderer::SetSprite(const std::filesystem::path& spritePath) {
+	if(!std::filesystem::exists(spritePath)) {
+		std::cerr << "File path to sprite provided is invalid! Path: " << spritePath << std::endl;
+		return;
+	}
+
 	if (m_Sprite) {
 		SDL_DestroyTexture(m_Sprite);
 	}
 
-	// if path is invalid or texture is not found, load default texture or something
-	// handle this or atleast notify the user somehow about invalid asset path
 	m_Sprite = TextureManager.LoadTexture(spritePath);
 	SDL_Point size = TextureManager.GetTextureSize(m_Sprite);
 

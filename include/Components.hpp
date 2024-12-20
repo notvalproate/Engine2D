@@ -6,7 +6,7 @@ class SpriteRenderer final : public Component {
 public:
 	~SpriteRenderer();
 
-	void SetSprite(const char* spritePath);
+	void SetSprite(const std::filesystem::path& spritePath);
 	void SetSortingLayer(const std::string_view layerName);
 	void SetPixelsPerUnit(const uint16_t pixelsPerUnit);
 

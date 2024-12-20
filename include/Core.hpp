@@ -11,6 +11,7 @@
 #include <type_traits>
 #include <chrono>
 #include <unordered_map>
+#include <filesystem>
 
 #include <SDL.h>
 #include <box2d/box2d.h>
@@ -1180,7 +1181,7 @@ public:
 private:
     ScreenHandler();
 
-    bool InitScreen(const char* title, const char* iconpath, const int windowWidth, const int windowHeight);
+    bool InitScreen(const std::string& title, const std::filesystem::path iconpath, const int windowWidth, const int windowHeight);
     void DestroyScreen();
     
     SDL_Window* m_Window;
@@ -1199,7 +1200,7 @@ private:
 
 class TextureHandler {
 public:
-    SDL_Texture* LoadTexture(const char* texpath) const;
+    SDL_Texture* LoadTexture(const std::filesystem::path& texPath) const;
     SDL_Point GetTextureSize(SDL_Texture* texture) const;
 
 private:
@@ -1318,7 +1319,7 @@ enum class SystemCursorType : uint8 {
 
 class CustomCursor {
 public:
-    CustomCursor(const char* cursorPath, const Vector2D& hotspot);
+    CustomCursor(const std::filesystem::path& cursorPath, const Vector2D& hotspot);
     ~CustomCursor();
 private:
     SDL_Cursor* m_Cursor;
@@ -1360,7 +1361,7 @@ public:
     Engine2D& operator=(const Engine2D& other) = delete;
     Engine2D& operator=(const Engine2D&& other) = delete;
 
-    void InitGame(const char* title, const char* iconpath, int windowWidth, int windowHeight);
+    void InitGame(const char* title, const std::string& iconpath, int windowWidth, int windowHeight);
     void Run();
 
 private:
