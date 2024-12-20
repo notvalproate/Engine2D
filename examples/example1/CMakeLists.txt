@@ -14,8 +14,14 @@ target_compile_options(example1
 include(cppcheck_analysis)
 add_to_cppcheck(example1 example1.cpp)
 
+set(ASSET_COPY_DIRECTORY ${CMAKE_BINARY_DIR}/bin/assets)
+
+if(MSVC)
+    set(ASSET_COPY_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$(Configuration)/assets)
+endif()
+
 add_custom_command(
     TARGET example1 POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_CURRENT_SOURCE_DIR}/assets ${CMAKE_BINARY_DIR}/bin/assets
+        ${CMAKE_CURRENT_SOURCE_DIR}/assets ${ASSET_COPY_DIRECTORY}
 )

@@ -45,6 +45,11 @@ target_compile_options(Engine2D
         ${CXX_COMPILER_FLAGS}
 )
 
+target_compile_definitions(Engine2D 
+    PRIVATE 
+        ENGINE2D_EXPORTS
+)
+
 install(TARGETS Engine2D 
     ARCHIVE DESTINATION lib
     LIBRARY DESTINATION lib

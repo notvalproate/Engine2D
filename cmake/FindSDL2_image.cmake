@@ -22,7 +22,7 @@ if (SDL2_IMAGE_USE_STATIC)
                  PATH_SUFFIXES lib lib64 bin SDL2_image/lib SDL2_image/lib64)
 else()
     find_library(SDL2_IMAGE_LIBRARY
-                 NAMES SDL2_image
+                 NAMES SDL2_image SDL2_imaged
                  HINTS ENV SDL2_IMAGE_ROOT
                  PATH_SUFFIXES lib lib64 bin SDL2_image/lib SDL2_image/lib64)
 endif()

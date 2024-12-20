@@ -27,11 +27,11 @@ if (SDL2_USE_STATIC)
                  PATH_SUFFIXES lib lib64 bin SDL2/lib SDL2/lib64)
 else()
     find_library(SDL2_LIBRARY
-                 NAMES SDL2
+                 NAMES SDL2 SDL2d
                  HINTS ENV SDL2_ROOT
                  PATH_SUFFIXES lib lib64 bin SDL2/lib SDL2/lib64)
     find_library(SDL2MAIN_LIBRARY
-                 NAMES SDL2main
+                 NAMES SDL2main SDL2maind
                  HINTS ENV SDL2_ROOT
                  PATH_SUFFIXES lib lib64 bin SDL2/lib SDL2/lib64)
 endif()

@@ -1,5 +1,20 @@
 #pragma once
 
+/*
+* Definition of ENGINE2D_API macro for MSVC DLL import/export
+* CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS works for everything except global and static variables
+* Hence, we need to define ENGINE2D_API to decorate classes that have static variables
+*/
+#ifdef _WIN32
+    #ifdef ENGINE2D_EXPORTS
+        #define ENGINE2D_API __declspec(dllexport)
+    #else
+        #define ENGINE2D_API __declspec(dllimport)
+    #endif
+#else
+    #define ENGINE2D_API
+#endif
+
 #include <iostream>
 #include <unordered_map>
 #include <vector>
@@ -70,15 +85,15 @@ public:
     static void Destroy(Component* component);
     static void DestroyImmediate(Component* component);
 
-    static InputHandler Input;
-    static SceneHandler SceneManager;
-    static ScreenHandler Screen;
-    static RenderingHandler RenderingPipeline;
-    static TextureHandler TextureManager;
-    static TimeHandler Time;
-    static PhysicsHandler Physics;
-    static CursorHandler Cursor;
-    static MathModule Math;
+    static ENGINE2D_API InputHandler Input;
+    static ENGINE2D_API SceneHandler SceneManager;
+    static ENGINE2D_API ScreenHandler Screen;
+    static ENGINE2D_API RenderingHandler RenderingPipeline;
+    static ENGINE2D_API TextureHandler TextureManager;
+    static ENGINE2D_API TimeHandler Time;
+    static ENGINE2D_API PhysicsHandler Physics;
+    static ENGINE2D_API CursorHandler Cursor;
+    static ENGINE2D_API MathModule Math;
 
 private:
     static void CopyBehaviours(GameObject* newGameObject, GameObject* originalGameObject);
@@ -282,9 +297,9 @@ public:
             return target;
         }
 
-        float omega = 2.0 / smoothTime;
-        float x = omega * deltaTime;
-        float exp = 1.0 / (1.0 + x + 0.48 * x * x + 0.235 * x * x * x);
+        double omega = 2.0 / smoothTime;
+        double x = omega * deltaTime;
+        double exp = 1.0 / (1.0 + x + 0.48 * x * x + 0.235 * x * x * x);
 
         Vector2D change = current - target;
         Vector2D tempVelocity = (currentVelocity - change * omega) * deltaTime;
@@ -375,12 +390,12 @@ public:
         return os;
     }
 
-    static const Vector2D up;
-    static const Vector2D down;
-    static const Vector2D left;
-    static const Vector2D right;
-    static const Vector2D one;
-    static const Vector2D zero;
+    static const ENGINE2D_API Vector2D up;
+    static const ENGINE2D_API Vector2D down;
+    static const ENGINE2D_API Vector2D left;
+    static const ENGINE2D_API Vector2D right;
+    static const ENGINE2D_API Vector2D one;
+    static const ENGINE2D_API Vector2D zero;
 };
 
 
@@ -822,7 +837,7 @@ public:
     }
 
     inline constexpr float GetGrayscale() const {
-        return (0.299f * r) + (0.587 * g) + (0.114 * b);
+        return (0.299f * r) + (0.587f * g) + (0.114f * b);
     }
 
     inline constexpr float GetMaxColorComponent() const {
@@ -863,7 +878,7 @@ public:
         float r{}, g{}, b{};
 
         float c = s * v;
-        float x = c * (1 - std::fabs(std::fmod(h / 60.0f, 2) - 1));
+        float x = c * (1 - static_cast<float>(std::fabs(static_cast<float>(std::fmod(h / 60.0f, 2) - 1))));
 
         int hPrime = ((int)h / 60) % 6;
 
@@ -896,12 +911,12 @@ public:
         return Color(r + m, g + m, b + m);
     }
 
-    static inline constexpr Color Lerp(const Color& c1, const Color& c2, double t) {
-        t = std::clamp(t, 0.0, 1.0);
+    static inline constexpr Color Lerp(const Color& c1, const Color& c2, float t) {
+        t = std::clamp(t, 0.0f, 1.0f);
         return Color(c1.r + (c2.r - c1.r) * t, c1.g + (c2.g - c1.g) * t, c1.b + (c2.b - c1.b) * t);
     }
 
-    static inline constexpr Color LerpUnclamped(const Color& c1, const Color& c2, double t) {
+    static inline constexpr Color LerpUnclamped(const Color& c1, const Color& c2, float t) {
         return Color(c1.r + (c2.r - c1.r) * t, c1.g + (c2.g - c1.g) * t, c1.b + (c2.b - c1.b) * t);
     }
 
@@ -1220,7 +1235,7 @@ public:
     inline unsigned int GetFramerate() const { return static_cast<unsigned int>(1 / m_DeltaTime); }
     inline uint32_t GetFrameCount() const { return m_FrameCount; }
 
-    double timeScale;
+    float timeScale;
 private:
     TimeHandler();
 
