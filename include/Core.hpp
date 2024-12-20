@@ -100,7 +100,7 @@ public:
         return *this;
     }
 
-    inline constexpr std::string ToString() const {
+    inline std::string ToString() const {
         return "(" + std::to_string(x) + "," + std::to_string(y) + ")";
     }
 
@@ -798,7 +798,7 @@ public:
         a(std::clamp(a, 0.0f, 1.0f))
     { }
 
-    inline constexpr std::string ToString() const {
+    inline std::string ToString() const {
         return "(" + std::to_string(r) + "," + std::to_string(g) + "," + std::to_string(b) + "," + std::to_string(a) + ")";
     }
 
