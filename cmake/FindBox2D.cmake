@@ -5,6 +5,7 @@
 #   Box2D_FOUND        - Set to TRUE if the library was found
 #   Box2D_INCLUDE_DIRS - Include directories for Box2D
 #   Box2D_LIBRARIES    - The Box2D library
+#   Box2D_RUNTIME      - Path to the Box2D runtime library (.dll, .so, or .dylib)
 #   Box2D::Box2D       - Imported target for linking
 
 # Option to use static or shared library
@@ -19,14 +20,18 @@ if (BOX2D_USE_STATIC)
     find_library(Box2D_LIBRARY
                  NAMES Box2D box2d
                  HINTS ENV Box2D_ROOT
-                 PATH_SUFFIXES lib lib64 bin box2d/lib box2d/lib64 box2d/bin
+                 PATH_SUFFIXES lib lib64 box2d/lib box2d/lib64
                  NAMES_PER_DIR Box2D_static box2d_static)
 else()
     find_library(Box2D_LIBRARY
                  NAMES Box2D box2d
                  HINTS ENV Box2D_ROOT
-                 PATH_SUFFIXES lib lib64 bin box2d/lib box2d/lib64 box2d/bin
+                 PATH_SUFFIXES lib lib64 box2d/lib box2d/lib64
                  NAMES_PER_DIR Box2D_shared box2d_shared)
+    find_file(Box2D_RUNTIME
+                 NAMES Box2D.dll libBox2D.dll Box2D.so libBox2D.so Box2D.dylib libBox2D.dylib
+                 HINTS ENV Box2D_ROOT
+                 PATH_SUFFIXES lib lib64 box2d/lib box2d/lib64 bin box2d/bin)
 endif()
 
 if (Box2D_INCLUDE_DIR AND Box2D_LIBRARY)
@@ -34,7 +39,13 @@ if (Box2D_INCLUDE_DIR AND Box2D_LIBRARY)
     set(Box2D_INCLUDE_DIRS ${Box2D_INCLUDE_DIR})
     set(Box2D_LIBRARIES ${Box2D_LIBRARY})
 
-	message(STATUS "Box2D successfully found!\nInclude directory: ${Box2D_INCLUDE_DIRS}\nLibrary: ${Box2D_LIBRARIES}\n")
+	message(STATUS "\nBox2D successfully found!\nInclude directory: ${Box2D_INCLUDE_DIRS}\nLibrary: ${Box2D_LIBRARIES}\n")
+
+    if(Box2D_RUNTIME)
+        message(STATUS "Box2D runtime found! Path: ${Box2D_RUNTIME}\n")
+    else()
+        message(WARNING "Box2D runtime not found! You may need to copy the Box2D runtime (.dll, .so or .dylib) to run examples.\n")
+    endif()
 
     add_library(Box2D::Box2D UNKNOWN IMPORTED)
     set_target_properties(Box2D::Box2D PROPERTIES
