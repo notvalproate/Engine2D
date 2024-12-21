@@ -5,7 +5,7 @@ Engine2D is a game engine written in C++ to develop 2D games. The engine is **he
 # Prerequisites
 > *(Still unsure if it a good idea to add the dependencies as submodules, commit them with the project, or leave them as manual installations. For now, it is manual)*
 
-Install the following libraries to your standard installation path for CMake to easily find them. If not, you can manually specify the paths.
+Install the following libraries to your standard installation path for CMake to easily find them. If not, you can manually specify the paths in CMake GUI or in the generated `CMakeCache.txt`.
 - SDL2 - https://github.com/libsdl-org/SDL
 - SDL2_image - https://github.com/libsdl-org/SDL_image
 - Box2D (v2.4) - https://github.com/erincatto/box2d
