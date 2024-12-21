@@ -1,21 +1,5 @@
 #include "Engine2D.hpp"
 
-// FIGURE OUT HOW TO MAKE COMPONENTS START IF THEY ARE ADDED AT RUN TIME
-
-/*
-class PlatformerGame : public notval::Engine2D {
-public:
-	void OnUserCreate() override {
-		//Setting up Tilemap
-		notval::Tilemap::SetBackgroundLayerNames({ "below player" });
-		notval::Tilemap::SetCollisionLayerNames({ "world" });
-		notval::Tilemap::SetForegroundLayerNames({ "above player" });
-
-		m_Level = std::make_unique<notval::Tilemap>("assets/tilemaps/tuxemon-town.json", m_Renderer);
-		m_Level->RenderToBuffer();
-};
-*/
-
 class FullscreenToggler : public Behaviour {
 public:
 	using Behaviour::Behaviour;
@@ -347,12 +331,10 @@ public:
 
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<CameraFollower>();
+
 		PlayerObject->AddComponent<Controller>();
+		// Comment line above and uncomment line below to use a player controller that uses and tests raycasts
 		// PlayerObject->AddComponent<PlayerController>();
-		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
-		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
-		playerRenderer->SetSortingLayer("Player");
-		playerRenderer->SetPixelsPerUnit(32);
 
 		PlayerObject->AddComponent<RigidBody>();
 		// auto playerCollider = PlayerObject->AddComponent<CapsuleCollider>();
