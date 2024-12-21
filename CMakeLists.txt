@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+project(Engine2D VERSION 1.0)
+
 if(MSVC)
     set(CXX_WARNING_FLAGS /W4)
 else()
@@ -24,9 +26,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Project Config and Dependencies
 
-project(Engine2D VERSION 1.0)
+# Project Config and Dependencies
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)

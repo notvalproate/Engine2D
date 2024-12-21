@@ -52,6 +52,7 @@ if (SDL2_INCLUDE_DIR AND SDL2_LIBRARY AND SDL2MAIN_LIBRARY)
         message(STATUS "SDL2 runtime found! Path: ${SDL2_RUNTIME}\n")
     else()
         message(WARNING "SDL2 runtime not found! You may need to copy the SDL2 runtime (.dll, .so or .dylib) to run examples.\n")
+        set(SDL2_RUNTIME "")
     endif()
 
     add_library(SDL2::SDL2 UNKNOWN IMPORTED)

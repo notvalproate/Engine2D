@@ -44,6 +44,7 @@ if (SDL2_IMAGE_INCLUDE_DIR AND SDL2_IMAGE_LIBRARY)
         message(STATUS "SDL2_image runtime found! Path: ${SDL2_IMAGE_RUNTIME}\n")
     else()
         message(WARNING "SDL2_image runtime not found! You may need to copy the SDL2_image runtime (.dll, .so or .dylib) to run examples.\n")
+        set(SDL2_IMAGE_RUNTIME "")
     endif()
 
     add_library(SDL2::SDL2_image UNKNOWN IMPORTED)

@@ -45,6 +45,7 @@ if (Box2D_INCLUDE_DIR AND Box2D_LIBRARY)
         message(STATUS "Box2D runtime found! Path: ${Box2D_RUNTIME}\n")
     else()
         message(WARNING "Box2D runtime not found! You may need to copy the Box2D runtime (.dll, .so or .dylib) to run examples.\n")
+        set(Box2D_RUNTIME "")
     endif()
 
     add_library(Box2D::Box2D UNKNOWN IMPORTED)

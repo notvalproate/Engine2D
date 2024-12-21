@@ -66,15 +66,11 @@ add_to_cppcheck(Engine2D SOURCES)
 # Post build command to copy over runtime libraries to binary output directory
 
 set(RUNTIME_LIBRARIES ${SDL2_RUNTIME} ${SDL2_IMAGE_RUNTIME} ${Box2D_RUNTIME})
-set(RUNTIME_LIBRARY_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-
-if(MSVC)
-    set(RUNTIME_LIBRARY_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration))
-endif()
+set(RUNTIME_LIBRARY_DIRECTORY $<TARGET_FILE_DIR:Engine2D>)
 
 if(RUNTIME_LIBRARIES)
     add_custom_command(TARGET Engine2D POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        COMMAND ${CMAKE_COMMAND} -E copy
         ${RUNTIME_LIBRARIES}
         ${RUNTIME_LIBRARY_DIRECTORY}
     )

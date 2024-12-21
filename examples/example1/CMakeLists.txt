@@ -14,11 +14,7 @@ target_compile_options(example1
 include(cppcheck_analysis)
 add_to_cppcheck(example1 example1.cpp)
 
-set(ASSET_COPY_DIRECTORY ${CMAKE_BINARY_DIR}/bin/assets)
-
-if(MSVC)
-    set(ASSET_COPY_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$(Configuration)/assets)
-endif()
+set(ASSET_COPY_DIRECTORY $<TARGET_FILE_DIR:Engine2D>/assets)
 
 add_custom_command(
     TARGET example1 POST_BUILD
