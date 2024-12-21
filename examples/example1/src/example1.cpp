@@ -241,7 +241,8 @@ class Controller : public Behaviour {
 		rb->FreezeRotation(true);
 		rb->drag = 1;
 		test = gameObject->GetComponent<BoxCollider>();
-		boo = true;
+		mcCursor = new CustomCursor("assets/cursor.png", Vector2D(0, 0));
+		boo = koo = false;
 	}
 
 	void Update() {
@@ -266,9 +267,26 @@ class Controller : public Behaviour {
 		}
 		
 		if (Input.GetKeyDown(SDL_SCANCODE_O)) {
-			//rb = gameObject->AddComponent<RigidBody>();
-
 			SceneManager.LoadScene("Test Scene 2");
+		}
+		
+		if (Input.GetKeyDown(SDL_SCANCODE_I)) {
+			SceneManager.LoadScene("Test Scene");
+		}
+
+		if (Input.GetKeyDown(SDL_SCANCODE_B)) {
+			Physics.SetRenderColliders(boo);
+			boo = !boo;
+		}
+
+		if (Input.GetKeyDown(SDL_SCANCODE_M)) {
+			if (!koo) {
+				Cursor.SetCursor(*mcCursor);
+			}
+			else {
+				Cursor.SetCursor(SystemCursorType::Arrow);
+			}
+			koo = !koo;
 		}
 	}
 
@@ -291,11 +309,13 @@ class Controller : public Behaviour {
 		std::cout << "Exiting trigger with " << collision.collider->gameObject->name << std::endl;
 	}
 	
+	CustomCursor* mcCursor;
+	double radius;
+	bool boo, koo;
+
 	Camera* mainCamera;
 	RigidBody* rb;
 	BoxCollider* test;
-	double radius;
-	bool boo;
 };
 
 class TestScene : public Scene {
