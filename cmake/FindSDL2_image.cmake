@@ -27,7 +27,7 @@ else()
                  HINTS ENV SDL2_IMAGE_ROOT
                  PATH_SUFFIXES lib lib64 SDL2_image/lib SDL2_image/lib64)
     find_file(SDL2_IMAGE_RUNTIME
-                 NAMES SDL2_image.dll libSDL2_image.dll SDL2_image.so libSDL2_image.so SDL2_image.dylib libSDL2_image.dylib
+                 NAMES SDL2_image.dll libSDL2_image.dll SDL2_imaged.dll SDL2_image.so libSDL2_image.so SDL2_image.dylib libSDL2_image.dylib
                  HINTS ENV SDL2_ROOT
                  PATH_SUFFIXES lib lib64 SDL2_image/lib SDL2_image/lib64 bin SDL2_image/bin)
 endif()

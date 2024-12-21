@@ -36,7 +36,7 @@ else()
                  HINTS ENV SDL2_ROOT
                  PATH_SUFFIXES lib lib64 SDL2/lib SDL2/lib64)
     find_file(SDL2_RUNTIME
-                 NAMES SDL2.dll libSDL2.dll SDL2.so libSDL2.so SDL2.dylib libSDL2.dylib
+                 NAMES SDL2.dll libSDL2.dll SDL2d.dll SDL2.so libSDL2.so SDL2.dylib libSDL2.dylib
                  HINTS ENV SDL2_ROOT
                  PATH_SUFFIXES lib lib64 SDL2/lib SDL2/lib64 bin SDL2/bin)
 endif()

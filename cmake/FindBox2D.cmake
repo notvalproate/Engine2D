@@ -29,7 +29,7 @@ else()
                  PATH_SUFFIXES lib lib64 box2d/lib box2d/lib64
                  NAMES_PER_DIR Box2D_shared box2d_shared)
     find_file(Box2D_RUNTIME
-                 NAMES Box2D.dll libBox2D.dll Box2D.so libBox2D.so Box2D.dylib libBox2D.dylib
+                 NAMES Box2D.dll libBox2D.dll Box2Dd.dll Box2D.so libBox2D.so Box2D.dylib libBox2D.dylib
                  HINTS ENV Box2D_ROOT
                  PATH_SUFFIXES lib lib64 box2d/lib box2d/lib64 bin box2d/bin)
 endif()
