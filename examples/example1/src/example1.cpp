@@ -332,6 +332,11 @@ public:
 		auto PlayerObject = CreateGameObject("Player");
 		PlayerObject->AddComponent<CameraFollower>();
 
+		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
+		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
+		playerRenderer->SetSortingLayer("Player");
+		playerRenderer->SetPixelsPerUnit(32);
+
 		PlayerObject->AddComponent<Controller>();
 		// Comment line above and uncomment line below to use a player controller that uses and tests raycasts
 		// PlayerObject->AddComponent<PlayerController>();
