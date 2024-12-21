@@ -51,14 +51,15 @@ bool ScreenHandler::InitScreen(const std::string& title, const std::filesystem::
 
 	std::cout << "Stage: Initialized Window..." << std::endl;
 
-	if (!std::filesystem::exists(iconpath)) {
+	if (std::filesystem::exists(iconpath)) {
+		SDL_Surface* TempSurface = IMG_Load(iconpath.string().c_str());
+		SDL_SetWindowIcon(m_Window, TempSurface);
+		SDL_FreeSurface(TempSurface);
+	} 
+	else {
 		std::cerr << "File path to icon provided is invalid! Path: " << iconpath << std::endl;
-		return false;
 	}
 
-	SDL_Surface* TempSurface = IMG_Load(iconpath.string().c_str());
-	SDL_SetWindowIcon(m_Window, TempSurface);
-	SDL_FreeSurface(TempSurface);
 	std::cout << "Stage: Initialized Window..." << std::endl;
 
 	SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
