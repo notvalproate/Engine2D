@@ -62,3 +62,15 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/
 
 include(cppcheck_analysis)
 add_to_cppcheck(Engine2D SOURCES)
+
+# Post build command to copy over runtime libraries to binary output directory
+
+set(RUNTIME_LIBRARIES ${SDL2_RUNTIME} ${SDL2_IMAGE_RUNTIME} ${Box2D_RUNTIME})
+
+if(RUNTIME_LIBRARIES)
+    add_custom_command(TARGET Engine2D POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${RUNTIME_LIBRARIES}
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+    )
+endif()
