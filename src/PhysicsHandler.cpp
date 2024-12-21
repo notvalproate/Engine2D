@@ -75,11 +75,17 @@ void PhysicsHandler::SetRenderColliders(const bool set) {
 }
 
 void PhysicsHandler::SetGravity(const Vector2D& gravity) const {
-	Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get()->SetGravity(b2Vec2(gravity.x, gravity.y));
+	if (Scene* currentScene = Object::SceneManager.GetCurrentScene()) {
+		currentScene->m_PhysicsWorld.get()->SetGravity(b2Vec2(gravity.x, gravity.y));
+	}
 }
 
 Vector2D PhysicsHandler::GetGravity() const {
-	return Vector2D(Object::SceneManager.GetCurrentScene()->m_PhysicsWorld.get()->GetGravity());
+	if (Scene* currentScene = Object::SceneManager.GetCurrentScene()) {
+		return Vector2D(currentScene->m_PhysicsWorld.get()->GetGravity());
+	}
+
+	return Vector2D::zero;
 }
 
 RayCastHit PhysicsHandler::RayCast(const Vector2D& origin, const Vector2D& direction, float distance) const {

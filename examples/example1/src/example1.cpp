@@ -393,21 +393,12 @@ public:
 		RenderingPipeline.AddSortingLayer("World");
 
 		Physics.SetRenderColliders(true);
+		Physics.SetGravity(Vector2D(0, 0));
 
 		SceneManager.AddScene<TestScene>("Test Scene");
 		SceneManager.AddScene<TestScene>("Test Scene 2");
 		SceneManager.LoadScene("Test Scene");
 	}
-};
-
-class KanvaGame : public Engine2D {
-public:
-	using Engine2D::Engine2D;
-
-	void SetupGame() override {
-		// Physics.SetGravity(Vector2D(0, 0));  issue
-		Physics.SetRenderColliders(true);
-	};
 };
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
