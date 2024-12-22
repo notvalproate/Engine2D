@@ -27,11 +27,16 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
+# Vendor Dependencies
+
+set(BUILD_SHARED_LIBS ON)
+set(BOX2D_BUILD_UNIT_TESTS OFF)
+set(BOX2D_BUILD_TESTBED OFF)
+
+add_subdirectory(vendor)
+
 # Project Config and Dependencies
 
-find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED)
-find_package(Box2D REQUIRED)
 find_package(CppCheck)
 
 set(ALL_ANALYSIS_TARGETS)
@@ -55,9 +60,9 @@ endif()
 
 # Build examples
 
-option(BUILD_EXAMPLES "Build example projects" OFF)
+option(ENGINE2D_BUILD_EXAMPLES "Build example projects" OFF)
 
-if (BUILD_EXAMPLES)
+if (ENGINE2D_BUILD_EXAMPLES)
   MESSAGE(STATUS "Building examples is enabled")
   add_subdirectory(examples)
 endif()

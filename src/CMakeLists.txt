@@ -34,8 +34,8 @@ add_library(notval::Engine2D ALIAS Engine2D)
 target_link_libraries(Engine2D
     PUBLIC
         SDL2::SDL2
-        SDL2::SDL2_image
-        Box2D::Box2D
+        SDL2_image::SDL2_image
+        box2d
 )
 
 target_include_directories(Engine2D PUBLIC ${CMAKE_SOURCE_DIR}/include)

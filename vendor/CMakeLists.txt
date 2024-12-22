@@ -1,6 +1,6 @@
-set(Box2D_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vendor/Box2D/CMakeLists.txt")
-set(SDL2_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vendor/SDL2/CMakeLists.txt")
-set(SDL2_image_PATH "${CMAKE_CURRENT_SOURCE_DIR}/vendor/SDL2_image/CMakeLists.txt")
+set(Box2D_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Box2D/CMakeLists.txt")
+set(SDL2_PATH "${CMAKE_CURRENT_SOURCE_DIR}/SDL2/CMakeLists.txt")
+set(SDL2_image_PATH "${CMAKE_CURRENT_SOURCE_DIR}/SDL2_image/CMakeLists.txt")
 
 macro(fetch_dependencies)
     execute_process(
@@ -35,6 +35,6 @@ else()
     message(STATUS "SDL2_image found.")
 endif()
 
-add_subdirectory(vendor/Box2D)
-add_subdirectory(vendor/SDL2)
-add_subdirectory(vendor/SDL2_image)
+add_subdirectory(Box2D)
+add_subdirectory(SDL2)
+add_subdirectory(SDL2_image)
