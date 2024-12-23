@@ -6,7 +6,7 @@
 #   Box2D_INCLUDE_DIRS - Include directories for Box2D
 #   Box2D_LIBRARIES    - The Box2D library
 #   Box2D_RUNTIME      - Path to the Box2D runtime library (.dll, .so, or .dylib)
-#   Box2D::Box2D       - Imported target for linking
+#   box2d       - Imported target for linking
 
 # Option to use static or shared library
 option(BOX2D_USE_STATIC "Use the static Box2D library" OFF)
@@ -48,8 +48,8 @@ if (Box2D_INCLUDE_DIR AND Box2D_LIBRARY)
         set(Box2D_RUNTIME "")
     endif()
 
-    add_library(Box2D::Box2D UNKNOWN IMPORTED)
-    set_target_properties(Box2D::Box2D PROPERTIES
+    add_library(box2d UNKNOWN IMPORTED)
+    set_target_properties(box2d PROPERTIES
                            IMPORTED_LOCATION ${Box2D_LIBRARY}
                            INTERFACE_INCLUDE_DIRECTORIES ${Box2D_INCLUDE_DIRS})
 else()

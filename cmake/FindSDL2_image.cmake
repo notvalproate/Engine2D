@@ -6,7 +6,7 @@
 #   SDL2_IMAGE_INCLUDE_DIRS  - Include directories for SDL2_image
 #   SDL2_IMAGE_LIBRARIES     - The SDL2_image library
 #   SDL2_IMAGE_RUNTIME             - Path to the SDL2_Image runtime library (.dll, .so, or .dylib)
-#   SDL2::SDL2_image         - Imported target for linking
+#   SDL2_image::SDL2_image         - Imported target for linking
 
 # Option to use static or shared library
 option(SDL2_IMAGE_USE_STATIC "Use the static SDL2_image library" OFF)
@@ -47,8 +47,8 @@ if (SDL2_IMAGE_INCLUDE_DIR AND SDL2_IMAGE_LIBRARY)
         set(SDL2_IMAGE_RUNTIME "")
     endif()
 
-    add_library(SDL2::SDL2_image UNKNOWN IMPORTED)
-    set_target_properties(SDL2::SDL2_image PROPERTIES
+    add_library(SDL2_image::SDL2_image UNKNOWN IMPORTED)
+    set_target_properties(SDL2_image::SDL2_image PROPERTIES
                            IMPORTED_LOCATION ${SDL2_IMAGE_LIBRARY}
                            INTERFACE_INCLUDE_DIRECTORIES ${SDL2_IMAGE_INCLUDE_DIRS})
 else()

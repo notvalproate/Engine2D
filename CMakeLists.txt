@@ -28,12 +28,25 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Vendor Dependencies
 
-set(BUILD_SHARED_LIBS ON CACHE BOOL "Build all dependencies as a shared libraries" FORCE)
-set(BOX2D_BUILD_SHARED ON CACHE BOOL "Build Box2D as a shared library" FORCE)
-set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build Box2D unit tests" FORCE)
-set(BOX2D_BUILD_TESTBED OFF CACHE BOOL "Build Box2D testbed" FORCE)
+# If false, will use find_package to try to find prebuilt and installed dependencies. If true, will build dependencies from source.
+option(ENGINE2D_BUILD_DEPENDENCIES "Build dependencies from source" ON)
 
-add_subdirectory(vendor EXCLUDE_FROM_ALL)
+if(ENGINE2D_BUILD_DEPENDENCIES)
+    message(STATUS "Building dependencies from source! To use prebuilt dependencies, set ENGINE2D_BUILD_DEPENDENCIES to OFF")
+
+    set(BUILD_SHARED_LIBS ON CACHE BOOL "Build all dependencies as a shared libraries" FORCE)
+    set(BOX2D_BUILD_SHARED ON CACHE BOOL "Build Box2D as a shared library" FORCE)
+    set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build Box2D unit tests" FORCE)
+    set(BOX2D_BUILD_TESTBED OFF CACHE BOOL "Build Box2D testbed" FORCE)
+    
+    add_subdirectory(vendor EXCLUDE_FROM_ALL)
+else()
+    message(STATUS "Using prebuilt dependencies if found on the system! To build dependencies from source, set ENGINE2D_BUILD_DEPENDENCIES to ON")
+
+    find_package(SDL2 REQUIRED)
+    find_package(SDL2_image REQUIRED)
+    find_package(Box2D REQUIRED)
+endif()
 
 # Some issue with Box2D not respecting the global X_OUTPUT_DIRECTORY correctly, so we set it manually
 
