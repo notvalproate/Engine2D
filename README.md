@@ -3,7 +3,9 @@
 Engine2D is a game engine written in C++ to develop 2D games. The engine is **heavily** inspired by the [Unity Scripting API](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/) and is still a huge **WIP**. It uses [SDL2](https://github.com/libsdl-org/SDL) to support cross-platform graphics and hardware and [Box2D](https://github.com/erincatto/box2d) (v2.4) as the physics engine.
 
 # Prerequisites
-The following dependencies are included in git submodules and will be installed and built along with the project:
+The dependency libraries are included in git submodules and will be built along with the project if you choose.
+- C++17 Supported Compiler - https://en.cppreference.com/w/cpp/compiler_support/17
+- CMake - https://cmake.org/
 - SDL2 - https://github.com/libsdl-org/SDL
 - SDL2_image - https://github.com/libsdl-org/SDL_image
 - Box2D (v2.4) - https://github.com/erincatto/box2d
