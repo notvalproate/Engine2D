@@ -26,16 +26,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-
 # Vendor Dependencies
-
 
 set(BUILD_SHARED_LIBS ON CACHE BOOL "Build all dependencies as a shared libraries" FORCE)
 set(BOX2D_BUILD_SHARED ON CACHE BOOL "Build Box2D as a shared library" FORCE)
 set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build Box2D unit tests" FORCE)
 set(BOX2D_BUILD_TESTBED OFF CACHE BOOL "Build Box2D testbed" FORCE)
 
-add_subdirectory(vendor)
+add_subdirectory(vendor EXCLUDE_FROM_ALL)
 
 # Some issue with Box2D not respecting the global X_OUTPUT_DIRECTORY correctly, so we set it manually
 
