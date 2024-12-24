@@ -7,12 +7,14 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 project(Engine2D VERSION 1.0)
 
 if(MSVC)
-    set(CXX_WARNING_FLAGS /W4)
+    set(CXX_COMPILER_FLAGS /W4 /MP)
 else()
-    set(CXX_WARNING_FLAGS -Wall)
+    set(CXX_COMPILER_FLAGS -Wall)
 endif()
 
-set(CXX_COMPILER_FLAGS ${CXX_WARNING_FLAGS})
+message("CXX_COMPILER_FLAGS: ${CXX_COMPILER_FLAGS}")
+
+message("CXX_COMPILER_FLAGS: ${CXX_COMPILER_FLAGS}")
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     message("Setting build type to 'Debug' as none was specified.")
