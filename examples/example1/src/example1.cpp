@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Engine2D.hpp"
 
 class FullscreenToggler : public Behaviour {

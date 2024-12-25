@@ -1,4 +1,5 @@
-#include "Components.hpp"
+#include "components/Components.hpp"
+#include "GameObject.hpp"
 
 RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_Mass(1), m_AutoMassEnabled(false), m_AttachedColliders({}), m_SensorFixture(nullptr) {
 	b2BodyDef boxBody;

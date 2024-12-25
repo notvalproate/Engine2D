@@ -1,5 +1,9 @@
-#include "Core.hpp"
+#include <iostream>
+
 #include "SDL_image.h"
+
+#include "TextureHandler.hpp"
+#include "Object.hpp"
 
 SDL_Texture* TextureHandler::LoadTexture(const std::filesystem::path& texPath) const {
 	if (!std::filesystem::exists(texPath)) {

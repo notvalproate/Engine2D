@@ -1,4 +1,5 @@
-#include "Core.hpp"
+#include "PhysicsHandler.hpp"
+#include "SceneHandler.hpp"
 
 PhysicsHandler::PhysicsHandler() : bouncinessThreshold(1.0f), m_RenderSceneColliders(false) { }
 
@@ -122,7 +123,8 @@ float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b
 	return fraction;
 }
 
-#include "Components.hpp"
+#include "components/Components.hpp"
+#include "GameObject.hpp"
 
 void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);

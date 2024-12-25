@@ -1,6 +1,7 @@
-#include "Core.hpp"
-
 #include <ranges>
+
+#include "GameObject.hpp"
+#include "Scene.hpp"
 
 GameObject::GameObject(Scene* scene, const uint32_t id) 
     : name({}), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false), m_Destroyed(false) { }

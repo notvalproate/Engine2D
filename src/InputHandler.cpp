@@ -1,4 +1,4 @@
-#include "Core.hpp"
+#include "InputHandler.hpp"
 
 InputHandler::InputHandler() : m_KeyboardState(nullptr) { }
 

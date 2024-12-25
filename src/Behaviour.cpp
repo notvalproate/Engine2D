@@ -1,4 +1,5 @@
-#include "Core.hpp"
+#include "Behaviour.hpp"
+#include "GameObject.hpp"
 
 Behaviour::Behaviour(GameObject* gameObject) : Component(gameObject), enabled(true), isActiveAndEnabled(true), name(&gameObject->name) { }
 

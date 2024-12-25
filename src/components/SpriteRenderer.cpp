@@ -1,5 +1,7 @@
-#include "Components.hpp"
-#include "SDL_image.h"
+#include <iostream>
+
+#include "components/Components.hpp"
+#include "GameObject.hpp"
 
 SpriteRenderer::SpriteRenderer(GameObject* gameObj)
 	: Component(gameObj), m_Sprite(nullptr), m_Dimensions(0, 0), m_PixelsPerUnit(100), m_SortingLayer("Default")

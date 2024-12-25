@@ -1,6 +1,11 @@
 #pragma once
-#include "Core.hpp"
+
 #include <optional>
+#include <filesystem>
+
+#include "Component.hpp"
+#include "Behaviour.hpp"
+#include "Transform.hpp"
 
 class SpriteRenderer final : public Component {
 public:
@@ -40,6 +45,8 @@ enum class RigidBodyType {
 	Kinematic = b2_kinematicBody,
 	Dynamic = b2_dynamicBody
 };
+
+class Collider;
 
 // TOTAL FORCE AND TOTAL TORQUE ARE ALWAYS ZERO IN THE UPDATE LOOPS OF BEHAVIOURS
 class RigidBody final : public Component {

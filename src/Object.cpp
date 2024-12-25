@@ -1,4 +1,8 @@
-#include "Core.hpp"
+#include "Object.hpp"
+#include "PhysicsHandler.hpp"
+#include "GameObject.hpp"
+#include "SceneHandler.hpp"
+#include "RenderingHandler.hpp"
 
 InputHandler Object::Input;
 SceneHandler Object::SceneManager;

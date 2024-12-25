@@ -1,4 +1,6 @@
-#include "Core.hpp"
+#include <iostream>
+
+#include "SceneHandler.hpp"
 
 SceneHandler::SceneHandler() : m_CurrentScene(nullptr) { }
 

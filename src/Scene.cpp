@@ -1,4 +1,5 @@
-#include "Core.hpp"
+#include "Scene.hpp"
+#include "GameObject.hpp"
 
 Scene::Scene(const std::string_view name, const std::vector<std::string>& avaiableSortingLayers) : name(name), m_Loaded(false) {
     m_CurrentCamera = CreateCamera("Main Camera");

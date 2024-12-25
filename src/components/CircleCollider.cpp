@@ -1,4 +1,5 @@
-#include "Components.hpp"
+#include "components/Components.hpp"
+#include "GameObject.hpp"
 
 CircleCollider::CircleCollider(GameObject* gameObj) : Collider(gameObj), m_Radius(1) {
 	auto spriteRenderer = gameObj->GetComponent<SpriteRenderer>();

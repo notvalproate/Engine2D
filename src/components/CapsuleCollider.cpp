@@ -1,4 +1,5 @@
-#include "Components.hpp"
+#include "components/Components.hpp"
+#include "GameObject.hpp"
 
 CapsuleCollider::CapsuleCollider(GameObject* gameObj)
 	: Collider(gameObj),

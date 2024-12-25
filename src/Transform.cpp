@@ -1,5 +1,5 @@
-#include "Core.hpp"
-#include <math.h>
+#include "Transform.hpp"
+#include "GameObject.hpp"
 
 Transform::Transform(GameObject* gameObject) : gameObject(gameObject), tag(&gameObject->tag), name(&gameObject->name), m_Parent(nullptr) { };
 

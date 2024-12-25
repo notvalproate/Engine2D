@@ -1,4 +1,4 @@
-#include "Core.hpp"
+#include "Color.hpp"
 
 const Color Color::white(1.0f, 1.0f, 1.0f);
 const Color Color::gray(0.5f, 0.5f, 0.5f);

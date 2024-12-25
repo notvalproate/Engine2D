@@ -1,4 +1,5 @@
-#include "Components.hpp"
+#include "components/Components.hpp"
+#include "GameObject.hpp"
 
 // CIRCLE COLLIDER BOUNCES, BUT NOT WHEN SLOW.
 // BOX COLLIDER DOESNT BOUNCE AT ALL

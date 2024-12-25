@@ -1,4 +1,5 @@
-#include "Components.hpp"
+#include "components/Components.hpp"
+#include "GameObject.hpp"
 
 Camera::Camera(GameObject* gameObject) : Component(gameObject) { }
 

@@ -1,5 +1,10 @@
-#include "Core.hpp"
+#include <iostream>
+
 #include "SDL_image.h"
+
+#include "CursorHandler.hpp"
+#include "ScreenHandler.hpp"
+#include "Object.hpp"
 
 CustomCursor::CustomCursor(const std::filesystem::path& cursorPath, const Vector2D& hotspot) : m_Cursor(nullptr) {
 	if (!std::filesystem::exists(cursorPath)) {

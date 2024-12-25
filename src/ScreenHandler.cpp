@@ -1,5 +1,8 @@
-#include "Core.hpp"
+#include <iostream>
+
 #include "SDL_image.h"
+
+#include "ScreenHandler.hpp"
 
 ScreenHandler::ScreenHandler() : m_Window(nullptr) { }
 
@@ -30,7 +33,7 @@ void ScreenHandler::SetToDisplayResolution() {
 	SetResolution(m_Mode.w, m_Mode.h);
 }
 
-bool ScreenHandler::InitScreen(const std::string& title, const std::filesystem::path iconpath, const int windowWidth, const int windowHeight) {
+bool ScreenHandler::InitScreen(const std::string& title, const std::filesystem::path& iconpath, const int windowWidth, const int windowHeight) {
 	if (SDL_GetDisplayMode(0, 0, &m_Mode)) {
 		std::cout << "Error: Couldn't Get Display Mode...Framerate set to 60" << std::endl;
 	}

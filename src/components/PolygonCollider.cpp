@@ -1,4 +1,7 @@
-#include "Components.hpp"
+#include <iostream>
+
+#include "components/Components.hpp"
+#include "GameObject.hpp"
 
 PolygonCollider::PolygonCollider(GameObject* gameObj) 
 	: Collider(gameObj), 

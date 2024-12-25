@@ -1,4 +1,12 @@
-#include "Core.hpp"
+#include <iostream>
+
+#include "SDL.h"
+
+#include "RenderingHandler.hpp"
+#include "SceneHandler.hpp"
+#include "Object.hpp"
+#include "Transform.hpp"
+#include "components/Camera.hpp"
 
 RenderingHandler::RenderingHandler() : m_Renderer(nullptr), m_AvailableSortingLayers({ "Default" }), m_CirclePointsReserve(1000) { }
 

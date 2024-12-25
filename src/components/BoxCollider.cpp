@@ -1,4 +1,5 @@
-#include "Components.hpp"
+#include "components/Components.hpp"
+#include "GameObject.hpp"
 
 BoxCollider::BoxCollider(GameObject* gameObj) : Collider(gameObj), m_Dimensions(Vector2D::one) { 
 	auto spriteRenderer = gameObj->GetComponent<SpriteRenderer>();
