@@ -4,6 +4,8 @@
 
 #include <SDL.h>
 
+namespace engine2d {
+
 class InputHandler {
 public:
     bool GetKey(const SDL_Scancode scanCode) const;
@@ -39,3 +41,5 @@ private:
     friend class Object;
     friend class Engine2D;
 };
+
+} // namespace engine2d

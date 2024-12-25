@@ -2,6 +2,8 @@
 
 #include "Engine2D.hpp"
 
+namespace engine2d {
+
 class FullscreenToggler : public Behaviour {
 public:
 	using Behaviour::Behaviour;
@@ -390,7 +392,7 @@ public:
 	}
 };
 
-class GameTest : public Engine2D {
+class GameTest : public engine2d::Engine2D {
 public:
 	using Engine2D::Engine2D;
 
@@ -410,8 +412,10 @@ public:
 	}
 };
 
+} // namespace engine2d
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
-	GameTest myGame;
+	engine2d::GameTest myGame;
 
 	myGame.InitGame("Engine2D", "assets/cursor.png", 1280, 720);
 	myGame.Run();

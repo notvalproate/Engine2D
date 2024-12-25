@@ -6,6 +6,8 @@
 #include "ScreenHandler.hpp"
 #include "Object.hpp"
 
+namespace engine2d {
+
 CustomCursor::CustomCursor(const std::filesystem::path& cursorPath, const Vector2D& hotspot) : m_Cursor(nullptr) {
 	if (!std::filesystem::exists(cursorPath)) {
 		std::cerr << "File path to cursor provided is invalid! Path: " << cursorPath << std::endl;
@@ -98,3 +100,5 @@ void CursorHandler::DestroySystemCursors() {
 
 	m_SystemCursors.clear();
 }
+
+} // namespace engine2d

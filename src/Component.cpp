@@ -1,6 +1,8 @@
 #include "Component.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 Component::Component(GameObject* gameObject) : gameObject(gameObject), transform(&gameObject->transform), tag(&gameObject->tag), m_Started(false) { }
 
 Component::~Component() { }
@@ -26,3 +28,5 @@ void Component::AttachGameObject(GameObject* newGameObject) {
 std::unique_ptr<Component> Component::Clone() const {
     return std::make_unique<Component>(*this);
 };
+
+} // namespace engine2d

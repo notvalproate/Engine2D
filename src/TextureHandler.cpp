@@ -5,6 +5,8 @@
 #include "TextureHandler.hpp"
 #include "Object.hpp"
 
+namespace engine2d {
+
 SDL_Texture* TextureHandler::LoadTexture(const std::filesystem::path& texPath) const {
 	if (!std::filesystem::exists(texPath)) {
 		std::cerr << "File path to sprite provided is invalid! Path: " << texPath << std::endl;
@@ -19,3 +21,5 @@ SDL_Point TextureHandler::GetTextureSize(SDL_Texture* texture) const {
 	SDL_QueryTexture(texture, NULL, NULL, &size.x, &size.y);
 	return size;
 }
+
+} // namespace engine2d

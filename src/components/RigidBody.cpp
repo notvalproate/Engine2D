@@ -1,6 +1,8 @@
 #include "components/Components.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_Mass(1), m_AutoMassEnabled(false), m_AttachedColliders({}), m_SensorFixture(nullptr) {
 	b2BodyDef boxBody;
 	boxBody.type = b2_dynamicBody;
@@ -237,3 +239,5 @@ void RigidBody::AttachCollider(Collider* collider) {
 
 	m_AttachedColliders.push_back(collider);
 }
+
+} // namespace engine2d

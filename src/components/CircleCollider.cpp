@@ -1,6 +1,8 @@
 #include "components/Components.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 CircleCollider::CircleCollider(GameObject* gameObj) : Collider(gameObj), m_Radius(1) {
 	auto spriteRenderer = gameObj->GetComponent<SpriteRenderer>();
 	if (spriteRenderer) {
@@ -35,3 +37,5 @@ b2Shape* CircleCollider::GetShape(bool useOffset) const {
 
 	return circleShape;
 }
+
+} // namespace engine2d

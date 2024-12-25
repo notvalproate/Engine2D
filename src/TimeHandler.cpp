@@ -1,6 +1,8 @@
 #include "TimeHandler.hpp"
 #include "Object.hpp"
 
+namespace engine2d {
+
 TimeHandler::TimeHandler() : timeScale(1), m_FixedFramerate(0), m_FixedDeltaTime(0), m_DeltaTime(0), m_FrameCount(0), m_FrameStart(std::chrono::system_clock::time_point()) { }
 
 void TimeHandler::InitTime() {
@@ -15,3 +17,5 @@ void TimeHandler::UpdateDeltaTime() {
 	m_DeltaTime = (std::chrono::duration_cast<std::chrono::microseconds>(newTime - m_FrameStart).count() / 1000000.0f);
 	m_FrameStart = newTime;
 }
+
+} // namespace engine2d

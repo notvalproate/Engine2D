@@ -2,6 +2,8 @@
 
 #include "Component.hpp"
 
+namespace engine2d {
+
 struct Collision;
 
 class Behaviour : public Component {
@@ -33,3 +35,5 @@ private:
     friend class Object;
     friend class GameObject;
 };
+
+} // namespace engine2d

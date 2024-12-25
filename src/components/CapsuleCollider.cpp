@@ -1,6 +1,8 @@
 #include "components/Components.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 CapsuleCollider::CapsuleCollider(GameObject* gameObj)
 	: Collider(gameObj),
 	m_Size(1, 1),
@@ -176,3 +178,5 @@ void CapsuleCollider::CreateFixturesOnBody(b2Body* body) {
 
 	m_LowerSemi = body->CreateFixture(&fixtureBottom);
 }
+
+} // namespace engine2d

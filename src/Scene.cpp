@@ -1,6 +1,8 @@
 #include "Scene.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 Scene::Scene(const std::string_view name, const std::vector<std::string>& avaiableSortingLayers) : name(name), m_Loaded(false) {
     m_CurrentCamera = CreateCamera("Main Camera");
     
@@ -212,3 +214,5 @@ void Scene::DestroyCamera(Camera* cam) {
         m_SceneCameras.erase(m_SceneCameras.begin() + i);
     }
 }
+
+} // namespace engine2d

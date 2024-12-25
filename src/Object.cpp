@@ -4,6 +4,8 @@
 #include "SceneHandler.hpp"
 #include "RenderingHandler.hpp"
 
+namespace engine2d {
+
 InputHandler Object::Input;
 SceneHandler Object::SceneManager;
 ScreenHandler Object::Screen;
@@ -177,3 +179,5 @@ void Object::DestroyImmediate(Component* component) {
 
     component->gameObject->RemoveComponent(component);
 }
+
+} // namespace engine2d

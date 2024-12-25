@@ -3,6 +3,8 @@
 #include "GameObject.hpp"
 #include "Scene.hpp"
 
+namespace engine2d {
+
 GameObject::GameObject(Scene* scene, const uint32_t id) 
     : name({}), tag({}), transform(this), scene(scene), m_SceneInstanceID(id), m_Started(false), m_Destroyed(false) { }
 
@@ -180,4 +182,6 @@ void GameObject::RemoveComponent(Component* component) {
 void GameObject::RemoveBehaviour(Behaviour* behaviour) {
     std::size_t index = GetBehaviourIndex(behaviour);
     m_Behaviours.erase(m_Behaviours.begin() + index);
+}
+
 }

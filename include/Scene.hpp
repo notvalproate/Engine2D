@@ -7,6 +7,8 @@
 #include "Object.hpp"
 #include "components/Camera.hpp"
 
+namespace engine2d {
+
 struct SortingLayer {
     SortingLayer(const std::string_view layerName) : name(layerName), m_GameObjectsInLayer({}) {}
 
@@ -68,3 +70,5 @@ private:
     friend class Collider;
     friend class Camera;
 };
+
+} // namespace engine2d

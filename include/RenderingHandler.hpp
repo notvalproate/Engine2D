@@ -8,6 +8,8 @@
 #include "Color.hpp"
 #include "Transform.hpp"
 
+namespace engine2d {
+
 class Camera;
 
 class RenderingHandler {
@@ -47,3 +49,5 @@ private:
     friend class TextureHandler;
     friend class Engine2D;
 };
+
+} // namespace engine2d

@@ -1,6 +1,8 @@
 #include "components/Components.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 // CIRCLE COLLIDER BOUNCES, BUT NOT WHEN SLOW.
 // BOX COLLIDER DOESNT BOUNCE AT ALL
 Collider::Collider(GameObject* gameObj)
@@ -310,3 +312,5 @@ void Collider::RemoveTriggerWith(Collider* collider) {
 		}
 	}
 }
+
+} // namespace engine2d

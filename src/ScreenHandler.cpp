@@ -4,6 +4,8 @@
 
 #include "ScreenHandler.hpp"
 
+namespace engine2d {
+
 ScreenHandler::ScreenHandler() : m_Window(nullptr) { }
 
 void ScreenHandler::ToggleFullscreen() {
@@ -73,3 +75,5 @@ bool ScreenHandler::InitScreen(const std::string& title, const std::filesystem::
 void ScreenHandler::DestroyScreen() {
 	SDL_DestroyWindow(m_Window);
 }
+
+} // namespace engine2d

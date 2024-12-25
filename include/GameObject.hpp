@@ -7,7 +7,7 @@
 #include "PhysicsHandler.hpp"
 #include "SceneHandler.hpp"
 
-class Object;
+namespace engine2d {
 
 class GameObject final : public Object {
 public:
@@ -254,3 +254,5 @@ private:
     friend class PhysicsHandler;
     friend class Collider;
 };
+
+} // namespace engine2d

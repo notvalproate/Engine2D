@@ -2,6 +2,8 @@
 
 #include "Component.hpp"
 
+namespace engine2d {
+
 class Camera final : public Component {
 public:
     ~Camera();
@@ -28,3 +30,5 @@ private:
 
     friend class GameObject;
 };
+
+} // namespace engine2d

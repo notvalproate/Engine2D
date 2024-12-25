@@ -10,6 +10,8 @@
 #include "CursorHandler.hpp"
 #include "MathModule.hpp"
 
+namespace engine2d {
+
 class GameObject;
 class Vector2D;
 class Transform;
@@ -53,3 +55,5 @@ private:
     static void CopyComponents(GameObject* newGameObject, GameObject* originalGameObject);
     static void DestroyChildren(GameObject* gameObject);
 };
+
+} // namespace engine2d

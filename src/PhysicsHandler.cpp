@@ -1,6 +1,8 @@
 #include "PhysicsHandler.hpp"
 #include "SceneHandler.hpp"
 
+namespace engine2d {
+
 PhysicsHandler::PhysicsHandler() : bouncinessThreshold(1.0f), m_RenderSceneColliders(false) { }
 
 void PhysicsHandler::RenderColliders() const {
@@ -198,3 +200,5 @@ Collision PhysicsHandler::ContactListener::GetCollision(Collider* collider, Coll
 
 	return collision;
 }
+
+} // namespace engine2d

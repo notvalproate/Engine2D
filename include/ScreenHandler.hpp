@@ -5,6 +5,8 @@
 
 #include <SDL.h>
 
+namespace engine2d {
+
 class ScreenHandler {
 public:
     void ToggleFullscreen();
@@ -36,3 +38,5 @@ private:
     friend class TimeHandler;
     friend class CursorHandler;
 };
+
+} // namespace engine2d

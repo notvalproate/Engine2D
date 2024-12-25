@@ -4,6 +4,8 @@
 
 #include <SDL.h>
 
+namespace engine2d {
+
 class TextureHandler {
 public:
     SDL_Texture* LoadTexture(const std::filesystem::path& texPath) const;
@@ -14,3 +16,5 @@ private:
 
     friend class Object;
 };
+
+} // namespace engine2d

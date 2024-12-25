@@ -4,6 +4,8 @@
 #include <string>
 #include <cmath>
 
+namespace engine2d {
+
 class Color {
 public:
     explicit constexpr inline Color() = default;
@@ -221,3 +223,5 @@ public:
     static const Color magenta;
     static const Color yellow;
 };
+
+} // namespace engine2d

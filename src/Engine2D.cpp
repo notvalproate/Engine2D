@@ -8,6 +8,8 @@
 #include "SceneHandler.hpp"
 #include "CursorHandler.hpp"
 
+namespace engine2d {
+
 Engine2D::Engine2D() : m_IsRunning(true) { }
 
 void Engine2D::InitGame(const char* title, const std::filesystem::path& iconpath, int windowWidth, int windowHeight) {
@@ -67,3 +69,5 @@ void Engine2D::Render() const {
 	SceneManager.m_CurrentScene->Render();
 	RenderingPipeline.PresentRenderer();
 }
+
+} // namespace engine2d

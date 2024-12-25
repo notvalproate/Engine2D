@@ -5,6 +5,8 @@
 
 #include "Object.hpp"
 
+namespace engine2d {
+
 class Component : public Object {
 public:
     virtual ~Component();
@@ -33,3 +35,5 @@ protected:
     friend class GameObject;
     friend class Behaviour;
 };
+
+} // namespace engine2d

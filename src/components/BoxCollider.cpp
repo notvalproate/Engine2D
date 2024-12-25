@@ -1,6 +1,8 @@
 #include "components/Components.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 BoxCollider::BoxCollider(GameObject* gameObj) : Collider(gameObj), m_Dimensions(Vector2D::one) { 
 	auto spriteRenderer = gameObj->GetComponent<SpriteRenderer>();
 	if (spriteRenderer) {
@@ -38,3 +40,5 @@ b2Shape* BoxCollider::GetShape(bool useOffset) const {
 
 	return boxShape;
 }
+
+} // namespace engine2d

@@ -1,5 +1,7 @@
 #pragma once
 
+namespace engine2d {
+
 class MathModule {
 public:
 	template <typename T>
@@ -19,3 +21,5 @@ public:
 		return current + (Sign(target - current) * maxDelta);
 	}
 };
+
+} // namespace engine2d

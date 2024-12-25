@@ -1,5 +1,7 @@
 #include "InputHandler.hpp"
 
+namespace engine2d {
+
 InputHandler::InputHandler() : m_KeyboardState(nullptr) { }
 
 void InputHandler::InitInput() {
@@ -122,3 +124,5 @@ void InputHandler::SetProperties() {
 		mouseScrollDeltaY = 0;
 	}
 }
+
+} // namespace engine2d

@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <chrono>
 
+namespace engine2d {
+
 class TimeHandler {
 public:
     inline float GetFixedDeltaTime() const { return m_FixedDeltaTime * timeScale; }
@@ -30,3 +32,5 @@ private:
     friend class Object;
     friend class Engine2D;
 };
+
+} // namespace engine2d

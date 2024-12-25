@@ -3,6 +3,8 @@
 #include "Vector2D.hpp"
 #include "components/Components.hpp"
 
+namespace engine2d {
+
 struct RayCastHit {
     bool hit{false};
     Vector2D point;
@@ -58,3 +60,5 @@ private:
     friend class BoxCollider;
     friend class RayCastCallback;
 };
+
+} // namespace engine2d

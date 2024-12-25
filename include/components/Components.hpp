@@ -7,6 +7,8 @@
 #include "Behaviour.hpp"
 #include "Transform.hpp"
 
+namespace engine2d {
+
 class SpriteRenderer final : public Component {
 public:
 	~SpriteRenderer();
@@ -339,3 +341,5 @@ private:
 	friend class GameObject;
 	friend class RigidBody;
 };
+
+} // namespace engine2d

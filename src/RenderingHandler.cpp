@@ -8,6 +8,8 @@
 #include "Transform.hpp"
 #include "components/Camera.hpp"
 
+namespace engine2d {
+
 RenderingHandler::RenderingHandler() : m_Renderer(nullptr), m_AvailableSortingLayers({ "Default" }), m_CirclePointsReserve(1000) { }
 
 bool RenderingHandler::InitRenderer() {
@@ -243,3 +245,5 @@ void RenderingHandler::PresentRenderer() {
 void RenderingHandler::DestroyRenderer() {
 	SDL_DestroyRenderer(m_Renderer);
 }
+
+} // namespace engine2d

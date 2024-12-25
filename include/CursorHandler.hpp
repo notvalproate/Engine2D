@@ -7,6 +7,8 @@
 
 #include "Vector2D.hpp"
 
+namespace engine2d {
+
 enum class CursorLockMode : uint8_t {
     None = 0,
     Locked = 1,
@@ -62,3 +64,5 @@ private:
     friend class Object;
     friend class Engine2D;
 };
+
+} // namespace engine2d

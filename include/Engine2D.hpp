@@ -11,6 +11,8 @@
 #include "PhysicsHandler.hpp"
 #include "SceneHandler.hpp"
 
+namespace engine2d {
+
 class Engine2D : public Object {
 public:
     Engine2D();
@@ -33,3 +35,5 @@ private:
 
     bool m_IsRunning;
 };
+
+} // namespace engine2d

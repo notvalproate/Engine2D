@@ -1,6 +1,8 @@
 #include "components/Components.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 EdgeCollider::EdgeCollider(GameObject* gameObj) 
 	: Collider(gameObj), 
 	m_Points( { Vector2D(-0.5, 0), Vector2D(0.5, 0) } ), 
@@ -152,3 +154,5 @@ void EdgeCollider::UpdateMassData() const {
 
 	m_AttachedRigidBody->m_Body->SetMassData(&massdata);
 }
+
+} // namespace engine2d

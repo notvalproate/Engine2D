@@ -3,6 +3,8 @@
 #include "components/Components.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 SpriteRenderer::SpriteRenderer(GameObject* gameObj)
 	: Component(gameObj), m_Sprite(nullptr), m_Dimensions(0, 0), m_PixelsPerUnit(100), m_SortingLayer("Default")
 {
@@ -52,3 +54,5 @@ void SpriteRenderer::SetPixelsPerUnit(const uint16_t pixelsPerUnit) {
 void SpriteRenderer::Render() const {
 	RenderingPipeline.RenderSprite(m_Sprite, m_Dimensions, m_PixelsPerUnit, transform);
 }
+
+} // namespace engine2d

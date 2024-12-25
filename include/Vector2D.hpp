@@ -12,6 +12,8 @@
 #include "MathModule.hpp"
 #include "Engine2DExport.hpp"
 
+namespace engine2d {
+
 class Vector2D {
 public:
     explicit inline constexpr Vector2D() = default;
@@ -307,3 +309,5 @@ public:
     static const ENGINE2D_API Vector2D one;
     static const ENGINE2D_API Vector2D zero;
 };
+
+} // namespace engine2d

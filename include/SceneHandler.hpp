@@ -6,6 +6,8 @@
 #include "RenderingHandler.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 class SceneHandler {
 public:
     template<typename T>
@@ -40,3 +42,5 @@ private:
     friend class Engine2D;
     friend class RenderingHandler;
 };
+
+} // namespace engine2d

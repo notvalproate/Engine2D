@@ -1,6 +1,8 @@
 #include "Transform.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 Transform::Transform(GameObject* gameObject) : gameObject(gameObject), tag(&gameObject->tag), name(&gameObject->name), m_Parent(nullptr) { };
 
 void Transform::Translate(const Vector2D& translation) {
@@ -170,3 +172,5 @@ void Transform::SetParent(Transform& parentTransform, bool instantiateInWorldSpa
 void Transform::SetParent(GameObject* parentGo, bool instantiateInWorldSpace) {
     SetParent(&parentGo->transform, instantiateInWorldSpace);
 }
+
+} // namespace engine2d

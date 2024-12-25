@@ -1,6 +1,8 @@
 #include "components/Components.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 Camera::Camera(GameObject* gameObject) : Component(gameObject) { }
 
 Camera::~Camera() {
@@ -61,3 +63,5 @@ Vector2D Camera::WorldToViewportPoint(const Vector2D& pos) const {
 Vector2D Camera::WorldToScreenPoint(const Vector2D& pos) const {
 	return ViewportToScreenPoint( WorldToViewportPoint(pos) );
 }
+
+} // namespace engine2d

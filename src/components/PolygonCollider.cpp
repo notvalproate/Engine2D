@@ -3,6 +3,8 @@
 #include "components/Components.hpp"
 #include "GameObject.hpp"
 
+namespace engine2d {
+
 PolygonCollider::PolygonCollider(GameObject* gameObj) 
 	: Collider(gameObj), 
 	m_Points({Vector2D(-0.5, -0.5), Vector2D(-0.5, 0.5), Vector2D(0.5, 0.5), Vector2D(0.5, -0.5)}),
@@ -229,3 +231,5 @@ void PolygonCollider::ReducePointsToPaths() {
 		prevEnd = endIndex;
 	}
 }
+
+} // namespace engine2d

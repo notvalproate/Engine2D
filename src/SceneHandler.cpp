@@ -2,6 +2,8 @@
 
 #include "SceneHandler.hpp"
 
+namespace engine2d {
+
 SceneHandler::SceneHandler() : m_CurrentScene(nullptr) { }
 
 void SceneHandler::DestroyScenes() {
@@ -39,3 +41,5 @@ void SceneHandler::LoadScene(const std::string_view sceneName) {
 		m_CurrentScene->m_Loaded = true;
 	}
 }
+
+} // namespace engine2d

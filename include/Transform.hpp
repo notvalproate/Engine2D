@@ -4,6 +4,8 @@
 
 #include "Vector2D.hpp"
 
+namespace engine2d {
+
 class GameObject;
 
 class Transform final {
@@ -56,3 +58,5 @@ private:
     friend class Object;
     friend class GameObject;
 };
+
+} // namespace engine2d
