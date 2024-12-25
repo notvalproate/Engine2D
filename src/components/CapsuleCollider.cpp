@@ -1,4 +1,4 @@
-#include "components/Components.hpp"
+#include "components/CapsuleCollider.hpp"
 #include "GameObject.hpp"
 
 namespace engine2d {

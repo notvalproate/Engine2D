@@ -1,4 +1,5 @@
-#include "components/Components.hpp"
+#include "components/BoxCollider.hpp"
+#include "components/SpriteRenderer.hpp"
 #include "GameObject.hpp"
 
 namespace engine2d {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Vector2D.hpp"
-#include "components/Components.hpp"
+#include "components/Collider.hpp"
 
 namespace engine2d {
 

@@ -11,6 +11,8 @@
 #include "PhysicsHandler.hpp"
 #include "SceneHandler.hpp"
 
+#include "components/Components.hpp"
+
 namespace engine2d {
 
 class Engine2D : public Object {

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "components/Components.hpp"
+#include "components/SpriteRenderer.hpp"
 #include "GameObject.hpp"
 
 namespace engine2d {

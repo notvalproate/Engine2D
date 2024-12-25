@@ -125,7 +125,7 @@ float PhysicsHandler::RayCastCallback::ReportFixture(b2Fixture* fixture, const b
 	return fraction;
 }
 
-#include "components/Components.hpp"
+#include "components/Collider.hpp"
 #include "GameObject.hpp"
 
 void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {

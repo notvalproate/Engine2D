@@ -1,4 +1,4 @@
-#include "components/Components.hpp"
+#include "components/Camera.hpp"
 #include "GameObject.hpp"
 
 namespace engine2d {
