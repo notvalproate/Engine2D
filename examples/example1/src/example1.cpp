@@ -346,9 +346,10 @@ public:
 		// PlayerObject->AddComponent<PlayerController>();
 
 		PlayerObject->AddComponent<RigidBody>();
-		// auto playerCollider = PlayerObject->AddComponent<CapsuleCollider>();
-		auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
-		playerCollider->SetTransform(Vector2D(1, 2), Vector2D(0, 0), 0);
+		auto playerCollider = PlayerObject->AddComponent<CapsuleCollider>();
+		// playerCollider->SetTransform(Vector2D(0.8, 0.6), CapsuleDirection::Vertical, Vector2D(-0.1, -0.3));
+		// auto playerCollider = PlayerObject->AddComponent<BoxCollider>();
+		// playerCollider->SetTransform(Vector2D(1, 2), Vector2D(0, 0), 0);
 
 		PhysicsMaterial ice(0, 0.3);
 

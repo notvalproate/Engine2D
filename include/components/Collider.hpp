@@ -15,6 +15,16 @@ public:
 };
 
 struct Collision {
+	explicit Collision(Collider* collider, Collider* otherCollider)
+		: 
+		collider(collider), 
+		otherCollider(otherCollider), 
+		rigidBody(collider->GetAttachedRigidBody()), 
+		otherRigidBody(otherCollider->GetAttachedRigidBody()),
+		transform(collider->transform),
+		gameObject(collider->gameObject)
+		{ }
+
 	Collider* collider;
 	Collider* otherCollider;
 
@@ -87,9 +97,17 @@ protected:
 	Vector2D m_CurrentPosition;
 	std::optional<b2Body*> m_StaticBody;
 
-	std::vector<Collision> m_CurrentCollisions{};
-	std::vector<Collision> m_CurrentTriggers{};
 	bool m_IsTrigger{};
+
+	struct FixtureOverlap {
+		b2Fixture* fixture;
+		Collider* otherCollider;
+	};
+
+	std::vector<FixtureOverlap> m_CurrentOverlaps{};
+
+	std::vector<Collider*> m_CurrentCollisions{};
+	std::vector<Collider*> m_CurrentTriggers{};
 
 	friend class GameObject;
 	friend class RigidBody;
