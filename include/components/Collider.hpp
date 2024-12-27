@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "Behaviour.hpp"
 #include "RigidBody.hpp"
 
@@ -14,27 +16,7 @@ public:
 	Vector2D size;
 };
 
-struct Collision {
-	explicit Collision(Collider* collider, Collider* otherCollider)
-		: 
-		collider(collider), 
-		otherCollider(otherCollider), 
-		rigidBody(collider->GetAttachedRigidBody()), 
-		otherRigidBody(otherCollider->GetAttachedRigidBody()),
-		transform(collider->transform),
-		gameObject(collider->gameObject)
-		{ }
-
-	Collider* collider;
-	Collider* otherCollider;
-
-	RigidBody* rigidBody;
-	RigidBody* otherRigidBody;
-
-	Transform* transform;
-
-	GameObject* gameObject;
-};
+struct Collision;
 
 class Collider : public Behaviour {
 public:
@@ -77,11 +59,10 @@ protected:
 
 	virtual b2Shape* GetShape(bool useOffset = false) const = 0;
 
+	// Collision Tracking
+
 	bool IsCollidingWith(Collider* collider) const;
-	void RemoveCollisionWith(Collider* collider);
-	
 	bool IsTriggeringWith(Collider* collider) const;
-	void RemoveTriggerWith(Collider* collider);
 
 	RigidBody* m_AttachedRigidBody;
 
@@ -99,19 +80,34 @@ protected:
 
 	bool m_IsTrigger{};
 
-	struct FixtureOverlap {
-		b2Fixture* fixture;
-		Collider* otherCollider;
-	};
-
-	std::vector<FixtureOverlap> m_CurrentOverlaps{};
-
-	std::vector<Collider*> m_CurrentCollisions{};
-	std::vector<Collider*> m_CurrentTriggers{};
+	std::unordered_map<Collider*, std::size_t> m_Contacts{};
+	std::unordered_map<Collider*, std::size_t> m_Overlaps{};
 
 	friend class GameObject;
 	friend class RigidBody;
 	friend class PhysicsHandler;
+};
+
+struct Collision {
+	explicit Collision(Collider* collider, Collider* otherCollider)
+		: 
+		collider(collider), 
+		otherCollider(otherCollider), 
+		rigidBody(collider->GetAttachedRigidBody()), 
+		otherRigidBody(otherCollider->GetAttachedRigidBody()),
+		transform(collider->transform),
+		gameObject(collider->gameObject)
+		{ }
+
+	Collider* collider;
+	Collider* otherCollider;
+
+	RigidBody* rigidBody;
+	RigidBody* otherRigidBody;
+
+	Transform* transform;
+
+	GameObject* gameObject;
 };
 
 } // namespace engine2d

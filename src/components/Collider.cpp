@@ -129,12 +129,12 @@ void Collider::Awake() {
 }
 
 void Collider::Update() {
-	for (const auto& collision : m_CurrentCollisions) {
-		gameObject->OnCollisionStay(collision);
+	for (const auto& contact : m_Contacts) {
+		gameObject->OnCollisionStay(Collision(contact.first, this));
 	}
 	
-	for (const auto& collision : m_CurrentTriggers) {
-		gameObject->OnTriggerStay(collision);
+	for (const auto& overlap : m_Overlaps) {
+		gameObject->OnTriggerStay(Collision(overlap.first, this));
 	}
 
 	if (m_AttachedRigidBody) {
@@ -276,41 +276,20 @@ b2FixtureDef Collider::GetFixtureDef(const b2Shape* colShape) const {
 }
 
 bool Collider::IsCollidingWith(Collider* collider) const {
-	for (const auto& collision : m_CurrentCollisions) {
-		if (collision.collider == collider) {
-			return true;
-		}
+	if (m_Contacts.count(collider)) {
+		return true;
 	}
 
 	return false;
 }
 
-void Collider::RemoveCollisionWith(Collider* collider) {
-	for (std::size_t i = 0; i < m_CurrentCollisions.size(); i++) {
-		if (m_CurrentCollisions[i].collider == collider) {
-			m_CurrentCollisions.erase(m_CurrentCollisions.begin() + i);
-			break;
-		}
-	}
-}
 
 bool Collider::IsTriggeringWith(Collider* collider) const {
-	for (const auto& collision : m_CurrentTriggers) {
-		if (collision.collider == collider) {
-			return true;
-		}
+	if (m_Overlaps.count(collider)) {
+		return true;
 	}
 
 	return false;
-}
-
-void Collider::RemoveTriggerWith(Collider* collider) {
-	for (std::size_t i = 0; i < m_CurrentTriggers.size(); i++) {
-		if (m_CurrentTriggers[i].collider == collider) {
-			m_CurrentTriggers.erase(m_CurrentTriggers.begin() + i);
-			break;
-		}
-	}
 }
 
 } // namespace engine2d

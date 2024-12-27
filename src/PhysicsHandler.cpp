@@ -132,59 +132,50 @@ void PhysicsHandler::ContactListener::BeginContact(b2Contact* contact) {
 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
-	// if (colliderA->IsCollidingWith(colliderB) || colliderA->IsTriggeringWith(colliderB)) {
-	// 	return;
-	// }
-
-	// Collision collisionA = GetCollision(colliderB, colliderA);
-	// Collision collisionB = GetCollision(colliderA, colliderB);
-
-	// if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
-	// 	colliderA->m_CurrentTriggers.push_back(collisionA);
-	// 	colliderB->m_CurrentTriggers.push_back(collisionB);
-
-	// 	colliderA->gameObject->OnTriggerEnter(collisionA);
-	// 	colliderB->gameObject->OnTriggerEnter(collisionB);
-
-	// 	return;
-	// }
-
-	// colliderA->m_CurrentCollisions.push_back(collisionA);
-	// colliderB->m_CurrentCollisions.push_back(collisionB);
-
-	// colliderA->gameObject->OnCollisionEnter(collisionA);
-	// colliderB->gameObject->OnCollisionEnter(collisionB);
+	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+		colliderA->m_Overlaps[colliderB]++;
+		if (!colliderB->m_Overlaps[colliderA]++) {
+			colliderA->gameObject->OnTriggerEnter(Collision(colliderB, colliderA));
+			colliderB->gameObject->OnTriggerEnter(Collision(colliderA, colliderB));
+		}
+	}
+	else {
+		colliderA->m_Contacts[colliderB]++;
+		if (!colliderB->m_Contacts[colliderA]++) {
+			colliderA->gameObject->OnCollisionEnter(Collision(colliderB, colliderA));
+			colliderB->gameObject->OnCollisionEnter(Collision(colliderA, colliderB));
+		}
+	}
 }
 
 void PhysicsHandler::ContactListener::EndContact(b2Contact* contact) {
 	auto colliderA = reinterpret_cast<Collider*>(contact->GetFixtureA()->GetUserData().pointer);
 	auto colliderB = reinterpret_cast<Collider*>(contact->GetFixtureB()->GetUserData().pointer);
 
-	// if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
-	// 	colliderA->RemoveTriggerWith(colliderB);
-	// 	colliderB->RemoveTriggerWith(colliderA);
-	// }
-	// else {
-	// 	colliderA->RemoveCollisionWith(colliderB);
-	// 	colliderB->RemoveCollisionWith(colliderA);
-	// }
+	if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
+		colliderA->m_Overlaps[colliderB]--;
+		colliderB->m_Overlaps[colliderA]--;
 
-	// if (colliderA->gameObject->m_Destroyed || colliderB->gameObject->m_Destroyed) {
-	// 	return;
-	// }
+		if (colliderA->m_Overlaps[colliderB] == 0) {
+			colliderA->m_Overlaps.erase(colliderB);
+			colliderB->m_Overlaps.erase(colliderA);
 
-	// Collision collisionA = GetCollision(colliderB, colliderA);
-	// Collision collisionB = GetCollision(colliderA, colliderB);
+			colliderA->gameObject->OnTriggerExit(Collision(colliderB, colliderA));
+			colliderB->gameObject->OnTriggerExit(Collision(colliderA, colliderB));
+		}
+	}
+	else {
+		colliderA->m_Contacts[colliderB]--;
+		colliderB->m_Contacts[colliderA]--;
 
-	// if (colliderA->m_IsTrigger || colliderB->m_IsTrigger) {
-	// 	colliderA->gameObject->OnTriggerExit(collisionA); 
-	// 	colliderB->gameObject->OnTriggerExit(collisionB);
+		if (colliderA->m_Contacts[colliderB] == 0) {
+			colliderA->m_Contacts.erase(colliderB);
+			colliderB->m_Contacts.erase(colliderA);
 
-	// 	return;
-	// }
-
-	// colliderA->gameObject->OnCollisionExit(collisionA);
-	// colliderB->gameObject->OnCollisionExit(collisionB);
+			colliderA->gameObject->OnCollisionExit(Collision(colliderB, colliderA));
+			colliderB->gameObject->OnCollisionExit(Collision(colliderA, colliderB));
+		}
+	}
 }
 
 } // namespace engine2d
