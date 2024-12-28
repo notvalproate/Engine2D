@@ -8,18 +8,9 @@ namespace engine2d {
 PolygonCollider::PolygonCollider(GameObject* gameObj) 
 	: Collider(gameObj), 
 	m_Points({Vector2D(-0.5, -0.5), Vector2D(-0.5, 0.5), Vector2D(0.5, 0.5), Vector2D(0.5, -0.5)}),
-	m_Paths({ {b2Vec2(-0.5, -0.5), b2Vec2(-0.5, 0.5), b2Vec2(0.5, 0.5), b2Vec2(0.5, -0.5)} }),
-	m_FixtureVector({})
+	m_Paths({ {b2Vec2(-0.5, -0.5), b2Vec2(-0.5, 0.5), b2Vec2(0.5, 0.5), b2Vec2(0.5, -0.5)} })
 {
 	
-}
-
-PolygonCollider::~PolygonCollider() {
-	if (m_AttachedRigidBody) {
-		for (auto& fixture : m_FixtureVector) {
-			m_AttachedRigidBody->m_Body->DestroyFixture(fixture);
-		}
-	}
 }
 
 std::unique_ptr<Component> PolygonCollider::Clone() const {
@@ -63,89 +54,26 @@ void PolygonCollider::SetPoints(const std::vector<Vector2D>& points, const Vecto
 	ResetShape();
 }
 
-void PolygonCollider::SetDensity(const double density) {
-	if (density <= 0) {
-		m_Density = 1.0f;
-	}
-	else {
-		m_Density = density;
-	}
+std::vector<b2Shape*> PolygonCollider::GetShapes(bool) const {
+	std::vector<b2Shape*> parts;
 
-	if (m_AttachedRigidBody->m_AutoMassEnabled) {
-		m_Fixture->SetDensity(m_Density);
-
-		for (auto& fixture : m_FixtureVector) {
-			fixture->SetDensity(m_Density);
-		}
-
-		m_AttachedRigidBody->m_Body->ResetMassData();
-	}
-}
-
-b2Shape* PolygonCollider::GetShape(bool) const {
-	b2PolygonShape* boxShape = new b2PolygonShape();
-
-	boxShape->Set(&m_Paths[0][0], m_Paths[0].size());
-
-	return boxShape;
-}
-
-void PolygonCollider::ResetShape() {
-	if (m_AttachedRigidBody) {
-		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
-
-		for (auto& fixture : m_FixtureVector) {
-			m_AttachedRigidBody->m_Body->DestroyFixture(fixture);
-		}
-
-		m_Fixture = nullptr;
-		m_FixtureVector.clear();
-
-		CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
-
-		m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
-	}
-	else {
-		DestroyStaticCollider();
-		m_FixtureVector.clear();
-
-		CreateStaticBody();
-		CreateFixturesOnBody(*m_StaticBody);
-	}
-}
-
-void PolygonCollider::AttachRigidBody(RigidBody* rigidBody) {
-	if (m_AttachedRigidBody) {
-		return;
+	for (const auto& path : m_Paths) {
+		b2PolygonShape* boxShape = new b2PolygonShape();
+		boxShape->Set(&path[0], path.size());
+		parts.push_back(boxShape);
 	}
 
-	m_Material.reset();
-
-	DestroyStaticCollider();
-	m_FixtureVector.clear();
-
-	m_AttachedRigidBody = rigidBody;
-
-	CreateFixturesOnBody(m_AttachedRigidBody->m_Body);
-
-	m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
-}
-
-void PolygonCollider::DeatachRigidBody() {
-	m_AttachedRigidBody = nullptr;
-	m_Fixture = nullptr;
-	m_FixtureVector.clear();
-	m_Material.emplace();
-
-	CreateStaticBody();
-	CreateFixturesOnBody(*m_StaticBody);
-
-	m_CurrentPosition = transform->position;
+	return parts;
 }
 
 // O(n) solution to find out if the list of points contain a concavity. Algorithm terminates as soon as concavity is detected.
 // Requires points to be supplied as clockwise winding ordered boundary points of a polygon.
 bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) const {
+	// Concavity test is only valid for polygons with more than 3 points.
+	if (points.size() <= 3) {
+		return false;
+	}
+
 	std::size_t prevPrev = 0;
 	std::size_t prev = 1;
 	std::size_t curr = 2;
@@ -197,21 +125,6 @@ bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) con
 	return false;
 }
 
-void PolygonCollider::CreateFixturesOnBody(b2Body* body) {
-	for (std::size_t i = 0; i < m_Paths.size(); i++) {
-		b2PolygonShape polygonShape;
-		polygonShape.Set(&m_Paths[i][0], m_Paths[i].size());
-
-		b2FixtureDef fixture = GetFixtureDef(&polygonShape);
-
-		if (i == 0) {
-			m_Fixture = body->CreateFixture(&fixture);
-			continue;
-		}
-
-		m_FixtureVector.push_back(body->CreateFixture(&fixture));
-	}
-}
 
 void PolygonCollider::ReducePointsToPaths() {
 	m_Paths.clear();
