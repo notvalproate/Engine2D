@@ -22,7 +22,7 @@ class Collider : public Behaviour {
 public:
 	virtual ~Collider();
 
-	virtual void SetDensity(const double density);
+	void SetDensity(const double density);
 	void SetMaterial(const PhysicsMaterial& material);
 	void SetFriction(const double friction);
 	void SetBounciness(const double bounciness);
@@ -44,11 +44,11 @@ protected:
 	void Update() override final;
 	void UpdateBounds();
 	void UpdateStaticPosition();
-	virtual void ResetShape();
+	void ResetShape();
 	void ResetDensity();
 
-	virtual void AttachRigidBody(RigidBody* rigidBody);
-	virtual void DeatachRigidBody();
+	void AttachRigidBody(RigidBody* rigidBody);
+	void DeatachRigidBody();
 
 	void CreateColliderOnRigidBody(const std::vector<b2Shape*>& colShapes);
 	void CreateStaticBody();

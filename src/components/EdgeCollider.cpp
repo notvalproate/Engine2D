@@ -5,7 +5,7 @@ namespace engine2d {
 
 EdgeCollider::EdgeCollider(GameObject* gameObj) 
 	: Collider(gameObj), 
-	m_Points( { Vector2D(-0.5, 0), Vector2D(0.5, 0) } ),
+	m_Points( { Vector2D(-0.5, 0), Vector2D(0.5, 0) } )
 {
 	
 }
