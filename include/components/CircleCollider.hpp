@@ -13,7 +13,7 @@ private:
 	CircleCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
-	b2Shape* GetShape(bool useOffset = false) const override;
+	std::vector<b2Shape*> GetShapes(bool useOffset = false) const override;
 
 	double m_Radius;
 

@@ -25,7 +25,7 @@ void CircleCollider::SetTransform(const double radius, const Vector2D& offset, c
 	ResetShape();
 }
 
-b2Shape* CircleCollider::GetShape(bool useOffset) const {
+std::vector<b2Shape*> CircleCollider::GetShapes(bool useOffset) const {
 	b2CircleShape* circleShape = new b2CircleShape();
 	b2Vec2 offset(0, 0);
 
@@ -36,7 +36,7 @@ b2Shape* CircleCollider::GetShape(bool useOffset) const {
 	circleShape->m_p = offset;
 	circleShape->m_radius = m_Radius;
 
-	return circleShape;
+	return { circleShape };
 }
 
 } // namespace engine2d

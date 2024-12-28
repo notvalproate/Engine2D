@@ -8,7 +8,7 @@ namespace engine2d {
 Collider::Collider(GameObject* gameObj)
 	: Behaviour(gameObj),
 	m_AttachedRigidBody(nullptr),
-	m_Fixture(nullptr),
+	m_Fixtures({}),
 	m_Offset(0, 0),
 	m_Rotation(0),
 	m_Material(),
@@ -30,7 +30,9 @@ Collider::~Collider() {
 			}
 		}
 
-		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+		for (auto fixture : m_Fixtures) {
+			m_AttachedRigidBody->m_Body->DestroyFixture(fixture);
+		}
 	}
 	else {
 		gameObject->scene->m_PhysicsWorld.get()->DestroyBody((*m_StaticBody));
@@ -46,7 +48,9 @@ void Collider::SetDensity(const double density) {
 	}
 
 	if (m_AttachedRigidBody->m_AutoMassEnabled) {
-		m_Fixture->SetDensity(m_Density);
+		for (auto fixture : m_Fixtures) {
+			fixture->SetDensity(m_Density);
+		}
 		m_AttachedRigidBody->m_Body->ResetMassData();
 	}
 }
@@ -67,7 +71,10 @@ void Collider::SetFriction(const double friction) {
 void Collider::SetBounciness(const double bounciness) {
 	if (m_Material.has_value()) {
 		(*m_Material).bounciness = bounciness;
-		m_Fixture->SetRestitution(bounciness);
+
+		for (auto fixture : m_Fixtures) {
+			fixture->SetRestitution(bounciness);
+		}
 	}
 }
 
@@ -110,20 +117,22 @@ double Collider::GetBounciness() const {
 }
 
 void Collider::Awake() {
-	b2Shape* boxShape = GetShape(true);
+	auto shapes = GetShapes(true);
 
 	m_AttachedRigidBody = gameObject->GetComponentInParent<RigidBody>();
 
 	if (m_AttachedRigidBody != nullptr) {
-		CreateColliderOnRigidBody(boxShape);
+		CreateColliderOnRigidBody(shapes);
 		m_AttachedRigidBody->AttachCollider(this);
 	}
 	else {
 		m_Material.emplace();
-		CreateStaticCollider(boxShape);
+		CreateStaticCollider(shapes);
 	}
 
-	delete boxShape;
+	for (auto shape : shapes) {
+		delete shape;
+	}
 
 	UpdateBounds();
 }
@@ -148,7 +157,16 @@ void Collider::Update() {
 }
 
 void Collider::UpdateBounds() {
-	b2AABB boundingBox = m_Fixture->GetAABB(0);
+	b2AABB boundingBox;
+	float max = std::numeric_limits<float>::max();
+	boundingBox.lowerBound = b2Vec2(max, max);
+	boundingBox.upperBound = b2Vec2(-max, -max);
+
+	for (auto fixture : m_Fixtures) {
+		b2AABB fixtureBox = fixture->GetAABB(0);
+		boundingBox.Combine(fixtureBox);
+	}
+
 	m_BoundingBox.center = boundingBox.GetCenter();
 	m_BoundingBox.extents = boundingBox.GetExtents();
 	m_BoundingBox.max = m_BoundingBox.center + m_BoundingBox.extents;
@@ -164,28 +182,34 @@ void Collider::UpdateStaticPosition() {
 }
 
 void Collider::ResetShape() {
+	std::vector<b2Shape*> shapes;
+
 	if (m_AttachedRigidBody) {
-		m_AttachedRigidBody->m_Body->DestroyFixture(m_Fixture);
+		for (auto fixture : m_Fixtures) {
+			m_AttachedRigidBody->m_Body->DestroyFixture(fixture);
+		}
 
-		b2Shape* boxShape = GetShape(true);
+		shapes = GetShapes(true);
 
-		CreateColliderOnRigidBody(boxShape);
-
-		delete boxShape;
+		CreateColliderOnRigidBody(shapes);
 	}
 	else {
 		DestroyStaticCollider();
 
-		b2Shape* boxShape = GetShape();
+		shapes = GetShapes();
 
-		CreateStaticCollider(boxShape);
+		CreateStaticCollider(shapes);
+	}
 
-		delete boxShape;
+	for (auto shape : shapes) {
+		delete shape;
 	}
 }
 
 void Collider::ResetDensity() {
-	m_Fixture->SetDensity(m_Density);
+	for (auto fixture : m_Fixtures) {
+		fixture->SetDensity(m_Density);
+	}
 }
 
 void Collider::AttachRigidBody(RigidBody* rigidBody) {
@@ -198,30 +222,36 @@ void Collider::AttachRigidBody(RigidBody* rigidBody) {
 
 	m_AttachedRigidBody = rigidBody;
 
-	b2Shape* shape = GetShape(true);
+	auto shapes = GetShapes(true);
 
-	CreateColliderOnRigidBody(shape);
+	CreateColliderOnRigidBody(shapes);
 
-	delete shape;
+	for (auto shape : shapes) {
+		delete shape;
+	}
 }
 
 void Collider::DeatachRigidBody() {
 	m_AttachedRigidBody = nullptr;
 
-	b2Shape* shape = GetShape(false);
+	auto shapes = GetShapes(false);
 
 	m_Material.emplace();
-	CreateStaticCollider(shape);
+	CreateStaticCollider(shapes);
 
-	delete shape;
+	for (auto shape : shapes) {
+		delete shape;
+	}
 
 	m_CurrentPosition = transform->position;
 }
 
-void Collider::CreateColliderOnRigidBody(const b2Shape* colShape) {
-	b2FixtureDef fixture = GetFixtureDef(colShape);
+void Collider::CreateColliderOnRigidBody(const std::vector<b2Shape*>& colShape) {
+	for (auto shape : colShape) {
+		b2FixtureDef fixture = GetFixtureDef(shape);
+		m_Fixtures.push_back(m_AttachedRigidBody->m_Body->CreateFixture(&fixture));
+	}
 
-	m_Fixture = m_AttachedRigidBody->m_Body->CreateFixture(&fixture);
 	m_AttachedRigidBody->SetMass(m_AttachedRigidBody->m_Mass);
 }
 
@@ -230,17 +260,19 @@ void Collider::CreateStaticBody() {
 	m_StaticBody = gameObject->scene->m_PhysicsWorld.get()->CreateBody(&body);
 }
 
-void Collider::CreateStaticCollider(const b2Shape* colShape) {
+void Collider::CreateStaticCollider(const std::vector<b2Shape*>& colShape) {
 	CreateStaticBody();
 
-	b2FixtureDef fixture = GetFixtureDef(colShape);
-	m_Fixture = (*m_StaticBody)->CreateFixture(&fixture);
+	for (auto shape : colShape) {
+		b2FixtureDef fixture = GetFixtureDef(shape);
+		m_Fixtures.push_back((*m_StaticBody)->CreateFixture(&fixture));
+	}
 }
 
 void Collider::DestroyStaticCollider() {
 	gameObject->scene->m_PhysicsWorld.get()->DestroyBody(*m_StaticBody);
 	m_StaticBody.reset();
-	m_Fixture = nullptr;
+	m_Fixtures.clear();
 }
 
 b2BodyDef Collider::GetStaticBodyDef() const {

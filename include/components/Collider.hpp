@@ -50,14 +50,14 @@ protected:
 	virtual void AttachRigidBody(RigidBody* rigidBody);
 	virtual void DeatachRigidBody();
 
-	void CreateColliderOnRigidBody(const b2Shape* colShape);
+	void CreateColliderOnRigidBody(const std::vector<b2Shape*>& colShapes);
 	void CreateStaticBody();
-	void CreateStaticCollider(const b2Shape* colShape);
+	void CreateStaticCollider(const std::vector<b2Shape*>& colShapes);
 	void DestroyStaticCollider();
 	b2BodyDef GetStaticBodyDef() const;
 	b2FixtureDef GetFixtureDef(const b2Shape* colShape) const;
 
-	virtual b2Shape* GetShape(bool useOffset = false) const = 0;
+	virtual std::vector<b2Shape*> GetShapes(bool useOffset = false) const = 0;
 
 	// Collision Tracking
 
@@ -66,7 +66,7 @@ protected:
 
 	RigidBody* m_AttachedRigidBody;
 
-	b2Fixture* m_Fixture;
+	std::vector<b2Fixture*> m_Fixtures;
 	Vector2D m_Offset;
 	double m_Rotation;
 

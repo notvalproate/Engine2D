@@ -24,7 +24,7 @@ void BoxCollider::SetTransform(const Vector2D& dimensions, const Vector2D& offse
 	ResetShape();
 }
 
-b2Shape* BoxCollider::GetShape(bool useOffset) const {
+std::vector<b2Shape*> BoxCollider::GetShapes(bool useOffset) const {
 	b2PolygonShape* boxShape = new b2PolygonShape();
 	b2Vec2 offset(0, 0);
 	
@@ -39,7 +39,7 @@ b2Shape* BoxCollider::GetShape(bool useOffset) const {
 		-m_Rotation * M_PI / 180.0
 	);
 
-	return boxShape;
+	return { boxShape };
 }
 
 } // namespace engine2d
