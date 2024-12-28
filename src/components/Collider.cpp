@@ -21,6 +21,11 @@ Collider::Collider(GameObject* gameObj)
 
 Collider::~Collider() {
 	if (m_AttachedRigidBody) {
+		for (auto fixture : m_Fixtures) {
+			m_AttachedRigidBody->m_Body->DestroyFixture(fixture);
+		}
+		m_Fixtures.clear();
+
 		auto& rbColliders = m_AttachedRigidBody->m_AttachedColliders;
 
 		for (size_t i = 0; i < rbColliders.size(); i++) {
@@ -28,10 +33,6 @@ Collider::~Collider() {
 				rbColliders.erase(rbColliders.begin() + i);
 				break;
 			}
-		}
-
-		for (auto fixture : m_Fixtures) {
-			m_AttachedRigidBody->m_Body->DestroyFixture(fixture);
 		}
 	}
 	else {
@@ -188,6 +189,7 @@ void Collider::ResetShape() {
 		for (auto fixture : m_Fixtures) {
 			m_AttachedRigidBody->m_Body->DestroyFixture(fixture);
 		}
+		m_Fixtures.clear();
 
 		shapes = GetShapes(true);
 

@@ -19,8 +19,6 @@ private:
 	CapsuleCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
-	void Awake() override;
-
 	std::vector<b2Shape*> GetShapes(bool useOffset = false) const override;
 
 	Vector2D m_Size;
