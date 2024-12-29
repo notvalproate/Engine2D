@@ -67,62 +67,36 @@ std::vector<b2Shape*> PolygonCollider::GetShapes(bool) const {
 }
 
 // O(n) solution to find out if the list of points contain a concavity. Algorithm terminates as soon as concavity is detected.
-// Requires points to be supplied as clockwise winding ordered boundary points of a polygon.
+// Loren Pechtel: https://stackoverflow.com/a/472001
 bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) const {
 	// Concavity test is only valid for polygons with more than 3 points.
 	if (points.size() <= 3) {
 		return false;
 	}
 
-	std::size_t prevPrev = 0;
-	std::size_t prev = 1;
-	std::size_t curr = 2;
+    std::size_t p1 = 0, p2 = 1, p3 = 2;
+    bool first = true;
+    bool positive = false;
 
-	while (true) {
-		const Vector2D& first = points[prevPrev];
-		const Vector2D& second = points[prev];
-		const Vector2D& current = points[curr];
+    while(p3 != 1) {
+        Vector2D v1 = points[p2] - points[p1];
+        Vector2D v2 = points[p3] - points[p2];
 
-		double dy = (second.y - first.y);
-		double dx = (second.x - first.x);
+        double cross = Vector2D::Cross(v1, v2);
 
-		bool infiniteSlope = dx == 0;
-		bool goingUp = dy > 0;
+        if (first) {
+            positive = cross > 0;
+            first = false;
+        } else if ((cross != 0) && (positive != (cross > 0))) {
+            return true;
+        }
 
-		bool upLeft = goingUp && current.x < second.x;
-		bool downRight = !goingUp && current.x > second.x;
+        p1 = p2;
+        p2 = p3;
+        p3 = (p3 + 1) % points.size();
+    }
 
-		if (infiniteSlope) {
-			if ((upLeft || downRight)) {
-				return true;
-			}
-		}
-		else {
-			double m = (dy / dx);
-			double c = second.y - (m * second.x);
-
-			double y0 = (m * current.x) + c;
-
-			bool above = current.y > y0;
-
-			bool forward = dx > 0;
-			above = forward ? above : !above;
-
-			if (above) {
-				return true;
-			}
-		}
-
-		if (curr == 0) {
-			break;
-		}
-
-		prevPrev++;
-		prev++;
-		curr = (curr + 1) % points.size();
-	}
-
-	return false;
+    return false;
 }
 
 
