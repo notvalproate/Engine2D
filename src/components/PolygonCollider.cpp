@@ -43,14 +43,16 @@ void PolygonCollider::SetPoints(const std::vector<Vector2D>& points, const Vecto
 		return;
 	}
 
-	if (ContainsConcavity(points)) {
-		std::cout << "Polygon provided has concavity(s)" << std::endl;
-		return;
-	}
-
 	m_Points = points;
 	m_Offset = offset;
-	ReducePointsToPaths();
+
+	if (ContainsConcavity(m_Points)) {
+		std::cout << "Polygon provided has concavity(s)" << std::endl;
+		m_Paths = Triangulate();
+	} else {
+		ReducePointsToPaths();
+	}
+
 	ResetShape();
 }
 
@@ -84,10 +86,14 @@ bool PolygonCollider::ContainsConcavity(const std::vector<Vector2D>& points) con
 
         double cross = Vector2D::Cross(v1, v2);
 
+		if (cross == 0) {
+			return true;
+		}
+
         if (first) {
             positive = cross > 0;
             first = false;
-        } else if ((cross != 0) && (positive != (cross > 0))) {
+        } else if (positive != (cross > 0)) {
             return true;
         }
 
@@ -118,5 +124,79 @@ void PolygonCollider::ReducePointsToPaths() {
 		prevEnd = endIndex;
 	}
 }
+
+
+std::vector<std::vector<b2Vec2>> PolygonCollider::Triangulate() const {
+    std::vector<std::vector<b2Vec2>> triangles;
+	triangles.reserve(m_Points.size() - 2);
+
+    std::vector<Vector2D> polygon = m_Points;
+
+    Vector2D t1 = polygon[1] - polygon[0];
+    Vector2D t2 = polygon[2] - polygon[1];
+
+    double winding = Vector2D::Cross(t1, t2);
+
+    if (winding < 0) {
+        std::reverse(polygon.begin(), polygon.end());
+    }
+
+    while (polygon.size() > 3) {
+        std::size_t p1 = 0, p2 = 1, p3 = 2;
+        bool earFound = false;
+
+        while (p3 != 1) {
+            Vector2D v1 = polygon[p2] - polygon[p1];
+            Vector2D v2 = polygon[p3] - polygon[p2];
+
+            double cross = Vector2D::Cross(v1, v2);
+
+            if (cross > 0) {
+                bool isEar = true;
+
+                for (std::size_t i = 0; i < polygon.size(); i++) {
+                    if (i != p1 && i != p2 && i != p3) {
+                        if (Vector2D::Cross(polygon[i] - polygon[p1], polygon[p3] - polygon[p1]) > 0 &&
+                            Vector2D::Cross(polygon[i] - polygon[p2], polygon[p1] - polygon[p2]) > 0 &&
+                            Vector2D::Cross(polygon[i] - polygon[p3], polygon[p2] - polygon[p3]) > 0) {
+                            isEar = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (isEar) {
+                    triangles.push_back({
+						b2Vec2(polygon[p1].x + m_Offset.x, polygon[p1].y + m_Offset.y),
+						b2Vec2(polygon[p2].x + m_Offset.x, polygon[p2].y + m_Offset.y),
+						b2Vec2(polygon[p3].x + m_Offset.x, polygon[p3].y + m_Offset.y)
+					});
+                    polygon.erase(polygon.begin() + p2);
+                    earFound = true;
+                    break;
+                }
+            }
+
+            p1 = p2;
+            p2 = p3;
+            p3 = (p3 + 1) % polygon.size();
+        }
+
+        if (!earFound) {
+            break;
+        }
+    }
+
+    if (polygon.size() == 3) {
+        triangles.push_back({
+			b2Vec2(polygon[0].x + m_Offset.x, polygon[0].y + m_Offset.y),
+			b2Vec2(polygon[1].x + m_Offset.x, polygon[1].y + m_Offset.y),
+			b2Vec2(polygon[2].x + m_Offset.x, polygon[2].y + m_Offset.y)
+		});
+    }
+
+    return triangles;
+}
+
 
 } // namespace engine2d

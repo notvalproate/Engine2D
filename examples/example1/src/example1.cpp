@@ -338,7 +338,7 @@ public:
 		col->SetTransform(Vector2D(1, 2), Vector2D(0, 0), 0);
 
 		auto PlayerObject = CreateGameObject("Player");
-		// PlayerObject->AddComponent<CameraFollower>();
+		PlayerObject->AddComponent<CameraFollower>();
 
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");
@@ -362,19 +362,18 @@ public:
 
 
 		// Capsule Collider Test
-		auto playerCapsule = PlayerObject->AddComponent<CapsuleCollider>();
-		playerCapsule->SetTransform(Vector2D(0.8, 0.6), CapsuleDirection::Vertical, Vector2D(-0.1, -0.3));
+		// auto playerCapsule = PlayerObject->AddComponent<CapsuleCollider>();
+		// playerCapsule->SetTransform(Vector2D(0.8, 0.6), CapsuleDirection::Vertical, Vector2D(-0.1, -0.3));
 		// playerCapsule->SetTransform(Vector2D(0.8, 0.6), CapsuleDirection::Horizontal, Vector2D(-0.1, -0.3));
 
 		// Polygon Collider Test
-		// auto playerPolygon = PlayerObject->AddComponent<PolygonCollider>();
-		// playerPolygon->CreatePrimitive(5, Vector2D(1, 1), Vector2D(0.5, 0));
-		// playerPolygon->SetPoints({ Vector2D(0, 0), Vector2D(1, 2), Vector2D(2, 1.1), Vector2D(1, 0.5) }, Vector2D(0, 0));
-		// playerPolygon->SetTransform({ Vector2D(-0.5, -0.5), Vector2D(0.5, -0.5), Vector2D(0.5, 0.5), Vector2D(-0.5, 0.5) }, Vector2D(0, 0), 0);
+		auto playerPolygon = PlayerObject->AddComponent<PolygonCollider>();
+		// playerPolygon->CreatePrimitive(5, Vector2D(1, 1), Vector2D(0, 0));
+		playerPolygon->SetPoints({ Vector2D(0, 0), Vector2D(1, 2), Vector2D(2, 1.5), Vector2D(1, 1) }, Vector2D(0, 0));
 
 		// Edge Collider Test
-		auto playerCollider = PlayerObject->AddComponent<EdgeCollider>();
-		playerCollider->SetPoints({ Vector2D(-1, 0), Vector2D(1, 0), Vector2D(1, 1), Vector2D(2, 1), Vector2D(3, 1.5) }, Vector2D(0, 0));
+		// auto playerCollider = PlayerObject->AddComponent<EdgeCollider>();
+		// playerCollider->SetPoints({ Vector2D(-1, 0), Vector2D(1, 0), Vector2D(1, 1), Vector2D(2, 1), Vector2D(3, 1.5) }, Vector2D(0, 0));
 
 		PhysicsMaterial ice(0, 0.3);
 

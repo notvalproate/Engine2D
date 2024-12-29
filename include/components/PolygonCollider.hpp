@@ -16,6 +16,7 @@ private:
 
 	std::vector<b2Shape*> GetShapes(bool useOffset = false) const override;
 
+	std::vector<std::vector<b2Vec2>> Triangulate() const;
 	bool ContainsConcavity(const std::vector<Vector2D>& points) const;
 	void ReducePointsToPaths();
 
