@@ -226,7 +226,7 @@ class Controller : public Behaviour {
 		Physics.SetGravity(Vector2D::zero);
 
 		rb = gameObject->GetComponent<RigidBody>();
-		rb->drag = 1;
+		rb->linearDrag = 1;
 		rb->SetMass(1);
 		rb->FreezeRotation(true);
 
@@ -278,6 +278,8 @@ class Controller : public Behaviour {
 			}
 			koo = !koo;
 		}
+
+		std::cout << "Velocity: " << rb->GetVelocity() << std::endl;
 	}
 
 	// FIX STAY SINCE EXIT IS CALLED WHEN ANY OF THE SUB-FIXTURES ON A SINGLE COLLIDER CALLS EXIT WHEN IT LEAVES CONTACT, EVEN
@@ -336,7 +338,7 @@ public:
 		col->SetTransform(Vector2D(1, 2), Vector2D(0, 0), 0);
 
 		auto PlayerObject = CreateGameObject("Player");
-		PlayerObject->AddComponent<CameraFollower>();
+		// PlayerObject->AddComponent<CameraFollower>();
 
 		auto playerRenderer = PlayerObject->AddComponent<SpriteRenderer>();
 		playerRenderer->SetSprite("assets/medieval/Characters/knight/idle/idle_knight_1.png");

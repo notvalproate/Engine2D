@@ -55,7 +55,7 @@ public:
 	bool IsAwake() const;
 	bool IsSleeping() const;
 
-	double drag;
+	double linearDrag;
 	double angularDrag;
 	Vector2D totalForce;
 	double totalTorque;

@@ -3,7 +3,7 @@
 
 namespace engine2d {
 
-RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_Mass(1), m_AutoMassEnabled(false), m_FreezeRotation(false), m_AttachedColliders({}), m_SensorFixture(nullptr) {
+RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), linearDrag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_Mass(1), m_AutoMassEnabled(false), m_FreezeRotation(false), m_AttachedColliders({}), m_SensorFixture(nullptr) {
 	b2BodyDef boxBody;
 	boxBody.type = b2_dynamicBody;
 	boxBody.position.Set(transform->position.x, transform->position.y);
@@ -210,9 +210,9 @@ void RigidBody::AddDrag() {
 		return;
 	}
 
-	double magSquare = velocity.GetMagnitudeSquared();
+	double magnitude = velocity.GetMagnitude();
 	velocity.Normalize();
-	Vector2D dragForce = -drag * magSquare * velocity;
+	Vector2D dragForce = -linearDrag * magnitude * velocity;
 	AddForce(dragForce);
 }
 
