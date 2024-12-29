@@ -3,7 +3,7 @@
 
 namespace engine2d {
 
-RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_Mass(1), m_AutoMassEnabled(false), m_AttachedColliders({}), m_SensorFixture(nullptr) {
+RigidBody::RigidBody(GameObject* gameObj) : Component(gameObj), drag(0.0), angularDrag(0.0), totalForce(0.0, 0.0), totalTorque(0.0), m_Body(nullptr), m_Mass(1), m_AutoMassEnabled(false), m_FreezeRotation(false), m_AttachedColliders({}), m_SensorFixture(nullptr) {
 	b2BodyDef boxBody;
 	boxBody.type = b2_dynamicBody;
 	boxBody.position.Set(transform->position.x, transform->position.y);
@@ -85,6 +85,7 @@ void RigidBody::SetMass(const float mass) {
 	}
 
 	m_Body->ResetMassData();
+	ResetMassToInternalMass();
 }
 
 void RigidBody::SetAutoMass(const bool use) {
@@ -139,6 +140,8 @@ void RigidBody::SetGravityScale(const double scale) {
 
 void RigidBody::FreezeRotation(const bool set) {
 	m_Body->SetFixedRotation(set);
+	m_FreezeRotation = set;
+	ResetMassToInternalMass();
 }
 
 void RigidBody::WakeUp() {
@@ -229,6 +232,13 @@ void RigidBody::ApplyTotalForces() {
 	totalForce.x = 0;
 	totalForce.y = 0;
 	totalTorque = 0;
+}
+
+void RigidBody::ResetMassToInternalMass() {
+	b2MassData massData = m_Body->GetMassData();
+	massData.mass = m_Mass;
+	massData.I = m_FreezeRotation ? 0 : (massData.I ? massData.I : 1);
+	m_Body->SetMassData(&massData);
 }
 
 void RigidBody::AttachCollider(Collider* collider) {

@@ -57,6 +57,7 @@ protected:
 	b2BodyDef GetStaticBodyDef() const;
 	b2FixtureDef GetFixtureDef(const b2Shape* colShape) const;
 
+	virtual void UpdateMassData() const { };
 	virtual std::vector<b2Shape*> GetShapes(bool useOffset = false) const = 0;
 
 	// Collision Tracking

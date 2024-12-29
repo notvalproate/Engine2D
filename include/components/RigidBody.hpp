@@ -69,11 +69,13 @@ private:
 	void AddDrag();
 	void AddAngularDrag();
 	void ApplyTotalForces();
+	void ResetMassToInternalMass();
 
 	b2Body* m_Body;
 
 	double m_Mass;
-	bool m_AutoMassEnabled;
+	bool m_AutoMassEnabled{};
+	bool m_FreezeRotation{};
 	PhysicsMaterial m_Material;
 	std::vector<Collider*> m_AttachedColliders;
 	std::optional<b2Fixture*> m_SensorFixture;

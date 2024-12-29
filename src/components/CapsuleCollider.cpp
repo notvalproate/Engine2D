@@ -47,7 +47,7 @@ std::vector<b2Shape*> CapsuleCollider::GetShapes(bool useOffset) const {
 
 	if (m_Direction == CapsuleDirection::Horizontal) {
 		radius = m_Size.y / 2.0;
-		offset = b2Vec2(m_Size.x / 2.0, 0);
+		circleOffset = b2Vec2(m_Size.x / 2.0, 0);
 	}
 
 	// For the top circle
@@ -55,14 +55,14 @@ std::vector<b2Shape*> CapsuleCollider::GetShapes(bool useOffset) const {
 	b2CircleShape* circleTop = new b2CircleShape();
 
 	circleTop->m_radius = radius;
-	circleTop->m_p = offset + b2Vec2(m_Offset.x, m_Offset.y);
+	circleTop->m_p = offset + b2Vec2(circleOffset.x, circleOffset.y);
 
 	// For the bottom circle
 
 	b2CircleShape* circleBottom = new b2CircleShape();
 
 	circleBottom->m_radius = radius;
-	circleBottom->m_p = -offset + b2Vec2(m_Offset.x, m_Offset.y);
+	circleBottom->m_p = offset - b2Vec2(circleOffset.x, circleOffset.y);
 
 	return { boxShape, circleTop, circleBottom };
 }

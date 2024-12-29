@@ -16,6 +16,7 @@ private:
 	EdgeCollider(GameObject* gameObj);
 	std::unique_ptr<Component> Clone() const;
 
+	void UpdateMassData() const override;
 	std::vector<b2Shape*> GetShapes(bool useOffset = false) const override;
 
 	std::vector<Vector2D> m_Points;

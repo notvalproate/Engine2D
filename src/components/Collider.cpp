@@ -125,6 +125,7 @@ void Collider::Awake() {
 	if (m_AttachedRigidBody != nullptr) {
 		CreateColliderOnRigidBody(shapes);
 		m_AttachedRigidBody->AttachCollider(this);
+		UpdateMassData();
 	}
 	else {
 		m_Material.emplace();
@@ -194,6 +195,7 @@ void Collider::ResetShape() {
 		shapes = GetShapes(true);
 
 		CreateColliderOnRigidBody(shapes);
+		UpdateMassData();
 	}
 	else {
 		DestroyStaticCollider();
@@ -227,6 +229,7 @@ void Collider::AttachRigidBody(RigidBody* rigidBody) {
 	auto shapes = GetShapes(true);
 
 	CreateColliderOnRigidBody(shapes);
+	UpdateMassData();
 
 	for (auto shape : shapes) {
 		delete shape;

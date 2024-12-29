@@ -25,6 +25,21 @@ void EdgeCollider::Reset() {
 	SetPoints({ Vector2D(-0.5, 0), Vector2D(0, 0.5) }, Vector2D::zero);
 }
 
+void EdgeCollider::UpdateMassData() const {
+	if (!m_AttachedRigidBody) {
+		return;
+	}
+
+	b2MassData massdata;
+
+	massdata.mass = m_AttachedRigidBody->GetMass();
+	massdata.center = m_AttachedRigidBody->m_Body->GetLocalCenter();
+	massdata.I = m_AttachedRigidBody->m_Body->GetInertia();
+	massdata.I = massdata.I ? massdata.I : 1;
+
+	m_AttachedRigidBody->m_Body->SetMassData(&massdata);
+}
+
 std::vector<b2Shape*> EdgeCollider::GetShapes(bool useOffset) const {
 	b2ChainShape* forwardChain = new b2ChainShape();
 	b2ChainShape* reverseChain = new b2ChainShape();
