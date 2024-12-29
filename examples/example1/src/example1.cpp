@@ -362,14 +362,25 @@ public:
 
 
 		// Capsule Collider Test
-		// auto playerCapsule = PlayerObject->AddComponent<CapsuleCollider>();
-		// playerCapsule->SetTransform(Vector2D(0.8, 0.6), CapsuleDirection::Vertical, Vector2D(-0.1, -0.3));
+		auto playerCapsule = PlayerObject->AddComponent<CapsuleCollider>();
+		playerCapsule->SetTransform(Vector2D(0.8, 0.6), CapsuleDirection::Vertical, Vector2D(-0.1, -0.3));
 		// playerCapsule->SetTransform(Vector2D(0.8, 0.6), CapsuleDirection::Horizontal, Vector2D(-0.1, -0.3));
 
 		// Polygon Collider Test
-		auto playerPolygon = PlayerObject->AddComponent<PolygonCollider>();
+		// auto playerPolygon = PlayerObject->AddComponent<PolygonCollider>();
 		// playerPolygon->CreatePrimitive(5, Vector2D(1, 1), Vector2D(0, 0));
-		playerPolygon->SetPoints({ Vector2D(0, 0), Vector2D(1, 2), Vector2D(2, 1.5), Vector2D(1, 1) }, Vector2D(0, 0));
+		// std::vector<Vector2D> points = {
+		// 	Vector2D(0.45, -0.29),
+		// 	Vector2D(0.82, -1.7),
+		// 	Vector2D(3.19, -0.27),
+		// 	Vector2D(0.9, 0.34),
+		// 	Vector2D(4.0, 3.0),
+		// 	Vector2D(1.1, 3.01),
+		// 	Vector2D(0.8, 2.4),
+		// 	Vector2D(0.88, 1.06),
+		// 	Vector2D(-1.69, -0.16)
+		// };
+		// playerPolygon->SetPoints(points, Vector2D(0, 0));
 
 		// Edge Collider Test
 		// auto playerCollider = PlayerObject->AddComponent<EdgeCollider>();
